@@ -163,6 +163,8 @@ figure{margin:0}
 .obdots{display:flex;gap:6px;justify-content:center;padding:18px 0 26px;flex:none}
 .obdots i{width:28px;height:3px;border-radius:2px;background:#333336;display:block;transition:.25s}
 .obdots i.on{background:var(--red)}
+.obfoot .btn[disabled]{background:rgba(255,255,255,.07);color:#6E6862;cursor:not-allowed}
+.obfoot .btn[disabled]:hover{background:rgba(255,255,255,.07)}
 
 .rolerow{display:flex;align-items:center;gap:13px;width:100%;text-align:left;padding:13px 14px;border-radius:10px;
   background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.13);transition:.16s}
@@ -713,7 +715,7 @@ figure{margin:0}
               <span class="roletext"><b>Architect</b><span>Structure, form, and urban planning.</span></span>
               <span class="roletick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12.5 10 17.5 19 7"/></svg></span>
             </button>
-            <button class="rolerow" aria-pressed="true">
+            <button class="rolerow" aria-pressed="false">
               <span class="roleicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11.5V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3.5"/><path d="M3 13a2 2 0 0 1 4 0v3h10v-3a2 2 0 0 1 4 0v6H3z"/></svg></span>
               <span class="roletext"><b>Interior Designer</b><span>Atmosphere, material, and human scale.</span></span>
               <span class="roletick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12.5 10 17.5 19 7"/></svg></span>
@@ -729,7 +731,7 @@ figure{margin:0}
               <span class="roletick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12.5 10 17.5 19 7"/></svg></span>
             </button>
           </div>
-          <div class="obfoot"><button class="btn btn-red" data-go="obthemes">Continue</button></div>
+          <div class="obfoot"><button class="btn btn-red" id="ob-go-themes" data-go="obthemes" disabled>Continue</button></div>
           <div class="obdots"><i class="on"></i><i class="on"></i><i></i><i></i></div>
         </section>
 
@@ -746,16 +748,16 @@ figure{margin:0}
           <div class="obbody">
             <div class="themegrid" id="ob-themes">
               <button class="themecell" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 21V6l7-3 7 3v15"/><path d="M9 21v-5h6v5"/><path d="M9 10h2M13 10h2"/></svg><b>Architecture</b></button>
-              <button class="themecell" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="7" y="9" width="8" height="12" rx="2"/><path d="M9.5 9V6h3v3"/><circle cx="18" cy="5" r="1"/><circle cx="18" cy="9" r="1"/><circle cx="21" cy="7" r="1"/></svg><b>Street Art</b></button>
+              <button class="themecell" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="7" y="9" width="8" height="12" rx="2"/><path d="M9.5 9V6h3v3"/><circle cx="18" cy="5" r="1"/><circle cx="18" cy="9" r="1"/><circle cx="21" cy="7" r="1"/></svg><b>Street Art</b></button>
               <button class="themecell" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg><b>Urban Design</b></button>
               <button class="themecell" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10l7-5 7 5v11"/><path d="M9.5 21v-6h5v6"/></svg><b>Historical</b></button>
-              <button class="themecell" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3.8"/><path d="M12 3v2.4M12 18.6V21M3 12h2.4M18.6 12H21M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M18.4 5.6l-1.7 1.7M7.3 16.7l-1.7 1.7"/></svg><b>Minimalist</b></button>
+              <button class="themecell" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3.8"/><path d="M12 3v2.4M12 18.6V21M3 12h2.4M18.6 12H21M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M18.4 5.6l-1.7 1.7M7.3 16.7l-1.7 1.7"/></svg><b>Minimalist</b></button>
               <button class="themecell" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M4 21V9h16v12"/><path d="M12 3 3.5 8.5h17z"/><path d="M8 21v-7M12 21v-7M16 21v-7"/></svg><b>Museums</b></button>
               <button class="themecell" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h20"/><path d="M4 18V8M20 18V8"/><path d="M4 12c5.5-4 10.5-4 16 0"/><path d="M8.5 18v-4.6M15.5 18v-4.6M12 18v-6"/></svg><b>Bridges</b></button>
               <button class="themecell" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 19h19"/><path d="M3.5 19 10 9l3.6 5.4L16 11l4.5 8"/><circle cx="17.5" cy="5.5" r="1.8"/></svg><b>Landscape</b></button>
             </div>
           </div>
-          <div class="obfoot"><button class="btn btn-red" data-go="obready">Continue</button></div>
+          <div class="obfoot"><button class="btn btn-red" id="ob-go-ready" data-go="obready" disabled>Continue</button></div>
           <div class="obdots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
         </section>
 
@@ -1430,6 +1432,12 @@ function setCapture(st, keepFrame){
   if(st === 'scanning') capTimer = setTimeout(()=>{ if(capState==='scanning') setCapture('ready'); }, 2600);
   if(st === 'analyzing') capTimer = setTimeout(()=>{ if(capState==='analyzing') setCapture('ready', true); }, 1600);
 }
+function syncObGate(){
+  const picked = sel => $$(sel).some(x => x.getAttribute('aria-pressed') === 'true');
+  const r = $('#ob-go-themes'), t = $('#ob-go-ready');
+  if(r) r.disabled = !picked('#ob-roles .rolerow');
+  if(t) t.disabled = !picked('#ob-themes .themecell');
+}
 function renderCheckinTags(){
   const extra = ['#modernism', '#mies', '#nyc'].filter(t=>!CAP_TAGS.includes(t));
   $('#ci-tags').innerHTML = CAP_TAGS.concat(extra)
@@ -1831,7 +1839,7 @@ $('#discover-map').insertAdjacentHTML('afterbegin', discoverMap());
 $('#journey-map').insertAdjacentHTML('afterbegin', journeyMap());
 $('#crossing-map').insertAdjacentHTML('afterbegin', crossingMap());
 renderSpots('nearby'); renderPfPanel('works'); renderTrips(); renderInsp('All'); renderRecords(); renderCommunity('feed');
-renderStops(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
+syncObGate(); renderStops(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
 
 document.addEventListener('click', e=>{
   const t = e.target;
@@ -1918,9 +1926,9 @@ document.addEventListener('click', e=>{
   }
 
   const role = t.closest('.rolerow');
-  if(role){ $$('#ob-roles .rolerow').forEach(r=>r.setAttribute('aria-pressed', String(r === role))); return; }
+  if(role){ $$('#ob-roles .rolerow').forEach(r=>r.setAttribute('aria-pressed', String(r === role))); syncObGate(); return; }
   const theme = t.closest('.themecell');
-  if(theme){ theme.setAttribute('aria-pressed', theme.getAttribute('aria-pressed')==='true'?'false':'true'); return; }
+  if(theme){ theme.setAttribute('aria-pressed', theme.getAttribute('aria-pressed')==='true'?'false':'true'); syncObGate(); return; }
 
   const tag = t.closest('.tagset .tag');
   if(tag){ tag.setAttribute('aria-pressed', tag.getAttribute('aria-pressed')==='true'?'false':'true'); return; }
