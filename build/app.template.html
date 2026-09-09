@@ -851,7 +851,7 @@ figure{margin:0}
 
         <!-- ============ 03 AR CAPTURE ============ -->
         <section class="screen" id="s-capture" data-bleed data-state="scanning">
-          <div class="ar-bg" id="ar-bg"><img data-img="ar_facade" alt="Bronze and glass tower facade seen from below"></div>
+          <div class="ar-bg" id="ar-bg"><img data-img="vessel_ar" alt="The Vessel at Hudson Yards seen from the plaza"></div>
           <div class="ar-scrim"></div>
 
           <span class="scanbeam" data-when="scanning analyzing"></span>
@@ -889,7 +889,7 @@ figure{margin:0}
             <div class="ar-bottom">
               <div class="ar-row">
                 <div class="ar-left" data-when="scanning">
-                  <span class="ar-thumb"><img data-img="checkin" alt="Last capture"></span>
+                  <span class="ar-thumb"><img data-img="vessel_shot" alt="Last capture"></span>
                   <button class="ar-addshot" aria-label="Add from library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
                 </div>
                 <button class="shutter" id="ar-shutter" data-when="scanning" aria-label="Take photo, then scan"><i></i></button>
@@ -909,7 +909,7 @@ figure{margin:0}
             <h2 class="h-title sm">New Check-in</h2>
             <button class="btn btn-red" style="width:auto;padding:10px 22px;font-size:13.5px" data-publish>Publish</button>
           </div>
-          <div class="ci-photo"><img data-img="checkin" alt="Manhattan skyline framed by a window"></div>
+          <div class="ci-photo"><img data-img="vessel_shot" alt="Stair lattice inside The Vessel"></div>
           <div class="ci-loc">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
             <div><b id="ci-locname">375 Park Ave, NYC</b><span class="tnum" id="ci-loccoords">40.7580° N, 73.9764° W</span></div>
@@ -925,8 +925,8 @@ figure{margin:0}
           </div>
           <div class="ci-block card">
             <div class="eyebrow">Caption / Poetry</div>
-            <textarea id="caption" rows="3" aria-label="Caption">Steel and glass rise in silence —
-Mies whispered here, still.</textarea>
+            <textarea id="caption" rows="3" aria-label="Caption">A lattice of stairs rising —
+the city folded in on itself.</textarea>
           </div>
           <div class="ci-block card">
             <div class="eyebrow">Tags</div>
@@ -935,10 +935,10 @@ Mies whispered here, still.</textarea>
           <div class="ci-block card">
             <div class="eyebrow">What stands out</div>
             <div class="tagset" id="ci-features">
-              <button class="tag" aria-pressed="true">Bronze curtain wall</button>
-              <button class="tag" aria-pressed="false">Plaza setback</button>
-              <button class="tag" aria-pressed="false">Travertine podium</button>
-              <button class="tag" aria-pressed="false">Structural rhythm</button>
+              <button class="tag" aria-pressed="true">Interlocking stairs</button>
+              <button class="tag" aria-pressed="false">Copper-clad steel</button>
+              <button class="tag" aria-pressed="false">Open-air atrium</button>
+              <button class="tag" aria-pressed="false">Hexagonal geometry</button>
             </div>
           </div>
           <button class="ci-row card">
@@ -1356,6 +1356,10 @@ const INSP = [
 ];
 
 const RECORDS = [
+  {id:'vessel', img:'vessel_hero', name:'The Vessel', city:'New York', style:'Contemporary',
+   architect:'Thomas Heatherwick', year:'2019', captures:3184, explorers:729,
+   shots:[['vessel_a','mia'],['vessel_b','kenji'],['vessel_c','sofia'],
+          ['vessel_shot','marco'],['vessel_ar','javier'],['vessel_hero','mia']]},
   {id:'barbican', img:'kn_barbican', name:'Barbican Estate', city:'London', style:'Brutalism',
    architect:'Chamberlin, Powell & Bon', year:'1976', captures:1284, explorers:312,
    shots:[['kn_barbican','javier'],['insp_bw','marco'],['w7','sofia']]},
@@ -1436,12 +1440,12 @@ const I = {
 const CAP_TAGS = ['#street', '#UrbanVernacular', '#night'];
 const TAG_POOL = ['#brutalism', '#facade', '#goldenhour', '#concrete', '#skyline', '#reflection'];
 const CANDIDATES = [
-  {name:'Seagram Building',      architect:'Mies van der Rohe',   year:'1958', style:'International Style',
-   street:'Park Avenue', addr:'375 Park Ave, NYC', coords:'40.7580° N, 73.9764° W', pct:96, bldId:'seagram'},
-  {name:'Lever House',           architect:'Gordon Bunshaft',     year:'1952', style:'International Style',
-   street:'Park Avenue', addr:'390 Park Ave, NYC', coords:'40.7595° N, 73.9723° W', pct:91},
-  {name:'Racquet & Tennis Club', architect:'McKim, Mead & White', year:'1918', style:'Renaissance Revival',
-   street:'Park Avenue', addr:'370 Park Ave, NYC', coords:'40.7576° N, 73.9741° W', pct:88}
+  {name:'The Vessel',      architect:'Thomas Heatherwick',      year:'2019', style:'Contemporary',
+   street:'Hudson Yards', addr:'20 Hudson Yards, NYC', coords:'40.7539° N, 74.0021° W', pct:96, bldId:'vessel'},
+  {name:'The Shed',        architect:'Diller Scofidio + Renfro', year:'2019', style:'Contemporary',
+   street:'Hudson Yards', addr:'545 W 30th St, NYC',   coords:'40.7535° N, 74.0022° W', pct:90},
+  {name:'30 Hudson Yards', architect:'Kohn Pedersen Fox',        year:'2019', style:'Contemporary',
+   street:'Hudson Yards', addr:'30 Hudson Yards, NYC', coords:'40.7540° N, 74.0011° W', pct:86}
 ];
 let capState = 'scanning', capTimer = null, capFrozen = false, capIndex = 0;
 
@@ -1484,7 +1488,7 @@ function syncObGate(){
   if(t) t.disabled = !picked('#ob-themes .themecell');
 }
 function renderCheckinTags(){
-  const extra = ['#modernism', '#mies', '#nyc'].filter(t=>!CAP_TAGS.includes(t));
+  const extra = ['#heatherwick', '#hudsonyards', '#stairs'].filter(t=>!CAP_TAGS.includes(t));
   $('#ci-tags').innerHTML = CAP_TAGS.concat(extra)
     .map(t=>`<button class="tag" aria-pressed="${CAP_TAGS.includes(t)}">${esc(t)}</button>`).join('');
 }
@@ -2027,7 +2031,7 @@ document.addEventListener('click', e=>{
     const tags = $$('#ci-tags .tag[aria-pressed="true"]').map(b=>b.textContent);
     const cand = CANDIDATES[capIndex];
     POSTS.unshift({person:'lucy', bld:cand.bldId || null, group:null, style:cand.style,
-      place:'New York', time:'just now', img:'checkin', quote:cap,
+      place:'New York', time:'just now', img:'vessel_shot', quote:cap,
       tags:tags.length?tags:['#archscape'], likes:0, comments:0, liked:false, saved:false, fresh:true});
     renderCommunity(commTab); go('community');
     toast($('#vis').getAttribute('aria-pressed')==='true' ? 'Published to Community' : 'Saved privately');
