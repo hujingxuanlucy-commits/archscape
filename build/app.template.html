@@ -1077,13 +1077,13 @@ Mies whispered here, still.</textarea>
             <div class="meethere" style="left:57.5%;top:46%"><i></i><b>MEET HERE</b></div>
           </div>
           <div class="xperson">
-            <span class="avatar steel" style="width:52px;height:52px;font-size:16px">J</span>
-            <div class="grow">
+            <span class="avatar steel" data-member="javier" style="width:52px;height:52px;font-size:16px;cursor:pointer">J</span>
+            <button class="grow" data-member="javier" style="text-align:left">
               <b>@javier.arq</b>
               <span>Madrid · 400m away</span>
               <span class="likes">Loves Brutalism, Photography, Urban Design</span>
-            </div>
-            <button class="sayhi" id="sayhi" aria-pressed="false">Say Hi</button>
+            </button>
+            <button class="sayhi" id="sayhi" aria-pressed="false">Message</button>
           </div>
           <div class="xcta">
             <button class="btn btn-red" id="meetup">
@@ -2010,8 +2010,8 @@ document.addEventListener('click', e=>{
     const b = $('#sayhi');
     const on = b.getAttribute('aria-pressed')!=='true';
     b.setAttribute('aria-pressed', String(on));
-    b.textContent = on ? 'Hi sent' : 'Say Hi';
-    if(on) toast('Said hi to @javier.arq'); return;
+    b.textContent = on ? 'Message sent' : 'Message';
+    if(on) toast('Message sent to @javier.arq'); return;
   }
   if(t.closest('#meetup')){ toast('Meet-up invite sent — 400m away'); return; }
   if(t.closest('#vis')){
