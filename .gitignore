@@ -1,0 +1,5 @@
+.DS_Store
+.claude/
+build/pylibs/
+__pycache__/
+*.pyc
