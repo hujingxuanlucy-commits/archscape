@@ -148,6 +148,11 @@ figure{margin:0}
 .obscreen{background:var(--ink);color:#fff;overflow:hidden}
 .obscreen.on{display:flex;flex-direction:column}
 .obtop{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:54px 26px 0;flex:none}
+.obtop-left{display:flex;align-items:center;gap:12px}
+.obback{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:#fff;flex:none;
+  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);transition:.16s}
+.obback:hover{background:rgba(255,255,255,.2)}
+.obback svg{width:17px;height:17px}
 .obmark{font-family:var(--disp);font-size:21px;font-weight:600;letter-spacing:.01em;color:#fff}
 .obmark b{color:var(--red);font-weight:600}
 .obskip{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#9C968E;transition:.16s}
@@ -706,8 +711,8 @@ figure{margin:0}
         <!-- ============ 01b ROLE ============ -->
         <section class="screen obscreen" id="s-obrole" data-bleed>
           <div class="obtop">
-            <span class="obmark"><b>Arch</b>Scape</span>
-            <button class="obskip" data-go="discover">Skip <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></button>
+            <div class="obtop-left"><button class="obback" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><span class="obmark"><b>Arch</b>Scape</span></div>
+            <button class="obskip" data-go="obready">Skip <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></button>
           </div>
           <div class="obhead">
             <h2>How do you see the city?</h2>
@@ -742,8 +747,8 @@ figure{margin:0}
         <!-- ============ 01c THEMES ============ -->
         <section class="screen obscreen" id="s-obthemes" data-bleed>
           <div class="obtop">
-            <span class="obmark"><b>Arch</b>Scape</span>
-            <button class="obskip" data-go="discover">Skip <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></button>
+            <div class="obtop-left"><button class="obback" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><span class="obmark"><b>Arch</b>Scape</span></div>
+            <button class="obskip" data-go="obready">Skip <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></button>
           </div>
           <div class="obhead">
             <h2>What inspires you most?</h2>
@@ -768,8 +773,8 @@ figure{margin:0}
         <!-- ============ 01d READY ============ -->
         <section class="screen obscreen" id="s-obready" data-bleed>
           <div class="obtop">
-            <span class="obmark"><b>Arch</b>Scape</span>
-            <button class="obskip" data-go="discover">Skip <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></button>
+            <div class="obtop-left"><button class="obback" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><span class="obmark"><b>Arch</b>Scape</span></div>
+            
           </div>
           <div class="obhead">
             <h2>Your creative journey begins</h2>
