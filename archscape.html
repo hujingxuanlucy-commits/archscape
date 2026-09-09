@@ -267,7 +267,7 @@ figure{margin:0}
 #s-capture{background:#08080A;overflow:hidden}
 .ar-bg{position:absolute;inset:0;overflow:hidden}
 .ar-bg img{width:100%;height:100%;object-fit:cover;transition:filter .45s ease, transform .45s ease}
-.ar-bg.shot img{filter:saturate(.66) contrast(1.08) brightness(.88);transform:scale(1.015)}
+.ar-bg.frozen img{filter:saturate(.66) contrast(1.08) brightness(.88);transform:scale(1.015)}
 .ar-scrim{position:absolute;inset:0;pointer-events:none;background:
   linear-gradient(180deg,rgba(0,0,0,.66),transparent 26%,transparent 50%,rgba(0,0,0,.82))}
 .ar-ui{position:absolute;inset:0;display:flex;flex-direction:column;color:#fff;z-index:3}
@@ -1475,7 +1475,7 @@ function setCapture(st, keepFrame){
   if(st === 'scanning'){ capFrozen = false; capIndex = 0; }
   if(st === 'analyzing' && !keepFrame) capFrozen = true;
   $('#s-capture').dataset.state = st;
-  $('#ar-bg').classList.toggle('shot', capFrozen);
+  $('#ar-bg').classList.toggle('frozen', capFrozen);
   $$('#s-capture [data-when]').forEach(el=>{
     el.hidden = !el.dataset.when.split(' ').includes(st);
   });
