@@ -47,7 +47,8 @@ figure{margin:0}
   border:1px solid #34343A;box-shadow:0 40px 90px -30px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.03) inset;
   transform:scale(var(--k,1));transform-origin:center center}
 .viewport{position:relative;width:var(--pw);height:var(--ph);border-radius:40px;overflow:hidden;background:var(--paper);
-  isolation:isolate}
+  isolation:isolate;transition:background .2s}
+.viewport[data-chrome="dark"]{background:var(--ink)}
 
 /* ============ phone chrome ============ */
 .statusbar{position:absolute;top:0;left:0;right:0;height:44px;z-index:40;display:flex;align-items:center;
@@ -74,8 +75,8 @@ figure{margin:0}
 .screen.leaving.to-right{animation:slideOutR .36s cubic-bezier(.32,.72,0,1) both}
 @keyframes slideInR{from{transform:translateX(100%)}to{transform:translateX(0)}}
 @keyframes slideInL{from{transform:translateX(-100%)}to{transform:translateX(0)}}
-@keyframes slideOutL{from{transform:translateX(0);opacity:1}to{transform:translateX(-26%);opacity:.5}}
-@keyframes slideOutR{from{transform:translateX(0);opacity:1}to{transform:translateX(26%);opacity:.5}}
+@keyframes slideOutL{from{transform:translateX(0);filter:brightness(1)}to{transform:translateX(-26%);filter:brightness(.5)}}
+@keyframes slideOutR{from{transform:translateX(0);filter:brightness(1)}to{transform:translateX(26%);filter:brightness(.5)}}
 .screen[data-bleed]{background:var(--ink)}
 .pad{padding-top:44px}
 .padnav{padding-bottom:104px}
