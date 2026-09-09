@@ -610,18 +610,22 @@ figure{margin:0}
 .xav span{font-size:11.5px;color:var(--muted)}
 
 /* ============ 11 knowledge ============ */
-.kn-hero{position:relative;padding:56px 22px 22px;overflow:hidden;background:var(--ink)}
+.kn-hero{position:relative;padding:20px 22px 22px;overflow:hidden;background:var(--ink)}
 .kn-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.42}
 .kn-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.55),rgba(10,10,10,.9))}
 .kn-in{position:relative;z-index:2}
+.knback{display:grid;place-items:center;width:34px;height:34px;border-radius:8px;color:#fff;margin-bottom:12px;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);transition:.16s}
+.knback:hover{background:rgba(255,255,255,.26)}
+.knback svg{width:19px;height:19px}
 .kn-in h2{font-family:var(--disp);font-size:33px;font-weight:600;color:#fff;margin:0;line-height:1.05}
 .kn-in p{margin:5px 0 16px;font-size:12.5px;color:rgba(255,255,255,.7)}
 .searchbox{display:flex;align-items:center;gap:10px;background:#fff;border-radius:7px;padding:0 14px;height:46px}
 .searchbox svg{width:18px;height:18px;color:var(--muted-2);flex:none}
 .searchbox input{flex:1;min-width:0;border:0;outline:none;background:none;font-size:14px;color:var(--ink)}
 .searchbox input::placeholder{color:var(--muted-2)}
-.kgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:0 22px 22px}
-.kcard{position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1/.86;display:block;background:var(--ink)}
+.kgrid{display:grid;grid-template-columns:1fr 1fr;grid-auto-flow:row dense;gap:11px;padding:0 22px 22px}
+.kcard{position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1/1.05;display:block;background:var(--ink)}
 .kcard.wide{grid-column:1/-1;aspect-ratio:1/.29}
 .kcard img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
 .kcard:hover img{transform:scale(1.05)}
@@ -1083,10 +1087,11 @@ Mies whispered here, still.</textarea>
         </section>
 
         <!-- ============ 11 KNOWLEDGE ============ -->
-        <section class="screen padnav" id="s-knowledge">
+        <section class="screen pad padnav" id="s-knowledge">
           <div class="kn-hero">
             <img data-img="kn_hero" alt="Library shelves">
             <div class="kn-in">
+              <button class="knback" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
               <h2>Search</h2>
               <p><span class="onum">50,000+</span> buildings, architects and styles</p>
               <div class="searchbox">
@@ -1323,7 +1328,7 @@ const RECORDS = [
   {id:'national', img:'insp_bw', name:'National Theatre', city:'London', style:'Brutalism',
    architect:'Denys Lasdun', year:'1976', captures:673, explorers:188,
    shots:[['insp_bw','marco'],['kn_barbican','javier'],['w1','mia']]},
-  {id:'seagram', img:'w7', name:'Seagram Building', city:'New York', style:'Modernism',
+  {id:'seagram', img:'ar_facade', name:'Seagram Building', city:'New York', style:'Modernism',
    architect:'Mies van der Rohe', year:'1958', captures:2104, explorers:498,
    shots:[['w7','mia'],['feedthumb','marco'],['checkin','kenji'],['w12','sofia'],['w2','javier'],['ar_facade','mia']]},
   {id:'willis', img:'w2', name:'Willis Building', city:'London', style:'Modernism',
