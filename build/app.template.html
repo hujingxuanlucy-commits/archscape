@@ -466,6 +466,105 @@ figure{margin:0}
 .empty p{margin:0 0 16px;font-size:13.5px;line-height:1.6}
 .empty .sectitle{margin-bottom:8px}
 
+/* ============ community: groups, members, buildings ============ */
+.travelband{display:flex;align-items:center;gap:11px;margin:14px 22px 16px;padding:12px 14px;
+  background:var(--red-tint);border:1px solid rgba(149,35,36,.22);border-radius:10px}
+.travelband svg{width:19px;height:19px;color:var(--red);flex:none}
+.travelband .grow{flex:1;min-width:0}
+.travelband b{display:block;font-size:13px;font-weight:600;color:var(--ink)}
+.travelband span{display:block;font-size:11.5px;color:#7A5B5B;margin-top:2px}
+
+.peoplestrip{display:flex;gap:16px;padding:14px 22px 4px;overflow-x:auto;scrollbar-width:none}
+.peoplestrip::-webkit-scrollbar{display:none}
+.pchip{flex:none;text-align:center;width:60px}
+.pchip .avatar{width:52px;height:52px;font-size:17px;margin:0 auto 6px;border:2px solid var(--paper);
+  box-shadow:0 0 0 2px var(--red)}
+.pchip.off .avatar{box-shadow:0 0 0 1.5px var(--bone)}
+.pchip .phandle{display:block;font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+
+.gcard{display:flex;gap:13px;align-items:flex-start;margin:0 22px 10px;padding:13px 14px;
+  width:calc(100% - 44px);text-align:left;transition:.16s}
+.gcard:hover{border-color:var(--muted-2)}
+.gcard > img{width:64px;height:64px;border-radius:8px;object-fit:cover;flex:none}
+.gcard .grow{flex:1;min-width:0}
+.gcard b{display:block;font-size:14px;font-weight:600;color:var(--ink)}
+.gcard .blurb{display:block;font-size:12px;color:var(--muted);line-height:1.45;margin:3px 0 6px}
+.gcard .gmeta{display:block;font-size:11.5px;color:var(--muted-2)}
+.gcard .gwalk{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--red);margin-top:6px}
+.gcard .gwalk i{width:6px;height:6px;border-radius:50%;background:var(--red);display:block;flex:none}
+.gkind{flex:none;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);border:1px solid var(--bone);border-radius:4px;padding:3px 7px}
+
+.gcover{position:relative;height:184px;overflow:hidden}
+.gcover img{width:100%;height:100%;object-fit:cover}
+.gcover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.45),rgba(10,10,10,.15) 40%,rgba(10,10,10,.8))}
+.gcover .gtitle{position:absolute;left:22px;right:22px;bottom:14px;z-index:2;color:#fff}
+.gcover .gtitle h2{font-family:var(--disp);font-size:29px;font-weight:600;margin:0;line-height:1.1}
+.gcover .gtitle span{font-size:11.5px;color:rgba(255,255,255,.8)}
+.gtop{position:absolute;left:0;right:0;top:0;z-index:3;display:flex;align-items:center;
+  justify-content:space-between;padding:52px 14px 0}
+.gtop .iconbtn{color:#fff}
+.gtop .iconbtn:hover{background:rgba(255,255,255,.18)}
+
+.walkcard{margin:0 22px 14px;padding:14px 15px}
+.walkrow{display:flex;align-items:flex-start;gap:12px;margin-top:9px}
+.walkdate{flex:none;width:52px;text-align:center;border:1px solid var(--bone);border-radius:7px;padding:6px 0}
+.walkdate b{display:block;font-family:var(--disp);font-size:20px;font-weight:600;line-height:1;color:var(--red)}
+.walkdate span{display:block;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-top:3px}
+.walkbody{flex:1;min-width:0}
+.walkbody > b{display:block;font-size:14px;font-weight:600;color:var(--ink)}
+.walkbody > span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.walkbody > span.walkgoing{display:flex;align-items:center;gap:8px;margin-top:10px}
+.walkbody .stackav{display:flex}
+.walkbody .stackav span{display:block;width:22px;height:22px;border:2px solid var(--white);margin-top:0}
+.walkgoing em{font-style:normal;font-size:11.5px;color:var(--muted)}
+
+.btn-outline{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;
+  border-radius:8px;font-size:14px;font-weight:600;color:var(--red);background:none;
+  border:1px solid var(--red);transition:.16s}
+.btn-outline:hover{background:var(--red-tint)}
+.btn-outline[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+.btn-outline svg{width:17px;height:17px}
+
+.mb-actions{display:flex;gap:10px;padding:0 22px 4px}
+.mb-actions .btn,.mb-actions .btn-outline{width:auto;flex:1;padding:12px}
+.crossed{display:flex;align-items:flex-start;gap:10px;margin:16px 22px 4px;padding:12px 14px;
+  background:var(--bone-soft);border-radius:9px}
+.crossed svg{width:17px;height:17px;color:var(--red);flex:none;margin-top:1px}
+.crossed span{font-size:12.5px;color:#57534D;line-height:1.5}
+.grouptags{display:flex;gap:8px;flex-wrap:wrap;padding:14px 22px 0}
+.gtag{font-size:11.5px;font-weight:500;color:var(--ink);background:var(--white);border:1px solid var(--bone);
+  border-radius:999px;padding:6px 12px;transition:.16s}
+.gtag:hover{border-color:var(--muted-2)}
+
+.bhero{position:relative;height:230px;overflow:hidden}
+.bhero img{width:100%;height:100%;object-fit:cover}
+.bhero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.5),transparent 45%)}
+.bfacts{padding:16px 22px 0}
+.bfacts h2{font-family:var(--disp);font-size:31px;font-weight:600;margin:0;line-height:1.06;color:var(--ink)}
+.bfacts p{margin:6px 0 0;font-size:13px;color:var(--muted)}
+.bstyles{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.bstyles span{font-size:11.5px;padding:6px 12px;border:1px solid var(--bone);background:var(--white);color:var(--ink)}
+.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.shot{position:relative;aspect-ratio:1;overflow:hidden;display:block}
+.shot img{width:100%;height:100%;object-fit:cover;transition:transform .45s}
+.shot:hover img{transform:scale(1.07)}
+.shot .who{position:absolute;left:0;right:0;bottom:0;padding:16px 7px 6px;font-size:9.5px;font-weight:600;
+  color:#fff;background:linear-gradient(transparent,rgba(10,10,10,.8));text-align:left}
+.bcta{padding:16px 22px 8px}
+
+.followbtn{flex:none;font-size:11.5px;font-weight:600;color:var(--red);border:1px solid var(--red);
+  border-radius:999px;padding:6px 13px;transition:.16s;background:none}
+.followbtn:hover{background:var(--red-tint)}
+.followbtn[aria-pressed="true"]{color:var(--muted);border-color:var(--bone)}
+.post-bld{display:flex;align-items:center;gap:6px;font-family:var(--disp);font-size:19px;font-weight:600;
+  color:var(--ink);margin-bottom:5px;text-align:left;transition:.16s}
+.post-bld svg{width:13px;height:13px;color:var(--red);flex:none}
+.post-bld:hover{color:var(--red)}
+.kcard{width:100%}
+
 /* ============ 09 community ============ */
 .post{border-bottom:1px solid var(--bone);padding-bottom:14px;margin-bottom:14px}
 .post-head{display:flex;align-items:center;gap:11px;padding:0 20px 12px}
@@ -922,7 +1021,30 @@ Mies whispered here, still.</textarea>
             <h2 class="h-title">Community</h2>
             <button class="iconbtn" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 6-2.5 7.5-2.5 7.5h17S18 14 18 8z"/><path d="M10.3 19a2 2 0 0 0 3.4 0"/></svg></button>
           </div>
-          <div id="posts"></div>
+          <div class="chiprow" data-chips="comm">
+            <button class="chip" aria-pressed="true"  data-val="feed">Feed</button>
+            <button class="chip" aria-pressed="false" data-val="following">Following</button>
+            <button class="chip" aria-pressed="false" data-val="groups">Groups</button>
+          </div>
+          <div id="comm-panel"></div>
+        </section>
+
+        <!-- ============ GROUP ============ -->
+        <section class="screen pad padnav" id="s-group">
+          <div class="ci-head"><button class="iconbtn" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><h2 class="h-title sm" id="g-name">Group</h2><button class="iconbtn" aria-label="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><line x1="8.3" y1="10.8" x2="15.7" y2="6.2"/><line x1="8.3" y1="13.2" x2="15.7" y2="17.8"/></svg></button></div>
+          <div id="g-body"></div>
+        </section>
+
+        <!-- ============ EXPLORER ============ -->
+        <section class="screen pad padnav" id="s-member">
+          <div class="ci-head"><button class="iconbtn" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><h2 class="h-title sm" id="m-name">Explorer</h2><button class="iconbtn" aria-label="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><line x1="8.3" y1="10.8" x2="15.7" y2="6.2"/><line x1="8.3" y1="13.2" x2="15.7" y2="17.8"/></svg></button></div>
+          <div id="m-body"></div>
+        </section>
+
+        <!-- ============ BUILDING ============ -->
+        <section class="screen pad padnav" id="s-building">
+          <div class="ci-head"><button class="iconbtn" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><h2 class="h-title sm">Building</h2><button class="iconbtn" aria-label="Save building"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg></button></div>
+          <div id="b-body"></div>
         </section>
 
         <!-- ============ 10 PATHS CROSSING ============ -->
@@ -981,6 +1103,7 @@ Mies whispered here, still.</textarea>
             <button class="chip" aria-pressed="false" data-val="Modernism">Modernism</button>
             <button class="chip" aria-pressed="false" data-val="Deconstructivism">Deconstructivism</button>
             <button class="chip" aria-pressed="false" data-val="Gothic">Gothic</button>
+            <button class="chip" aria-pressed="false" data-val="Contemporary">Contemporary</button>
           </div>
           <div class="kcount">
             <h3 class="sectitle"><span id="kheading">All records</span> <span style="color:var(--muted-2);font-size:15px">· <span id="kcount" class="onum">12</span></span></h3>
@@ -1039,14 +1162,20 @@ const SCREENS = [
   {id:'archive',     name:'Archive',     chrome:'light', nav:true, tab:'profile'},
   {id:'inspiration', name:'Inspiration', chrome:'light', nav:true, tab:'profile'},
   {id:'community',   name:'Community',   chrome:'light', nav:true, tab:'explore'},
+  {id:'group',       name:'Group',       chrome:'light', nav:true, tab:'explore'},
+  {id:'member',      name:'Explorer',    chrome:'light', nav:true, tab:'explore'},
+  {id:'building',    name:'Building',    chrome:'light', nav:true, tab:'explore'},
   {id:'crossing',    name:'Crossing',    chrome:'light', nav:true, tab:'explore'},
   {id:'knowledge',   name:'Knowledge',   chrome:'light', nav:true, tab:'explore'}
 ];
 const viewport = $('#viewport'), tabbar = $('#tabbar'), toastEl = $('#toast');
 let current = 'onboarding';
 
-function go(id){
+let navStack = [];
+function back(){ go(navStack.pop() || 'discover', true); }
+function go(id, isBack){
   const s = SCREENS.find(x=>x.id===id); if(!s) return;
+  if(!isBack && current !== id){ navStack.push(current); if(navStack.length > 30) navStack.shift(); }
   current = id;
   $$('.screen').forEach(el => el.classList.toggle('on', el.id === 's'+'-'+id));
   viewport.dataset.chrome = s.chrome;
@@ -1153,17 +1282,17 @@ function crossingMap(){
 /* ---------- data ---------- */
 const SPOTS = {
   nearby:[
-    {img:'k11',  name:'K11 Musea',   city:'Hong Kong', n:128},
-    {img:'tate', name:'Tate Modern', city:'London',    n:412}],
+    {id:'k11', img:'k11', name:'K11 Musea', city:'Hong Kong', n:128},
+    {id:'tate', img:'tate', name:'Tate Modern', city:'London', n:412}],
   trending:[
-    {img:'insp_heydar', name:'Heydar Aliyev Centre', city:'Baku',    n:906},
-    {img:'insp_nest',   name:"Bird's Nest",          city:'Beijing', n:734}],
+    {id:'heydar', img:'insp_heydar', name:'Heydar Aliyev Centre', city:'Baku', n:906},
+    {id:'nest', img:'insp_nest', name:"Bird's Nest", city:'Beijing', n:734}],
   following:[
-    {img:'kn_barbican', name:'Barbican Estate', city:'London',   n:288},
-    {img:'kn_habitat',  name:'Habitat 67',      city:'Montreal', n:161}],
+    {id:'barbican', img:'kn_barbican', name:'Barbican Estate', city:'London', n:288},
+    {id:'habitat', img:'kn_habitat', name:'Habitat 67', city:'Montreal', n:161}],
   saved:[
-    {img:'insp_pavil', name:'Serpentine Pavilion', city:'London', n:97},
-    {img:'insp_glass', name:'Great Court',         city:'London', n:355}]
+    {id:'serpentine', img:'insp_pavil', name:'Serpentine Pavilion', city:'London', n:97},
+    {id:'greatcourt', img:'insp_glass', name:'Great Court', city:'London', n:355}]
 };
 const SPOT_TITLE = {nearby:'Nearby Spots', trending:'Trending Now', following:'From People You Follow', saved:'Your Saved Spots'};
 
@@ -1183,25 +1312,67 @@ const INSP = [
 ];
 
 const RECORDS = [
-  {img:'kn_barbican', name:'Barbican Estate',      city:'London',   style:'Brutalism'},
-  {img:'kn_habitat',  name:'Habitat 67',           city:'Montreal', style:'Brutalism'},
-  {img:'kn_trellick', name:'Trellick Tower',       city:'London',   style:'Brutalism', wide:true, sub:'Goldfinger \u00b7 1972'},
-  {img:'insp_bw',     name:'National Theatre',     city:'London',   style:'Brutalism'},
-  {img:'w7',          name:'Seagram Building',     city:'New York', style:'Modernism'},
-  {img:'w2',          name:'Willis Building',      city:'London',   style:'Modernism'},
-  {img:'insp_glass',  name:'Great Court',          city:'London',   style:'Modernism', wide:true, sub:'Foster + Partners'},
-  {img:'insp_pavil',  name:'Serpentine Pavilion',  city:'London',   style:'Modernism'},
-  {img:'insp_heydar', name:'Heydar Aliyev Centre', city:'Baku',     style:'Deconstructivism'},
-  {img:'insp_nest',   name:"Bird's Nest",          city:'Beijing',  style:'Deconstructivism'},
-  {img:'w8',          name:'Duomo di Milano',      city:'Milan',    style:'Gothic'},
-  {img:'w9',          name:'Duomo, West Front',    city:'Milan',    style:'Gothic'}
+  {id:'barbican', img:'kn_barbican', name:'Barbican Estate', city:'London', style:'Brutalism',
+   architect:'Chamberlin, Powell & Bon', year:'1976', captures:1284, explorers:312,
+   shots:[['kn_barbican','javier'],['insp_bw','marco'],['w7','sofia']]},
+  {id:'habitat', img:'kn_habitat', name:'Habitat 67', city:'Montreal', style:'Brutalism',
+   architect:'Moshe Safdie', year:'1967', captures:842, explorers:203,
+   shots:[['kn_habitat','sofia'],['w1','mia'],['onb_lattice','kenji']]},
+  {id:'trellick', img:'kn_trellick', name:'Trellick Tower', city:'London', style:'Brutalism', wide:true,
+   architect:'Erno Goldfinger', year:'1972', captures:519, explorers:147,
+   shots:[['kn_trellick','javier'],['insp_stair','marco'],['w7','kenji']]},
+  {id:'national', img:'insp_bw', name:'National Theatre', city:'London', style:'Brutalism',
+   architect:'Denys Lasdun', year:'1976', captures:673, explorers:188,
+   shots:[['insp_bw','marco'],['kn_barbican','javier'],['w1','mia']]},
+  {id:'seagram', img:'w7', name:'Seagram Building', city:'New York', style:'Modernism',
+   architect:'Mies van der Rohe', year:'1958', captures:2104, explorers:498,
+   shots:[['w7','mia'],['feedthumb','marco'],['checkin','kenji'],['w12','sofia'],['w2','javier'],['ar_facade','mia']]},
+  {id:'willis', img:'w2', name:'Willis Building', city:'London', style:'Modernism',
+   architect:'Foster + Partners', year:'2008', captures:311, explorers:96,
+   shots:[['w2','sofia'],['insp_glass','marco'],['w4','mia']]},
+  {id:'greatcourt', img:'insp_glass', name:'Great Court', city:'London', style:'Modernism', wide:true,
+   architect:'Foster + Partners', year:'2000', captures:1466, explorers:377,
+   shots:[['insp_glass','sofia'],['w6','marco'],['w4','kenji']]},
+  {id:'serpentine', img:'insp_pavil', name:'Serpentine Pavilion', city:'London', style:'Modernism',
+   architect:'Sou Fujimoto', year:'2013', captures:428, explorers:131,
+   shots:[['insp_pavil','sofia'],['insp_heydar','marco'],['w5','mia']]},
+  {id:'heydar', img:'insp_heydar', name:'Heydar Aliyev Centre', city:'Baku', style:'Deconstructivism',
+   architect:'Zaha Hadid', year:'2012', captures:1893, explorers:441,
+   shots:[['insp_heydar','marco'],['insp_pavil','sofia'],['insp_nest','kenji']]},
+  {id:'nest', img:'insp_nest', name:"Bird's Nest", city:'Beijing', style:'Deconstructivism',
+   architect:'Herzog & de Meuron', year:'2008', captures:1207, explorers:356,
+   shots:[['insp_nest','kenji'],['insp_heydar','marco'],['onb_lattice','javier']]},
+  {id:'duomo', img:'duomo', name:'Duomo di Milano', city:'Milan', style:'Gothic',
+   architect:'Simone da Orsenigo', year:'1386', captures:3521, explorers:812,
+   shots:[['duomo','marco'],['w8','marco'],['w9','sofia']]},
+  {id:'duomowest', img:'w9', name:'Duomo, West Front', city:'Milan', style:'Gothic',
+   architect:'Carlo Buzzi', year:'1656', captures:702, explorers:214,
+   shots:[['w9','marco'],['w8','kenji'],['duomo','sofia']]},
+  {id:'k11', img:'k11', name:'K11 Musea', city:'Hong Kong', style:'Contemporary',
+   architect:'Kohn Pedersen Fox', year:'2019', captures:596, explorers:174,
+   shots:[['k11','kenji'],['w6','mia'],['insp_glass','sofia']]},
+  {id:'tate', img:'tate', name:'Tate Modern', city:'London', style:'Contemporary',
+   architect:'Herzog & de Meuron', year:'2000', captures:2870, explorers:640,
+   shots:[['tate','sofia'],['insp_bw','marco'],['kn_barbican','javier']]}
 ];
 
 let POSTS = [
-  {user:'@marco.design', av:'M', avc:'steel', place:'Milan', time:'32 min ago', img:'duomo',
-   quote:'“The Duomo at golden hour — every stone tells a century.”',
+  {person:'marco', bld:'duomo', group:'light', style:'Gothic', place:'Milan', time:'32 min ago', img:'duomo',
+   quote:'The Duomo at golden hour — every stone tells a century.',
    tags:['#gothic','#milan','#duomo'], likes:1247, comments:87, liked:true, saved:false},
-  {user:'@lucy.arch', av:'L', avc:'', place:'New York', time:'2h ago', img:'highline',
+  {person:'javier', bld:'barbican', group:'brutalism', style:'Brutalism', place:'London', time:'1h ago', img:'kn_barbican',
+   quote:'Forty years of weather and the concrete still reads exactly as intended.',
+   tags:['#brutalism','#barbican','#london'], likes:634, comments:41, liked:false, saved:false},
+  {person:'mia', bld:'seagram', group:'modernism', style:'Modernism', place:'New York', time:'2h ago', img:'feedthumb',
+   quote:'The light at Seagram today — pure Mies perfection.',
+   tags:['#modernism','#mies','#nyc'], likes:284, comments:42, liked:false, saved:false},
+  {person:'sofia', bld:'greatcourt', group:'light', style:'Modernism', place:'London', time:'5h ago', img:'insp_glass',
+   quote:'Foster’s lattice turns the whole court into a sundial.',
+   tags:['#daylight','#foster','#london'], likes:912, comments:63, liked:false, saved:true},
+  {person:'kenji', bld:null, group:'tokyo', style:'Urban Vernacular', place:'Tokyo', time:'8h ago', img:'onb_night',
+   quote:'Shibuya after rain — every surface doing double duty as a mirror.',
+   tags:['#tokyo','#night','#street'], likes:1508, comments:126, liked:true, saved:false},
+  {person:'lucy', bld:null, group:null, style:'Landscape', place:'New York', time:'2h ago', img:'highline',
    quote:'High Line at dusk — reclaimed steel as urban poem.',
    tags:['#highline','#nyc','#landscape'], likes:642, comments:31, liked:false, saved:true}
 ];
@@ -1222,7 +1393,7 @@ const CAP_TAGS = ['#street', '#UrbanVernacular', '#night'];
 const TAG_POOL = ['#brutalism', '#facade', '#goldenhour', '#concrete', '#skyline', '#reflection'];
 const CANDIDATES = [
   {name:'Seagram Building',      architect:'Mies van der Rohe',   year:'1958', style:'International Style',
-   street:'Park Avenue', addr:'375 Park Ave, NYC', coords:'40.7580° N, 73.9764° W', pct:96},
+   street:'Park Avenue', addr:'375 Park Ave, NYC', coords:'40.7580° N, 73.9764° W', pct:96, bldId:'seagram'},
   {name:'Lever House',           architect:'Gordon Bunshaft',     year:'1952', style:'International Style',
    street:'Park Avenue', addr:'390 Park Ave, NYC', coords:'40.7595° N, 73.9723° W', pct:91},
   {name:'Racquet & Tennis Club', architect:'McKim, Mead & White', year:'1918', style:'Renaissance Revival',
@@ -1268,12 +1439,285 @@ function renderCheckinTags(){
     .map(t=>`<button class="tag" aria-pressed="${CAP_TAGS.includes(t)}">${esc(t)}</button>`).join('');
 }
 
+/* ---------- community: people, groups, buildings ----------
+   The arc: see a building -> see who else captured it -> follow that eye ->
+   join their group -> the group walks to a building -> you meet there.      */
+const PEOPLE = {
+  lucy:   {name:'Lucy Zhang', handle:'@lucy.arch', av:'L', avc:'', city:'New York', self:true,
+           bio:'Architect & urban photographer.', followers:'3.2k', captures:247, cities:18,
+           groups:['brutalism','tokyo'], crossed:'', works:['w1','w2','w3']},
+  marco:  {name:'Marco Ferrari', handle:'@marco.design', av:'M', avc:'steel', city:'Milan',
+           bio:'Lombard baroque and everything that came after it. Slow walks, long lenses.',
+           followers:'4.1k', captures:312, cities:9, following:true, groups:['brutalism','light'],
+           crossed:'Your paths crossed at the Duomo, Milan — Nov 2024',
+           works:['duomo','w8','w9','insp_bw','w11','arc_bcn']},
+  sofia:  {name:'Sofia Bergmann', handle:'@sofia.b', av:'S', avc:'', city:'Copenhagen',
+           bio:'Danish modernism, daylight, and the space between gallery and landscape.',
+           followers:'2.8k', captures:196, cities:6, following:false, groups:['light','modernism'],
+           crossed:'You have both captured the Barbican Estate',
+           works:['insp_pavil','w5','insp_glass','w2','kn_habitat','w12']},
+  kenji:  {name:'Kenji Tanaka', handle:'@kenji.t', av:'K', avc:'grey', city:'Tokyo',
+           bio:'Night walks through Shibuya. Neon, concrete, and the vernacular of small streets.',
+           followers:'5.6k', captures:428, cities:12, following:false, groups:['tokyo','light'],
+           crossed:'Kenji is in New York next week',
+           works:['onb_night','w11','arc_tky','onb_brick','onb_glass','w7']},
+  javier: {name:'Javier Ruiz', handle:'@javier.arq', av:'J', avc:'steel', city:'Madrid',
+           bio:'Brutalism, photography and urban design. Currently 400m from you.',
+           followers:'1.9k', captures:143, cities:5, following:false, groups:['brutalism'],
+           crossed:'Your paths crossed today — 400m away',
+           works:['insp_stair','insp_bw','kn_trellick','kn_barbican','w7','onb_lattice']},
+  mia:    {name:'Mia Liu', handle:'@mia.liu', av:'M', avc:'', city:'New York',
+           bio:'Midtown light, curtain walls, and the hour before sunset.',
+           followers:'3.4k', captures:271, cities:8, following:true, groups:['modernism','light'],
+           crossed:'Your paths crossed on Park Avenue — today',
+           works:['feedthumb','w12','w2','checkin','w1','kn_habitat']}
+};
+
+const GROUPS = {
+  brutalism:{name:'Brutalism Collective', kind:'Style', img:'kn_barbican', members:148, posts:89, joined:true,
+    blurb:'Celebrating the raw beauty of concrete and structural honesty.',
+    people:['marco','javier','sofia'],
+    walk:{d:'14', m:'Sep', title:'Barbican highwalk loop', place:'Barbican Estate, London', time:'Saturday 10:00', going:12, bld:'barbican'}},
+  tokyo:{name:'Tokyo Explorers', kind:'City', img:'onb_night', members:342, posts:122, joined:true,
+    blurb:'Urban walks through Japan’s architectural landscape.',
+    people:['kenji','mia'],
+    walk:{d:'22', m:'Sep', title:'Shibuya to Omotesando', place:'Shibuya, Tokyo', time:'Sunday 16:00', going:8, bld:null}},
+  light:{name:'Light & Shadow', kind:'Theme', img:'w5', members:112, posts:56, joined:false,
+    blurb:'How natural light transforms architectural space.',
+    people:['sofia','marco','kenji','mia'], walk:null},
+  modernism:{name:'Mid-Century Modern', kind:'Style', img:'w7', members:203, posts:97, joined:false,
+    blurb:'Postwar modernism, from Mies van der Rohe to the Smithsons.',
+    people:['mia','sofia'],
+    walk:{d:'18', m:'Sep', title:'Park Avenue towers', place:'Midtown, New York', time:'Thursday 18:00', going:5, bld:'seagram'}}
+};
+
+let commTab = 'feed', curGroup = 'brutalism', curMember = 'marco', curBuilding = 'seagram';
+const bldById = id => RECORDS.find(r => r.id === id);
+
+/* ---------- small pieces ---------- */
+function avatarOf(k, extra){
+  const p = PEOPLE[k];
+  return `<span class="avatar ${p.avc}${extra ? ' ' + extra : ''}">${p.av}</span>`;
+}
+function followBtn(k){
+  const p = PEOPLE[k];
+  if(!p || p.self) return '';
+  return `<button class="followbtn" data-follow="${k}" aria-pressed="${!!p.following}">${p.following ? 'Following' : 'Follow'}</button>`;
+}
+function stackOf(keys){
+  return '<span class="stackav">' + keys.map(k=>{
+    const p = PEOPLE[k];
+    return `<span style="background:${p.avc==='steel'?'#3E6B9A':p.avc==='grey'?'#666666':'#952324'}"></span>`;
+  }).join('') + '</span>';
+}
+
+/* ---------- posts ---------- */
+function postHTML(p, i){
+  const who = PEOPLE[p.person];
+  const b = p.bld ? bldById(p.bld) : null;
+  return `<article class="post">
+    <div class="post-head">
+      <span data-member="${p.person}" style="cursor:pointer">${avatarOf(p.person)}</span>
+      <button class="grow" data-member="${p.person}" style="text-align:left">
+        <b>${esc(who.name)}${p.fresh?'<span class="newflag">JUST NOW</span>':''}</b>
+        <span>${esc(who.city)} &#183; ${esc(p.style || 'Architecture')} &#183; ${esc(p.time)}</span>
+      </button>
+      ${followBtn(p.person)}
+    </div>
+    <img class="post-img" src="${IMG[p.img]}" alt="${esc(p.place)}">
+    <div class="post-body">
+      ${b ? `<button class="post-bld" data-building="${b.id}">${esc(b.name)}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></button>` : ''}
+      <p class="post-quote">${esc(p.quote)}</p>
+      <div class="hashes">${p.tags.map(t=>`<a>${esc(t)}</a>`).join('')}</div>
+      <div class="post-acts">
+        <button class="act ${p.liked?'liked':''}" data-like="${i}">${I.heart}<span>${p.likes>999?(p.likes/1000).toFixed(1)+'k':p.likes}</span></button>
+        <button class="act">${I.chat}<span>${p.comments}</span></button>
+        <button class="act">${I.share}</button>
+        <span class="spacer"></span>
+        <button class="act ${p.saved?'liked':''}" data-savepost="${i}">${I.book}</button>
+      </div>
+    </div>
+  </article>`;
+}
+
+/* ---------- community panel ---------- */
+function groupCard(id){
+  const g = GROUPS[id];
+  return `<button class="gcard card" data-group="${id}">
+    <img src="${IMG[g.img]}" alt="">
+    <span class="grow">
+      <b>${esc(g.name)}</b>
+      <span class="blurb">${esc(g.blurb)}</span>
+      <span class="gmeta">${g.members} members &#183; ${g.posts} posts</span>
+      ${g.walk ? `<span class="gwalk"><i></i>Walk on ${esc(g.walk.d)} ${esc(g.walk.m)} &#183; ${g.walk.going} going</span>` : ''}
+    </span>
+    <span class="gkind">${esc(g.kind)}</span>
+  </button>`;
+}
+function renderCommunity(tab){
+  commTab = tab;
+  const p = $('#comm-panel');
+  if(tab === 'groups'){
+    const mine = Object.keys(GROUPS).filter(k=>GROUPS[k].joined);
+    const rest = Object.keys(GROUPS).filter(k=>!GROUPS[k].joined);
+    p.innerHTML = `
+      <button class="travelband" data-go="crossing">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+        <span class="grow"><b>You are in New York this week</b>
+          <span>2 walks nearby &#183; 4 explorers from your groups are here</span></span>
+      </button>
+      <div class="sechead"><h3 class="sectitle">Your groups</h3></div>
+      ${mine.map(groupCard).join('')}
+      <div class="sechead" style="padding-top:18px"><h3 class="sectitle">Discover groups</h3></div>
+      ${rest.map(groupCard).join('')}`;
+    return;
+  }
+  if(tab === 'following'){
+    const suggest = Object.keys(PEOPLE).filter(k=>!PEOPLE[k].self && !PEOPLE[k].following);
+    const list = POSTS.filter(x=>{ const w = PEOPLE[x.person]; return w.self || w.following; });
+    p.innerHTML = `
+      <div class="peoplestrip">${Object.keys(PEOPLE).filter(k=>PEOPLE[k].following)
+        .map(k=>`<button class="pchip" data-member="${k}">${avatarOf(k)}<span class="phandle">${esc(PEOPLE[k].handle)}</span></button>`).join('')}</div>
+      <div class="sechead" style="padding-top:14px"><h3 class="sectitle">Suggested for you</h3></div>
+      <div class="peoplestrip" style="padding-top:0">${suggest
+        .map(k=>`<button class="pchip off" data-member="${k}">${avatarOf(k)}<span class="phandle">${esc(PEOPLE[k].handle)}</span></button>`).join('')}</div>
+      <div class="sechead" style="padding-top:18px"><h3 class="sectitle">From people you follow</h3></div>
+      ${list.map((x)=>postHTML(x, POSTS.indexOf(x))).join('')}`;
+    return;
+  }
+  p.innerHTML = POSTS.map((x,i)=>postHTML(x,i)).join('');
+}
+
+/* ---------- group ---------- */
+function renderGroup(id){
+  curGroup = id;
+  const g = GROUPS[id];
+  $('#g-name').textContent = g.name;
+  const posts = POSTS.filter(x=>x.group === id);
+  $('#g-body').innerHTML = `
+    <div class="gcover"><img src="${IMG[g.img]}" alt=""></div>
+    <div class="pf-id" style="padding-top:16px">
+      <p class="pf-bio" style="margin-bottom:14px">${esc(g.blurb)}</p>
+    </div>
+    <div class="statgrid">
+      <div class="s"><b class="red onum">${g.members}</b><span>Members</span></div>
+      <div class="s"><b class="onum">${g.posts}</b><span>Posts</span></div>
+      <div class="s"><b class="onum">${g.walk ? 1 : 0}</b><span>Walks</span></div>
+    </div>
+    <div style="padding:16px 22px 4px">
+      <button class="btn-outline" data-join="${id}" aria-pressed="${g.joined}">
+        ${g.joined ? 'Joined' : 'Join group'}</button>
+    </div>
+    ${g.walk ? `
+      <div class="sechead" style="padding-top:18px"><h3 class="sectitle">Next walk</h3></div>
+      <div class="walkcard card">
+        <div class="eyebrow">Meet in person</div>
+        <div class="walkrow">
+          <span class="walkdate"><b class="onum">${g.walk.d}</b><span>${esc(g.walk.m)}</span></span>
+          <span class="walkbody">
+            <b>${esc(g.walk.title)}</b>
+            <span>${esc(g.walk.place)} &#183; ${esc(g.walk.time)}</span>
+            <span class="walkgoing">${stackOf(g.people.slice(0,3))}<em>${g.walk.going} going</em></span>
+          </span>
+        </div>
+        <div style="margin-top:13px;display:flex;gap:9px">
+          <button class="btn-outline" data-walk="${id}" aria-pressed="false" style="flex:1">I&#8217;m going</button>
+          ${g.walk.bld ? `<button class="gtag" data-building="${g.walk.bld}" style="flex:none">View building</button>` : ''}
+        </div>
+      </div>` : ''}
+    <div class="sechead" style="padding-top:18px"><h3 class="sectitle">Members</h3>
+      <span class="seelink" style="cursor:default">${g.members}</span></div>
+    <div class="peoplestrip">${g.people.map(k=>
+      `<button class="pchip" data-member="${k}">${avatarOf(k)}<span class="phandle">${esc(PEOPLE[k].handle)}</span></button>`).join('')}</div>
+    <div class="sechead" style="padding-top:18px"><h3 class="sectitle">Recent posts</h3></div>
+    ${posts.length ? posts.map(x=>postHTML(x, POSTS.indexOf(x))).join('')
+      : '<div class="empty"><p>No posts in this group yet.</p></div>'}`;
+}
+
+/* ---------- member ---------- */
+function renderMember(id){
+  curMember = id;
+  const m = PEOPLE[id];
+  $('#m-name').textContent = m.name;
+  $('#m-body').innerHTML = `
+    <div class="pf-cover"><img src="${IMG[m.works[0]]}" alt="">
+      <span class="avatar pf-avatar ${m.avc}">${m.av}</span></div>
+    <div class="pf-id">
+      <h2>${esc(m.name)}</h2>
+      <div class="pf-handle">${esc(m.handle)} &#183; ${esc(m.city)}</div>
+      <p class="pf-bio">${esc(m.bio)}</p>
+    </div>
+    <div class="mb-actions">
+      <button class="btn btn-red" data-follow="${id}" aria-pressed="${!!m.following}">
+        ${m.following ? 'Following' : 'Follow'}</button>
+      <button class="btn-outline" data-msg="${id}">Message</button>
+    </div>
+    ${m.crossed ? `<div class="crossed">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 20 21 4"/><path d="M3 4l18 16"/></svg>
+      <span>${esc(m.crossed)}</span></div>` : ''}
+    <div class="statgrid" style="margin-top:16px">
+      <div class="s"><b class="red onum">${m.captures}</b><span>Captures</span></div>
+      <div class="s"><b class="onum">${esc(m.followers)}</b><span>Followers</span></div>
+      <div class="s"><b class="onum">${m.cities}</b><span>Cities</span></div>
+    </div>
+    <div class="sechead" style="padding-top:18px"><h3 class="sectitle">Groups in common</h3></div>
+    <div class="grouptags">${m.groups.map(k=>
+      `<button class="gtag" data-group="${k}">${esc(GROUPS[k].name)}</button>`).join('')}</div>
+    <div class="sechead" style="padding-top:20px"><h3 class="sectitle">Recent captures</h3></div>
+    <div class="works">${m.works.map(w=>
+      `<figure class="work"><img src="${IMG[w]}" alt=""></figure>`).join('')}</div>`;
+}
+
+/* ---------- building ---------- */
+function renderBuilding(id){
+  curBuilding = id;
+  const b = bldById(id);
+  if(!b) return;
+  const walkKey = Object.keys(GROUPS).find(k => GROUPS[k].walk && GROUPS[k].walk.bld === id);
+  const g = walkKey ? GROUPS[walkKey] : null;
+  $('#b-body').innerHTML = `
+    <div class="bhero"><img src="${IMG[b.img]}" alt="${esc(b.name)}"></div>
+    <div class="bfacts">
+      <h2>${esc(b.name)}</h2>
+      <p>${esc(b.architect)}, ${esc(b.year)} &#183; ${esc(b.city)}</p>
+      <div class="bstyles"><span>${esc(b.style)}</span></div>
+    </div>
+    <div class="statgrid" style="margin-top:18px">
+      <div class="s"><b class="red onum">${b.captures}</b><span>Captures</span></div>
+      <div class="s"><b class="onum">${b.explorers}</b><span>Explorers</span></div>
+      <div class="s"><b class="onum">${b.shots.length}</b><span>From your circle</span></div>
+    </div>
+    ${g ? `
+      <div class="sechead" style="padding-top:18px"><h3 class="sectitle">A walk comes here</h3></div>
+      <div class="walkcard card">
+        <div class="eyebrow">${esc(g.name)}</div>
+        <div class="walkrow">
+          <span class="walkdate"><b class="onum">${esc(g.walk.d)}</b><span>${esc(g.walk.m)}</span></span>
+          <span class="walkbody"><b>${esc(g.walk.title)}</b>
+            <span>${esc(g.walk.time)} &#183; ${g.walk.going} going</span>
+            <span class="walkgoing">${stackOf(g.people.slice(0,3))}<em>Meet the group here</em></span></span>
+        </div>
+        <div style="margin-top:13px"><button class="btn-outline" data-group="${walkKey}">Open group</button></div>
+      </div>` : ''}
+    <div class="sechead" style="padding-top:18px"><h3 class="sectitle">Captured by</h3>
+      <span class="seelink" style="cursor:default">${b.explorers} explorers</span></div>
+    <div class="shots">${b.shots.map(([img, who])=>
+      `<button class="shot" data-member="${who}"><img src="${IMG[img]}" alt="">
+        <span class="who">${esc(PEOPLE[who].handle)}</span></button>`).join('')}</div>
+    <div class="bcta"><button class="btn btn-red" data-go="capture">Add your capture</button></div>`;
+}
+
+function openGroup(id){ renderGroup(id); go('group'); }
+function openMember(id){ renderMember(id); go('member'); }
+function openBuilding(id){ renderBuilding(id); go('building'); }
+
 /* ---------- renderers ---------- */
 function renderSpots(key){
   $('#spots-title').textContent = SPOT_TITLE[key];
   $('#spots').innerHTML = SPOTS[key].map(s=>`
-    <figure class="spot" style="margin:0"><img src="${IMG[s.img]}" alt="${esc(s.name)}">
-      <figcaption><b>${esc(s.name)}</b><span>${esc(s.city)} &#183; ${s.n} check-ins</span></figcaption></figure>`).join('');
+    <button class="spot" data-building="${s.id}"><img src="${IMG[s.img]}" alt="${esc(s.name)}">
+      <figcaption><b>${esc(s.name)}</b><span>${esc(s.city)} &#183; ${s.n} check-ins</span></figcaption></button>`).join('');
 }
 const WORKS = [
   {img:'w1', t:'Shadow line, Broadgate'},   {img:'w2', t:'Willis Building curve'},
@@ -1373,34 +1817,13 @@ function renderRecords(){
   $('#kheading').textContent = q ? 'Results for \u201c' + q + '\u201d' : (cat === 'All' ? 'All records' : cat);
   $('#kcount').textContent = list.length;
   $('#kgrid').innerHTML = list.length ? list.map(r=>`
-    <figure class="kcard ${r.wide?'wide':''}"><img src="${IMG[r.img]}" alt="${esc(r.name)}">
-      <figcaption><b>${esc(r.name)}</b><span>${esc(r.sub || (r.city + ' \u00b7 ' + r.style))}</span></figcaption>
-    </figure>`).join('')
+    <button class="kcard ${r.wide?'wide':''}" data-building="${r.id}"><img src="${IMG[r.img]}" alt="${esc(r.name)}">
+      <figcaption><b>${esc(r.name)}</b><span>${esc(r.city)} \u00b7 ${esc(r.style)}</span></figcaption>
+    </button>`).join('')
     : `<div class="empty"><h3 class="sectitle">No records found</h3>
         <p>Nothing matches \u201c${esc(q)}\u201d. Try an architect, a style, or a city.</p></div>`;
 }
-function renderPosts(){
-  $('#posts').innerHTML = POSTS.map((p,i)=>`
-    <article class="post">
-      <div class="post-head">
-        <span class="avatar ${p.avc}" >${esc(p.av)}</span>
-        <span class="grow"><b>${esc(p.user)}${p.fresh?'<span class="newflag">JUST NOW</span>':''}</b><span>${esc(p.place)} · ${esc(p.time)}</span></span>
-        <span class="iconbtn" style="color:var(--muted)">···</span>
-      </div>
-      <img class="post-img" src="${IMG[p.img]}" alt="${esc(p.place)} architecture">
-      <div class="post-body">
-        <p class="post-quote">${esc(p.quote)}</p>
-        <div class="hashes">${p.tags.map(t=>`<a>${esc(t)}</a>`).join('')}</div>
-        <div class="post-acts">
-          <button class="act ${p.liked?'liked':''}" data-like="${i}">${I.heart}<span>${p.likes>999?(p.likes/1000).toFixed(1)+'k':p.likes}</span></button>
-          <button class="act" data-go="community">${I.chat}<span>${p.comments}</span></button>
-          <button class="act">${I.share}</button>
-          <span class="spacer"></span>
-          <button class="act ${p.saved?'liked':''}" data-savepost="${i}">${I.book}</button>
-        </div>
-      </div>
-    </article>`).join('');
-}
+
 
 /* ---------- wire up ---------- */
 $$('[data-img]').forEach(el=>{
@@ -1410,11 +1833,46 @@ $$('[data-img]').forEach(el=>{
 $('#discover-map').insertAdjacentHTML('afterbegin', discoverMap());
 $('#journey-map').insertAdjacentHTML('afterbegin', journeyMap());
 $('#crossing-map').insertAdjacentHTML('afterbegin', crossingMap());
-renderSpots('nearby'); renderPfPanel('works'); renderTrips(); renderInsp('All'); renderRecords(); renderPosts();
+renderSpots('nearby'); renderPfPanel('works'); renderTrips(); renderInsp('All'); renderRecords(); renderCommunity('feed');
 renderStops(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
 
 document.addEventListener('click', e=>{
   const t = e.target;
+
+  if(t.closest('[data-back]')){ back(); return; }
+
+  const fol = t.closest('[data-follow]');
+  if(fol){
+    const k = fol.dataset.follow, who = PEOPLE[k];
+    who.following = !who.following;
+    toast(who.following ? 'Following ' + who.handle : 'Unfollowed ' + who.handle);
+    if(current === 'member') renderMember(k); else renderCommunity(commTab);
+    return;
+  }
+  const jn = t.closest('[data-join]');
+  if(jn){
+    const g = GROUPS[jn.dataset.join];
+    g.joined = !g.joined; g.members += g.joined ? 1 : -1;
+    toast(g.joined ? 'Joined ' + g.name : 'Left ' + g.name);
+    renderGroup(jn.dataset.join); return;
+  }
+  const wk = t.closest('[data-walk]');
+  if(wk){
+    const g = GROUPS[wk.dataset.walk], on = wk.getAttribute('aria-pressed') !== 'true';
+    wk.setAttribute('aria-pressed', String(on));
+    wk.textContent = on ? 'You are going' : 'I\u2019m going';
+    g.walk.going += on ? 1 : -1;
+    if(on) toast('See you at ' + g.walk.place); return;
+  }
+  const msg = t.closest('[data-msg]');
+  if(msg){ toast('Message sent to ' + PEOPLE[msg.dataset.msg].handle); return; }
+
+  const grp = t.closest('[data-group]');
+  if(grp){ openGroup(grp.dataset.group); return; }
+  const mem = t.closest('[data-member]');
+  if(mem){ openMember(mem.dataset.member); return; }
+  const bld = t.closest('[data-building]');
+  if(bld && bld.dataset.building){ openBuilding(bld.dataset.building); return; }
 
   const goBtn = t.closest('[data-go]');
   if(goBtn){ go(goBtn.dataset.go); return; }
@@ -1427,6 +1885,7 @@ document.addEventListener('click', e=>{
     if(g==='discover') renderSpots(chip.dataset.val);
     if(g==='insp')     renderInsp(chip.dataset.val);
     if(g==='kstyle'){ $('#ksearch').value=''; renderRecords(); }
+    if(g==='comm')     renderCommunity(chip.dataset.val);
     return;
   }
 
@@ -1482,12 +1941,12 @@ document.addEventListener('click', e=>{
   if(like){
     const p = POSTS[+like.dataset.like];
     p.liked = !p.liked; p.likes += p.liked ? 1 : -1;
-    renderPosts(); return;
+    renderCommunity(commTab); return;
   }
   const sp = t.closest('[data-savepost]');
   if(sp){
     const p = POSTS[+sp.dataset.savepost];
-    p.saved = !p.saved; renderPosts();
+    p.saved = !p.saved; renderCommunity(commTab);
     toast(p.saved ? 'Saved to your library' : 'Removed from library'); return;
   }
   const sv = t.closest('[data-save]');
@@ -1516,9 +1975,11 @@ document.addEventListener('click', e=>{
   if(t.closest('[data-publish]')){
     const cap = ($('#caption').value||'').trim() || 'Untitled check-in';
     const tags = $$('#ci-tags .tag[aria-pressed="true"]').map(b=>b.textContent);
-    POSTS.unshift({user:'@lucy.arch', av:'L', avc:'', place:'New York', time:'just now', img:'checkin',
-      quote:cap, tags:tags.length?tags:['#archscape'], likes:0, comments:0, liked:false, saved:false, fresh:true});
-    renderPosts(); go('community');
+    const cand = CANDIDATES[capIndex];
+    POSTS.unshift({person:'lucy', bld:cand.bldId || null, group:null, style:cand.style,
+      place:'New York', time:'just now', img:'checkin', quote:cap,
+      tags:tags.length?tags:['#archscape'], likes:0, comments:0, liked:false, saved:false, fresh:true});
+    renderCommunity(commTab); go('community');
     toast($('#vis').getAttribute('aria-pressed')==='true' ? 'Published to Community' : 'Saved privately');
     return;
   }
