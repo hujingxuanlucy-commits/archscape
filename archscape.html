@@ -148,11 +148,6 @@ figure{margin:0}
 .obscreen{background:var(--ink);color:#fff;overflow:hidden}
 .obscreen.on{display:flex;flex-direction:column}
 .obtop{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:54px 26px 0;flex:none}
-.obtop-left{display:flex;align-items:center;gap:12px}
-.obback{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:#fff;flex:none;
-  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);transition:.16s}
-.obback:hover{background:rgba(255,255,255,.2)}
-.obback svg{width:17px;height:17px}
 .obmark{font-family:var(--disp);font-size:21px;font-weight:600;letter-spacing:.01em;color:#fff}
 .obmark b{color:var(--red);font-weight:600}
 .obskip{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#9C968E;transition:.16s}
@@ -164,7 +159,11 @@ figure{margin:0}
 .obhead p{margin:0;color:#9C968E;font-size:13.5px;line-height:1.6;max-width:35ch}
 .obbody{flex:1;min-height:0;padding:20px 26px 0;display:flex;flex-direction:column;justify-content:center;
   gap:10px;overflow:hidden}
-.obfoot{padding:14px 26px 0;flex:none}
+.obfoot{padding:14px 26px 0;flex:none;display:flex;gap:11px}
+.obfoot .btn{width:auto;flex:1}
+.obprev{flex:none;padding:16px 22px;border-radius:8px;font-size:15px;font-weight:600;color:#CFC9C0;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);transition:.16s}
+.obprev:hover{background:rgba(255,255,255,.17);color:#fff}
 .obdots{display:flex;gap:6px;justify-content:center;padding:18px 0 26px;flex:none}
 .obdots i{width:28px;height:3px;border-radius:2px;background:#333336;display:block;transition:.25s}
 .obdots i.on{background:var(--red)}
@@ -711,7 +710,7 @@ figure{margin:0}
         <!-- ============ 01b ROLE ============ -->
         <section class="screen obscreen" id="s-obrole" data-bleed>
           <div class="obtop">
-            <div class="obtop-left"><button class="obback" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><span class="obmark"><b>Arch</b>Scape</span></div>
+            <span class="obmark"><b>Arch</b>Scape</span>
             <button class="obskip" data-go="obready">Skip <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></button>
           </div>
           <div class="obhead">
@@ -740,14 +739,14 @@ figure{margin:0}
               <span class="roletick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12.5 10 17.5 19 7"/></svg></span>
             </button>
           </div>
-          <div class="obfoot"><button class="btn btn-red" id="ob-go-themes" data-go="obthemes" disabled>Continue</button></div>
+          <div class="obfoot"><button class="obprev" data-back>Back</button><button class="btn btn-red" id="ob-go-themes" data-go="obthemes" disabled>Next</button></div>
           <div class="obdots"><i class="on"></i><i class="on"></i><i></i><i></i></div>
         </section>
 
         <!-- ============ 01c THEMES ============ -->
         <section class="screen obscreen" id="s-obthemes" data-bleed>
           <div class="obtop">
-            <div class="obtop-left"><button class="obback" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><span class="obmark"><b>Arch</b>Scape</span></div>
+            <span class="obmark"><b>Arch</b>Scape</span>
             <button class="obskip" data-go="obready">Skip <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></button>
           </div>
           <div class="obhead">
@@ -766,14 +765,14 @@ figure{margin:0}
               <button class="themecell" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 19h19"/><path d="M3.5 19 10 9l3.6 5.4L16 11l4.5 8"/><circle cx="17.5" cy="5.5" r="1.8"/></svg><b>Landscape</b></button>
             </div>
           </div>
-          <div class="obfoot"><button class="btn btn-red" id="ob-go-ready" data-go="obready" disabled>Continue</button></div>
+          <div class="obfoot"><button class="obprev" data-back>Back</button><button class="btn btn-red" id="ob-go-ready" data-go="obready" disabled>Next</button></div>
           <div class="obdots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
         </section>
 
         <!-- ============ 01d READY ============ -->
         <section class="screen obscreen" id="s-obready" data-bleed>
           <div class="obtop">
-            <div class="obtop-left"><button class="obback" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><span class="obmark"><b>Arch</b>Scape</span></div>
+            <span class="obmark"><b>Arch</b>Scape</span>
             
           </div>
           <div class="obhead">
@@ -794,7 +793,7 @@ figure{margin:0}
               </span>
             </div>
           </div>
-          <div class="obfoot"><button class="btn btn-red" data-go="discover">Start Exploring</button></div>
+          <div class="obfoot"><button class="obprev" data-back>Back</button><button class="btn btn-red" data-go="discover">Start Exploring</button></div>
           <div class="obdots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
         </section>
 
