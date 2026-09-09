@@ -241,13 +241,13 @@ figure{margin:0}
 .act.liked svg{fill:var(--red);stroke:var(--red)}
 
 /* ============ 03 AR capture ============ */
-#s-capture{background:#08080A}
+#s-capture{background:#08080A;overflow:hidden}
 .ar-bg{position:absolute;inset:0;overflow:hidden}
 .ar-bg img{width:100%;height:100%;object-fit:cover;transition:filter .45s ease, transform .45s ease}
 .ar-bg.shot img{filter:saturate(.66) contrast(1.08) brightness(.88);transform:scale(1.015)}
 .ar-scrim{position:absolute;inset:0;pointer-events:none;background:
   linear-gradient(180deg,rgba(0,0,0,.66),transparent 26%,transparent 50%,rgba(0,0,0,.82))}
-.ar-ui{position:relative;height:100%;display:flex;flex-direction:column;color:#fff;z-index:3}
+.ar-ui{position:absolute;inset:0;display:flex;flex-direction:column;color:#fff;z-index:3}
 
 .ar-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:52px 15px 0}
 .ar-round{width:38px;height:38px;border-radius:50%;background:rgba(22,22,25,.6);border:1px solid rgba(255,255,255,.2);
@@ -791,10 +791,7 @@ figure{margin:0}
         <section class="screen pad padnav" id="s-discover">
           <div class="apphead">
             <h2 class="h-title">Discover</h2>
-            <div class="headrow">
-              <button class="iconbtn" data-go="knowledge" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
-              <button class="avatar" style="width:38px;height:38px" data-go="profile" aria-label="Your profile">L</button>
-            </div>
+            <button class="iconbtn" data-go="knowledge" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
           </div>
           <div class="chiprow" data-chips="discover">
             <button class="chip" aria-pressed="true" data-val="nearby">Nearby</button>
