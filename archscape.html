@@ -64,6 +64,18 @@ figure{margin:0}
 .screen::-webkit-scrollbar{display:none}
 .screen.on{display:block;z-index:2;animation:screenIn .26s ease both}
 @keyframes screenIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+/* linear steps push sideways; the outgoing page trails at a slower rate */
+.screen.on.from-right{animation:slideInR .36s cubic-bezier(.32,.72,0,1) both}
+.screen.on.from-left {animation:slideInL .36s cubic-bezier(.32,.72,0,1) both}
+.screen.leaving{display:block;z-index:1;pointer-events:none}
+#s-onboarding.leaving,.obscreen.leaving{display:flex;flex-direction:column}
+.screen.leaving.to-left {animation:slideOutL .36s cubic-bezier(.32,.72,0,1) both}
+.screen.leaving.to-right{animation:slideOutR .36s cubic-bezier(.32,.72,0,1) both}
+@keyframes slideInR{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes slideInL{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+@keyframes slideOutL{from{transform:translateX(0);opacity:1}to{transform:translateX(-26%);opacity:.5}}
+@keyframes slideOutR{from{transform:translateX(0);opacity:1}to{transform:translateX(26%);opacity:.5}}
 .screen[data-bleed]{background:var(--ink)}
 .pad{padding-top:44px}
 .padnav{padding-bottom:104px}
@@ -1181,11 +1193,35 @@ let current = 'onboarding';
 
 let navStack = [];
 function back(){ go(navStack.pop() || 'discover', true); }
+const OB_SEQ = ['onboarding','obrole','obthemes','obready'];
+let slideTimer = null;
+const TRANS = ['leaving','to-left','to-right','from-left','from-right'];
+
 function go(id, isBack){
   const s = SCREENS.find(x=>x.id===id); if(!s) return;
+  const from = current;
   if(!isBack && current !== id){ navStack.push(current); if(navStack.length > 30) navStack.shift(); }
   current = id;
+
+  /* a move between two steps of the onboarding sequence slides sideways;
+     direction comes from the step order, so Skip and Back both read right */
+  const a = OB_SEQ.indexOf(from), b = OB_SEQ.indexOf(id);
+  const slide = a !== -1 && b !== -1 && a !== b;
+  const fwd = b > a;
+  const fromEl = $('#s'+'-'+from), toEl = $('#s'+'-'+id);
+
+  clearTimeout(slideTimer);
+  $$('.screen').forEach(el => el.classList.remove(...TRANS));
   $$('.screen').forEach(el => el.classList.toggle('on', el.id === 's'+'-'+id));
+
+  if(slide && fromEl && toEl && fromEl !== toEl){
+    fromEl.classList.add('leaving', fwd ? 'to-left' : 'to-right');
+    toEl.classList.add(fwd ? 'from-right' : 'from-left');
+    slideTimer = setTimeout(()=>{
+      fromEl.classList.remove(...TRANS);
+      toEl.classList.remove('from-right','from-left');
+    }, 380);
+  }
   viewport.dataset.chrome = s.chrome;
   tabbar.hidden = !s.nav;
   $$('.tabitem').forEach(b => b.setAttribute('aria-current', String(b.dataset.tab === s.tab)));
