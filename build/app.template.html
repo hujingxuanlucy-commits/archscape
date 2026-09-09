@@ -70,13 +70,17 @@ figure{margin:0}
 .screen.on.from-right{animation:slideInR .36s cubic-bezier(.32,.72,0,1) both}
 .screen.on.from-left {animation:slideInL .36s cubic-bezier(.32,.72,0,1) both}
 .screen.leaving{display:block;z-index:1;pointer-events:none}
+.screen.leaving::after{content:"";position:absolute;inset:0;z-index:99;background:#000;pointer-events:none;
+  animation:dimIn .36s cubic-bezier(.32,.72,0,1) both}
+@keyframes dimIn{from{opacity:0}to{opacity:.42}}
+.screen.on.from-right,.screen.on.from-left,.screen.leaving{will-change:transform}
 #s-onboarding.leaving,.obscreen.leaving{display:flex;flex-direction:column}
 .screen.leaving.to-left {animation:slideOutL .36s cubic-bezier(.32,.72,0,1) both}
 .screen.leaving.to-right{animation:slideOutR .36s cubic-bezier(.32,.72,0,1) both}
 @keyframes slideInR{from{transform:translateX(100%)}to{transform:translateX(0)}}
 @keyframes slideInL{from{transform:translateX(-100%)}to{transform:translateX(0)}}
-@keyframes slideOutL{from{transform:translateX(0);filter:brightness(1)}to{transform:translateX(-26%);filter:brightness(.5)}}
-@keyframes slideOutR{from{transform:translateX(0);filter:brightness(1)}to{transform:translateX(26%);filter:brightness(.5)}}
+@keyframes slideOutL{from{transform:translateX(0)}to{transform:translateX(-26%)}}
+@keyframes slideOutR{from{transform:translateX(0)}to{transform:translateX(26%)}}
 .screen[data-bleed]{background:var(--ink)}
 .pad{padding-top:44px}
 .padnav{padding-bottom:104px}
@@ -1218,10 +1222,7 @@ function go(id, isBack){
   if(slide && fromEl && toEl && fromEl !== toEl){
     fromEl.classList.add('leaving', fwd ? 'to-left' : 'to-right');
     toEl.classList.add(fwd ? 'from-right' : 'from-left');
-    slideTimer = setTimeout(()=>{
-      fromEl.classList.remove(...TRANS);
-      toEl.classList.remove('from-right','from-left');
-    }, 380);
+    slideTimer = setTimeout(()=>{ fromEl.classList.remove(...TRANS); }, 380);
   }
   viewport.dataset.chrome = s.chrome;
   tabbar.hidden = !s.nav;
