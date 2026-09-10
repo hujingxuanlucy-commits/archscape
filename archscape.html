@@ -522,6 +522,25 @@ figure{margin:0}
 .ci-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 16px 12px}
 .ci-photo{position:relative;margin:0 22px;border-radius:10px 10px 0 0;overflow:hidden;height:184px}
 .ci-photo img{width:100%;height:100%;object-fit:cover}
+/* the photos in this check-in: order, cover and removal in one place */
+.ci-edit{margin:0 22px;padding:11px 14px 12px;background:var(--white);border:1px solid var(--bone);border-top:0}
+.ci-strip{display:flex;gap:7px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.ci-strip::-webkit-scrollbar{display:none}
+.cishot{position:relative;flex:none;width:56px;height:56px;border-radius:7px;display:block;
+  background-size:cover;background-position:50% 50%;border:1px solid var(--bone);transition:.16s}
+.cishot[aria-pressed="true"]{box-shadow:0 0 0 2px var(--red);border-color:var(--red)}
+.cishot .cover{position:absolute;left:0;right:0;bottom:0;background:rgba(149,35,36,.92);color:#fff;
+  font-size:7.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-align:center;padding:2px 0;
+  border-radius:0 0 6px 6px}
+.ci-tools{display:flex;align-items:center;gap:7px;margin-top:10px}
+.citool{flex:none;width:34px;height:32px;border-radius:7px;border:1px solid var(--bone);background:var(--paper);
+  display:grid;place-items:center;color:var(--ink);transition:.16s}
+.citool svg{width:15px;height:15px}
+.citool.wide{flex:1;width:auto;font-size:11.5px;font-weight:600;letter-spacing:.02em}
+.citool:hover:not([disabled]){border-color:var(--red);color:var(--red)}
+.citool[disabled]{opacity:.4;cursor:not-allowed}
+.citool[aria-pressed="true"]{background:var(--red-tint);border-color:var(--red);color:var(--red)}
+.ci-edit + .ci-loc{border-top:0}
 .ci-loc{display:flex;gap:11px;align-items:flex-start;margin:0 22px 10px;padding:11px 14px;background:var(--white);
   border:1px solid var(--bone);border-top:0;border-radius:0 0 10px 10px}
 .ci-loc svg{width:19px;height:19px;color:var(--red);flex:none;margin-top:1px}
@@ -1182,7 +1201,16 @@ figure{margin:0}
             <h2 class="h-title sm">New Check-in</h2>
             <button class="btn btn-red" style="width:auto;padding:10px 22px;font-size:13.5px" data-publish>Publish</button>
           </div>
-          <div class="ci-photo"><img id="ci-photo" data-img="vessel_shot" alt="Stair lattice inside The Vessel"><span class="ci-count" id="ci-count" hidden></span></div>
+          <div class="ci-photo"><img id="ci-photo" data-img="vessel_shot" alt="Photo in this check-in"><span class="ci-count" id="ci-count" hidden></span></div>
+          <div class="ci-edit" id="ci-edit" hidden>
+            <div class="ci-strip" id="ci-strip"></div>
+            <div class="ci-tools">
+              <button class="citool" data-photo="left" aria-label="Move earlier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 5 8 12 15 19"/></svg></button>
+              <button class="citool" data-photo="right" aria-label="Move later"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 5 16 12 9 19"/></svg></button>
+              <button class="citool wide" data-photo="cover" id="ci-setcover">Set as cover</button>
+              <button class="citool" data-photo="remove" aria-label="Remove photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+            </div>
+          </div>
           <div class="ci-loc" id="ci-locrow">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
             <div><b id="ci-locname">375 Park Ave, NYC</b><span class="tnum" id="ci-loccoords">40.7580&#xB0; N, 73.9764&#xB0; W</span></div>
@@ -1809,9 +1837,35 @@ function renderCapSet(){
       '<span>Matched across ' + n + ' photos</span>';
   } else ang.hidden = true;
 
-  $('#ci-photo').src = IMG[CAP_SET[0] || 'vessel_shot'];
+  if(capCover >= n) capCover = 0;
+  if(ciSel >= n) ciSel = Math.max(0, n - 1);
+  renderCheckinPhotos();
+}
+
+/* The check-in owns the set: which photo leads, what order they read in,
+   and what to drop - all without leaving the page. */
+let capCover = 0, ciSel = 0;
+
+function renderCheckinPhotos(){
+  const n = CAP_SET.length;
+  $('#ci-photo').src = IMG[CAP_SET[ciSel] || CAP_SET[0] || 'vessel_shot'];
   $('#ci-count').hidden = n < 2;
   $('#ci-count').textContent = n + ' photos';
+  $('#ci-edit').hidden = n < 2;
+  if(n < 2) return;
+
+  $('#ci-strip').innerHTML = CAP_SET.map((k,i)=>
+    '<button class="cishot" data-cishot="' + i + '" aria-pressed="' + (i === ciSel) + '" ' +
+    'aria-label="Photo ' + (i+1) + '" style="background-image:url(' + IMG[k] + ')">' +
+    (i === capCover ? '<span class="cover">Cover</span>' : '') + '</button>').join('');
+
+  $('[data-photo="left"]').disabled  = ciSel === 0;
+  $('[data-photo="right"]').disabled = ciSel === n - 1;
+  const isCover = ciSel === capCover;
+  $('#ci-setcover').disabled = isCover;
+  $('#ci-setcover').textContent = isCover ? 'Cover photo' : 'Set as cover';
+  $('#ci-setcover').setAttribute('aria-pressed', String(isCover));
+  $('[data-photo="remove"]').disabled = n < 2;
 }
 
 function addToSet(key){
@@ -1972,7 +2026,7 @@ function setCapture(st, keepFrame, keepSet){
   capState = st;
   if(st === 'scanning'){
     capFrozen = false; capIndex = 0; capPassive = false;
-    if(!keepSet){ CAP_SET = []; shotIdx = 0; $('#ar-bg').querySelector('img').src = IMG[SHOTS[0]]; }
+    if(!keepSet){ CAP_SET = []; capCover = 0; ciSel = 0; shotIdx = 0; $('#ar-bg').querySelector('img').src = IMG[SHOTS[0]]; }
     renderCapSet();
   }
   if(st === 'analyzing'){ capPassive = false; if(!keepFrame) capFrozen = true; }
@@ -2726,12 +2780,38 @@ document.addEventListener('click', e=>{
     return;
   }
 
+  const cish = t.closest('[data-cishot]');
+  if(cish){ ciSel = +cish.dataset.cishot; renderCheckinPhotos(); return; }
+
+  const pact = t.closest('[data-photo]');
+  if(pact){
+    const act = pact.dataset.photo, n = CAP_SET.length;
+    if(act === 'cover'){ capCover = ciSel; toast('Cover photo set'); }
+    if(act === 'remove'){
+      CAP_SET.splice(ciSel, 1);
+      if(capCover === ciSel) capCover = 0;
+      else if(capCover > ciSel) capCover--;
+      ciSel = Math.min(ciSel, CAP_SET.length - 1);
+    }
+    if(act === 'left' || act === 'right'){
+      const to = act === 'left' ? ciSel - 1 : ciSel + 1;
+      if(to < 0 || to >= n) return;
+      const [m] = CAP_SET.splice(ciSel, 1);
+      CAP_SET.splice(to, 0, m);
+      if(capCover === ciSel) capCover = to;
+      else if(capCover === to) capCover = ciSel;
+      ciSel = to;
+    }
+    renderCapSet();
+    return;
+  }
+
   if(t.closest('[data-publish]')){
     const cap = ($('#caption').value||'').trim() || 'Untitled check-in';
     const tags = $$('#ci-tags .tag[aria-pressed="true"]').map(b=>b.textContent);
     const cand = CANDIDATES[capIndex];
     POSTS.unshift({person:'lucy', bld:cand.bldId || null, group:null, style:cand.style,
-      place:'New York', time:'just now', img:'vessel_shot', quote:cap,
+      place:'New York', time:'just now', img:CAP_SET[capCover] || 'vessel_shot', quote:cap,
       tags:tags.length?tags:['#archscape'], likes:0, comments:0, liked:false, saved:false, fresh:true});
     renderCommunity(commTab); go('community');
     toast($('#vis').getAttribute('aria-pressed')==='true' ? 'Published to Community' : 'Saved privately');
