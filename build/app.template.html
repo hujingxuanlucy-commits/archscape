@@ -230,8 +230,11 @@ figure{margin:0}
 .readystrip{flex:none;display:flex;align-items:center;gap:11px;margin:0 26px;padding:13px 0 2px;
   border-top:1px solid rgba(255,255,255,.16)}
 .stackav{display:flex;flex:none}
-.stackav span{width:21px;height:21px;border-radius:50%;border:2px solid #0F0F0F;margin-left:-7px;display:block}
+.stackav span{width:21px;height:21px;border-radius:50%;border:2px solid #0F0F0F;margin-left:-7px;display:block;
+  overflow:hidden;background-size:cover;background-position:50% 50%}
 .stackav span:first-child{margin-left:0}
+.stackav img{width:100%;height:100%;object-fit:cover;display:block}
+.readystrip .stackav span{width:27px;height:27px;margin-left:-9px;border-color:var(--ink)}
 .readystrip b{font-family:var(--disp);font-size:23px;font-weight:600;color:#fff;line-height:1}
 .readystrip em{font-style:normal;font-size:9.5px;font-weight:700;letter-spacing:.14em;color:#9C968E;
   text-transform:uppercase;line-height:1.4}
@@ -816,9 +819,9 @@ figure{margin:0}
             </div>
             <div class="readystrip">
               <span class="stackav">
-                <span style="background:#952324"></span>
-                <span style="background:#3E6B9A"></span>
-                <span style="background:#666666"></span>
+                <span><img data-img="k11" alt="Curator Mia R."></span>
+                <span><img data-img="w11" alt="Curator Javier O."></span>
+                <span><img data-img="tate" alt="Curator Kenji T."></span>
               </span>
               <b>12k+</b><em>curators<br>exploring now</em>
             </div>
