@@ -486,6 +486,18 @@ figure{margin:0}
 .ar-lib b{font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.78)}
 .ar-lib:hover b{color:#fff}
 .ar-spacer{width:64px;flex:none}
+.ar-next{width:64px;flex:none;display:flex;flex-direction:column;align-items:center;gap:4px;color:#fff}
+.ar-next span{font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase}
+.ar-next svg{width:30px;height:30px;padding:7px;border-radius:50%;background:var(--red);color:#fff}
+.ar-next:hover svg{background:var(--red-deep)}
+/* confirmed: the card stops asking and simply states what this is */
+#s-capture[data-confirmed="1"] .ar-cardcta,
+#s-capture[data-confirmed="1"] .ar-dismiss{display:none}
+#s-capture[data-confirmed="1"] .ar-info{border-color:rgba(95,191,134,.55)}
+.ar-confirmed{display:none;align-items:center;gap:7px;margin-top:9px;font-size:10px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:#5FBF86}
+.ar-confirmed svg{width:13px;height:13px}
+#s-capture[data-confirmed="1"] .ar-confirmed{display:flex}
 /* every photo in this capture, in one place */
 .ar-tray{display:flex;flex-direction:column;gap:7px}
 .tray-lab{font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.62)}
@@ -525,11 +537,12 @@ figure{margin:0}
   background:var(--red);color:#fff;border-radius:999px;padding:11px;font-size:13.5px;font-weight:600;transition:.16s}
 .ar-cardcta:hover{background:var(--red-deep)}
 .ar-cardcta i{width:9px;height:9px;border-radius:50%;background:#fff;flex:none;display:block}
-.ar-dismiss{position:absolute;right:6px;top:5px;width:24px;height:24px;border-radius:50%;
+.ar-dismiss{position:absolute;right:8px;top:7px;width:26px;height:26px;border-radius:50%;
   color:rgba(255,255,255,.6);font-size:17px;line-height:1;display:none;place-items:center;transition:.16s}
 .ar-dismiss:hover{color:#fff;background:rgba(255,255,255,.12)}
 #s-capture[data-passive="1"] .ar-dismiss{display:grid}
-#s-capture[data-passive="1"] .ar-inforow .ar-pct{margin-right:22px}
+#s-capture[data-passive="1"] .ar-inforow .ar-pct{margin-right:30px}
+#s-capture[data-passive="1"] .foldcaret{margin-right:26px}
 .ar-angles{display:flex;align-items:center;gap:7px;margin-top:8px;font-size:10px;font-weight:700;
   letter-spacing:.11em;text-transform:uppercase;color:#9C968E}
 .ar-angles i{width:18px;height:18px;border-radius:4px;display:block;background-size:cover;background-position:50% 50%;
@@ -596,6 +609,21 @@ figure{margin:0}
 .dfield input{flex:1;min-width:0;border:0;background:none;outline:none;font-size:14px;font-weight:500;
   color:var(--ink);padding:2px 0}
 .dfield input:focus{color:var(--red)}
+.addrow{display:flex;gap:8px;margin-top:11px}
+.addrow input{flex:1;min-width:0;padding:9px 12px;border-radius:7px;border:1px solid var(--bone);
+  background:var(--paper);font-size:12.5px;color:var(--ink);outline:none;transition:.16s}
+.addrow input:focus{border-color:var(--red);background:var(--white)}
+.addbtn{flex:none;padding:9px 16px;border-radius:7px;border:1px solid var(--red);color:var(--red);
+  background:none;font-size:12px;font-weight:600;transition:.16s}
+.addbtn:hover{background:var(--red);color:#fff}
+.tag .x{margin-left:7px;opacity:.5;font-weight:700}
+.tag:hover .x{opacity:1}
+#ci-tracklist .trackrow{border-bottom:1px solid var(--bone-soft)}
+#ci-tracklist .trackrow:last-child{border-bottom:0}
+#ci-tracklist .trackrow b{color:var(--ink)}
+#ci-tracklist .trackrow span{color:var(--muted)}
+#ci-tracklist .trackrow i{border-color:var(--bone)}
+#ci-tracklist .trackrow[aria-pressed="true"] i{background:var(--red);border-color:var(--red)}
 .tagset{display:flex;gap:9px;margin-top:9px;flex-wrap:wrap}
 .tag{font-size:12.5px;font-weight:500;color:var(--muted);background:var(--white);border:1px solid var(--bone);
   border-radius:6px;padding:7px 13px;transition:.16s}
@@ -1281,6 +1309,7 @@ figure{margin:0}
                 <div class="ar-angles" id="ar-angles" hidden></div>
                 <button class="ar-dismiss" id="ar-dismiss" aria-label="Keep scanning">&#215;</button>
                 <button class="ar-cardcta" data-confirm><i></i>Capture This Building</button>
+                <span class="ar-confirmed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12.5 10 17.5 19 7"/></svg>Confirmed &#183; keep shooting or tap Next</span>
                 <div class="ar-inforow ar-infolinks">
                   <button class="ar-wrong" id="ar-rescan">Not this building? Scan again</button>
                   <button class="ar-wrong" id="ar-retake">New building</button>
@@ -1296,11 +1325,15 @@ figure{margin:0}
                   <b>Library</b>
                 </button>
                 <button class="shutter" id="ar-shutter" aria-label="Take photo, then scan"><i></i></button>
-                <span class="ar-spacer" aria-hidden="true"></span>
+                <button class="ar-next" id="ar-next" data-go="checkin" hidden>
+                  <span>Next</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 5 16 12 9 19"/></svg>
+                </button>
+                <span class="ar-spacer" id="ar-spacer" aria-hidden="true"></span>
               </div>
               <div class="ar-hint" data-when="scanning">Hold steady &#183; or tap the shutter to scan your shot</div>
               <div class="ar-hint" data-when="analyzing">Matching against 50,000+ records</div>
-              <div class="ar-hint" data-when="ready">Same building &#183; the shutter adds another photo</div>
+              <div class="ar-hint" data-when="ready" id="ar-readyhint">Same building &#183; the shutter adds another photo</div>
           </div>
         </section>
 
@@ -1342,21 +1375,28 @@ the city folded in on itself.</textarea>
           <div class="ci-block card">
             <div class="eyebrow">Tags</div>
             <div class="tagset" id="ci-tags"></div>
+            <form class="addrow" id="ci-tagform">
+              <input id="ci-tagin" placeholder="Add your own tag" aria-label="Add your own tag" maxlength="24">
+              <button class="addbtn" type="submit">Add</button>
+            </form>
           </div>
           <div class="ci-block card">
             <div class="eyebrow">What stands out</div>
-            <div class="tagset" id="ci-features">
-              <button class="tag" aria-pressed="true">Interlocking stairs</button>
-              <button class="tag" aria-pressed="false">Copper-clad steel</button>
-              <button class="tag" aria-pressed="false">Open-air atrium</button>
-              <button class="tag" aria-pressed="false">Hexagonal geometry</button>
-            </div>
+            <div class="tagset" id="ci-features"></div>
+            <form class="addrow" id="ci-featform">
+              <input id="ci-featin" placeholder="Add what you noticed" aria-label="Add what stands out" maxlength="34">
+              <button class="addbtn" type="submit">Add</button>
+            </form>
           </div>
-          <button class="ci-row card">
+          <button class="ci-row card" id="ci-music">
             <svg class="lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="6.5" cy="17.5" r="2.8"/><circle cx="17.5" cy="15.5" r="2.8"/><path d="M9.3 17.5V6l11-2v11.5"/></svg>
-            <span class="grow"><b>Metamorphosen &#x2014; R. Strauss</b><span>Background Ambience</span></span>
+            <span class="grow"><b id="ci-mtitle">No sound</b><span>Background ambience</span></span>
             <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
           </button>
+          <div class="ci-block card" id="ci-musicpick" hidden>
+            <div class="eyebrow">Choose ambience</div>
+            <div id="ci-tracklist"></div>
+          </div>
           <div class="ci-row card">
             <span class="grow"><b id="vis-label">Visibility: Public</b></span>
             <button class="switch" id="vis" aria-pressed="true" aria-label="Public visibility"><i></i></button>
@@ -1857,7 +1897,8 @@ const I = {
    B. shot     scanning --(shutter)--> analyzing --> ready
    Either way the user lands on 'ready' and must press Capture to commit.   */
 let CAP_TAGS = [];
-const MAX_TAGS = 6;   /* the column has to stay inside the space it is given */
+const MAX_TAGS = 6;
+const MAX_SHOTS = 6;   /* a capture is a handful of angles, not a roll of film */   /* the column has to stay inside the space it is given */
 const TAG_POOL = ['#facade', '#goldenhour', '#concrete', '#reflection', '#geometry', '#publicspace'];
 const CANDIDATES = [
   {name:'The Vessel',      architect:'Thomas Heatherwick',      year:'2019', style:'Contemporary',
@@ -1872,6 +1913,7 @@ const CANDIDATES = [
 ];
 let capState = 'scanning', capTimer = null, capFrozen = false, capIndex = 0;
 let capPassive = false;   /* detected on its own, with no shot taken */
+let capConfirmed = false; /* the building is settled; photos can still be added */
 
 /* Capture settings: each switch changes how the camera actually behaves. */
 const CAP_OPTS = {grid:false, auto:true, geo:true};
@@ -1942,7 +1984,7 @@ function renderCapSet(){
   const tray = $('#ar-tray');
   tray.hidden = n === 0;
   tray.innerHTML = n
-    ? '<span class="tray-lab">' + n + (n === 1 ? ' photo' : ' photos') + ' in this capture</span>' +
+    ? '<span class="tray-lab">' + n + ' of ' + MAX_SHOTS + (n === 1 ? ' photo' : ' photos') + ' in this capture</span>' +
       '<span class="tray-strip">' +
       CAP_SET.map((k,i)=>'<span class="tray-shot" style="background-image:url(' + IMG[k] + ')">' +
         '<button class="tray-open" data-openshot="' + i + '" aria-label="Open photo ' + (i+1) + '"></button>' +
@@ -1968,6 +2010,7 @@ let capCover = 0, ciSel = 0;
 
 function renderCheckinPhotos(){
   const n = CAP_SET.length;
+  const sh = $('#ar-shutter'); if(sh) sh.disabled = setFull();
   $('#ci-photo').src = IMG[CAP_SET[ciSel] || CAP_SET[0] || 'vessel_shot'];
   $('#ci-count').hidden = n < 2;
   $('#ci-count').textContent = n + ' photos';
@@ -1988,13 +2031,17 @@ function renderCheckinPhotos(){
   $('[data-photo="remove"]').disabled = n < 2;
 }
 
+function setFull(){ return CAP_SET.length >= MAX_SHOTS; }
+
 function addToSet(key){
+  if(setFull()) return false;
   /* the first photo of an identified building folds the card away, so the
      photos have room; after that the user's own choice is left alone */
   if(capState === 'ready' && !CAP_SET.length) $('#s-capture').dataset.fold = '1';
   CAP_SET.push(key);
   renderCapSet();
   applyCandidate();
+  return true;
 }
 
 function renderLibrary(){
@@ -2228,6 +2275,12 @@ function setCapture(st, keepFrame, keepSet){
   $('#ar-bg').classList.toggle('frozen', capFrozen);
   $('#s-capture').dataset.passive = (st === 'ready' && capPassive) ? '1' : '0';
   $('#ar-retake').hidden = !CAP_SET.length;
+  if(st !== 'ready'){
+    capConfirmed = false;
+    $('#s-capture').dataset.confirmed = '0';
+    $('#ar-next').hidden = true;
+    $('#ar-spacer').hidden = false;
+  }
   $('#s-capture').dataset.fold = (st === 'ready' && CAP_SET.length) ? '1' : '0';
   applyCandidate();
   if(st === 'scanning' || st === 'analyzing') startTagReveal();
@@ -2250,10 +2303,41 @@ function syncObGate(){
   if(r) r.disabled = !picked('#ob-roles .rolerow');
   if(t) t.disabled = !picked('#ob-themes .themecell');
 }
+/* the check-in owns the words: suggestions can be dropped, and anything
+   the user types is theirs to remove again */
+let CI_TAGS = [], CI_FEATS = [];
+const FEATURE_POOL = {
+  vessel: ['Interlocking stairs', 'Copper-clad steel', 'Open-air atrium', 'Hexagonal geometry'],
+  shed:   ['Telescoping shell', 'Exposed steel truss', 'ETFE pillows'],
+  hy30:   ['Curtain wall', 'Angled crown', 'Public observatory']
+};
+
 function renderCheckinTags(){
-  const extra = ['#heatherwick', '#hudsonyards', '#stairs'].filter(t=>!CAP_TAGS.includes(t));
-  $('#ci-tags').innerHTML = CAP_TAGS.concat(extra)
-    .map(t=>`<button class="tag" aria-pressed="${CAP_TAGS.includes(t)}">${esc(t)}</button>`).join('');
+  const suggested = TAG_POOL.filter(t=>!CAP_TAGS.includes(t)).slice(0, 3);
+  const all = CAP_TAGS.concat(CI_TAGS.filter(t=>!CAP_TAGS.includes(t)))
+                      .concat(suggested.filter(t=>!CI_TAGS.includes(t)));
+  $('#ci-tags').innerHTML = all.map(t=>{
+    const on = CAP_TAGS.includes(t) || CI_TAGS.includes(t);
+    const mine = CI_TAGS.includes(t) && !CAP_TAGS.includes(t);
+    return `<button class="tag" data-citag="${esc(t)}" aria-pressed="${on}">${esc(t)}` +
+           (mine ? '<span class="x">&#215;</span>' : '') + '</button>';
+  }).join('');
+
+  const key = CANDIDATES[capIndex].bldId === 'vessel' ? 'vessel'
+            : CANDIDATES[capIndex].name === 'The Shed' ? 'shed' : 'hy30';
+  const feats = (FEATURE_POOL[key] || []).concat(CI_FEATS.filter(f=>!(FEATURE_POOL[key] || []).includes(f)));
+  $('#ci-features').innerHTML = feats.map((f, i)=>{
+    const mine = CI_FEATS.includes(f);
+    return `<button class="tag" data-cifeat="${esc(f)}" aria-pressed="${mine || i === 0}">${esc(f)}` +
+           (mine ? '<span class="x">&#215;</span>' : '') + '</button>';
+  }).join('');
+
+  const tr = TRACKS.find(x=>x.id === curTrack);
+  $('#ci-mtitle').textContent = tr ? tr.title : 'No sound';
+  $('#ci-tracklist').innerHTML =
+    TRACKS.map(t=>`<button class="trackrow" data-citrack="${t.id}" aria-pressed="${curTrack === t.id}">
+      <i></i><b>${esc(t.title)}</b><span class="tnum">${esc(t.len)}</span></button>`).join('') +
+    `<button class="trackrow" data-citrack="none" aria-pressed="${curTrack === null}"><i></i><b>No sound</b></button>`;
 }
 
 /* ---------- community: people, groups, buildings ----------
@@ -3088,11 +3172,13 @@ document.addEventListener('click', e=>{
 
   /* --- capture flow --- */
   if(t.closest('#ar-shutter')){
+    if(setFull()){ toast('Up to ' + MAX_SHOTS + ' photos - remove one first'); return; }
     const frame = SHOTS[shotIdx];
     shotIdx = (shotIdx + 1) % SHOTS.length;
-    $('#ar-bg').querySelector('img').src = IMG[frame];
-    addToSet(frame);
+    if(!addToSet(frame)) return;
     flashShutter();
+    /* you shot that frame, so the camera is now looking at the next one */
+    $('#ar-bg').querySelector('img').src = IMG[SHOTS[shotIdx]];
     /* identified already: another angle of the same building needs no second
        opinion, so the camera stays live and nothing is analysed */
     if(capState === 'ready'){ refreshTags(); return; }
@@ -3128,14 +3214,17 @@ document.addEventListener('click', e=>{
   if(pick){
     const k = pick.dataset.pick, i = LIB_PICK.indexOf(k);
     if(i > -1) LIB_PICK.splice(i, 1);
-    else if(LIB_PICK.length >= 8) { toast('Up to 8 photos at once'); return; }
+    else if(LIB_PICK.length >= MAX_SHOTS) { toast('Up to ' + MAX_SHOTS + ' photos in a capture'); return; }
     else LIB_PICK.push(k);
     syncLibPick();
     return;
   }
   if(t.closest('#ar-libgo')){
     if(!LIB_PICK.length) return;
-    const picked = LIB_PICK.slice();
+    const room = MAX_SHOTS - CAP_SET.length;
+    if(room <= 0){ toast('Up to ' + MAX_SHOTS + ' photos in a capture'); return; }
+    const picked = LIB_PICK.slice(0, room);
+    if(LIB_PICK.length > room) toast('Only ' + room + ' would fit - added those');
     LIB_PICK = [];
     closeCapSheets();
     $('#ar-bg').querySelector('img').src = IMG[picked[picked.length - 1]];
@@ -3199,7 +3288,15 @@ document.addEventListener('click', e=>{
   if(current === 'capture' && !t.closest('.ar-sheet')) closeCapSheets();
   if(t.closest('#si-go')){ runSignIn(); return; }
   if(t.closest('.sforgot')){ toast('Reset link sent to your email'); return; }
-  if(t.closest('[data-confirm]')){ go('checkin'); toast(CANDIDATES[capIndex].name + ' captured'); return; }
+  if(t.closest('[data-confirm]')){
+    capConfirmed = true;
+    $('#s-capture').dataset.confirmed = '1';
+    $('#ar-next').hidden = false;
+    $('#ar-spacer').hidden = true;
+    if(!CAP_SET.length){ const f = SHOTS[shotIdx]; shotIdx = (shotIdx + 1) % SHOTS.length; addToSet(f); }
+    toast(CANDIDATES[capIndex].name + ' confirmed');
+    return;
+  }
   if(t.closest('#ar-addtag')){
     if(CAP_TAGS.length >= MAX_TAGS){ toast('Up to ' + MAX_TAGS + ' tags - remove one first'); return; }
     const next = TAG_POOL.find(x=>!CAP_TAGS.includes(x));
@@ -3321,9 +3418,39 @@ document.addEventListener('click', e=>{
     return;
   }
 
+  const citag = t.closest('[data-citag]');
+  if(citag){
+    const v = citag.dataset.citag;
+    if(t.closest('.x')){ CI_TAGS = CI_TAGS.filter(x=>x !== v); renderCheckinTags(); return; }
+    const on = citag.getAttribute('aria-pressed') === 'true';
+    if(on){ CI_TAGS = CI_TAGS.filter(x=>x !== v); CAP_TAGS = CAP_TAGS.filter(x=>x !== v); }
+    else if(!CI_TAGS.includes(v)) CI_TAGS.push(v);
+    renderCheckinTags();
+    return;
+  }
+  const cifeat = t.closest('[data-cifeat]');
+  if(cifeat){
+    const v = cifeat.dataset.cifeat;
+    if(t.closest('.x')){ CI_FEATS = CI_FEATS.filter(x=>x !== v); renderCheckinTags(); return; }
+    cifeat.setAttribute('aria-pressed', String(cifeat.getAttribute('aria-pressed') !== 'true'));
+    return;
+  }
+  if(t.closest('#ci-music')){
+    const p = $('#ci-musicpick');
+    p.hidden = !p.hidden;
+    return;
+  }
+  const citrack = t.closest('[data-citrack]');
+  if(citrack){
+    curTrack = citrack.dataset.citrack === 'none' ? null : citrack.dataset.citrack;
+    applyTrack(); renderAudio(); renderCheckinTags();
+    $('#ci-musicpick').hidden = true;
+    return;
+  }
+
   if(t.closest('[data-publish]')){
     const cap = ($('#caption').value||'').trim() || 'Untitled check-in';
-    const tags = $$('#ci-tags .tag[aria-pressed="true"]').map(b=>b.textContent);
+    const tags = $$('#ci-tags .tag[aria-pressed="true"]').map(b=>b.dataset.citag);
     const cand = CANDIDATES[capIndex];
     POSTS.unshift({person:'lucy', bld:cand.bldId || null, group:null, style:cand.style,
       place:'New York', time:'just now', img:CAP_SET[capCover] || 'vessel_shot', quote:cap,
@@ -3334,6 +3461,26 @@ document.addEventListener('click', e=>{
   }
 });
 $('#ksearch').addEventListener('input', renderRecords);
+
+$('#ci-tagform').addEventListener('submit', e=>{
+  e.preventDefault();
+  const inp = $('#ci-tagin');
+  let v = inp.value.trim().replace(/\s+/g, '');
+  if(!v) return;
+  if(v[0] !== '#') v = '#' + v;
+  if(!CI_TAGS.includes(v) && !CAP_TAGS.includes(v)) CI_TAGS.push(v);
+  inp.value = '';
+  renderCheckinTags();
+});
+$('#ci-featform').addEventListener('submit', e=>{
+  e.preventDefault();
+  const inp = $('#ci-featin');
+  const v = inp.value.trim();
+  if(!v) return;
+  if(!CI_FEATS.includes(v)) CI_FEATS.push(v);
+  inp.value = '';
+  renderCheckinTags();
+});
 
 go('onboarding');
 fitDevice();
