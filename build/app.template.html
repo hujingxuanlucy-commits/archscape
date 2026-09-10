@@ -48,6 +48,17 @@ figure{margin:0}
   transform:scale(var(--k,1));transform-origin:center center}
 .viewport{position:relative;width:var(--pw);height:var(--ph);border-radius:40px;overflow:hidden;background:var(--paper);
   isolation:isolate;transition:background .2s}
+/* --- opening the app: the dark screen recedes, the app rises into place --- */
+.screen.on.appear{animation:appIn .58s cubic-bezier(.2,.85,.25,1) both}
+@keyframes appIn{from{opacity:0;transform:scale(1.045)}60%{opacity:1}to{opacity:1;transform:none}}
+.screen.leaving.appear-out{animation:appOut .46s cubic-bezier(.4,0,.6,1) both;z-index:2}
+@keyframes appOut{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.94)}}
+.screen.leaving.appear-out::after{animation:none;opacity:0}
+.tabbar.appear{animation:navRise .5s .16s cubic-bezier(.32,.72,0,1) both}
+@keyframes navRise{from{opacity:0;transform:translateY(130%)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .screen.on.appear,.screen.leaving.appear-out,.tabbar.appear{animation:none}
+}
 .viewport[data-chrome="dark"]{background:var(--ink)}
 
 /* ============ phone chrome ============ */
@@ -1396,7 +1407,9 @@ let navStack = [];
 function back(){ go(navStack.pop() || 'discover', true); }
 const OB_SEQ = ['onboarding','obrole','obthemes','obready'];
 let slideTimer = null;
-const TRANS = ['leaving','to-left','to-right','from-left','from-right'];
+const TRANS = ['leaving','to-left','to-right','from-left','from-right','appear','appear-out'];
+/* Finishing onboarding or signing in opens the app rather than just swapping screens. */
+const ENTER_FROM = ['obready','signin'];
 
 function go(id, isBack){
   const s = SCREENS.find(x=>x.id===id); if(!s) return;
@@ -1417,13 +1430,22 @@ function go(id, isBack){
   $$('.screen').forEach(el => el.classList.remove(...TRANS));
   $$('.screen').forEach(el => el.classList.toggle('on', el.id === 's'+'-'+id));
 
+  const entering = !isBack && id === 'discover' && ENTER_FROM.includes(from);
+
   if(slide && fromEl && toEl && fromEl !== toEl){
     fromEl.classList.add('leaving', fwd ? 'to-left' : 'to-right');
     toEl.classList.add(fwd ? 'from-right' : 'from-left');
     slideTimer = setTimeout(()=>{ fromEl.classList.remove(...TRANS); }, 380);
+  } else if(entering && fromEl && toEl){
+    fromEl.classList.add('leaving', 'appear-out');
+    toEl.classList.add('appear');
+    /* only the outgoing screen is cleaned: stripping 'appear' from the
+       arriving one would let the base screenIn animation replay */
+    slideTimer = setTimeout(()=>{ fromEl.classList.remove(...TRANS); }, 700);
   }
   viewport.dataset.chrome = s.chrome;
   tabbar.hidden = !s.nav;
+  tabbar.classList.toggle('appear', entering);
   $$('.tabitem').forEach(b => b.setAttribute('aria-current', String(b.dataset.tab === s.tab)));
   const sc = $('#s'+'-'+id); if(sc) sc.scrollTop = 0;
   if(id === 'capture') setCapture('scanning'); else clearTimeout(capTimer);
