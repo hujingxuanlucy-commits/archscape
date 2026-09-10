@@ -212,20 +212,29 @@ figure{margin:0}
 .themecell[aria-pressed="true"] svg{color:var(--red)}
 .themecell b{display:block;font-size:13px;font-weight:600;color:#fff}
 
-.readycard{position:relative;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.13);flex:none}
-.readycard > img{width:100%;height:236px;object-fit:cover}
-.readymap{position:absolute;right:12px;top:12px;width:98px;height:72px;border-radius:8px;overflow:hidden;
-  border:1px solid rgba(255,255,255,.4);box-shadow:0 8px 20px rgba(0,0,0,.55)}
+#s-obready .obbody{padding:14px 0 0;gap:0;justify-content:flex-end}
+.readyart{position:relative;flex:1;min-height:0}
+.readyart figure{position:absolute;margin:0;overflow:hidden;box-shadow:0 22px 54px -20px rgba(0,0,0,.9)}
+.readyart figure img{width:100%;height:100%;object-fit:cover}
+.rg1{left:-20px;top:14px;width:174px;height:214px;transform:rotate(-5deg);z-index:2}
+.rg2{left:118px;top:-12px;width:162px;height:192px;transform:rotate(4deg);z-index:1}
+.rg3{left:82px;top:150px;width:142px;height:178px;transform:rotate(-2.5deg);z-index:4}
+.rg4{left:236px;top:102px;width:144px;height:206px;transform:rotate(6.5deg);z-index:3}
+.readyveil{position:absolute;inset:-2px;z-index:5;pointer-events:none;
+  background:linear-gradient(180deg,rgba(15,15,15,.42) 0 18px,rgba(15,15,15,0) 96px,rgba(15,15,15,0) 46%,var(--ink) 93%)}
+.readymap{position:absolute;z-index:6;right:12px;top:6px;width:88px;height:64px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.55);box-shadow:0 12px 26px rgba(0,0,0,.6);transform:rotate(-6deg)}
 .readymap img{width:100%;height:100%;object-fit:cover}
 .readymap i{position:absolute;left:50%;top:50%;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;
   background:var(--red);border:2px solid #fff;display:block}
-.readypill{position:absolute;left:12px;right:12px;bottom:12px;display:flex;align-items:center;gap:10px;
-  background:rgba(12,12,13,.82);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:7px 13px}
+.readystrip{flex:none;display:flex;align-items:center;gap:11px;margin:0 26px;padding:13px 0 2px;
+  border-top:1px solid rgba(255,255,255,.16)}
 .stackav{display:flex;flex:none}
 .stackav span{width:21px;height:21px;border-radius:50%;border:2px solid #0F0F0F;margin-left:-7px;display:block}
 .stackav span:first-child{margin-left:0}
-.readypill b{font-size:12px;font-weight:700;color:#fff}
-.readypill em{font-style:normal;font-size:12px;color:#9C968E}
+.readystrip b{font-family:var(--disp);font-size:23px;font-weight:600;color:#fff;line-height:1}
+.readystrip em{font-style:normal;font-size:9.5px;font-weight:700;letter-spacing:.14em;color:#9C968E;
+  text-transform:uppercase;line-height:1.4}
 
 /* ============ 02 discover ============ */
 .mapframe{position:relative;height:250px;overflow:hidden;background:#F1ECE2;border-bottom:1px solid var(--bone)}
@@ -797,17 +806,21 @@ figure{margin:0}
             <p>Capture the hidden geometries of the city. Join a community of visual curators documenting the intersection of light, shadow, and human scale.</p>
           </div>
           <div class="obbody">
-            <div class="readycard">
-              <img data-img="ar_facade" alt="Modernist tower facade">
+            <div class="readyart">
+              <figure class="rg1"><img data-img="w8" alt="Concrete stair and shadow"></figure>
+              <figure class="rg2"><img data-img="insp_heydar" alt="Curved white facade"></figure>
+              <figure class="rg3"><img data-img="w2" alt="Curved glass curtain wall"></figure>
+              <figure class="rg4"><img data-img="vessel_ar" alt="The Vessel, Hudson Yards"></figure>
               <span class="readymap"><img data-img="map_city" alt=""><i></i></span>
-              <span class="readypill">
-                <span class="stackav">
-                  <span style="background:#952324"></span>
-                  <span style="background:#3E6B9A"></span>
-                  <span style="background:#666666"></span>
-                </span>
-                <b>12k+</b><em>curators exploring now</em>
+              <div class="readyveil"></div>
+            </div>
+            <div class="readystrip">
+              <span class="stackav">
+                <span style="background:#952324"></span>
+                <span style="background:#3E6B9A"></span>
+                <span style="background:#666666"></span>
               </span>
+              <b>12k+</b><em>curators<br>exploring now</em>
             </div>
           </div>
           <div class="obfoot"><button class="obprev" data-back>Back</button><button class="btn btn-red" data-go="discover">Start Exploring</button></div>
