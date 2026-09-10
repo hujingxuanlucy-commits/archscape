@@ -363,6 +363,31 @@ figure{margin:0}
   .ar-music .mtitle.roll > span{animation:none}
 }
 
+.coach{position:absolute;inset:0;z-index:10;background:rgba(8,8,10,.72);display:flex;align-items:flex-end;
+  animation:popIn .24s ease both}
+.coachbox{margin:0 15px 26px;width:100%;background:rgba(14,14,16,.97);border:1px solid rgba(255,255,255,.16);
+  border-radius:13px;padding:16px 17px 15px}
+.coachbox h4{font-family:var(--disp);font-size:22px;font-weight:600;color:#fff;margin:6px 0 7px}
+.coachbox p{margin:0;font-size:13px;line-height:1.55;color:#9C968E}
+.coachfoot{display:flex;align-items:center;gap:9px;margin-top:15px}
+.coachdots{flex:1;display:flex;gap:5px}
+.coachdots i{width:18px;height:3px;border-radius:2px;background:#3A3A3E;display:block;transition:.2s}
+.coachdots i.on{background:var(--red)}
+.coachfoot .btn-capture{flex:none;width:auto;padding:10px 22px;border-radius:999px}
+.coachfoot .pill-ghost{padding:9px 16px}
+.shotview{position:absolute;inset:0;z-index:9;background:#0B0B0C;display:flex;align-items:center;
+  justify-content:center;animation:popIn .2s ease both}
+.shotview img{width:100%;height:100%;object-fit:contain;display:block}
+.sv-top{position:absolute;left:15px;right:15px;top:52px;display:flex;align-items:center;justify-content:space-between}
+.sv-count{font-size:11px;font-weight:700;letter-spacing:.12em;color:rgba(255,255,255,.72);
+  background:rgba(20,20,23,.7);border-radius:999px;padding:6px 13px}
+.sv-nav{position:absolute;top:50%;margin-top:-19px;width:38px;height:38px;border-radius:50%;
+  background:rgba(22,22,25,.66);border:1px solid rgba(255,255,255,.2);color:#fff;display:grid;place-items:center}
+.sv-nav svg{width:17px;height:17px}
+.sv-nav.prev{left:12px}
+.sv-nav.next{right:12px}
+.sv-nav[disabled]{opacity:.3}
+.sv-tools{position:absolute;left:0;right:0;bottom:34px;display:flex;justify-content:center;gap:10px}
 .ar-flash{position:absolute;inset:0;z-index:7;background:#fff;opacity:0;pointer-events:none;display:block}
 .ar-flash.on{animation:shutterFlash .34s ease-out both}
 @keyframes shutterFlash{0%{opacity:0}12%{opacity:.82}100%{opacity:0}}
@@ -426,6 +451,22 @@ figure{margin:0}
 .artag.add:hover{color:#fff}
 
 .ar-mid{margin-top:auto;padding:0 18px}
+.ar-fold{display:flex;align-items:center;gap:10px;width:100%;text-align:left}
+.ar-fold .ar-inforow{flex:1;min-width:0}
+.foldname{display:none;flex:1;min-width:0;font-family:var(--disp);font-size:17px;font-weight:600;color:#fff;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.foldcaret{width:14px;height:14px;flex:none;color:rgba(255,255,255,.6);transition:transform .2s}
+#s-capture[data-fold="1"] .foldcaret{transform:rotate(-90deg)}
+#s-capture[data-fold="1"] .ar-info > h3,
+#s-capture[data-fold="1"] .ar-info > p,
+#s-capture[data-fold="1"] .ar-angles,
+#s-capture[data-fold="1"] .ar-infolinks{display:none}
+#s-capture[data-fold="1"] .ar-fold .eyebrow{display:none}
+#s-capture[data-fold="1"] .foldname{display:block;order:1}
+#s-capture[data-fold="1"] .ar-fold .ar-inforow{order:2;flex:none}
+#s-capture[data-fold="1"] .foldcaret{order:3}
+#s-capture[data-fold="1"] .ar-cardcta{margin-top:9px;padding:9px}
+#s-capture[data-fold="1"] .ar-info{padding-bottom:11px}
 .ar-info{background:rgba(12,12,13,.86);border:1.5px solid var(--red);padding:13px 15px 14px;max-width:302px;
   animation:popIn .3s ease both}
 @keyframes popIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
@@ -453,7 +494,8 @@ figure{margin:0}
 .tray-shot{position:relative;flex:none;width:52px;height:52px;border-radius:8px;display:block;
   background-size:cover;background-position:50% 50%;border:1px solid rgba(255,255,255,.34);
   animation:tagIn .32s cubic-bezier(.32,.72,0,1) both}
-.tray-shot button{position:absolute;right:-5px;top:-5px;width:19px;height:19px;border-radius:50%;
+.tray-open{position:absolute;inset:0;width:100%;height:100%;background:none;border:0;border-radius:8px;cursor:pointer}
+.tray-shot button:not(.tray-open){position:absolute;right:-5px;top:-5px;width:19px;height:19px;border-radius:50%;
   background:rgba(10,10,11,.9);border:1px solid rgba(255,255,255,.32);color:#fff;font-size:12px;line-height:1;
   display:grid;place-items:center;transition:.16s}
 .tray-shot button:hover{background:var(--red);border-color:var(--red)}
@@ -1163,6 +1205,32 @@ figure{margin:0}
 
           <div class="ar-grid" id="ar-grid" hidden></div>
           <span class="ar-flash" id="ar-flash" aria-hidden="true"></span>
+          <div class="coach" id="ar-coach" hidden>
+            <div class="coachbox">
+              <span class="eyebrow">First time here</span>
+              <h4 id="coach-title">Point at a building</h4>
+              <p id="coach-body">ArchScape reads the frame and names what it sees. You do not have to shoot first.</p>
+              <div class="coachfoot">
+                <span class="coachdots" id="coach-dots"></span>
+                <button class="pill-ghost" id="coach-skip">Skip</button>
+                <button class="btn-capture" id="coach-next">Next</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="shotview" id="ar-shotview" hidden>
+            <img id="sv-img" alt="Photo in this capture">
+            <div class="sv-top">
+              <span class="sv-count tnum" id="sv-count">1 / 1</span>
+              <button class="ar-round" id="sv-close" aria-label="Back to camera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+            </div>
+            <button class="sv-nav prev" data-sv="prev" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 5 8 12 15 19"/></svg></button>
+            <button class="sv-nav next" data-sv="next" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 5 16 12 9 19"/></svg></button>
+            <div class="sv-tools">
+              <button class="pill-ghost" data-sv="remove">Remove</button>
+              <button class="pill-ghost" data-sv="keep">Done</button>
+            </div>
+          </div>
 
           <div class="ar-ui">
             <div class="ar-top">
@@ -1200,10 +1268,14 @@ figure{margin:0}
 
             <div class="ar-mid">
               <div class="ar-info" data-when="ready">
-                <div class="ar-inforow">
-                  <span class="eyebrow">Building detected</span>
-                  <span class="ar-pct" id="ar-pct">96%</span>
-                </div>
+                <button class="ar-fold" id="ar-fold" aria-label="Show or hide details" aria-expanded="true">
+                  <span class="ar-inforow">
+                    <span class="eyebrow">Building detected</span>
+                    <span class="ar-pct" id="ar-pct">96%</span>
+                  </span>
+                  <span class="foldname" id="ar-foldname">The Vessel</span>
+                  <svg class="foldcaret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
                 <h3 id="ar-name">Seagram Building</h3>
                 <p id="ar-meta">Mies van der Rohe, 1958 &#183; Park Avenue</p>
                 <div class="ar-angles" id="ar-angles" hidden></div>
@@ -1211,7 +1283,7 @@ figure{margin:0}
                 <button class="ar-cardcta" data-confirm><i></i>Capture This Building</button>
                 <div class="ar-inforow ar-infolinks">
                   <button class="ar-wrong" id="ar-rescan">Not this building? Scan again</button>
-                  <button class="ar-wrong" id="ar-retake">Start over</button>
+                  <button class="ar-wrong" id="ar-retake">New building</button>
                 </div>
               </div>
             </div>
@@ -1587,7 +1659,11 @@ function go(id, isBack){
   tabbar.classList.toggle('appear', entering);
   $$('.tabitem').forEach(b => b.setAttribute('aria-current', String(b.dataset.tab === s.tab)));
   const sc = $('#s'+'-'+id); if(sc) sc.scrollTop = 0;
-  if(id === 'capture') setCapture('scanning'); else clearTimeout(capTimer);
+  if(id === 'capture'){
+    setCapture('scanning');
+    $('#ar-shotview').hidden = true;
+    if(!coachSeen){ coachStep = 0; showCoach(); }
+  } else clearTimeout(capTimer);
   if(id === 'checkin') renderCheckinTags();
   if(id === 'journey') requestAnimationFrame(()=>jmap.refit());
 }
@@ -1786,13 +1862,13 @@ const TAG_POOL = ['#facade', '#goldenhour', '#concrete', '#reflection', '#geomet
 const CANDIDATES = [
   {name:'The Vessel',      architect:'Thomas Heatherwick',      year:'2019', style:'Contemporary',
    street:'Hudson Yards', addr:'20 Hudson Yards, NYC', coords:'40.7539° N, 74.0021° W', pct:96, bldId:'vessel',
-   tags:['#street', '#UrbanVernacular', '#night']},
+   tags:['#thevessel', '#hudsonyards', '#heatherwick']},
   {name:'The Shed',        architect:'Diller Scofidio + Renfro', year:'2019', style:'Contemporary',
    street:'Hudson Yards', addr:'545 W 30th St, NYC',   coords:'40.7535° N, 74.0022° W', pct:90,
-   tags:['#movable', '#steelframe', '#culture']},
+   tags:['#theshed', '#hudsonyards', '#movable']},
   {name:'30 Hudson Yards', architect:'Kohn Pedersen Fox',        year:'2019', style:'Contemporary',
    street:'Hudson Yards', addr:'30 Hudson Yards, NYC', coords:'40.7540° N, 74.0011° W', pct:86,
-   tags:['#skyline', '#curtainwall', '#tower']}
+   tags:['#30hudsonyards', '#skyline', '#curtainwall']}
 ];
 let capState = 'scanning', capTimer = null, capFrozen = false, capIndex = 0;
 let capPassive = false;   /* detected on its own, with no shot taken */
@@ -1844,6 +1920,15 @@ function applyTrack(){
   }, 90);
 }
 
+/* what each frame actually shows, so the tags describe this photo and not
+   some generic idea of the building */
+const SHOT_TAGS = {
+  shot_v1:['#facade','#copper'],   shot_v2:['#stairs','#geometry'],
+  shot_v3:['#plaza','#publicspace'], shot_v4:['#glass','#reflection'],
+  shot_v5:['#lookingup','#sky'],   shot_v6:['#lattice','#silhouette'],
+  vessel_a:['#detail','#copper'],  vessel_b:['#stairs','#pattern'],
+  vessel_c:['#lookingup','#geometry']
+};
 const SHOTS = ['shot_v1','shot_v2','shot_v3','shot_v4','shot_v5','shot_v6'];
 let shotIdx = 0;
 /* photos of this same structure taken earlier - importing them is how you
@@ -1860,6 +1945,7 @@ function renderCapSet(){
     ? '<span class="tray-lab">' + n + (n === 1 ? ' photo' : ' photos') + ' in this capture</span>' +
       '<span class="tray-strip">' +
       CAP_SET.map((k,i)=>'<span class="tray-shot" style="background-image:url(' + IMG[k] + ')">' +
+        '<button class="tray-open" data-openshot="' + i + '" aria-label="Open photo ' + (i+1) + '"></button>' +
         '<button data-delshot="' + i + '" aria-label="Remove photo ' + (i+1) + '">&#215;</button></span>').join('') +
       '</span>'
     : '';
@@ -1903,6 +1989,9 @@ function renderCheckinPhotos(){
 }
 
 function addToSet(key){
+  /* the first photo of an identified building folds the card away, so the
+     photos have room; after that the user's own choice is left alone */
+  if(capState === 'ready' && !CAP_SET.length) $('#s-capture').dataset.fold = '1';
   CAP_SET.push(key);
   renderCapSet();
   applyCandidate();
@@ -2013,6 +2102,7 @@ function runSignIn(){
 function applyCandidate(){
   const c = CANDIDATES[capIndex];
   $('#ar-name').textContent = c.name;
+  $('#ar-foldname').textContent = c.name;
   $('#ar-meta').textContent = c.architect + ', ' + c.year + ' \u00b7 ' + c.street;
   const bonus = Math.min(Math.max(CAP_SET.length - 1, 0) * 2, 4);
   $('#ar-pct').textContent = Math.min((capFrozen ? c.pct - 2 : c.pct) + bonus, 99) + '% match';
@@ -2044,15 +2134,69 @@ function renderCapTags(animateFrom){
   if(ready) capTagsShown = CAP_TAGS.length;
 }
 
+/* building first, then what is actually in the newest frame */
+function composeTags(){
+  const out = (CANDIDATES[capIndex].tags || []).slice();
+  const last = CAP_SET[CAP_SET.length - 1];
+  (SHOT_TAGS[last] || []).forEach(t=>{ if(!out.includes(t)) out.push(t); });
+  return out.slice(0, MAX_TAGS);
+}
+
+/* Shown once, on the first visit to the camera. */
+const COACH = [
+  {t:'Point at a building', b:'ArchScape reads the frame and names what it sees. You do not have to shoot first.'},
+  {t:'One capture, many photos', b:'Once a building is named, the shutter just adds another photo of it. Walk around and keep shooting.'},
+  {t:'Tag, then keep it', b:'Labels are suggested from the building and the frame. Edit them, then Capture This Building to save.'}
+];
+let coachStep = 0, coachSeen = false;
+try { coachSeen = localStorage.getItem('as-coach') === '1'; } catch(e){}
+
+function showCoach(){
+  const c = COACH[coachStep];
+  $('#coach-title').textContent = c.t;
+  $('#coach-body').textContent = c.b;
+  $('#coach-dots').innerHTML = COACH.map((_, i)=>'<i class="' + (i <= coachStep ? 'on' : '') + '"></i>').join('');
+  $('#coach-next').textContent = coachStep === COACH.length - 1 ? 'Start' : 'Next';
+  $('#ar-coach').hidden = false;
+}
+function endCoach(){
+  $('#ar-coach').hidden = true;
+  coachSeen = true;
+  try { localStorage.setItem('as-coach', '1'); } catch(e){}
+}
+
+let svIdx = 0;
+function openShot(i){
+  svIdx = i;
+  const n = CAP_SET.length;
+  if(!n){ $('#ar-shotview').hidden = true; return; }
+  svIdx = Math.max(0, Math.min(svIdx, n - 1));
+  $('#sv-img').src = IMG[CAP_SET[svIdx]];
+  $('#sv-count').textContent = (svIdx + 1) + ' / ' + n;
+  $('[data-sv="prev"]').disabled = svIdx === 0;
+  $('[data-sv="next"]').disabled = svIdx === n - 1;
+  $('#ar-shotview').hidden = false;
+}
+
 function flashShutter(){
   const f = $('#ar-flash');
   f.classList.remove('on'); void f.offsetWidth; f.classList.add('on');
 }
 
+/* keep any tag the user added or removed; only fold in the new frame's */
+function refreshTags(){
+  const add = SHOT_TAGS[CAP_SET[CAP_SET.length - 1]] || [];
+  let grew = false;
+  add.forEach(t=>{
+    if(!CAP_TAGS.includes(t) && CAP_TAGS.length < MAX_TAGS){ CAP_TAGS.push(t); grew = true; }
+  });
+  if(grew){ capTagsShown = CAP_TAGS.length; renderCapTags(CAP_TAGS.length - add.length); }
+}
+
 function startTagReveal(){
   clearInterval(tagTimer);
   capTagsShown = 0;
-  CAP_TAGS = (CANDIDATES[capIndex].tags || []).slice();
+  CAP_TAGS = composeTags();
   renderCapTags(0);
   tagTimer = setInterval(()=>{
     const btns = $$('#ar-tags .artag:not(.add)');
@@ -2084,6 +2228,7 @@ function setCapture(st, keepFrame, keepSet){
   $('#ar-bg').classList.toggle('frozen', capFrozen);
   $('#s-capture').dataset.passive = (st === 'ready' && capPassive) ? '1' : '0';
   $('#ar-retake').hidden = !CAP_SET.length;
+  $('#s-capture').dataset.fold = (st === 'ready' && CAP_SET.length) ? '1' : '0';
   applyCandidate();
   if(st === 'scanning' || st === 'analyzing') startTagReveal();
   else if(st === 'ready'){ clearInterval(tagTimer); renderCapTags(); }
@@ -2950,7 +3095,7 @@ document.addEventListener('click', e=>{
     flashShutter();
     /* identified already: another angle of the same building needs no second
        opinion, so the camera stays live and nothing is analysed */
-    if(capState === 'ready') return;
+    if(capState === 'ready'){ refreshTags(); return; }
     $('#ar-scanlabel').textContent = 'Analysing your shot';
     setCapture('analyzing'); return;
   }
@@ -2995,18 +3140,48 @@ document.addEventListener('click', e=>{
     closeCapSheets();
     $('#ar-bg').querySelector('img').src = IMG[picked[picked.length - 1]];
     picked.forEach(addToSet);
-    if(capState === 'ready'){ toast(picked.length + ' added to this capture'); return; }
+    if(capState === 'ready'){ refreshTags(); toast(picked.length + ' added to this capture'); return; }
     $('#ar-scanlabel').textContent = picked.length > 1
       ? 'Reading ' + picked.length + ' imported photos' : 'Reading imported photo';
     setCapture('analyzing');
     return;
   }
+  const svb = t.closest('[data-sv]');
+  if(svb){
+    const a = svb.dataset.sv;
+    if(a === 'prev') openShot(svIdx - 1);
+    if(a === 'next') openShot(svIdx + 1);
+    if(a === 'keep') $('#ar-shotview').hidden = true;
+    if(a === 'remove'){
+      CAP_SET.splice(svIdx, 1);
+      renderCapSet(); applyCandidate();
+      if(!CAP_SET.length){ $('#ar-shotview').hidden = true; toast('All photos removed'); }
+      else openShot(Math.min(svIdx, CAP_SET.length - 1));
+    }
+    return;
+  }
+  if(t.closest('#coach-skip')){ endCoach(); return; }
+  if(t.closest('#coach-next')){
+    if(coachStep >= COACH.length - 1) endCoach();
+    else { coachStep++; showCoach(); }
+    return;
+  }
+  if(t.closest('#sv-close')){ $('#ar-shotview').hidden = true; return; }
+  const shotOpen = t.closest('[data-openshot]');
+  if(shotOpen){ openShot(+shotOpen.dataset.openshot); return; }
   const del = t.closest('[data-delshot]');
   if(del){
     CAP_SET.splice(+del.dataset.delshot, 1);
     renderCapSet(); applyCandidate();
     $('#ar-retake').hidden = !CAP_SET.length;
     if(!CAP_SET.length) toast('All photos removed');
+    return;
+  }
+  if(t.closest('#ar-fold')){
+    const sc = $('#s-capture');
+    const folded = sc.dataset.fold === '1';
+    sc.dataset.fold = folded ? '0' : '1';
+    $('#ar-fold').setAttribute('aria-expanded', String(folded));
     return;
   }
   if(t.closest('#ar-dismiss')){ setCapture('scanning', false, true); toast('Still scanning'); return; }
