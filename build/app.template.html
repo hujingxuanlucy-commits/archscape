@@ -407,19 +407,23 @@ figure{margin:0}
 .ar-bottom{padding:16px 18px 24px;display:flex;flex-direction:column;gap:13px}
 .ar-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:76px}
 .ar-left{display:flex;align-items:center;gap:9px}
-.ar-lib,.ar-setbtn{display:flex;flex-direction:column;align-items:center;gap:5px;width:64px;flex:none;
-  color:#fff;transition:.16s}
+.ar-lib{display:flex;flex-direction:column;align-items:center;gap:5px;width:64px;flex:none;color:#fff;transition:.16s}
 .ar-lib svg{width:23px;height:23px}
-.ar-lib b,.ar-setbtn b{font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
-  color:rgba(255,255,255,.78)}
-.ar-lib:hover b,.ar-setbtn:hover b{color:#fff}
-.ar-setbtn b{color:var(--red)}
-.ar-setbtn[data-empty="1"] b{color:rgba(255,255,255,.45)}
-.ar-setstack{display:flex;height:26px;align-items:center}
-.ar-setstack i{width:24px;height:24px;border-radius:6px;border:1.5px solid rgba(255,255,255,.5);margin-left:-9px;
-  display:block;background-size:cover;background-position:50% 50%;background-color:rgba(255,255,255,.14)}
-.ar-setstack i:first-child{margin-left:0}
-.ar-setstack.empty i{border-style:dashed;border-color:rgba(255,255,255,.36)}
+.ar-lib b{font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.78)}
+.ar-lib:hover b{color:#fff}
+.ar-spacer{width:64px;flex:none}
+/* every photo in this capture, in one place */
+.ar-tray{display:flex;flex-direction:column;gap:7px}
+.tray-lab{font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.62)}
+.tray-strip{display:flex;gap:7px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.tray-strip::-webkit-scrollbar{display:none}
+.tray-shot{position:relative;flex:none;width:52px;height:52px;border-radius:8px;display:block;
+  background-size:cover;background-position:50% 50%;border:1px solid rgba(255,255,255,.34);
+  animation:tagIn .32s cubic-bezier(.32,.72,0,1) both}
+.tray-shot button{position:absolute;right:-5px;top:-5px;width:19px;height:19px;border-radius:50%;
+  background:rgba(10,10,11,.9);border:1px solid rgba(255,255,255,.32);color:#fff;font-size:12px;line-height:1;
+  display:grid;place-items:center;transition:.16s}
+.tray-shot button:hover{background:var(--red);border-color:var(--red)}
 .ar-sheet-lib{width:274px;top:auto;bottom:126px;padding:13px 14px 14px}
 .ar-sheetnote{margin:2px 0 10px;font-size:11px;line-height:1.4;color:#8E8880}
 .ar-libgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
@@ -433,11 +437,10 @@ figure{margin:0}
 /* a detection nobody asked for reads as a suggestion, not a takeover */
 .ar-info{position:relative}
 #s-capture[data-passive="1"] .ar-info{border-color:rgba(149,35,36,.55);background:rgba(12,12,13,.78)}
-.ar-cardcta{display:none;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:11px;
+.ar-cardcta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:11px;
   background:var(--red);color:#fff;border-radius:999px;padding:11px;font-size:13.5px;font-weight:600;transition:.16s}
 .ar-cardcta:hover{background:var(--red-deep)}
 .ar-cardcta i{width:9px;height:9px;border-radius:50%;background:#fff;flex:none;display:block}
-#s-capture[data-passive="1"] .ar-cardcta{display:flex}
 .ar-dismiss{position:absolute;right:6px;top:5px;width:24px;height:24px;border-radius:50%;
   color:rgba(255,255,255,.6);font-size:17px;line-height:1;display:none;place-items:center;transition:.16s}
 .ar-dismiss:hover{color:#fff;background:rgba(255,255,255,.12)}
@@ -1085,12 +1088,6 @@ figure{margin:0}
               <div class="ar-libgrid" id="ar-libgrid"></div>
             </div>
 
-            <div class="ar-sheet ar-sheet-lib" id="ar-set" hidden>
-              <div class="eyebrow">This capture</div>
-              <p class="ar-sheetnote" id="ar-setnote">Shoot the same building from several angles for a stronger match.</p>
-              <div class="ar-libgrid" id="ar-setgrid"></div>
-            </div>
-
             <div class="ar-mid">
               <div class="ar-info" data-when="ready">
                 <div class="ar-inforow">
@@ -1104,24 +1101,20 @@ figure{margin:0}
                 <button class="ar-cardcta" data-confirm><i></i>Capture This Building</button>
                 <div class="ar-inforow ar-infolinks">
                   <button class="ar-wrong" id="ar-rescan">Not this building? Scan again</button>
-                  <button class="ar-wrong" id="ar-more">Add angle</button>
+                  <button class="ar-wrong" id="ar-retake">Start over</button>
                 </div>
               </div>
             </div>
 
             <div class="ar-bottom">
+              <div class="ar-tray" id="ar-tray" hidden></div>
               <div class="ar-row">
-                <button class="ar-lib" id="ar-lib" data-when="scanning" aria-label="Import from your library">
+                <button class="ar-lib" id="ar-lib" aria-label="Import from your library">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 15 5-4 4 3 3-2 6 4"/><circle cx="9" cy="9.5" r="1.3"/></svg>
                   <b>Library</b>
                 </button>
-                <button class="shutter" id="ar-shutter" data-when="scanning" aria-label="Take photo, then scan"><i></i></button>
-                <button class="ar-setbtn" id="ar-setbtn" data-when="scanning" aria-label="Angles in this capture">
-                  <span class="ar-setstack" id="ar-setstack"></span>
-                  <b id="ar-setcount">0</b>
-                </button>
-                <button class="pill-ghost" id="ar-retake" data-when="ready">Retake</button>
-                <button class="btn-capture" id="ar-confirm" data-confirm data-when="ready"><i></i>Capture This Building</button>
+                <button class="shutter" id="ar-shutter" aria-label="Take photo, then scan"><i></i></button>
+                <span class="ar-spacer" aria-hidden="true"></span>
               </div>
               <div class="ar-hint" data-when="scanning">Hold steady &#183; or tap the shutter to scan your shot</div>
               <div class="ar-hint" data-when="analyzing">Matching against 50,000+ records</div>
@@ -1697,34 +1690,23 @@ const CAP_OPTS = {grid:false, auto:true, geo:true};
 const LIBRARY = ['vessel_a','vessel_b','vessel_c','w2','w8','insp_heydar','k11','tate'];
 let CAP_SET = [];
 
-function setStack(){
-  const shots = CAP_SET.slice(-3);
-  return shots.length
-    ? shots.map(k=>'<i style="background-image:url(' + IMG[k] + ')"></i>').join('')
-    : '<i></i>';
-}
-
 function renderCapSet(){
   const n = CAP_SET.length;
-  const stack = $('#ar-setstack');
-  stack.innerHTML = setStack();
-  stack.classList.toggle('empty', n === 0);
-  $('#ar-setcount').textContent = n === 0 ? 'Angles' : (n + (n === 1 ? ' angle' : ' angles'));
-  $('#ar-setbtn').dataset.empty = n ? '0' : '1';
-
-  $('#ar-setgrid').innerHTML = n
-    ? CAP_SET.map((k,i)=>'<button data-delshot="' + i + '" aria-label="Remove angle ' + (i+1) + '">' +
-        '<img src="' + IMG[k] + '" alt=""><span class="del">&#215;</span></button>').join('')
-    : '<p class="ar-libempty">No angles yet. Tap the shutter, or import a photo you already took.</p>';
-  $('#ar-setnote').textContent = n > 1
-    ? 'Matching across ' + n + ' angles. More angles, higher confidence.'
-    : 'Shoot the same building from several angles for a stronger match.';
+  const tray = $('#ar-tray');
+  tray.hidden = n === 0;
+  tray.innerHTML = n
+    ? '<span class="tray-lab">' + n + (n === 1 ? ' photo' : ' photos') + ' in this capture</span>' +
+      '<span class="tray-strip">' +
+      CAP_SET.map((k,i)=>'<span class="tray-shot" style="background-image:url(' + IMG[k] + ')">' +
+        '<button data-delshot="' + i + '" aria-label="Remove photo ' + (i+1) + '">&#215;</button></span>').join('') +
+      '</span>'
+    : '';
 
   const ang = $('#ar-angles');
   if(n > 1){
     ang.hidden = false;
     ang.innerHTML = CAP_SET.slice(0,3).map(k=>'<i style="background-image:url(' + IMG[k] + ')"></i>').join('') +
-      '<span>Matched from ' + n + ' angles</span>';
+      '<span>Matched across ' + n + ' photos</span>';
   } else ang.hidden = true;
 
   $('#ci-photo').src = IMG[CAP_SET[0] || 'vessel_shot'];
@@ -1744,7 +1726,7 @@ function renderLibrary(){
 }
 
 function sheetsOpen(){
-  return ['#ar-settings','#ar-library','#ar-set'].some(id=>{ const el = $(id); return el && !el.hidden; });
+  return ['#ar-settings','#ar-library'].some(id=>{ const el = $(id); return el && !el.hidden; });
 }
 
 /* The passive scan may only run when the camera is actually being aimed:
@@ -1761,7 +1743,7 @@ function syncScanTimer(){
 }
 
 function closeCapSheets(){
-  ['#ar-settings','#ar-library','#ar-set'].forEach(id=>{ const el = $(id); if(el) el.hidden = true; });
+  ['#ar-settings','#ar-library'].forEach(id=>{ const el = $(id); if(el) el.hidden = true; });
   const sc = $('#s-capture'); if(sc) sc.dataset.settings = '0';
   const g = $('#ar-gear'); if(g) g.setAttribute('aria-expanded', 'false');
   syncScanTimer();
@@ -1875,11 +1857,7 @@ function setCapture(st, keepFrame, keepSet){
     el.hidden = !el.dataset.when.split(' ').includes(st);
   });
   $('#s-capture').dataset.passive = (st === 'ready' && capPassive) ? '1' : '0';
-  if(st === 'ready' && capPassive){
-    ['#ar-shutter','#ar-lib','#ar-setbtn'].forEach(id=>{ const el = $(id); if(el) el.hidden = false; });
-    $('#ar-retake').hidden = true;
-    $('#ar-confirm').hidden = true;
-  }
+  $('#ar-retake').hidden = !CAP_SET.length;
   applyCandidate();
   if(st === 'scanning') startTagReveal();
   else if(st === 'ready'){ clearInterval(tagTimer); renderCapTags(); }
@@ -2481,7 +2459,6 @@ document.addEventListener('click', e=>{
     return;
   }
   if(t.closest('#ar-lib')){ renderLibrary(); openCapSheet('#ar-library'); return; }
-  if(t.closest('#ar-setbtn')){ openCapSheet('#ar-set'); return; }
   const imp = t.closest('[data-import]');
   if(imp){
     const k = imp.dataset.import;
@@ -2496,11 +2473,11 @@ document.addEventListener('click', e=>{
   if(del){
     CAP_SET.splice(+del.dataset.delshot, 1);
     renderCapSet(); applyCandidate();
-    if(!CAP_SET.length) toast('Capture set cleared');
+    $('#ar-retake').hidden = !CAP_SET.length;
+    if(!CAP_SET.length) toast('All photos removed');
     return;
   }
   if(t.closest('#ar-dismiss')){ setCapture('scanning', false, true); toast('Still scanning'); return; }
-  if(t.closest('#ar-more')){ setCapture('scanning', false, true); toast('Frame another angle'); return; }
   const optb = t.closest('.arset');
   if(optb){
     const k = optb.dataset.opt;
