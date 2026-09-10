@@ -363,6 +363,10 @@ figure{margin:0}
   .ar-music .mtitle.roll > span{animation:none}
 }
 
+.ar-flash{position:absolute;inset:0;z-index:7;background:#fff;opacity:0;pointer-events:none;display:block}
+.ar-flash.on{animation:shutterFlash .34s ease-out both}
+@keyframes shutterFlash{0%{opacity:0}12%{opacity:.82}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.ar-flash.on{animation:none}}
 .scanbeam{position:absolute;left:0;right:0;top:16%;height:2px;display:block;z-index:4;pointer-events:none;
   background:linear-gradient(90deg,transparent,var(--red),transparent);
   box-shadow:0 0 16px 3px rgba(149,35,36,.5);animation:beam 2.4s ease-in-out infinite}
@@ -1132,6 +1136,7 @@ figure{margin:0}
           </div>
 
           <div class="ar-grid" id="ar-grid" hidden></div>
+          <span class="ar-flash" id="ar-flash" aria-hidden="true"></span>
 
           <div class="ar-ui">
             <div class="ar-top">
@@ -1197,6 +1202,7 @@ figure{margin:0}
               </div>
               <div class="ar-hint" data-when="scanning">Hold steady &#183; or tap the shutter to scan your shot</div>
               <div class="ar-hint" data-when="analyzing">Matching against 50,000+ records</div>
+              <div class="ar-hint" data-when="ready">Same building &#183; the shutter adds another photo</div>
           </div>
         </section>
 
@@ -2025,6 +2031,11 @@ function renderCapTags(animateFrom){
   if(ready) capTagsShown = CAP_TAGS.length;
 }
 
+function flashShutter(){
+  const f = $('#ar-flash');
+  f.classList.remove('on'); void f.offsetWidth; f.classList.add('on');
+}
+
 function startTagReveal(){
   clearInterval(tagTimer);
   capTagsShown = 0;
@@ -2056,6 +2067,8 @@ function setCapture(st, keepFrame, keepSet){
     el.hidden = !el.dataset.when.split(' ').includes(st);
   });
   closeCapSheets();
+  if(st === 'ready') capFrozen = false;   /* live again: you can keep shooting */
+  $('#ar-bg').classList.toggle('frozen', capFrozen);
   $('#s-capture').dataset.passive = (st === 'ready' && capPassive) ? '1' : '0';
   $('#ar-retake').hidden = !CAP_SET.length;
   applyCandidate();
@@ -2737,6 +2750,10 @@ document.addEventListener('click', e=>{
     shotIdx = (shotIdx + 1) % SHOTS.length;
     $('#ar-bg').querySelector('img').src = IMG[frame];
     addToSet(frame);
+    flashShutter();
+    /* identified already: another angle of the same building needs no second
+       opinion, so the camera stays live and nothing is analysed */
+    if(capState === 'ready') return;
     $('#ar-scanlabel').textContent = 'Analysing your shot';
     setCapture('analyzing'); return;
   }
@@ -2781,6 +2798,7 @@ document.addEventListener('click', e=>{
     closeCapSheets();
     $('#ar-bg').querySelector('img').src = IMG[picked[picked.length - 1]];
     picked.forEach(addToSet);
+    if(capState === 'ready'){ toast(picked.length + ' added to this capture'); return; }
     $('#ar-scanlabel').textContent = picked.length > 1
       ? 'Reading ' + picked.length + ' imported photos' : 'Reading imported photo';
     setCapture('analyzing');
