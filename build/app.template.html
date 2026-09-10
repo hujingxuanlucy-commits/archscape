@@ -383,20 +383,26 @@ figure{margin:0}
 .sv-top{position:absolute;left:15px;right:15px;top:52px;display:flex;align-items:center;justify-content:space-between}
 .sv-count{font-size:11px;font-weight:700;letter-spacing:.12em;color:rgba(255,255,255,.72);
   background:rgba(20,20,23,.7);border-radius:999px;padding:6px 13px}
-.sv-nav{position:absolute;top:50%;margin-top:-19px;width:38px;height:38px;border-radius:50%;
-  background:rgba(22,22,25,.66);border:1px solid rgba(255,255,255,.2);color:#fff;display:grid;place-items:center}
+.sv-nav{position:absolute;top:42%;margin-top:-19px;width:38px;height:38px;border-radius:50%;
+  background:rgba(22,22,25,.66);border:1px solid rgba(255,255,255,.2);color:#fff;display:grid;place-items:center;z-index:2}
 .sv-nav svg{width:17px;height:17px}
 .sv-nav.prev{left:12px}
 .sv-nav.next{right:12px}
 .sv-nav[disabled]{opacity:.3}
-.shotview::after{content:"";position:absolute;left:0;right:0;bottom:0;height:190px;pointer-events:none;
-  background:linear-gradient(180deg,transparent,rgba(8,8,10,.9))}
-.sv-tools{position:absolute;left:15px;right:15px;bottom:30px;z-index:3;display:flex;justify-content:center;gap:10px}
-.sv-tools .pill-ghost{background:rgba(28,28,32,.92);border-color:rgba(255,255,255,.32);padding:12px 24px}
-.sv-tools .pill-ghost:hover{background:rgba(56,56,62,.95)}
-.sv-looks{position:absolute;left:0;right:0;bottom:84px;z-index:3;display:flex;gap:8px;justify-content:center;
-  padding:0 14px;overflow-x:auto;scrollbar-width:none}
+/* one solid panel at the bottom of the viewer, instead of two rows of
+   pills floating loose over the photo */
+.sv-sheet{position:absolute;left:0;right:0;bottom:0;z-index:3;background:rgba(9,9,10,.97);
+  border-top:1px solid rgba(255,255,255,.14);border-radius:16px 16px 0 0;
+  padding:15px 16px calc(20px + env(safe-area-inset-bottom, 0px))}
+.sv-looklabel{font-size:9.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);margin-bottom:10px}
+.sv-looks{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
 .sv-looks::-webkit-scrollbar{display:none}
+.sv-actions{display:flex;gap:10px;margin-top:14px}
+.sv-actions .pill-ghost{flex:1;background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.2);
+  justify-content:center;display:flex;align-items:center}
+.sv-actions .pill-ghost:hover{background:rgba(255,255,255,.16)}
+.sv-actions .btn-capture{flex:1.3}
 .lookbtn{flex:none;padding:7px 14px;border-radius:999px;background:rgba(22,22,25,.8);
   border:1px solid rgba(255,255,255,.22);color:#fff;font-size:11.5px;font-weight:600;transition:.16s}
 .lookbtn:hover{background:rgba(52,52,58,.9)}
@@ -440,7 +446,9 @@ figure{margin:0}
   background:#fff;transition:transform .18s cubic-bezier(.32,.72,0,1)}
 .arset[aria-pressed="true"] i{background:var(--red)}
 .arset[aria-pressed="true"] i::after{transform:translateX(14px)}
-#s-capture[data-settings="1"] .ar-tags{opacity:0;pointer-events:none}
+#s-capture[data-settings="1"] .ar-tags,
+#s-capture[data-settings="1"] .ar-status{opacity:0;pointer-events:none}
+.ar-status{transition:opacity .18s}
 /* a flex sibling of the card and the controls, so it can never sit over them;
    it fills the space left between them and stacks upward from the bottom */
 .ar-tags{transition:opacity .18s;flex:1;min-height:0;display:flex;flex-direction:column;
@@ -994,6 +1002,7 @@ figure{margin:0}
 
 /* ============ 09 community ============ */
 .post{border-bottom:1px solid var(--bone);padding-bottom:14px;margin-bottom:14px}
+#comm-panel > .post:first-child{margin-top:14px}
 .post-head{display:flex;align-items:center;gap:11px;padding:0 20px 12px}
 .post-head .avatar{width:38px;height:38px}
 .post-head .grow{flex:1;min-width:0}
@@ -1309,10 +1318,13 @@ figure{margin:0}
             </div>
             <button class="sv-nav prev" data-sv="prev" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 5 8 12 15 19"/></svg></button>
             <button class="sv-nav next" data-sv="next" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 5 16 12 9 19"/></svg></button>
-            <div class="sv-looks" id="sv-looks"></div>
-            <div class="sv-tools">
-              <button class="pill-ghost" data-sv="remove">Remove</button>
-              <button class="pill-ghost" data-sv="keep">Done</button>
+            <div class="sv-sheet">
+              <div class="sv-looklabel">Look</div>
+              <div class="sv-looks" id="sv-looks"></div>
+              <div class="sv-actions">
+                <button class="pill-ghost" data-sv="remove">Remove photo</button>
+                <button class="btn-capture" data-sv="keep">Done</button>
+              </div>
             </div>
           </div>
 
@@ -1504,7 +1516,7 @@ the city folded in on itself.</textarea>
         <!-- ============ 06 PROFILE ============ -->
         <section class="screen padnav" id="s-profile">
           <div class="pf-cover">
-            <img data-img="prof_cover" alt="Night street lit by lanterns">
+            <img data-img="prof_cover" alt="The Vessel, seen from within its honeycomb structure">
             <span class="avatar pf-avatar">L</span>
             <button class="pf-edit">Edit</button>
           </div>
