@@ -375,12 +375,38 @@ figure{margin:0}
 .ar-bottom{padding:16px 18px 24px;display:flex;flex-direction:column;gap:13px}
 .ar-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:76px}
 .ar-left{display:flex;align-items:center;gap:9px}
-.ar-thumb{width:46px;height:46px;border-radius:9px;overflow:hidden;border:1px solid rgba(255,255,255,.32);flex:none}
-.ar-thumb img{width:100%;height:100%;object-fit:cover}
-.ar-addshot{width:40px;height:40px;border-radius:9px;background:rgba(255,255,255,.15);
-  border:1px solid rgba(255,255,255,.22);display:grid;place-items:center;color:#fff;flex:none;transition:.16s}
-.ar-addshot:hover{background:rgba(255,255,255,.26)}
-.ar-addshot svg{width:17px;height:17px}
+.ar-lib,.ar-setbtn{display:flex;flex-direction:column;align-items:center;gap:5px;width:64px;flex:none;
+  color:#fff;transition:.16s}
+.ar-lib svg{width:23px;height:23px}
+.ar-lib b,.ar-setbtn b{font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+  color:rgba(255,255,255,.78)}
+.ar-lib:hover b,.ar-setbtn:hover b{color:#fff}
+.ar-setbtn b{color:var(--red)}
+.ar-setbtn[data-empty="1"] b{color:rgba(255,255,255,.45)}
+.ar-setstack{display:flex;height:26px;align-items:center}
+.ar-setstack i{width:24px;height:24px;border-radius:6px;border:1.5px solid rgba(255,255,255,.5);margin-left:-9px;
+  display:block;background-size:cover;background-position:50% 50%;background-color:rgba(255,255,255,.14)}
+.ar-setstack i:first-child{margin-left:0}
+.ar-setstack.empty i{border-style:dashed;border-color:rgba(255,255,255,.36)}
+.ar-sheet-lib{width:274px;top:auto;bottom:126px;padding:13px 14px 14px}
+.ar-sheetnote{margin:2px 0 10px;font-size:11px;line-height:1.4;color:#8E8880}
+.ar-libgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ar-libgrid button{position:relative;aspect-ratio:1;overflow:hidden;border-radius:6px;display:block;
+  border:1px solid rgba(255,255,255,.16)}
+.ar-libgrid img{width:100%;height:100%;object-fit:cover;display:block}
+.ar-libgrid button:hover{border-color:var(--red)}
+.ar-libgrid .del{position:absolute;right:2px;top:2px;width:16px;height:16px;border-radius:50%;
+  background:rgba(10,10,11,.86);color:#fff;font-size:11px;line-height:15px;text-align:center;display:block}
+.ar-libempty{grid-column:1/-1;margin:0;font-size:11.5px;line-height:1.45;color:#8E8880;padding:2px 0}
+.ar-angles{display:flex;align-items:center;gap:7px;margin-top:8px;font-size:10px;font-weight:700;
+  letter-spacing:.11em;text-transform:uppercase;color:#9C968E}
+.ar-angles i{width:18px;height:18px;border-radius:4px;display:block;background-size:cover;background-position:50% 50%;
+  border:1px solid rgba(255,255,255,.34);margin-left:-6px}
+.ar-angles i:first-of-type{margin-left:0}
+.ar-infolinks{margin-top:9px;gap:14px}
+.ar-infolinks .ar-wrong{white-space:nowrap}
+.ci-count{position:absolute;right:10px;bottom:10px;background:rgba(12,12,13,.84);color:#fff;border-radius:999px;
+  padding:5px 11px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
 .shutter{width:76px;height:76px;border-radius:50%;border:3.5px solid #fff;display:grid;place-items:center;
   transition:.18s;background:rgba(255,255,255,.08);flex:none}
 .shutter i{width:60px;height:60px;border-radius:50%;background:#fff;opacity:0;transition:.18s;display:block}
@@ -400,7 +426,7 @@ figure{margin:0}
   text-transform:uppercase}
 /* ============ 04 check-in ============ */
 .ci-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 16px 12px}
-.ci-photo{margin:0 22px;border-radius:10px 10px 0 0;overflow:hidden;height:184px}
+.ci-photo{position:relative;margin:0 22px;border-radius:10px 10px 0 0;overflow:hidden;height:184px}
 .ci-photo img{width:100%;height:100%;object-fit:cover}
 .ci-loc{display:flex;gap:11px;align-items:flex-start;margin:0 22px 10px;padding:11px 14px;background:var(--white);
   border:1px solid var(--bone);border-top:0;border-radius:0 0 10px 10px}
@@ -972,6 +998,18 @@ figure{margin:0}
               <button class="arset" data-opt="geo"><b>Attach location</b><span>Save coordinates with the capture</span><i></i></button>
             </div>
 
+            <div class="ar-sheet ar-sheet-lib" id="ar-library" hidden>
+              <div class="eyebrow">Import from library</div>
+              <p class="ar-sheetnote">Imported photos are scanned the same way as a live frame.</p>
+              <div class="ar-libgrid" id="ar-libgrid"></div>
+            </div>
+
+            <div class="ar-sheet ar-sheet-lib" id="ar-set" hidden>
+              <div class="eyebrow">This capture</div>
+              <p class="ar-sheetnote" id="ar-setnote">Shoot the same building from several angles for a stronger match.</p>
+              <div class="ar-libgrid" id="ar-setgrid"></div>
+            </div>
+
             <div class="ar-mid">
               <div class="ar-info" data-when="ready">
                 <div class="ar-inforow">
@@ -980,18 +1018,25 @@ figure{margin:0}
                 </div>
                 <h3 id="ar-name">Seagram Building</h3>
                 <p id="ar-meta">Mies van der Rohe, 1958 &#183; Park Avenue</p>
-                <button class="ar-wrong" id="ar-rescan">Not this building? Scan again</button>
+                <div class="ar-angles" id="ar-angles" hidden></div>
+                <div class="ar-inforow ar-infolinks">
+                  <button class="ar-wrong" id="ar-rescan">Not this building? Scan again</button>
+                  <button class="ar-wrong" id="ar-more">Add angle</button>
+                </div>
               </div>
             </div>
 
             <div class="ar-bottom">
               <div class="ar-row">
-                <div class="ar-left" data-when="scanning">
-                  <span class="ar-thumb"><img data-img="vessel_shot" alt="Last capture"></span>
-                  <button class="ar-addshot" aria-label="Add from library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
-                </div>
+                <button class="ar-lib" id="ar-lib" data-when="scanning" aria-label="Import from your library">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 15 5-4 4 3 3-2 6 4"/><circle cx="9" cy="9.5" r="1.3"/></svg>
+                  <b>Library</b>
+                </button>
                 <button class="shutter" id="ar-shutter" data-when="scanning" aria-label="Take photo, then scan"><i></i></button>
-                <button class="ar-flip" data-when="scanning" aria-label="Flip camera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-9 9 9 9 0 0 1-7.6-4.2"/><polyline points="3 11 3 17 9 17"/><path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 7.6 4.2"/><polyline points="21 13 21 7 15 7"/></svg></button>
+                <button class="ar-setbtn" id="ar-setbtn" data-when="scanning" aria-label="Angles in this capture">
+                  <span class="ar-setstack" id="ar-setstack"></span>
+                  <b id="ar-setcount">0</b>
+                </button>
                 <button class="pill-ghost" id="ar-retake" data-when="ready">Retake</button>
                 <button class="btn-capture" id="ar-confirm" data-when="ready"><i></i>Capture This Building</button>
               </div>
@@ -1007,7 +1052,7 @@ figure{margin:0}
             <h2 class="h-title sm">New Check-in</h2>
             <button class="btn btn-red" style="width:auto;padding:10px 22px;font-size:13.5px" data-publish>Publish</button>
           </div>
-          <div class="ci-photo"><img data-img="vessel_shot" alt="Stair lattice inside The Vessel"></div>
+          <div class="ci-photo"><img id="ci-photo" data-img="vessel_shot" alt="Stair lattice inside The Vessel"><span class="ci-count" id="ci-count" hidden></span></div>
           <div class="ci-loc" id="ci-locrow">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
             <div><b id="ci-locname">375 Park Ave, NYC</b><span class="tnum" id="ci-loccoords">40.7580° N, 73.9764° W</span></div>
@@ -1302,7 +1347,7 @@ function go(id, isBack){
   if(!isBack && current !== id){ navStack.push(current); if(navStack.length > 30) navStack.shift(); }
   current = id;
   if(from === 'signin' || id === 'signin') resetSignIn();
-  if(from === 'capture') closeCapSettings();
+  if(from === 'capture') closeCapSheets();
 
   /* a move between two steps of the onboarding sequence slides sideways;
      direction comes from the step order, so Skip and Back both read right */
@@ -1550,19 +1595,77 @@ let capState = 'scanning', capTimer = null, capFrozen = false, capIndex = 0;
 /* Capture settings: each switch changes how the camera actually behaves. */
 const CAP_OPTS = {grid:false, auto:true, geo:true};
 
+/* ---------- the capture set ----------
+   A capture is one building, photographed from one or more angles. Shots
+   from the shutter and photos imported from the library both land here and
+   are scanned the same way; each extra angle raises the match confidence. */
+const LIBRARY = ['vessel_a','vessel_b','vessel_c','w2','w8','insp_heydar','k11','tate'];
+let CAP_SET = [];
+
+function setStack(){
+  const shots = CAP_SET.slice(-3);
+  return shots.length
+    ? shots.map(k=>'<i style="background-image:url(' + IMG[k] + ')"></i>').join('')
+    : '<i></i>';
+}
+
+function renderCapSet(){
+  const n = CAP_SET.length;
+  const stack = $('#ar-setstack');
+  stack.innerHTML = setStack();
+  stack.classList.toggle('empty', n === 0);
+  $('#ar-setcount').textContent = n === 0 ? 'Angles' : (n + (n === 1 ? ' angle' : ' angles'));
+  $('#ar-setbtn').dataset.empty = n ? '0' : '1';
+
+  $('#ar-setgrid').innerHTML = n
+    ? CAP_SET.map((k,i)=>'<button data-delshot="' + i + '" aria-label="Remove angle ' + (i+1) + '">' +
+        '<img src="' + IMG[k] + '" alt=""><span class="del">&#215;</span></button>').join('')
+    : '<p class="ar-libempty">No angles yet. Tap the shutter, or import a photo you already took.</p>';
+  $('#ar-setnote').textContent = n > 1
+    ? 'Matching across ' + n + ' angles. More angles, higher confidence.'
+    : 'Shoot the same building from several angles for a stronger match.';
+
+  const ang = $('#ar-angles');
+  if(n > 1){
+    ang.hidden = false;
+    ang.innerHTML = CAP_SET.slice(0,3).map(k=>'<i style="background-image:url(' + IMG[k] + ')"></i>').join('') +
+      '<span>Matched from ' + n + ' angles</span>';
+  } else ang.hidden = true;
+
+  $('#ci-photo').src = IMG[CAP_SET[0] || 'vessel_shot'];
+  $('#ci-count').hidden = n < 2;
+  $('#ci-count').textContent = n + ' photos';
+}
+
+function addToSet(key){
+  CAP_SET.push(key);
+  renderCapSet();
+  applyCandidate();
+}
+
+function renderLibrary(){
+  $('#ar-libgrid').innerHTML = LIBRARY.map(k=>
+    '<button data-import="' + k + '" aria-label="Import this photo"><img src="' + IMG[k] + '" alt=""></button>').join('');
+}
+
+function closeCapSheets(){
+  ['#ar-settings','#ar-library','#ar-set'].forEach(id=>{ const el = $(id); if(el) el.hidden = true; });
+  const sc = $('#s-capture'); if(sc) sc.dataset.settings = '0';
+  const g = $('#ar-gear'); if(g) g.setAttribute('aria-expanded', 'false');
+}
+
+function openCapSheet(id){
+  const was = !$(id).hidden;
+  closeCapSheets();
+  if(!was){ $(id).hidden = false; $('#s-capture').dataset.settings = '1'; }
+}
+
 function applyCapOpts(){
   $('#ar-grid').hidden = !CAP_OPTS.grid;
   $('#ci-locrow').hidden = !CAP_OPTS.geo;
   $$('#ar-settings .arset').forEach(b=>{
     b.setAttribute('aria-pressed', String(!!CAP_OPTS[b.dataset.opt]));
   });
-}
-
-function closeCapSettings(){
-  const p = $('#ar-settings'); if(!p) return;
-  p.hidden = true;
-  $('#s-capture').dataset.settings = '0';
-  $('#ar-gear').setAttribute('aria-expanded', 'false');
 }
 
 /* ---------- sign in: a short, staged authentication ---------- */
@@ -1604,7 +1707,8 @@ function applyCandidate(){
   const c = CANDIDATES[capIndex];
   $('#ar-name').textContent = c.name;
   $('#ar-meta').textContent = c.architect + ', ' + c.year + ' \u00b7 ' + c.street;
-  $('#ar-pct').textContent = (capFrozen ? c.pct - 2 : c.pct) + '% match';
+  const bonus = Math.min(Math.max(CAP_SET.length - 1, 0) * 2, 4);
+  $('#ar-pct').textContent = Math.min((capFrozen ? c.pct - 2 : c.pct) + bonus, 99) + '% match';
   $('#ci-locname').textContent = c.addr;
   $('#ci-loccoords').textContent = c.coords;
   $('#ci-name').value = c.name;
@@ -1642,10 +1746,14 @@ function startTagReveal(){
     capTagsShown++;
   }, 640);
 }
-function setCapture(st, keepFrame){
+function setCapture(st, keepFrame, keepSet){
   clearTimeout(capTimer);
   capState = st;
-  if(st === 'scanning'){ capFrozen = false; capIndex = 0; }
+  if(st === 'scanning'){
+    capFrozen = false; capIndex = 0;
+    if(!keepSet){ CAP_SET = []; $('#ar-bg').querySelector('img').src = IMG['vessel_ar']; }
+    renderCapSet();
+  }
   if(st === 'analyzing' && !keepFrame) capFrozen = true;
   $('#s-capture').dataset.state = st;
   $('#ar-bg').classList.toggle('frozen', capFrozen);
@@ -2065,7 +2173,7 @@ $('#discover-map').insertAdjacentHTML('afterbegin', discoverMap());
 $('#journey-map').insertAdjacentHTML('afterbegin', journeyMap());
 $('#crossing-map').insertAdjacentHTML('afterbegin', crossingMap());
 renderSpots('nearby'); renderPfPanel('works'); renderTrips(); renderInsp('All'); renderRecords(); renderCommunity('feed');
-syncObGate(); renderStops(); applyCapOpts(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
+syncObGate(); renderStops(); applyCapOpts(); renderLibrary(); renderCapSet(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
 
 document.addEventListener('click', e=>{
   const t = e.target;
@@ -2122,6 +2230,7 @@ document.addEventListener('click', e=>{
 
   /* --- capture flow --- */
   if(t.closest('#ar-shutter')){
+    addToSet('vessel_shot');
     $('#ar-scanlabel').textContent = 'Analysing your shot';
     setCapture('analyzing'); return;
   }
@@ -2133,12 +2242,31 @@ document.addEventListener('click', e=>{
     return;
   }
   if(t.closest('#ar-gear')){
-    const p = $('#ar-settings'), open = p.hidden;
-    p.hidden = !open;
-    $('#s-capture').dataset.settings = open ? '1' : '0';
+    const open = $('#ar-settings').hidden;
+    openCapSheet('#ar-settings');
     $('#ar-gear').setAttribute('aria-expanded', String(open));
     return;
   }
+  if(t.closest('#ar-lib')){ renderLibrary(); openCapSheet('#ar-library'); return; }
+  if(t.closest('#ar-setbtn')){ openCapSheet('#ar-set'); return; }
+  const imp = t.closest('[data-import]');
+  if(imp){
+    const k = imp.dataset.import;
+    closeCapSheets();
+    $('#ar-bg').querySelector('img').src = IMG[k];
+    addToSet(k);
+    $('#ar-scanlabel').textContent = 'Reading imported photo';
+    setCapture('analyzing');
+    return;
+  }
+  const del = t.closest('[data-delshot]');
+  if(del){
+    CAP_SET.splice(+del.dataset.delshot, 1);
+    renderCapSet(); applyCandidate();
+    if(!CAP_SET.length) toast('Capture set cleared');
+    return;
+  }
+  if(t.closest('#ar-more')){ setCapture('scanning', false, true); toast('Frame another angle'); return; }
   const optb = t.closest('.arset');
   if(optb){
     const k = optb.dataset.opt;
@@ -2150,7 +2278,7 @@ document.addEventListener('click', e=>{
     }
     return;
   }
-  if(current === 'capture' && !t.closest('#ar-settings')) closeCapSettings();
+  if(current === 'capture' && !t.closest('.ar-sheet')) closeCapSheets();
   if(t.closest('#si-go')){ runSignIn(); return; }
   if(t.closest('.sforgot')){ toast('Reset link sent to your email'); return; }
   if(t.closest('#ar-confirm')){ go('checkin'); toast(CANDIDATES[capIndex].name + ' captured'); return; }
