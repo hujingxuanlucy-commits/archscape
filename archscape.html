@@ -574,10 +574,36 @@ figure{margin:0}
 /* ============ 05 journey map ============ */
 .jmap{position:relative;height:330px;overflow:hidden;background:#F1ECE2;border-bottom:1px solid var(--bone);
   touch-action:none}
-/* the map itself moves; legend and controls stay put */
-.mapzoom{position:absolute;inset:0;transform-origin:0 0;cursor:grab;will-change:transform}
-.mapzoom.grabbing{cursor:grabbing}
-.mapzoom.eased{transition:transform .26s cubic-bezier(.32,.72,0,1)}
+/* drawn map: paper ground, bone streets, brand red for your own places */
+.jmap{cursor:grab}
+.jmap.grabbing{cursor:grabbing}
+.mapcanvas{position:absolute;inset:0;width:100%;height:100%;background:#F4F0E7;display:block}
+.mpark{fill:#DCE6D5;stroke:#C9D6C0;stroke-width:1}
+.mst{stroke:#DED5C3;stroke-linecap:round}
+.mav{stroke:#CDBFA5;stroke-linecap:round}
+.mroute{fill:none;stroke-linejoin:round;stroke-linecap:round;opacity:.92}
+.mlabel{font-family:var(--ui);font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  fill:#A79E8E}
+.mname{font-family:var(--ui);font-size:10px;font-weight:700;fill:var(--ink);paint-order:stroke;
+  stroke:rgba(250,248,244,.92);stroke-width:3.4px;stroke-linejoin:round}
+.mparklab{fill:#7E9271;letter-spacing:.2em}
+.mstop{cursor:pointer}
+.mapsearch{position:absolute;left:14px;right:60px;bottom:12px;z-index:6}
+.mapsearch > svg{position:absolute;left:11px;top:11px;width:15px;height:15px;color:var(--muted);pointer-events:none}
+.mapsearch input{width:100%;padding:10px 12px 10px 33px;border-radius:9px;border:1px solid var(--bone);
+  background:rgba(255,255,255,.97);font-size:12.5px;color:var(--ink);outline:none;
+  box-shadow:0 8px 22px -14px rgba(0,0,0,.45)}
+.mapsearch input:focus{border-color:var(--red)}
+.mapres{position:absolute;left:0;right:0;bottom:44px;background:var(--white);border:1px solid var(--bone);
+  border-radius:9px;overflow:hidden;box-shadow:0 14px 30px -14px rgba(0,0,0,.45)}
+.mapres button{display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:9px 12px;
+  border-bottom:1px solid var(--bone-soft);transition:.16s}
+.mapres button:last-child{border-bottom:0}
+.mapres button:hover{background:var(--paper)}
+.mapres i{width:8px;height:8px;border-radius:50%;flex:none}
+.mapres b{flex:1;min-width:0;font-size:12.5px;font-weight:600;color:var(--ink);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mapres span{flex:none;font-size:10.5px;color:var(--muted)}
 .zoomctl{position:absolute;right:12px;bottom:12px;z-index:5;display:flex;flex-direction:column;gap:1px;
   border-radius:9px;overflow:hidden;box-shadow:0 8px 22px -12px rgba(0,0,0,.4);border:1px solid var(--bone)}
 .zoomctl button{width:34px;height:32px;background:rgba(255,255,255,.96);color:var(--ink);display:grid;
@@ -1274,7 +1300,12 @@ the city folded in on itself.</textarea>
             <button class="iconbtn" aria-label="Share journey"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><line x1="8.3" y1="10.8" x2="15.7" y2="6.2"/><line x1="8.3" y1="13.2" x2="15.7" y2="17.8"/></svg></button>
           </div>
           <div class="jmap" id="journey-map">
-            <div class="mapzoom" id="jmap-zoom"></div>
+            <svg class="mapcanvas" id="jmap-svg" aria-label="Map of your journey through Manhattan"></svg>
+            <div class="mapsearch">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+              <input id="jmap-q" type="search" placeholder="Search places on this map" aria-label="Search places">
+              <div class="mapres" id="jmap-res" hidden></div>
+            </div>
             <div class="zoomctl">
               <button data-zoom="in" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
               <button data-zoom="out" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
@@ -1558,6 +1589,7 @@ function go(id, isBack){
   const sc = $('#s'+'-'+id); if(sc) sc.scrollTop = 0;
   if(id === 'capture') setCapture('scanning'); else clearTimeout(capTimer);
   if(id === 'checkin') renderCheckinTags();
+  if(id === 'journey') requestAnimationFrame(()=>jmap.refit());
 }
 let toastT;
 function toast(msg){
@@ -1614,26 +1646,7 @@ function discoverMap(){
     </svg>`;
 }
 
-function journeyMap(){
-  const R = {
-    arch:  {c:'#952324', pts:'50,255 130,255 130,195 235,195 235,135 330,135'},
-    art:   {c:'#3E6B9A', pts:'80,310 80,225 198,225 198,102 275,102 275,72 335,72'},
-    photo: {c:'#666666', pts:'40,190 105,190 105,290 215,290 215,245 310,245'}
-  };
-  return `<img class="mapimg" src="${IMG.map_grid}" alt="Your journey drawn as three coloured lines">
-    <svg class="mapsvg" viewBox="0 0 393 330">
-      <g transform="rotate(${TILT} ${PIVOT})">
-        ${Object.entries(R).map(([k,r])=>
-          `<g data-route="${k}" style="transition:opacity .25s">${routeSVG(r.pts, r.c)}</g>`).join('')}
-        ${stationSVG(130, 195, '#952324', 'MoMA')}
-        ${stationSVG(235, 195, '#952324', 'Seagram')}
-        ${stationSVG(198, 102, '#3E6B9A', 'Guggenheim')}
-        ${stationSVG(215, 290, '#666666', '')}
-        <circle cx="330" cy="135" r="14" fill="#952324" opacity=".18"/>
-        <circle cx="330" cy="135" r="8.5" fill="#952324" stroke="#fff" stroke-width="3"/>
-      </g>
-    </svg>`;
-}
+
 
 function crossingMap(){
   return `<img class="mapimg" src="${IMG.map_grid}" alt="Two explorer paths crossing nearby">
@@ -2578,105 +2591,287 @@ function renderRecords(){
 }
 
 
-/* ---------- map: pan and zoom ----------
-   Bounded on purpose: this is one city's worth of walking, so it zooms into
-   street detail and back out to the whole route, never further. */
-function makeZoomable(frame, stage, buttons){
-  const MIN = 1, MAX = 4;
-  let z = 1, x = 0, y = 0;
+/* ---------- a real map, drawn rather than fetched ----------
+   The sandbox cannot load map tiles, so the map is generated from actual
+   geography instead: Web Mercator projection, Manhattan's true grid angle
+   and block spacing, and real coordinates for every place shown. Panning,
+   zooming and searching all work against those coordinates. */
+
+const MAP = {
+  /* 5th Ave & 42nd St, and the grid's real bearing east of north */
+  o: {lat: 40.75478, lng: -73.98153},
+  bearing: 29,
+  avSpacing: 274,   /* metres between avenues */
+  stSpacing: 81,    /* metres between cross streets */
+  avenues: [
+    {i: -3, name: 'Lexington Ave'}, {i: -2, name: 'Park Ave'}, {i: -1, name: 'Madison Ave'},
+    {i: 0,  name: '5th Ave'},       {i: 1,  name: '6th Ave'},  {i: 2,  name: '7th Ave'},
+    {i: 3,  name: '8th Ave'},       {i: 4,  name: '9th Ave'},  {i: 5,  name: '10th Ave'}
+  ],
+  streets: {from: -20, to: 62, label: 5},   /* 22nd St up to 104th St */
+  park: {s: 17, n: 68, w: 0, e: 3}          /* 59th-110th, 5th to 8th */
+};
+
+const PLACES = [
+  {id:'moma',   name:'MoMA',                lat:40.7614, lng:-73.9776, c:'#3E6B9A', kind:'Art Spaces'},
+  {id:'seagram',name:'Seagram Building',    lat:40.7587, lng:-73.9720, c:'#952324', kind:'Architecture'},
+  {id:'gugg',   name:'Guggenheim',          lat:40.7830, lng:-73.9590, c:'#3E6B9A', kind:'Art Spaces'},
+  {id:'parkav', name:'Park Ave Facades',    lat:40.7549, lng:-73.9756, c:'#666666', kind:'Photography'},
+  {id:'vessel', name:'The Vessel',          lat:40.7539, lng:-74.0021, c:'#952324', kind:'Architecture'},
+  {id:'chrysler',name:'Chrysler Building',  lat:40.7516, lng:-73.9755, c:'#952324', kind:'Architecture'},
+  {id:'empire', name:'Empire State',        lat:40.7484, lng:-73.9857, c:'#952324', kind:'Architecture'},
+  {id:'whitney',name:'Whitney Museum',      lat:40.7396, lng:-74.0089, c:'#3E6B9A', kind:'Art Spaces'},
+  {id:'grand',  name:'Grand Central',       lat:40.7527, lng:-73.9772, c:'#666666', kind:'Photography'}
+];
+
+const ROUTES = {
+  arch:  {c:'#952324', stops:['vessel','empire','seagram','chrysler']},
+  art:   {c:'#3E6B9A', stops:['whitney','moma','gugg']},
+  photo: {c:'#666666', stops:['grand','parkav','moma']}
+};
+
+/* --- Web Mercator, metres --- */
+const R_E = 6378137;
+const merc = (lat, lng) => ({
+  x: R_E * lng * Math.PI / 180,
+  y: R_E * Math.log(Math.tan(Math.PI / 4 + lat * Math.PI / 360))
+});
+/* a point offset from the grid origin: a avenues across, s streets up */
+function gridPt(a, s){
+  const th = MAP.bearing * Math.PI / 180;
+  const up = {x: Math.sin(th), y: Math.cos(th)};          /* uptown */
+  const cross = {x: -Math.cos(th), y: Math.sin(th)};      /* west across town: 6th, 7th, 8th */
+  const o = merc(MAP.o.lat, MAP.o.lng);
+  const dx = up.x * s * MAP.stSpacing + cross.x * a * MAP.avSpacing;
+  const dy = up.y * s * MAP.stSpacing + cross.y * a * MAP.avSpacing;
+  /* mercator y is stretched by latitude; correct so spacing stays true */
+  const k = 1 / Math.cos(MAP.o.lat * Math.PI / 180);
+  return {x: o.x + dx * k, y: o.y + dy * k};
+}
+
+let mapView = {lat: 40.7640, lng: -73.9790, scale: 0.34, sel: null};
+const mapLayers = {arch:true, art:true, photo:true};
+
+function makeLiveMap(frame, svg, buttons){
+  const MIN = 0.09, MAX = 2.6;
   const pts = new Map();
   let last = null, pinch = 0;
 
-  const clamp = ()=>{
-    const w = frame.clientWidth, h = frame.clientHeight;
-    x = Math.min(0, Math.max(w - w * z, x));
-    y = Math.min(0, Math.max(h - h * z, y));
+  const size = () => ({w: frame.clientWidth, h: frame.clientHeight});
+  const centre = () => merc(mapView.lat, mapView.lng);
+  const toScreen = p => {
+    const {w, h} = size(), c = centre();
+    return {x: w / 2 + (p.x - c.x) * mapView.scale, y: h / 2 - (p.y - c.y) * mapView.scale};
   };
-  const apply = ()=>{
-    clamp();
-    stage.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + z + ')';
+  const fromScreen = (sx, sy) => {
+    const {w, h} = size(), c = centre();
+    return {x: c.x + (sx - w / 2) / mapView.scale, y: c.y - (sy - h / 2) / mapView.scale};
+  };
+  const setCentreMerc = m => {
+    mapView.lng = m.x / R_E * 180 / Math.PI;
+    mapView.lat = (2 * Math.atan(Math.exp(m.y / R_E)) - Math.PI / 2) * 180 / Math.PI;
+  };
+
+  function draw(){
+    const {w, h} = size();
+    const sc = mapView.scale;
+    const P = (a, s) => toScreen(gridPt(a, s));
+    const line = (p1, p2, cls, sw) =>
+      `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" class="${cls}" stroke-width="${sw}"/>`;
+
+    let out = '';
+    /* Central Park sits on the grid, so it is drawn from the same frame */
+    const pk = MAP.park;
+    const corners = [P(pk.w, pk.s), P(pk.e, pk.s), P(pk.e, pk.n), P(pk.w, pk.n)];
+    out += `<polygon class="mpark" points="${corners.map(p=>p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ')}"/>`;
+
+    /* blocks: cross streets first, then the heavier avenues over them */
+    const sw = Math.max(.7, Math.min(2.4, sc * 3.2));
+    const every = sc > .55 ? 1 : sc > .28 ? 2 : 5;   /* fewer streets when zoomed out */
+    for(let s = MAP.streets.from; s <= MAP.streets.to; s++){
+      if(s % every) continue;
+      const inPark = s > pk.s && s < pk.n;
+      if(inPark){
+        out += line(P(pk.e, s), P(5.4, s), 'mst', sw);
+        out += line(P(-3.6, s), P(pk.w, s), 'mst', sw);
+      } else {
+        out += line(P(-3.6, s), P(5.4, s), 'mst', sw);
+      }
+    }
+    MAP.avenues.forEach(av=>{
+      const s0 = MAP.streets.from, s1 = MAP.streets.to;
+      const crossesPark = av.i >= pk.w && av.i <= pk.e;
+      if(crossesPark){
+        out += line(P(av.i, s0), P(av.i, pk.s), 'mav', sw * 1.7);
+        out += line(P(av.i, pk.n), P(av.i, s1), 'mav', sw * 1.7);
+      } else {
+        out += line(P(av.i, s0), P(av.i, s1), 'mav', sw * 1.7);
+      }
+    });
+
+    if(sc > .18){
+      const pc = P((pk.w + pk.e) / 2, (pk.s + pk.n) / 2);
+      out += `<text class="mlabel mparklab" x="${pc.x.toFixed(1)}" y="${pc.y.toFixed(1)}" text-anchor="middle">Central Park</text>`;
+    }
+
+    /* street names once there is room for them */
+    if(sc > .55){
+      MAP.avenues.forEach(av=>{
+        const p = P(av.i, Math.round((MAP.streets.from + MAP.streets.to) / 2));
+        if(p.x < -40 || p.x > w + 40) return;
+        out += `<text class="mlabel" x="${p.x.toFixed(1)}" y="${(h - 14).toFixed(1)}" text-anchor="middle">${av.name}</text>`;
+      });
+    }
+    if(sc > .9){
+      for(let s = MAP.streets.from; s <= MAP.streets.to; s += MAP.streets.label){
+        const p = P(-3.6, s);
+        if(p.y < 12 || p.y > h - 12) continue;
+        out += `<text class="mlabel" x="8" y="${(p.y - 3).toFixed(1)}">${42 + s} St</text>`;
+      }
+    }
+
+    /* the journeys */
+    const byId = Object.fromEntries(PLACES.map(p=>[p.id, p]));
+    Object.entries(ROUTES).forEach(([k, r])=>{
+      const pl = r.stops.map(id=>{
+        const q = byId[id], p = toScreen(merc(q.lat, q.lng));
+        return p.x.toFixed(1) + ',' + p.y.toFixed(1);
+      }).join(' ');
+      out += `<g data-route="${k}" style="transition:opacity .25s" opacity="${mapLayers[k] ? 1 : 0}">
+        <polyline class="mroute" points="${pl}" stroke="${r.c}" stroke-width="${Math.max(2.4, sc * 9).toFixed(1)}"/>
+      </g>`;
+    });
+
+    /* places */
+    PLACES.forEach(q=>{
+      const p = toScreen(merc(q.lat, q.lng));
+      if(p.x < -60 || p.x > w + 60 || p.y < -40 || p.y > h + 40) return;
+      const on = mapView.sel === q.id;
+      const r = on ? 8 : Math.max(4, Math.min(7, sc * 16));
+      out += `<g class="mstop${on ? ' on' : ''}" data-place="${q.id}">
+        ${on ? `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${(r + 7).toFixed(1)}" fill="${q.c}" opacity=".2"/>` : ''}
+        <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${r.toFixed(1)}" fill="${q.c}" stroke="#fff" stroke-width="${(r / 2.6).toFixed(1)}"/>
+        ${(sc > .3 || on) ? `<text class="mname" x="${p.x.toFixed(1)}" y="${(p.y - r - 7).toFixed(1)}" text-anchor="middle">${esc(q.name)}</text>` : ''}
+      </g>`;
+    });
+
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    svg.innerHTML = out;
     buttons.forEach(b=>{
-      if(b.dataset.zoom === 'in')  b.disabled = z >= MAX - .001;
-      if(b.dataset.zoom === 'out') b.disabled = z <= MIN + .001;
-      if(b.dataset.zoom === 'reset') b.disabled = z <= MIN + .001;
+      if(b.dataset.zoom === 'in')  b.disabled = mapView.scale >= MAX - .001;
+      if(b.dataset.zoom === 'out') b.disabled = mapView.scale <= MIN + .001;
     });
-  };
-  /* zoom about a point so the map grows from where you are looking */
-  const zoomTo = (nz, cx, cy)=>{
-    nz = Math.min(MAX, Math.max(MIN, nz));
-    if(nz === z) return;
-    x = cx - (cx - x) * (nz / z);
-    y = cy - (cy - y) * (nz / z);
-    z = nz;
-    apply();
-  };
-  const ease = fn =>{
-    stage.classList.add('eased');
-    fn();
-    setTimeout(()=>stage.classList.remove('eased'), 280);
+  }
+
+  const zoomTo = (ns, cx, cy)=>{
+    ns = Math.min(MAX, Math.max(MIN, ns));
+    if(ns === mapView.scale) return;
+    const before = fromScreen(cx, cy);
+    mapView.scale = ns;
+    const after = fromScreen(cx, cy);
+    const c = centre();
+    setCentreMerc({x: c.x + (before.x - after.x), y: c.y + (before.y - after.y)});
+    draw();
   };
 
-  buttons.forEach(b=>b.addEventListener('click', e=>{
-    e.stopPropagation();
-    const r = frame.getBoundingClientRect(), cx = r.width / 2, cy = r.height / 2;
-    ease(()=>{
-      if(b.dataset.zoom === 'in')  zoomTo(z * 1.6, cx, cy);
-      if(b.dataset.zoom === 'out') zoomTo(z / 1.6, cx, cy);
-      if(b.dataset.zoom === 'reset'){ z = 1; x = 0; y = 0; apply(); }
-    });
-  }));
-
-  stage.addEventListener('pointerdown', e=>{
+  frame.addEventListener('pointerdown', e=>{
+    if(e.target.closest('.zoomctl, .legend, .mapsearch')) return;
     pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
-    stage.setPointerCapture(e.pointerId);
-    stage.classList.add('grabbing');
+    frame.setPointerCapture(e.pointerId);
+    frame.classList.add('grabbing');
     last = {x:e.clientX, y:e.clientY};
     if(pts.size === 2){
       const [a, b] = [...pts.values()];
       pinch = Math.hypot(a.x - b.x, a.y - b.y);
     }
   });
-
-  stage.addEventListener('pointermove', e=>{
+  frame.addEventListener('pointermove', e=>{
     if(!pts.has(e.pointerId)) return;
     pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
     const r = frame.getBoundingClientRect();
     if(pts.size === 2){
       const [a, b] = [...pts.values()];
       const d = Math.hypot(a.x - b.x, a.y - b.y);
-      if(pinch) zoomTo(z * (d / pinch), (a.x + b.x) / 2 - r.left, (a.y + b.y) / 2 - r.top);
+      if(pinch) zoomTo(mapView.scale * (d / pinch), (a.x + b.x) / 2 - r.left, (a.y + b.y) / 2 - r.top);
       pinch = d;
       return;
     }
     if(!last) return;
-    x += e.clientX - last.x;
-    y += e.clientY - last.y;
+    const c = centre();
+    setCentreMerc({x: c.x - (e.clientX - last.x) / mapView.scale,
+                   y: c.y + (e.clientY - last.y) / mapView.scale});
     last = {x:e.clientX, y:e.clientY};
-    apply();
+    draw();
   });
-
   const release = e=>{
     pts.delete(e.pointerId);
     if(pts.size < 2) pinch = 0;
-    if(!pts.size){ last = null; stage.classList.remove('grabbing'); }
+    if(!pts.size){ last = null; frame.classList.remove('grabbing'); }
   };
-  stage.addEventListener('pointerup', release);
-  stage.addEventListener('pointercancel', release);
-
-  stage.addEventListener('wheel', e=>{
+  frame.addEventListener('pointerup', release);
+  frame.addEventListener('pointercancel', release);
+  frame.addEventListener('wheel', e=>{
     e.preventDefault();
     const r = frame.getBoundingClientRect();
-    zoomTo(z * (e.deltaY < 0 ? 1.12 : 1 / 1.12), e.clientX - r.left, e.clientY - r.top);
+    zoomTo(mapView.scale * (e.deltaY < 0 ? 1.14 : 1 / 1.14), e.clientX - r.left, e.clientY - r.top);
   }, {passive:false});
 
-  stage.addEventListener('dblclick', e=>{
-    const r = frame.getBoundingClientRect();
-    ease(()=>zoomTo(z >= MAX - .001 ? 1 : z * 1.8, e.clientX - r.left, e.clientY - r.top));
-  });
+  buttons.forEach(b=>b.addEventListener('click', ()=>{
+    const {w, h} = size();
+    if(b.dataset.zoom === 'in')  zoomTo(mapView.scale * 1.7, w / 2, h / 2);
+    if(b.dataset.zoom === 'out') zoomTo(mapView.scale / 1.7, w / 2, h / 2);
+    if(b.dataset.zoom === 'reset') fitAll();
+  }));
 
-  window.addEventListener('resize', apply);
-  apply();
-  return {reset: ()=>{ z = 1; x = 0; y = 0; apply(); }};
+  function fitAll(){
+    const ms = PLACES.map(q=>merc(q.lat, q.lng));
+    const xs = ms.map(m=>m.x), ys = ms.map(m=>m.y);
+    const {w, h} = size();
+    const pad = 46;
+    mapView.scale = Math.min((w - pad * 2) / (Math.max(...xs) - Math.min(...xs)),
+                             (h - pad * 2) / (Math.max(...ys) - Math.min(...ys)));
+    setCentreMerc({x: (Math.max(...xs) + Math.min(...xs)) / 2,
+                   y: (Math.max(...ys) + Math.min(...ys)) / 2});
+    mapView.sel = null;
+    draw();
+  }
+  function flyTo(id){
+    const q = PLACES.find(p=>p.id === id); if(!q) return;
+    mapView.sel = id;
+    mapView.scale = Math.max(mapView.scale, 1.15);
+    setCentreMerc(merc(q.lat, q.lng));
+    draw();
+  }
+
+  window.addEventListener('resize', draw);
+  let fitted = false;
+  /* the screen is hidden at boot, so there is nothing to fit to until it shows */
+  const refit = ()=>{ if(!size().w) return; if(!fitted){ fitted = true; fitAll(); } else draw(); };
+  refit();
+  return {draw, flyTo, fitAll, refit};
+}
+
+function wireMapSearch(){
+  const q = $('#jmap-q'), res = $('#jmap-res');
+  const show = list=>{
+    res.hidden = !list.length;
+    res.innerHTML = list.map(p=>
+      `<button data-fly="${p.id}"><i style="background:${p.c}"></i>
+        <b>${esc(p.name)}</b><span>${esc(p.kind)}</span></button>`).join('');
+  };
+  q.addEventListener('input', ()=>{
+    const v = q.value.trim().toLowerCase();
+    if(!v){ res.hidden = true; return; }
+    show(PLACES.filter(p=>(p.name + ' ' + p.kind).toLowerCase().includes(v)).slice(0, 5));
+  });
+  q.addEventListener('focus', ()=>{ if(q.value.trim()) res.hidden = false; });
+  res.addEventListener('click', e=>{
+    const b = e.target.closest('[data-fly]'); if(!b) return;
+    jmap.flyTo(b.dataset.fly);
+    q.value = PLACES.find(p=>p.id === b.dataset.fly).name;
+    res.hidden = true;
+    q.blur();
+  });
 }
 
 /* ---------- wire up ---------- */
@@ -2685,8 +2880,8 @@ $$('[data-img]').forEach(el=>{
   if(el.tagName === 'IMG') el.src = src; else el.style.backgroundImage = `url(${src})`;
 });
 $('#discover-map').insertAdjacentHTML('afterbegin', discoverMap());
-$('#jmap-zoom').innerHTML = journeyMap();
-makeZoomable($('#journey-map'), $('#jmap-zoom'), $$('#journey-map .zoomctl button'));
+const jmap = makeLiveMap($('#journey-map'), $('#jmap-svg'), $$('#journey-map .zoomctl button'));
+wireMapSearch();
 $('#crossing-map').insertAdjacentHTML('afterbegin', crossingMap());
 renderSpots('nearby'); renderPfPanel('works'); renderTrips(); renderInsp('All'); renderRecords(); renderCommunity('feed'); renderDiscoverCommunity();
 syncObGate(); renderStops(); applyCapOpts(); applyTrack(); renderAudio(); renderLibrary(); renderCapSet(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
@@ -2694,6 +2889,8 @@ syncObGate(); renderStops(); applyCapOpts(); applyTrack(); renderAudio(); render
 document.addEventListener('click', e=>{
   const t = e.target;
 
+  const mp = t.closest('[data-place]');
+  if(mp){ jmap.flyTo(mp.dataset.place); return; }
   if(t.closest('[data-back]')){ back(); return; }
 
   const fol = t.closest('[data-follow]');
@@ -2884,6 +3081,7 @@ document.addEventListener('click', e=>{
     layer.setAttribute('aria-pressed', String(on));
     const g = $(`#journey-map [data-route="${layer.dataset.layer}"]`);
     if(g) g.style.opacity = on ? '1' : '0';
+    mapLayers[layer.dataset.layer] = on;
     return;
   }
 
