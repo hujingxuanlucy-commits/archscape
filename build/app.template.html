@@ -578,6 +578,30 @@ figure{margin:0}
 .travelband b{display:block;font-size:13px;font-weight:600;color:var(--ink)}
 .travelband span{display:block;font-size:11.5px;color:#7A5B5B;margin-top:2px}
 
+.secnote{font-size:12px;font-weight:600;color:var(--muted)}
+.emptynote{margin:0 22px;font-size:12.5px;line-height:1.5;color:var(--muted)}
+.emptynote.sub{margin-top:-2px;margin-bottom:10px}
+.prows{margin:4px 22px 0;border-top:1px solid var(--bone-soft)}
+.prow{display:flex;align-items:center;gap:11px;width:100%;padding:11px 0;
+  border-bottom:1px solid var(--bone-soft)}
+.prow-main{display:flex;align-items:center;gap:11px;flex:1;min-width:0;text-align:left}
+.prow .avatar{width:40px;height:40px;font-size:15px;flex:none}
+.prow-body{flex:1;min-width:0}
+.prow-body > b{display:block;font-size:13.5px;font-weight:600;color:var(--ink)}
+.prow-act{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prow-thumb{width:34px;height:34px;border-radius:6px;flex:none;display:block;
+  background-size:cover;background-position:50% 50%;border:1px solid var(--bone)}
+.scards{display:flex;gap:11px;overflow-x:auto;padding:2px 22px 4px;scrollbar-width:none}
+.scards::-webkit-scrollbar{display:none}
+.scard{flex:none;width:204px;padding:13px;display:flex;flex-direction:column;gap:10px}
+.scard-head{display:flex;align-items:center;gap:10px;text-align:left;width:100%}
+.scard-head .avatar{width:38px;height:38px;font-size:14px;flex:none}
+.scard-why{display:flex;gap:7px;margin:0;font-size:11.5px;line-height:1.45;color:var(--muted)}
+.scard-why i{flex:none;width:5px;height:5px;border-radius:50%;background:var(--red);margin-top:5px}
+.scard-works{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.scard-works i{display:block;aspect-ratio:1;border-radius:5px;background-size:cover;background-position:50% 50%}
+.scard .followbtn{width:100%;padding:9px;text-align:center;display:block}
 .peoplestrip{display:flex;gap:16px;padding:14px 22px 4px;overflow-x:auto;scrollbar-width:none}
 .peoplestrip::-webkit-scrollbar{display:none}
 .pchip{flex:none;text-align:center;width:60px}
@@ -1938,6 +1962,77 @@ function renderDiscoverCommunity(){
      </div>`;
 }
 
+/* What has someone actually done lately: their newest post, named by the
+   building it captured, so a row says something a bare avatar cannot. */
+function lastActivity(k){
+  const post = POSTS.find(x=>x.person === k);
+  if(!post) return 'No captures yet';
+  const b = post.bld && bldById(post.bld);
+  return (b ? 'Captured ' + b.name : 'Posted from ' + post.place) + ' \u00b7 ' + post.time;
+}
+
+/* Why this person is worth following, in their own terms first. */
+function followReason(k){
+  const me = PEOPLE.lucy, they = PEOPLE[k];
+  if(they.crossed) return they.crossed;
+  const shared = (they.groups || []).filter(g=>me.groups.includes(g));
+  if(shared.length) return 'Also in ' + GROUPS[shared[0]].name;
+  return they.captures + ' captures across ' + they.cities + ' cities';
+}
+
+function followRow(k){
+  const t = PEOPLE[k];
+  return `<div class="prow">
+    <button class="prow-main" data-member="${k}">
+      ${avatarOf(k)}
+      <span class="prow-body">
+        <b>${esc(t.name)}</b>
+        <span class="prow-act">${esc(lastActivity(k))}</span>
+      </span>
+      ${t.works && t.works[0] ? `<i class="prow-thumb" style="background-image:url(${IMG[t.works[0]]})"></i>` : ''}
+    </button>
+    ${followBtn(k)}
+  </div>`;
+}
+
+function suggestCard(k){
+  const t = PEOPLE[k];
+  return `<div class="scard card">
+    <button class="scard-head" data-member="${k}">
+      ${avatarOf(k)}
+      <span class="prow-body"><b>${esc(t.name)}</b>
+        <span class="prow-act">${esc(t.city)} \u00b7 ${esc(t.handle)}</span></span>
+    </button>
+    <p class="scard-why"><i></i>${esc(followReason(k))}</p>
+    <div class="scard-works">
+      ${(t.works || []).slice(0,3).map(w=>`<i style="background-image:url(${IMG[w]})"></i>`).join('')}
+    </div>
+    ${followBtn(k)}
+  </div>`;
+}
+
+function renderFollowing(){
+  const mine    = Object.keys(PEOPLE).filter(k=>!PEOPLE[k].self && PEOPLE[k].following);
+  const suggest = Object.keys(PEOPLE).filter(k=>!PEOPLE[k].self && !PEOPLE[k].following);
+  const list    = POSTS.filter(x=>{ const w = PEOPLE[x.person]; return w.self || w.following; });
+  return `
+    <div class="sechead"><h3 class="sectitle">People you follow</h3>
+      <span class="secnote onum">${mine.length}</span></div>
+    ${mine.length
+      ? `<div class="prows">${mine.map(followRow).join('')}</div>`
+      : `<p class="emptynote">You are not following anyone yet. Start with a suggestion below.</p>`}
+
+    ${suggest.length ? `
+      <div class="sechead" style="padding-top:20px"><h3 class="sectitle">Worth following</h3></div>
+      <p class="emptynote sub">Explorers whose paths have crossed yours, or who share your groups.</p>
+      <div class="scards">${suggest.map(suggestCard).join('')}</div>` : ''}
+
+    <div class="sechead" style="padding-top:20px"><h3 class="sectitle">Latest from them</h3></div>
+    ${list.length
+      ? list.map(x=>postHTML(x, POSTS.indexOf(x))).join('')
+      : `<p class="emptynote">Follow someone to see their captures here.</p>`}`;
+}
+
 function renderCommunity(tab){
   commTab = tab;
   const p = $('#comm-panel');
@@ -1957,16 +2052,7 @@ function renderCommunity(tab){
     return;
   }
   if(tab === 'following'){
-    const suggest = Object.keys(PEOPLE).filter(k=>!PEOPLE[k].self && !PEOPLE[k].following);
-    const list = POSTS.filter(x=>{ const w = PEOPLE[x.person]; return w.self || w.following; });
-    p.innerHTML = `
-      <div class="peoplestrip">${Object.keys(PEOPLE).filter(k=>PEOPLE[k].following)
-        .map(k=>`<button class="pchip" data-member="${k}">${avatarOf(k)}<span class="phandle">${esc(PEOPLE[k].handle)}</span></button>`).join('')}</div>
-      <div class="sechead" style="padding-top:14px"><h3 class="sectitle">Suggested for you</h3></div>
-      <div class="peoplestrip" style="padding-top:0">${suggest
-        .map(k=>`<button class="pchip off" data-member="${k}">${avatarOf(k)}<span class="phandle">${esc(PEOPLE[k].handle)}</span></button>`).join('')}</div>
-      <div class="sechead" style="padding-top:18px"><h3 class="sectitle">From people you follow</h3></div>
-      ${list.map((x)=>postHTML(x, POSTS.indexOf(x))).join('')}`;
+    p.innerHTML = renderFollowing();
     return;
   }
   p.innerHTML = POSTS.map((x,i)=>postHTML(x,i)).join('');
