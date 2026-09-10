@@ -332,12 +332,44 @@ figure{margin:0}
   display:grid;place-items:center;color:#fff;flex:none;transition:.16s}
 .ar-round:hover{background:rgba(48,48,54,.85)}
 .ar-round svg{width:17px;height:17px}
-.ar-music{display:flex;align-items:center;gap:8px;background:var(--red);border-radius:999px;padding:9px 13px;
-  font-size:12.5px;font-weight:600;color:#fff;max-width:210px;min-width:0}
-.ar-music svg{width:14px;height:14px;flex:none}
-.ar-music .mtitle{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ar-music .mx{opacity:.8;flex:none;display:grid;place-items:center;width:15px;height:15px}
-.ar-music .mx svg{width:11px;height:11px}
+/* Ambience is a secondary control, so it wears the camera's own chrome
+   rather than the brand red the primary action uses. */
+.ar-music{display:flex;align-items:center;gap:8px;background:rgba(22,22,25,.6);
+  border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:8px 14px;
+  font-size:12.5px;font-weight:600;color:#fff;max-width:212px;min-width:0;transition:.16s}
+.ar-music:hover{background:rgba(48,48,54,.85)}
+.ar-music .mnote{width:14px;height:14px;flex:none}
+.ar-music .mtitle{overflow:hidden;white-space:nowrap;min-width:0}
+.ar-music .mtitle > span{display:inline-block}
+/* the title only scrolls when it genuinely does not fit */
+.ar-music .mtitle.roll > span{animation:roll 9s ease-in-out infinite}
+@keyframes roll{0%,12%{transform:translateX(0)}88%,100%{transform:translateX(var(--roll))}}
+/* four bars, moving only while something is playing */
+.eqbars{display:none;align-items:flex-end;gap:2px;height:13px;flex:none}
+.eqbars i{width:2.5px;border-radius:1px;background:var(--red);display:block;height:40%;
+  animation:eq .9s ease-in-out infinite}
+.eqbars i:nth-child(2){animation-delay:.18s;height:90%}
+.eqbars i:nth-child(3){animation-delay:.36s;height:60%}
+.eqbars i:nth-child(4){animation-delay:.54s;height:75%}
+@keyframes eq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+.eqbars i{transform-origin:50% 100%}
+#s-capture[data-audio="1"] .eqbars{display:flex}
+#s-capture[data-audio="1"] .ar-music .mnote{display:none}
+#s-capture[data-audio="1"] .ar-music{border-color:rgba(149,35,36,.75)}
+.ar-sheet-music{left:50%;transform:translateX(-50%);right:auto;top:100px;width:252px;bottom:auto}
+.trackrow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.1)}
+#ar-audiolist .trackrow:last-child{border-bottom:0}
+.trackrow b{flex:1;min-width:0;font-size:12.5px;font-weight:600;color:#fff;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.trackrow span{flex:none;font-size:10.5px;color:#8E8880}
+.trackrow i{flex:none;width:7px;height:7px;border-radius:50%;border:1px solid rgba(255,255,255,.34)}
+.trackrow[aria-pressed="true"] i{background:var(--red);border-color:var(--red)}
+.trackrow[aria-pressed="true"] b{color:#fff}
+@media (prefers-reduced-motion:reduce){
+  .eqbars i{animation:none}
+  .ar-music .mtitle.roll > span{animation:none}
+}
 
 .scanbeam{position:absolute;left:0;right:0;top:16%;height:2px;display:block;z-index:4;pointer-events:none;
   background:linear-gradient(90deg,transparent,var(--red),transparent);
@@ -1080,10 +1112,10 @@ figure{margin:0}
           <div class="ar-ui">
             <div class="ar-top">
               <button class="ar-round" data-back aria-label="Close camera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
-              <button class="ar-music" id="ar-music">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6.5" cy="17.5" r="2.6"/><circle cx="17.5" cy="15.5" r="2.6"/><path d="M9.1 17.5V6l11-2v11.5"/></svg>
-                <span class="mtitle">Nils Frahm &#8212; Says</span>
-                <span class="mx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></span>
+              <button class="ar-music" id="ar-music" aria-expanded="false">
+                <span class="eqbars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+                <svg class="mnote" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6.5" cy="17.5" r="2.6"/><circle cx="17.5" cy="15.5" r="2.6"/><path d="M9.1 17.5V6l11-2v11.5"/></svg>
+                <span class="mtitle" id="ar-mtitle"><span>Add ambience</span></span>
               </button>
               <button class="ar-round" id="ar-gear" aria-label="Capture settings" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></button>
             </div>
@@ -1093,6 +1125,12 @@ figure{margin:0}
               <button class="arset" data-opt="grid"><b>Framing grid</b><span>Thirds guide over the viewfinder</span><i></i></button>
               <button class="arset" data-opt="auto"><b>Auto-detect buildings</b><span>Identify without pressing the shutter</span><i></i></button>
               <button class="arset" data-opt="geo"><b>Attach location</b><span>Save coordinates with the capture</span><i></i></button>
+            </div>
+
+            <div class="ar-sheet ar-sheet-music" id="ar-audio" hidden>
+              <div class="eyebrow">Ambience</div>
+              <p class="ar-sheetnote">Sound is saved with the capture. Nothing plays until you choose.</p>
+              <div id="ar-audiolist"></div>
             </div>
 
             <div class="ar-tags" id="ar-tags" data-when="scanning analyzing ready"></div>
@@ -1704,6 +1742,46 @@ const CAP_OPTS = {grid:false, auto:true, geo:true};
    A capture is one building, photographed from one or more angles. Shots
    from the shutter and photos imported from the library both land here and
    are scanned the same way; each extra angle raises the match confidence. */
+/* ---------- ambience ----------
+   Never automatic: a camera that starts playing music on its own is the
+   wrong instinct in public. The track is chosen, then saved with the capture. */
+const TRACKS = [
+  {id:'frahm',   title:'Nils Frahm \u2014 Says',            len:'8:16'},
+  {id:'rani',    title:'Hania Rani \u2014 Glass',           len:'4:32'},
+  {id:'sakamoto',title:'Ryuichi Sakamoto \u2014 Solari',    len:'5:41'},
+  {id:'arnalds', title:'\u00d3lafur Arnalds \u2014 Near Light', len:'4:08'}
+];
+let curTrack = null;
+
+function renderAudio(){
+  $('#ar-audiolist').innerHTML =
+    TRACKS.map(t=>`<button class="trackrow" data-track="${t.id}" aria-pressed="${curTrack === t.id}">
+      <i></i><b>${esc(t.title)}</b><span class="tnum">${esc(t.len)}</span></button>`).join('') +
+    `<button class="trackrow" data-track="none" aria-pressed="${curTrack === null}">
+      <i></i><b>No sound</b></button>`;
+}
+
+function applyTrack(){
+  const t = TRACKS.find(x=>x.id === curTrack);
+  $('#s-capture').dataset.audio = t ? '1' : '0';
+  const lab = $('#ar-mtitle');
+  lab.firstElementChild.textContent = t ? t.title : 'Add ambience';
+  lab.classList.remove('roll');
+  lab.style.removeProperty('--roll');
+  /* Scroll the title only when it genuinely overflows. Measured after layout
+     has settled, off bounding rects, since a single frame was not enough. */
+  clearTimeout(applyTrack._t);
+  applyTrack._t = setTimeout(()=>{
+    if(!t || curTrack !== t.id) return;
+    const inner = lab.firstElementChild;
+    const over = Math.round(inner.getBoundingClientRect().width - lab.getBoundingClientRect().width);
+    if(over > 4){
+      lab.style.setProperty('--roll', '-' + (over + 6) + 'px');
+      lab.classList.add('roll');
+    }
+  }, 90);
+}
+
 const SHOTS = ['shot_v1','shot_v2','shot_v3','shot_v4','shot_v5','shot_v6'];
 let shotIdx = 0;
 /* photos of this same structure taken earlier - importing them is how you
@@ -1770,7 +1848,7 @@ function syncLibPick(){
 }
 
 function sheetsOpen(){
-  return ['#ar-settings','#ar-library'].some(id=>{ const el = $(id); return el && !el.hidden; });
+  return ['#ar-settings','#ar-library','#ar-audio'].some(id=>{ const el = $(id); return el && !el.hidden; });
 }
 
 /* The passive scan may only run when the camera is actually being aimed:
@@ -1787,7 +1865,8 @@ function syncScanTimer(){
 }
 
 function closeCapSheets(){
-  ['#ar-settings','#ar-library'].forEach(id=>{ const el = $(id); if(el) el.hidden = true; });
+  ['#ar-settings','#ar-library','#ar-audio'].forEach(id=>{ const el = $(id); if(el) el.hidden = true; });
+  const m = $('#ar-music'); if(m) m.setAttribute('aria-expanded', 'false');
   const sc = $('#s-capture'); if(sc) sc.dataset.settings = '0';
   const g = $('#ar-gear'); if(g) g.setAttribute('aria-expanded', 'false');
   syncScanTimer();
@@ -2420,7 +2499,7 @@ $('#discover-map').insertAdjacentHTML('afterbegin', discoverMap());
 $('#journey-map').insertAdjacentHTML('afterbegin', journeyMap());
 $('#crossing-map').insertAdjacentHTML('afterbegin', crossingMap());
 renderSpots('nearby'); renderPfPanel('works'); renderTrips(); renderInsp('All'); renderRecords(); renderCommunity('feed'); renderDiscoverCommunity();
-syncObGate(); renderStops(); applyCapOpts(); renderLibrary(); renderCapSet(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
+syncObGate(); renderStops(); applyCapOpts(); applyTrack(); renderAudio(); renderLibrary(); renderCapSet(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
 
 document.addEventListener('click', e=>{
   const t = e.target;
@@ -2561,7 +2640,22 @@ document.addEventListener('click', e=>{
   }
   const untag = t.closest('[data-untag]');
   if(untag){ CAP_TAGS.splice(+untag.dataset.untag, 1); renderCapTags(); return; }
-  if(t.closest('#ar-music')){ $('#ar-music').hidden = true; toast('Ambience removed'); return; }
+  if(t.closest('#ar-music')){
+    const open = $('#ar-audio').hidden;
+    renderAudio(); openCapSheet('#ar-audio');
+    $('#ar-music').setAttribute('aria-expanded', String(open));
+    return;
+  }
+  const trk = t.closest('[data-track]');
+  if(trk){
+    const id = trk.dataset.track;
+    curTrack = id === 'none' ? null : id;
+    applyTrack(); renderAudio();
+    closeCapSheets();
+    const t2 = TRACKS.find(x=>x.id === curTrack);
+    toast(t2 ? 'Playing ' + t2.title : 'Sound off');
+    return;
+  }
 
   const pft = t.closest('.pftab');
   if(pft){
