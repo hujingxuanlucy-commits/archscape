@@ -522,6 +522,13 @@ figure{margin:0}
   letter-spacing:.12em;text-transform:uppercase;color:#5FBF86}
 .ar-confirmed svg{width:13px;height:13px}
 #s-capture[data-confirmed="1"] .ar-confirmed{display:flex}
+/* an archive registration line - this capture's own catalogue number and
+   coordinates, the way a print or a museum object carries an accession ID */
+.ar-catalog{display:flex;align-items:baseline;gap:8px;margin-top:10px;padding-top:9px;
+  border-top:1px solid rgba(255,255,255,.14);flex-wrap:wrap}
+.ar-catalog i{width:5px;height:5px;background:var(--red);flex:none;margin-bottom:1px}
+.ar-catalog b{font-size:10.5px;font-weight:700;letter-spacing:.1em;color:rgba(255,255,255,.78)}
+.ar-catalog span{font-size:10.5px;color:rgba(255,255,255,.46);letter-spacing:.03em}
 /* every photo in this capture, in one place */
 .ar-tray{display:flex;flex-direction:column;gap:7px}
 .tray-lab{font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.62)}
@@ -1380,6 +1387,7 @@ figure{margin:0}
                 </button>
                 <h3 id="ar-name">Seagram Building</h3>
                 <p id="ar-meta">Mies van der Rohe, 1958 &#183; Park Avenue</p>
+                <div class="ar-catalog"><i></i><b id="ar-catid">NYC&#8211;ARCH&#8211;0248</b><span id="ar-catcoord" class="tnum">40.7539&#176; N &#183; 74.0021&#176; W</span></div>
                 <div class="ar-angles" id="ar-angles" hidden></div>
                 <button class="ar-dismiss" id="ar-dismiss" aria-label="Keep scanning">&#215;</button>
                 <button class="ar-cardcta" data-confirm><i></i>Capture This Building</button>
@@ -2242,6 +2250,11 @@ function runSignIn(){
   })();
 }
 
+/* This capture's own accession number, the way a print or a museum object
+   carries one - continuing straight on from the profile's own count (247
+   Check-ins), since this capture is the next entry in that same archive. */
+const NEXT_CAT_NUM = 248;
+
 function applyCandidate(){
   const c = CANDIDATES[capIndex];
   $('#ar-name').textContent = c.name;
@@ -2249,6 +2262,8 @@ function applyCandidate(){
   $('#ar-meta').textContent = c.architect + ', ' + c.year + ' \u00b7 ' + c.street;
   const bonus = Math.min(Math.max(CAP_SET.length - 1, 0) * 2, 4);
   $('#ar-pct').textContent = Math.min((capFrozen ? c.pct - 2 : c.pct) + bonus, 99) + '% match';
+  $('#ar-catid').textContent = 'NYC\u2013ARCH\u2013' + String(NEXT_CAT_NUM).padStart(4, '0');
+  $('#ar-catcoord').textContent = c.coords;
   $('#ci-locname').textContent = c.addr;
   $('#ci-loccoords').textContent = c.coords;
   $('#ci-name').value = c.name;
