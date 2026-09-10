@@ -216,6 +216,27 @@ figure{margin:0}
 .roletick svg{width:12px;height:12px;color:#fff;opacity:0;transition:.16s}
 .rolerow[aria-pressed="true"] .roletick svg{opacity:1}
 
+/* --- selection feedback: the card settles, its icon kicks, the tick
+   draws itself, and a ring breaks outward from the border --- */
+.rolerow,.themecell{position:relative}
+.rolerow::after,.themecell::after{content:"";position:absolute;inset:-1px;border-radius:inherit;
+  border:1.5px solid var(--red);opacity:0;pointer-events:none}
+.rolerow.picked::after,.themecell.picked::after{animation:ringOut .5s cubic-bezier(.22,.8,.3,1) both}
+@keyframes ringOut{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.06)}}
+.rolerow.picked,.themecell.picked{animation:cardPop .42s cubic-bezier(.3,1.4,.5,1) both}
+@keyframes cardPop{0%{transform:scale(1)}38%{transform:scale(1.03)}100%{transform:scale(1)}}
+.rolerow.picked .roleicon,.themecell.picked svg{animation:iconKick .46s cubic-bezier(.3,1.5,.45,1) both}
+@keyframes iconKick{0%{transform:scale(1) rotate(0)}42%{transform:scale(1.16) rotate(-7deg)}100%{transform:scale(1) rotate(0)}}
+.rolerow.picked .roletick{animation:tickPop .42s cubic-bezier(.28,1.5,.45,1) both}
+@keyframes tickPop{0%{transform:scale(.4)}55%{transform:scale(1.18)}100%{transform:scale(1)}}
+.roletick polyline{stroke-dasharray:26;stroke-dashoffset:0}
+.rolerow.picked .roletick polyline{animation:tickDraw .34s .08s cubic-bezier(.4,0,.2,1) both}
+@keyframes tickDraw{from{stroke-dashoffset:26}to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){
+  .rolerow.picked,.themecell.picked,.rolerow.picked::after,.themecell.picked::after,
+  .rolerow.picked .roleicon,.themecell.picked svg,.rolerow.picked .roletick,
+  .rolerow.picked .roletick polyline{animation:none}
+}
 .themegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .themecell{padding:13px;border-radius:10px;background:rgba(255,255,255,.05);text-align:left;
   border:1px solid rgba(255,255,255,.13);transition:.16s}
@@ -1802,6 +1823,15 @@ function setCapture(st, keepFrame, keepSet){
   if(st === 'scanning' && CAP_OPTS.auto) capTimer = setTimeout(()=>{ if(capState==='scanning') setCapture('ready'); }, 2600);
   if(st === 'analyzing') capTimer = setTimeout(()=>{ if(capState==='analyzing') setCapture('ready', true); }, 1600);
 }
+/* Restart the selection animation even when the same card is tapped twice. */
+function playPick(el){
+  el.classList.remove('picked');
+  void el.offsetWidth;
+  el.classList.add('picked');
+  clearTimeout(el._pickT);
+  el._pickT = setTimeout(()=>el.classList.remove('picked'), 560);
+}
+
 function syncObGate(){
   const picked = sel => $$(sel).some(x => x.getAttribute('aria-pressed') === 'true');
   const r = $('#ob-go-themes'), t = $('#ob-go-ready');
@@ -2441,9 +2471,17 @@ document.addEventListener('click', e=>{
   }
 
   const role = t.closest('.rolerow');
-  if(role){ $$('#ob-roles .rolerow').forEach(r=>r.setAttribute('aria-pressed', String(r === role))); syncObGate(); return; }
+  if(role){
+    $$('#ob-roles .rolerow').forEach(r=>r.setAttribute('aria-pressed', String(r === role)));
+    playPick(role); syncObGate(); return;
+  }
   const theme = t.closest('.themecell');
-  if(theme){ theme.setAttribute('aria-pressed', theme.getAttribute('aria-pressed')==='true'?'false':'true'); syncObGate(); return; }
+  if(theme){
+    const on = theme.getAttribute('aria-pressed') !== 'true';
+    theme.setAttribute('aria-pressed', String(on));
+    if(on) playPick(theme);
+    syncObGate(); return;
+  }
 
   const tag = t.closest('.tagset .tag');
   if(tag){ tag.setAttribute('aria-pressed', tag.getAttribute('aria-pressed')==='true'?'false':'true'); return; }
