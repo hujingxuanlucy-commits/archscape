@@ -648,19 +648,7 @@ figure{margin:0}
 .chev.fold{transition:transform .2s}
 #ci-music[aria-expanded="true"] .chev.fold{transform:rotate(180deg)}
 .ci-foldbody{padding:0 15px 6px;border-top:1px solid var(--bone-soft)}
-.quickadd{position:absolute;left:0;right:0;bottom:0;z-index:60;background:var(--white);
-  border-top:1px solid var(--bone);padding:13px 16px 18px;box-shadow:0 -14px 32px -20px rgba(0,0,0,.5);
-  animation:qaUp .24s cubic-bezier(.32,.72,0,1) both}
-@keyframes qaUp{from{transform:translateY(100%)}to{transform:none}}
-.qa-lab{display:block;font-size:9.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--muted);margin-bottom:9px}
-.qa-row{display:flex;gap:8px;align-items:center}
-.qa-row input{flex:1;min-width:0;padding:11px 13px;border-radius:8px;border:1px solid var(--bone);
-  background:var(--paper);font-size:13.5px;color:var(--ink);outline:none;transition:.16s}
-.qa-row input:focus{border-color:var(--red);background:var(--white)}
-.qa-x{flex:none;width:32px;height:32px;border-radius:50%;color:var(--muted);font-size:17px;
-  display:grid;place-items:center;transition:.16s}
-.qa-x:hover{background:var(--bone-soft);color:var(--ink)}
+
 .addbtn{flex:none;padding:9px 16px;border-radius:7px;border:1px solid var(--red);color:var(--red);
   background:none;font-size:12px;font-weight:600;transition:.16s}
 .addbtn:hover{background:var(--red);color:#fff}
@@ -676,6 +664,18 @@ figure{margin:0}
 .tag{font-size:12.5px;font-weight:500;color:var(--muted);background:var(--white);border:1px solid var(--bone);
   border-radius:6px;padding:7px 13px;transition:.16s}
 .tag[aria-pressed="true"]{color:var(--red);border-color:var(--red);background:var(--red-tint)}
+/* the add control opens as a real field in the same row, sized to match
+   the chips around it, rather than a bar over the rest of the page */
+.taginput{display:inline-flex;align-items:center;gap:2px;border:1px solid var(--red);border-radius:6px;
+  background:var(--white);padding:2px 2px 2px 11px}
+.taginput input{width:132px;min-width:0;font-size:12.5px;color:var(--ink);background:none;border:0;outline:none}
+.taginput input::placeholder{color:var(--muted-2)}
+.taginput button{flex:none;width:26px;height:26px;border-radius:5px;display:grid;place-items:center;
+  color:var(--muted);transition:.16s}
+.taginput button:hover{background:var(--paper)}
+.taginput button[type="submit"]{color:var(--red)}
+.taginput button[type="submit"] svg{width:14px;height:14px}
+.taginput button[data-canceladd] {font-size:15px}
 .ci-row{display:flex;align-items:center;gap:13px;margin:0 22px 9px;padding:12px 15px;width:calc(100% - 44px);text-align:left}
 .ci-row svg.lead{width:20px;height:20px;color:var(--red);flex:none}
 .ci-row .grow{flex:1;min-width:0}
@@ -760,11 +760,19 @@ figure{margin:0}
 .stopbody > span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
 
 /* ============ 06 profile ============ */
-.pf-cover{position:relative;height:206px}
-.pf-cover img{width:100%;height:100%;object-fit:cover}
-.pf-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.5),rgba(10,10,10,.1) 45%,rgba(10,10,10,.35))}
-.pf-avatar{position:absolute;left:22px;bottom:-34px;width:88px;height:88px;font-size:34px;font-family:var(--disp);
-  font-weight:600;border:3px solid var(--paper);z-index:3}
+/* a quiet drafting-sheet ground rather than a decorative banner photo:
+   the identity here comes from the archive's own record, not a hero shot */
+.pf-cover{position:relative;height:150px;background:var(--ink);overflow:hidden}
+.pf-cover::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--red)}
+.pf-grid{position:absolute;inset:0;
+  background-image:
+    linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px),
+    linear-gradient(180deg,rgba(255,255,255,.055) 1px,transparent 1px);
+  background-size:26px 26px}
+.pf-cover::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(120% 90% at 12% 0%,rgba(149,35,36,.16),transparent 60%)}
+.pf-avatar{position:absolute;left:22px;bottom:-34px;width:88px;height:88px;object-fit:cover;
+  border:3px solid var(--paper);border-radius:50%;z-index:3;display:block}
 .pf-edit{position:absolute;right:20px;bottom:14px;z-index:3;background:var(--white);color:var(--ink);
   font-size:12.5px;font-weight:600;padding:8px 18px;border-radius:6px;transition:.16s}
 .pf-edit:hover{background:var(--bone-soft)}
@@ -1524,8 +1532,8 @@ the city folded in on itself.</textarea>
         <!-- ============ 06 PROFILE ============ -->
         <section class="screen padnav" id="s-profile">
           <div class="pf-cover">
-            <img data-img="prof_cover" alt="The Vessel, seen from within its honeycomb structure">
-            <span class="avatar pf-avatar">L</span>
+            <div class="pf-grid" aria-hidden="true"></div>
+            <img class="pf-avatar" data-img="pf_avatar" alt="Lucy's own capture: shadow line, Broadgate">
             <button class="pf-edit">Edit</button>
           </div>
           <div class="pf-id">
@@ -1681,15 +1689,6 @@ the city folded in on itself.</textarea>
         </section>
 
         <!-- tab bar -->
-        <div class="quickadd" id="quickadd" hidden>
-          <span class="qa-lab" id="qa-lab">Add a tag</span>
-          <form class="qa-row" id="qa-form">
-            <input id="qa-in" maxlength="34" autocomplete="off" aria-label="New entry">
-            <button class="addbtn" type="submit">Add</button>
-            <button class="qa-x" type="button" id="qa-close" aria-label="Close">&#215;</button>
-          </form>
-        </div>
-
         <nav class="tabbar" id="tabbar">
           <button class="tabitem" data-tab="explore" data-go="discover">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="15.6 8.4 10.9 10.9 8.4 15.6 13.1 13.1"/></svg>
@@ -2442,6 +2441,23 @@ const FEATURE_POOL = {
   hy30:   ['Curtain wall', 'Angled crown', 'Public observatory']
 };
 
+/* The Add control for a set of tags/features opens inline, in the same
+   row, as a real text field - not a bottom sheet floating over the rest
+   of the page. Only one set is ever mid-edit at a time. */
+let ciAddOpen = null;   /* null | 'tag' | 'feat' */
+
+function addChipHTML(kind){
+  if(ciAddOpen === kind){
+    return `<form class="taginput" data-addform="${kind}">
+      <input id="ci-addin" type="text" autocomplete="off" maxlength="${kind === 'tag' ? 24 : 34}"
+        placeholder="${kind === 'tag' ? 'e.g. golden hour' : 'e.g. Cantilevered landings'}" aria-label="New entry">
+      <button type="submit" aria-label="Add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12.5 10 17.5 19 7"/></svg></button>
+      <button type="button" data-canceladd aria-label="Cancel">&#215;</button>
+    </form>`;
+  }
+  return `<button class="tag addtag" data-addkind="${kind}">Add +</button>`;
+}
+
 function renderCheckinTags(){
   const suggested = TAG_POOL.filter(t=>!CAP_TAGS.includes(t)).slice(0, 3);
   const all = CAP_TAGS.concat(CI_TAGS.filter(t=>!CAP_TAGS.includes(t)))
@@ -2451,7 +2467,7 @@ function renderCheckinTags(){
     const mine = CI_TAGS.includes(t) && !CAP_TAGS.includes(t);
     return `<button class="tag" data-citag="${esc(t)}" aria-pressed="${on}">${esc(t)}` +
            (mine ? '<span class="x">&#215;</span>' : '') + '</button>';
-  }).join('') + '<button class="tag addtag" data-addkind="tag">Add +</button>';
+  }).join('') + addChipHTML('tag');
 
   const key = CANDIDATES[capIndex].bldId === 'vessel' ? 'vessel'
             : CANDIDATES[capIndex].name === 'The Shed' ? 'shed' : 'hy30';
@@ -2460,7 +2476,9 @@ function renderCheckinTags(){
     const mine = CI_FEATS.includes(f);
     return `<button class="tag" data-cifeat="${esc(f)}" aria-pressed="${mine || i === 0}">${esc(f)}` +
            (mine ? '<span class="x">&#215;</span>' : '') + '</button>';
-  }).join('') + '<button class="tag addtag" data-addkind="feat">Add +</button>';
+  }).join('') + addChipHTML('feat');
+
+  if(ciAddOpen){ const el = $('#ci-addin'); if(el) el.focus(); }
 
   const tr = TRACKS.find(x=>x.id === curTrack);
   $('#ci-mtitle').textContent = tr ? tr.title : 'No sound';
@@ -3653,8 +3671,8 @@ document.addEventListener('click', e=>{
     return;
   }
   const addk = t.closest('[data-addkind]');
-  if(addk){ openQuickAdd(addk.dataset.addkind); return; }
-  if(t.closest('#qa-close')){ closeQuickAdd(); return; }
+  if(addk){ ciAddOpen = addk.dataset.addkind; renderCheckinTags(); return; }
+  if(t.closest('[data-canceladd]')){ closeQuickAdd(); return; }
   const citrack = t.closest('[data-citrack]');
   if(citrack){
     curTrack = citrack.dataset.citrack === 'none' ? null : citrack.dataset.citrack;
@@ -3683,33 +3701,33 @@ document.addEventListener('input', e=>{
   if(e.target.id === 'j-q'){ jQuery = e.target.value; $('#pf-panel').innerHTML = renderJourneys(); }
 });
 
-/* Typing happens in a bar that rises from the bottom, where the keyboard
-   would be, instead of a field sitting open on the page all the time. */
-let qaKind = 'tag';
-function openQuickAdd(kind){
-  qaKind = kind;
-  $('#qa-lab').textContent = kind === 'tag' ? 'Add a tag' : 'Add what you noticed';
-  const inp = $('#qa-in');
-  inp.placeholder = kind === 'tag' ? 'e.g. golden hour' : 'e.g. Cantilevered landings';
-  inp.value = '';
-  $('#quickadd').hidden = false;
-  inp.focus();
-}
-function closeQuickAdd(){ $('#quickadd').hidden = true; }
-
-$('#qa-form').addEventListener('submit', e=>{
-  e.preventDefault();
-  const v = $('#qa-in').value.trim();
-  if(!v) return;
-  if(qaKind === 'tag'){
-    let tag = v.replace(/\s+/g, '');
-    if(tag[0] !== '#') tag = '#' + tag;
-    if(!CI_TAGS.includes(tag) && !CAP_TAGS.includes(tag)) CI_TAGS.push(tag);
-  } else if(!CI_FEATS.includes(v)) CI_FEATS.push(v);
+/* Adding a tag or a feature happens as a real text field opening in that
+   set's own row - not a bar sliding up from the bottom of the screen. */
+function closeQuickAdd(){
+  if(!ciAddOpen) return;
+  ciAddOpen = null;
   renderCheckinTags();
-  closeQuickAdd();
+}
+
+document.addEventListener('submit', e=>{
+  const form = e.target.closest('[data-addform]');
+  if(!form) return;
+  e.preventDefault();
+  const kind = form.dataset.addform;
+  const v = $('#ci-addin').value.trim();
+  if(v){
+    if(kind === 'tag'){
+      let tag = v.replace(/\s+/g, '');
+      if(tag[0] !== '#') tag = '#' + tag;
+      if(!CI_TAGS.includes(tag) && !CAP_TAGS.includes(tag)) CI_TAGS.push(tag);
+    } else if(!CI_FEATS.includes(v)) CI_FEATS.push(v);
+  }
+  ciAddOpen = null;
+  renderCheckinTags();
 });
-$('#qa-in').addEventListener('keydown', e=>{ if(e.key === 'Escape') closeQuickAdd(); });
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape' && ciAddOpen) closeQuickAdd();
+});
 
 go('onboarding');
 fitDevice();
