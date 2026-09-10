@@ -758,8 +758,10 @@ figure{margin:0}
 .pf-handle{font-size:13px;color:var(--muted);margin:5px 0 9px}
 .pf-bio{font-size:13.5px;color:#57534D;line-height:1.6;margin:0 0 18px;max-width:40ch}
 .statgrid{display:flex;border-block:1px solid var(--bone);background:var(--white)}
-.statgrid .s{flex:1;text-align:center;padding:15px 4px 16px}
+.statgrid .s{flex:1;text-align:center;padding:15px 4px 16px;display:block;width:100%;transition:.16s}
 .statgrid .s + .s{border-left:1px solid var(--bone)}
+.statgrid button.s{cursor:pointer}
+.statgrid button.s:hover{background:var(--paper)}
 .statgrid b{display:block;font-family:var(--disp);font-size:25px;font-weight:600;line-height:1;color:var(--ink)}
 .statgrid b.red{color:var(--red)}
 .statgrid span{display:block;font-size:10.5px;color:var(--muted);margin-top:5px}
@@ -774,6 +776,26 @@ figure{margin:0}
 .pftab[aria-current="true"]{color:var(--ink);border-bottom-color:var(--red)}
 .pftab em{font-style:normal;font-size:11px;color:var(--muted-2);font-variant-numeric:tabular-nums}
 .pftab[aria-current="true"] em{color:var(--red)}
+.work{cursor:pointer;transition:.16s}
+.work:active{opacity:.8}
+.jsearch{position:relative;margin:14px 22px 12px}
+.jsearch > svg{position:absolute;left:11px;top:50%;margin-top:-8px;width:16px;height:16px;color:var(--muted)}
+.jsearch input{width:100%;padding:11px 14px 11px 34px;border-radius:9px;border:1px solid var(--bone);
+  background:var(--paper);font-size:13.5px;color:var(--ink);outline:none;transition:.16s}
+.jsearch input:focus{border-color:var(--red);background:var(--white)}
+/* the profile lightbox: one photo full-frame, paged, with context beneath */
+.lightbox{position:fixed;inset:0;z-index:80;background:#0B0B0C;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;animation:popIn .2s ease both}
+.lightbox img{width:100%;height:100%;object-fit:contain;display:block;position:absolute;inset:0}
+.lb-top{position:absolute;left:15px;right:15px;top:52px;z-index:2;display:flex;align-items:center;justify-content:space-between}
+.lb-count{font-size:11px;font-weight:700;letter-spacing:.12em;color:rgba(255,255,255,.72);
+  background:rgba(20,20,23,.7);border-radius:999px;padding:6px 13px}
+.lb-cap{position:absolute;left:0;right:0;bottom:78px;z-index:2;text-align:center;padding:0 24px;
+  text-shadow:0 2px 12px rgba(0,0,0,.7)}
+.lb-cap b{display:block;font-family:var(--disp);font-size:19px;font-weight:600;color:#fff}
+.lb-cap span{display:block;font-size:12.5px;color:rgba(255,255,255,.75);margin-top:3px}
+.lightbox .pill-ghost{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);z-index:2;
+  background:rgba(28,28,32,.92);border-color:rgba(255,255,255,.32)}
 .pflink{display:block;width:100%;text-align:center;padding:16px;font-size:13px;font-weight:600;
   color:var(--red);transition:.16s}
 .pflink:hover{background:var(--bone-soft)}
@@ -1474,7 +1496,7 @@ the city folded in on itself.</textarea>
           </div>
           <div class="sechead" style="padding-top:18px">
             <h3 class="sectitle">Stops Today</h3>
-            <button class="seelink" data-go="archive">Full archive</button>
+            <button class="seelink" data-pfjump="journeys">All journeys</button>
           </div>
           <div id="stops"></div>
         </section>
@@ -1492,30 +1514,37 @@ the city folded in on itself.</textarea>
             <p class="pf-bio">Architect &amp; urban photographer. Documenting the beauty of structural honesty in everyday spaces.</p>
           </div>
           <div class="statgrid">
-            <div class="s"><b class="red onum">247</b><span>Check-ins</span></div>
-            <div class="s"><b class="onum">3.2k</b><span>Followers</span></div>
-            <div class="s"><b class="onum">18</b><span>Cities</span></div>
-            <div class="s"><b class="onum">89</b><span>Saved</span></div>
+            <button class="s" data-pfjump="works"><b class="red onum">247</b><span>Check-ins</span></button>
+            <span class="s"><b class="onum">3.2k</b><span>Followers</span></span>
+            <span class="s"><b class="onum">18</b><span>Cities</span></span>
+            <button class="s" data-pfjump="saved"><b class="onum">89</b><span>Saved</span></button>
           </div>
           <div id="pf-sentinel"></div>
           <div class="pftabs" id="pf-tabs">
             <button class="pftab" data-pftab="works"    aria-current="true">Captures <em>247</em></button>
             <button class="pftab" data-pftab="saved"    aria-current="false">Saved <em>89</em></button>
-            <button class="pftab" data-pftab="journeys" aria-current="false">Journeys <em>12</em></button>
+            <button class="pftab" data-pftab="journeys" aria-current="false">Journeys <em id="pf-jcount">3</em></button>
+            <button class="pftab" data-pftab="groups"   aria-current="false">Groups <em id="pf-gcount">2</em></button>
           </div>
           <div id="pf-panel"></div>
+
+          <div class="lightbox" id="lightbox" hidden>
+            <div class="lb-top">
+              <span class="lb-count tnum" id="lb-count">1 / 1</span>
+              <button class="ar-round" id="lb-close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+            </div>
+            <img id="lb-img" alt="">
+            <button class="sv-nav prev" data-lbnav="prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 5 8 12 15 19"/></svg></button>
+            <button class="sv-nav next" data-lbnav="next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 5 16 12 9 19"/></svg></button>
+            <div class="lb-cap">
+              <b id="lb-title"></b>
+              <span id="lb-meta"></span>
+            </div>
+            <button class="pill-ghost" id="lb-unsave" data-lbunsave hidden>Remove from Saved</button>
+          </div>
         </section>
 
-        <!-- ============ 07 ARCHIVE ============ -->
-        <section class="screen pad padnav" id="s-archive">
-          <div class="ci-head">
-            <button class="iconbtn" data-go="profile" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-            <h2 class="h-title sm">Journey Archive</h2>
-            <button class="iconbtn" aria-label="Filter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="17" x2="21" y2="17"/><circle cx="9" cy="7" r="2.4"/><circle cx="16" cy="17" r="2.4"/></svg></button>
-          </div>
-          <div class="yr onum">2024</div>
-          <div id="trips"></div>
-        </section>
+        
 
         <!-- ============ 08 INSPIRATION ============ -->
         <section class="screen pad padnav" id="s-inspiration">
@@ -1688,7 +1717,6 @@ const SCREENS = [
   {id:'checkin',     name:'Check-in',    chrome:'light', nav:false},
   {id:'journey',     name:'Journey Map', chrome:'light', nav:true, tab:'map'},
   {id:'profile',     name:'Profile',     chrome:'light', nav:true, tab:'profile'},
-  {id:'archive',     name:'Archive',     chrome:'light', nav:true, tab:'profile'},
   {id:'inspiration', name:'Inspiration', chrome:'light', nav:true, tab:'profile'},
   {id:'community',   name:'Community',   chrome:'light', nav:true, tab:'explore'},
   {id:'group',       name:'Group',       chrome:'light', nav:true, tab:'explore'},
@@ -1751,6 +1779,7 @@ function go(id, isBack){
     if(!coachSeen){ coachStep = 0; showCoach(); }
   } else clearTimeout(capTimer);
   if(id === 'checkin') renderCheckinTags(); else closeQuickAdd();
+  closeLightbox();
   if(id === 'journey') requestAnimationFrame(()=>jmap.refit());
 }
 let toastT;
@@ -1846,9 +1875,18 @@ const SPOTS = {
 const SPOT_TITLE = {nearby:'Nearby Spots', trending:'Trending Now', following:'From People You Follow', saved:'Your Saved Spots'};
 
 const TRIPS = [
-  {img:'arc_bcn', dot:'#952324', name:'Barcelona — Architecture Walk', date:'Nov 12, 2024', meta:'14 check-ins · Gaudí buildings · 6.2 km'},
-  {img:'arc_tky', dot:'#3E6B9A', name:'Tokyo — Art District',          date:'Sep 3, 2024',  meta:'9 check-ins · Modern Art · 3.8 km'},
-  {img:'arc_par', dot:'#666666', name:'Paris — Haussmann Routes',      date:'Mar 20, 2024', meta:'22 check-ins · Classical France · 9.1 km'}
+  {img:'arc_bcn',     dot:'#952324', name:'Barcelona — Architecture Walk', date:'Nov 12, 2024', year:'2024', meta:'14 check-ins · Gaudí buildings · 6.2 km'},
+  {img:'arc_tky',     dot:'#3E6B9A', name:'Tokyo — Art District',          date:'Sep 3, 2024',  year:'2024', meta:'9 check-ins · Modern Art · 3.8 km'},
+  {img:'vessel_hero', dot:'#952324', name:'New York — Hudson Yards',      date:'Aug 14, 2024', year:'2024', meta:'6 check-ins · Contemporary · 2.1 km'},
+  {img:'kn_habitat',  dot:'#666666', name:'Montreal — Habitat 67',        date:'Jun 2, 2024',  year:'2024', meta:'4 check-ins · Brutalism · 1.4 km'},
+  {img:'arc_par',     dot:'#666666', name:'Paris — Haussmann Routes',     date:'Mar 20, 2024', year:'2024', meta:'22 check-ins · Classical France · 9.1 km'},
+  {img:'insp_heydar', dot:'#3E6B9A', name:'Baku — Heydar Aliyev Centre',  date:'Jan 9, 2024',  year:'2024', meta:'3 check-ins · Contemporary · 0.8 km'},
+  {img:'kn_trellick', dot:'#666666', name:'London — Brutalist London',    date:'Nov 2, 2023',  year:'2023', meta:'11 check-ins · Brutalism · 5.3 km'},
+  {img:'duomo',       dot:'#952324', name:'Milan — Duomo & Galleria',     date:'Jul 18, 2023', year:'2023', meta:'8 check-ins · Gothic · 2.9 km'},
+  {img:'highline',    dot:'#666666', name:'New York — High Line Walk',    date:'May 6, 2023',  year:'2023', meta:'7 check-ins · Photography · 3.2 km'},
+  {img:'tate',        dot:'#3E6B9A', name:'London — Bankside Galleries',  date:'Feb 24, 2023', year:'2023', meta:'5 check-ins · Modernism · 1.7 km'},
+  {img:'k11',         dot:'#666666', name:'Hong Kong — K11 Musea',        date:'Oct 30, 2022', year:'2022', meta:'6 check-ins · Contemporary · 2.0 km'},
+  {img:'onb_night',   dot:'#3E6B9A', name:'Tokyo — Shibuya Night Walk',   date:'Sep 12, 2022', year:'2022', meta:'9 check-ins · Photography · 4.6 km'}
 ];
 
 const INSP = [
@@ -2805,22 +2843,74 @@ const SAVED = [
 ];
 function grid(list, badgeFirst){
   return '<div class="works">' + list.map((x,i)=>`
-    <figure class="work"><img src="${IMG[x.img]}" alt="${esc(x.t)}">
-      ${badgeFirst && i===0 ? '<span class="newbadge">NEW</span>' : ''}</figure>`).join('') + '</div>';
+    <button class="work" data-work="${i}">
+      <img src="${IMG[x.img]}" alt="${esc(x.t)}">
+      ${badgeFirst && i===0 ? '<span class="newbadge">NEW</span>' : ''}
+    </button>`).join('') + '</div>';
 }
-function renderPfPanel(tab){
-  const p = $('#pf-panel');
-  if(tab === 'journeys'){
-    p.innerHTML = TRIPS.map(t=>`
-      <button class="trip" data-go="journey">
+
+/* ---------- journeys: filter and search live in the profile tab itself,
+   so there is nowhere else to send someone looking for "all of it" ---------- */
+let jFilter = 'all', jQuery = '';
+function journeyYears(){
+  return [...new Set(TRIPS.map(t=>t.year))].sort((a,b)=>b - a);
+}
+function renderJourneys(){
+  const years = journeyYears();
+  const q = jQuery.trim().toLowerCase();
+  const list = TRIPS.filter(t=>
+    (jFilter === 'all' || t.year === jFilter) &&
+    (!q || (t.name + ' ' + t.meta).toLowerCase().includes(q)));
+  return `
+    <div class="jsearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+      <input id="j-q" type="search" placeholder="Search your journeys" value="${esc(jQuery)}" aria-label="Search journeys"></div>
+    <div class="chiprow" id="j-years" data-chips="jyear">
+      <button class="chip" data-jyear="all" aria-pressed="${jFilter==='all'}">All years</button>
+      ${years.map(y=>`<button class="chip" data-jyear="${y}" aria-pressed="${jFilter===String(y)}">${y}</button>`).join('')}
+    </div>
+    ${list.length ? list.map(t=>{
+      const i = TRIPS.indexOf(t);
+      return `<button class="trip" data-go="journey" data-trip="${i}">
         <span class="dot" style="background:${t.dot}"></span>
         <img src="${IMG[t.img]}" alt="${esc(t.name)}">
         <span class="grow"><b>${esc(t.name)}</b><time>${esc(t.date)}</time><span>${esc(t.meta)}</span></span>
-      </button>`).join('') +
-      '<button class="pflink" data-go="archive">Open Journey Archive</button>';
+      </button>`;
+    }).join('') : `<p class="emptynote" style="margin:18px 22px">No journeys match ${q ? '"' + esc(jQuery) + '"' : 'that year'}.</p>`}`;
+}
+
+/* ---------- profile lightbox: paging through Captures or Saved ---------- */
+let lbKind = 'work', lbIndex = 0;
+function openLightbox(kind, i){
+  const list = kind === 'saved' ? SAVED : WORKS;
+  if(!list.length) return;
+  lbKind = kind;
+  lbIndex = Math.max(0, Math.min(i, list.length - 1));
+  const x = list[lbIndex];
+  $('#lb-img').src = IMG[x.img];
+  $('#lb-title').textContent = x.t;
+  $('#lb-meta').textContent = kind === 'saved' ? 'Saved from ' + x.by : 'Your capture';
+  $('#lb-count').textContent = (lbIndex + 1) + ' / ' + list.length;
+  $('#lb-unsave').hidden = kind !== 'saved';
+  $('[data-lbnav="prev"]').disabled = lbIndex === 0;
+  $('[data-lbnav="next"]').disabled = lbIndex === list.length - 1;
+  $('#lightbox').hidden = false;
+}
+function closeLightbox(){ $('#lightbox').hidden = true; }
+
+function renderPfPanel(tab){
+  const p = $('#pf-panel');
+  if(tab === 'journeys'){
+    p.innerHTML = renderJourneys();
+  } else if(tab === 'groups'){
+    const mine = Object.keys(GROUPS).filter(k=>GROUPS[k].joined);
+    p.innerHTML =
+      (mine.length
+        ? mine.map(groupCard).join('')
+        : `<p class="emptynote" style="margin:18px 22px">You haven't joined a group yet.</p>`) +
+      '<button class="pflink" data-comm="groups">Find more groups</button>';
   } else if(tab === 'saved'){
-    p.innerHTML = '<div class="savedgrid">' + SAVED.map(x=>`
-      <button class="savedcard">
+    p.innerHTML = '<div class="savedgrid">' + SAVED.map((x,i)=>`
+      <button class="savedcard" data-saveditem="${i}">
         <span class="savedthumb"><img src="${IMG[x.img]}" alt="${esc(x.t)}">
           <span class="savedmark">${I.book}</span></span>
         <b>${esc(x.t)}</b><span>Saved from ${esc(x.by)}</span>
@@ -2829,6 +2919,8 @@ function renderPfPanel(tab){
   } else {
     p.innerHTML = grid(WORKS, true);
   }
+  $('#pf-jcount').textContent = TRIPS.length;
+  $('#pf-gcount').textContent = Object.keys(GROUPS).filter(k=>GROUPS[k].joined).length;
 }
 const STOPS = [
   {t:'09:41', name:'MoMA',              meta:'Art Spaces · 0.0 km',   c:'#3E6B9A'},
@@ -2843,14 +2935,6 @@ function renderStops(){
       <span class="stopdot" style="--c:${s.c}"></span>
       <span class="stopbody"><b>${esc(s.name)}</b><span>${esc(s.meta)}</span></span>
     </div>`).join('');
-}
-function renderTrips(){
-  $('#trips').innerHTML = TRIPS.map(t=>`
-    <button class="trip" data-go="journey">
-      <span class="dot" style="background:${t.dot}"></span>
-      <img src="${IMG[t.img]}" alt="${esc(t.name)}">
-      <span class="grow"><b>${esc(t.name)}</b><time>${esc(t.date)}</time><span>${esc(t.meta)}</span></span>
-    </button>`).join('');
 }
 function renderInsp(filter){
   const list = filter==='All' ? INSP : INSP.filter(x=>x.style===filter);
@@ -3177,7 +3261,7 @@ $('#discover-map').insertAdjacentHTML('afterbegin', discoverMap());
 const jmap = makeLiveMap($('#journey-map'), $('#jmap-svg'), $$('#journey-map .zoomctl button'));
 wireMapSearch();
 $('#crossing-map').insertAdjacentHTML('afterbegin', crossingMap());
-renderSpots('nearby'); renderPfPanel('works'); renderTrips(); renderInsp('All'); renderRecords(); renderCommunity('feed'); renderDiscoverCommunity();
+renderSpots('nearby'); renderPfPanel('works'); renderInsp('All'); renderRecords(); renderCommunity('feed'); renderDiscoverCommunity();
 syncObGate(); renderStops(); applyCapOpts(); applyTrack(); renderAudio(); applyLook(); renderLibrary(); renderCapSet(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
 
 document.addEventListener('click', e=>{
@@ -3232,6 +3316,7 @@ document.addEventListener('click', e=>{
     if(g==='insp')     renderInsp(chip.dataset.val);
     if(g==='kstyle'){ $('#ksearch').value=''; renderRecords(); }
     if(g==='comm')     renderCommunity(chip.dataset.val);
+    if(g==='jyear'){ jFilter = chip.dataset.jyear; $('#pf-panel').innerHTML = renderJourneys(); }
     return;
   }
 
@@ -3401,6 +3486,34 @@ document.addEventListener('click', e=>{
     pfPin();
     return;
   }
+  /* stat tiles and "All journeys" jump straight into a profile tab, from
+     wherever the tap happened - the profile screen and its tab render first */
+  const jump = t.closest('[data-pfjump]');
+  if(jump){
+    const tab = jump.dataset.pfjump;
+    go('profile');
+    $$('#pf-tabs .pftab').forEach(x=>x.setAttribute('aria-current', String(x.dataset.pftab === tab)));
+    renderPfPanel(tab);
+    return;
+  }
+  const workTile = t.closest('[data-work]');
+  if(workTile){ openLightbox('work', +workTile.dataset.work); return; }
+  const savedTile = t.closest('[data-saveditem]');
+  if(savedTile){ openLightbox('saved', +savedTile.dataset.saveditem); return; }
+  if(t.closest('[data-lbunsave]')){
+    const i = lbIndex;
+    SAVED.splice(i, 1);
+    closeLightbox();
+    renderPfPanel('saved');
+    toast('Removed from Saved');
+    return;
+  }
+  if(t.closest('#lb-close')){ closeLightbox(); return; }
+  if(t.closest('[data-lbnav]')){
+    const dir = t.closest('[data-lbnav]').dataset.lbnav === 'next' ? 1 : -1;
+    openLightbox(lbKind, lbIndex + dir);
+    return;
+  }
 
   const role = t.closest('.rolerow');
   if(role){
@@ -3536,6 +3649,12 @@ document.addEventListener('click', e=>{
   }
 });
 $('#ksearch').addEventListener('input', renderRecords);
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape' && !$('#lightbox').hidden) closeLightbox();
+});
+document.addEventListener('input', e=>{
+  if(e.target.id === 'j-q'){ jQuery = e.target.value; $('#pf-panel').innerHTML = renderJourneys(); }
+});
 
 /* Typing happens in a bar that rises from the bottom, where the keyboard
    would be, instead of a field sitting open on the page all the time. */
