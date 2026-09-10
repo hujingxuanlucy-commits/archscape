@@ -568,7 +568,24 @@ figure{margin:0}
 .ci-cta{padding:5px 22px 24px}
 
 /* ============ 05 journey map ============ */
-.jmap{position:relative;height:330px;overflow:hidden;background:#F1ECE2;border-bottom:1px solid var(--bone)}
+.jmap{position:relative;height:330px;overflow:hidden;background:#F1ECE2;border-bottom:1px solid var(--bone);
+  touch-action:none}
+/* the map itself moves; legend and controls stay put */
+.mapzoom{position:absolute;inset:0;transform-origin:0 0;cursor:grab;will-change:transform}
+.mapzoom.grabbing{cursor:grabbing}
+.mapzoom.eased{transition:transform .26s cubic-bezier(.32,.72,0,1)}
+.zoomctl{position:absolute;right:12px;bottom:12px;z-index:5;display:flex;flex-direction:column;gap:1px;
+  border-radius:9px;overflow:hidden;box-shadow:0 8px 22px -12px rgba(0,0,0,.4);border:1px solid var(--bone)}
+.zoomctl button{width:34px;height:32px;background:rgba(255,255,255,.96);color:var(--ink);display:grid;
+  place-items:center;transition:.16s;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.zoomctl button:hover:not([disabled]){background:var(--red);color:#fff}
+.zoomctl button[disabled]{color:var(--muted);opacity:.55;cursor:not-allowed}
+.zoomctl svg{width:15px;height:15px}
+.zoomhint{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:5;
+  background:rgba(12,12,13,.8);color:#fff;border-radius:999px;padding:5px 12px;
+  font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;pointer-events:none;
+  opacity:0;transition:opacity .25s}
+.zoomhint.on{opacity:1}
 .legend{position:absolute;left:14px;top:14px;z-index:4;background:rgba(255,255,255,.95);border:1px solid var(--bone);
   border-radius:8px;padding:11px 13px 12px;box-shadow:0 8px 22px -12px rgba(0,0,0,.32)}
 .legend h4{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 9px}
@@ -1251,6 +1268,12 @@ the city folded in on itself.</textarea>
             <button class="iconbtn" aria-label="Share journey"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><line x1="8.3" y1="10.8" x2="15.7" y2="6.2"/><line x1="8.3" y1="13.2" x2="15.7" y2="17.8"/></svg></button>
           </div>
           <div class="jmap" id="journey-map">
+            <div class="mapzoom" id="jmap-zoom"></div>
+            <div class="zoomctl">
+              <button data-zoom="in" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+              <button data-zoom="out" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+              <button data-zoom="reset" id="jmap-fit" aria-label="Fit the whole city">Fit</button>
+            </div>
             <div class="legend">
               <h4>My routes</h4>
               <button data-layer="arch" aria-pressed="true"><i style="background:#952324"></i>Architecture</button>
@@ -2542,13 +2565,115 @@ function renderRecords(){
 }
 
 
+/* ---------- map: pan and zoom ----------
+   Bounded on purpose: this is one city's worth of walking, so it zooms into
+   street detail and back out to the whole route, never further. */
+function makeZoomable(frame, stage, buttons){
+  const MIN = 1, MAX = 4;
+  let z = 1, x = 0, y = 0;
+  const pts = new Map();
+  let last = null, pinch = 0;
+
+  const clamp = ()=>{
+    const w = frame.clientWidth, h = frame.clientHeight;
+    x = Math.min(0, Math.max(w - w * z, x));
+    y = Math.min(0, Math.max(h - h * z, y));
+  };
+  const apply = ()=>{
+    clamp();
+    stage.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + z + ')';
+    buttons.forEach(b=>{
+      if(b.dataset.zoom === 'in')  b.disabled = z >= MAX - .001;
+      if(b.dataset.zoom === 'out') b.disabled = z <= MIN + .001;
+      if(b.dataset.zoom === 'reset') b.disabled = z <= MIN + .001;
+    });
+  };
+  /* zoom about a point so the map grows from where you are looking */
+  const zoomTo = (nz, cx, cy)=>{
+    nz = Math.min(MAX, Math.max(MIN, nz));
+    if(nz === z) return;
+    x = cx - (cx - x) * (nz / z);
+    y = cy - (cy - y) * (nz / z);
+    z = nz;
+    apply();
+  };
+  const ease = fn =>{
+    stage.classList.add('eased');
+    fn();
+    setTimeout(()=>stage.classList.remove('eased'), 280);
+  };
+
+  buttons.forEach(b=>b.addEventListener('click', e=>{
+    e.stopPropagation();
+    const r = frame.getBoundingClientRect(), cx = r.width / 2, cy = r.height / 2;
+    ease(()=>{
+      if(b.dataset.zoom === 'in')  zoomTo(z * 1.6, cx, cy);
+      if(b.dataset.zoom === 'out') zoomTo(z / 1.6, cx, cy);
+      if(b.dataset.zoom === 'reset'){ z = 1; x = 0; y = 0; apply(); }
+    });
+  }));
+
+  stage.addEventListener('pointerdown', e=>{
+    pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
+    stage.setPointerCapture(e.pointerId);
+    stage.classList.add('grabbing');
+    last = {x:e.clientX, y:e.clientY};
+    if(pts.size === 2){
+      const [a, b] = [...pts.values()];
+      pinch = Math.hypot(a.x - b.x, a.y - b.y);
+    }
+  });
+
+  stage.addEventListener('pointermove', e=>{
+    if(!pts.has(e.pointerId)) return;
+    pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
+    const r = frame.getBoundingClientRect();
+    if(pts.size === 2){
+      const [a, b] = [...pts.values()];
+      const d = Math.hypot(a.x - b.x, a.y - b.y);
+      if(pinch) zoomTo(z * (d / pinch), (a.x + b.x) / 2 - r.left, (a.y + b.y) / 2 - r.top);
+      pinch = d;
+      return;
+    }
+    if(!last) return;
+    x += e.clientX - last.x;
+    y += e.clientY - last.y;
+    last = {x:e.clientX, y:e.clientY};
+    apply();
+  });
+
+  const release = e=>{
+    pts.delete(e.pointerId);
+    if(pts.size < 2) pinch = 0;
+    if(!pts.size){ last = null; stage.classList.remove('grabbing'); }
+  };
+  stage.addEventListener('pointerup', release);
+  stage.addEventListener('pointercancel', release);
+
+  stage.addEventListener('wheel', e=>{
+    e.preventDefault();
+    const r = frame.getBoundingClientRect();
+    zoomTo(z * (e.deltaY < 0 ? 1.12 : 1 / 1.12), e.clientX - r.left, e.clientY - r.top);
+  }, {passive:false});
+
+  stage.addEventListener('dblclick', e=>{
+    const r = frame.getBoundingClientRect();
+    ease(()=>zoomTo(z >= MAX - .001 ? 1 : z * 1.8, e.clientX - r.left, e.clientY - r.top));
+  });
+
+  window.addEventListener('resize', apply);
+  apply();
+  return {reset: ()=>{ z = 1; x = 0; y = 0; apply(); }};
+}
+
 /* ---------- wire up ---------- */
 $$('[data-img]').forEach(el=>{
   const src = IMG[el.dataset.img]; if(!src) return;
   if(el.tagName === 'IMG') el.src = src; else el.style.backgroundImage = `url(${src})`;
 });
 $('#discover-map').insertAdjacentHTML('afterbegin', discoverMap());
-$('#journey-map').insertAdjacentHTML('afterbegin', journeyMap());
+$('#jmap-zoom').innerHTML = journeyMap();
+makeZoomable($('#journey-map'), $('#jmap-zoom'), $$('#journey-map .zoomctl button'));
 $('#crossing-map').insertAdjacentHTML('afterbegin', crossingMap());
 renderSpots('nearby'); renderPfPanel('works'); renderTrips(); renderInsp('All'); renderRecords(); renderCommunity('feed'); renderDiscoverCommunity();
 syncObGate(); renderStops(); applyCapOpts(); applyTrack(); renderAudio(); renderLibrary(); renderCapSet(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
