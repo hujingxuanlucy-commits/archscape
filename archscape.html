@@ -611,6 +611,28 @@ figure{margin:0}
 .gtop .iconbtn{color:#fff}
 .gtop .iconbtn:hover{background:rgba(255,255,255,.18)}
 
+.walknear{display:block;width:100%;text-align:left;margin:0 22px;width:calc(100% - 44px);padding:14px 15px}
+.wn-head{display:flex;align-items:flex-start;gap:12px}
+.wn-body{flex:1;min-width:0;display:block}
+.wn-body .eyebrow{display:block;margin-bottom:3px}
+.wn-body > b{display:block;font-family:var(--disp);font-size:18px;font-weight:600;color:var(--ink);line-height:1.15}
+.wn-place{display:block;font-size:12px;color:var(--muted);margin-top:3px}
+.wn-foot{display:flex;align-items:center;gap:9px;margin-top:12px;padding-top:11px;border-top:1px solid var(--bone-soft)}
+.wn-foot .stackav{flex:none}
+.wn-foot .stackav span{display:block;width:22px;height:22px;border:2px solid var(--white);margin-top:0}
+.wn-foot em{flex:1;min-width:0;font-style:normal;font-size:11.5px;color:var(--muted);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wn-cta{flex:none;font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--red)}
+.nearrow{display:flex;gap:9px;overflow-x:auto;padding:13px 22px 2px;scrollbar-width:none}
+.nearrow::-webkit-scrollbar{display:none}
+.nearp{flex:none;width:84px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 6px;
+  background:var(--white);border:1px solid var(--bone);border-radius:10px;transition:.16s}
+.nearp:hover{border-color:var(--red)}
+.nearp > b{font-size:12.5px;font-weight:600;color:var(--ink)}
+.nearp > span{font-size:10.5px;color:var(--muted)}
+.nearp .avatar{width:36px;height:36px;font-size:14px}
+.nearp i{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-style:normal;
+  font-size:19px;color:var(--red);background:var(--red-tint);border:1px dashed var(--red)}
 .walkcard{margin:0 22px 14px;padding:14px 15px}
 .walkrow{display:flex;align-items:flex-start;gap:12px;margin-top:9px}
 .walkdate{flex:none;width:52px;text-align:center;border:1px solid var(--bone);border-radius:7px;padding:6px 0}
@@ -949,20 +971,10 @@ figure{margin:0}
           </div>
           <div class="spots" id="spots"></div>
           <div class="sechead">
-            <h3 class="sectitle">Community Feed</h3>
-            <button class="seelink" data-go="community">See All</button>
+            <h3 class="sectitle">Community</h3>
+            <button class="seelink" data-comm="groups">All groups</button>
           </div>
-          <button class="feedcard card" data-go="community">
-            <img data-img="feedthumb" alt="Concrete block facade">
-            <div class="grow">
-              <div class="fc-meta"><b>@mia.liu</b> &#xB7; 12 min ago</div>
-              <p class="fc-text">The light at Seagram Building today &#x2014; pure Mies perfection.</p>
-              <div class="fc-acts">
-                <span class="act liked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 1 0-7.1 7.1l8.8 8.8 8.8-8.8a5 5 0 0 0 0-7.1z"/></svg>284</span>
-                <span class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M21 11.5a8 8 0 0 1-11.7 7.1L3 20.5l1.9-6.1A8 8 0 1 1 21 11.5z"/></svg>42</span>
-              </div>
-            </div>
-          </button>
+          <div id="disc-comm"></div>
         </section>
 
         <!-- ============ 03 AR CAPTURE ============ -->
@@ -1894,6 +1906,38 @@ function groupCard(id){
     <span class="gkind">${esc(g.kind)}</span>
   </button>`;
 }
+/* Discover's community block is location-first: the next walk you could
+   actually turn up to, then the people already out there nearby. */
+function renderDiscoverCommunity(){
+  const gk = Object.keys(GROUPS).find(k=>GROUPS[k].walk);
+  const g = GROUPS[gk], w = g.walk;
+  const near = ['mia','sofia','kenji','javier'];
+  $('#disc-comm').innerHTML =
+    `<button class="card walknear" data-group="${gk}">
+       <span class="wn-head">
+         <span class="walkdate"><b class="onum">${esc(w.d)}</b><span>${esc(w.m)}</span></span>
+         <span class="wn-body">
+           <span class="eyebrow">Next walk near you</span>
+           <b>${esc(w.title)}</b>
+           <span class="wn-place">${esc(w.place)} &#183; ${esc(w.time)}</span>
+         </span>
+       </span>
+       <span class="wn-foot">
+         ${stackOf(g.people)}
+         <em>${w.going} going &#183; ${esc(g.name)}</em>
+         <span class="wn-cta">Details</span>
+       </span>
+     </button>
+     <div class="nearrow">
+       ${near.map(k=>{
+         const p = PEOPLE[k];
+         return `<button class="nearp" data-member="${k}">
+           ${avatarOf(k)}<b>${esc(p.name.split(' ')[0])}</b><span>${esc(p.city)}</span></button>`;
+       }).join('')}
+       <button class="nearp nearall" data-comm="following"><i>&#43;</i><b>Following</b><span>Your people</span></button>
+     </div>`;
+}
+
 function renderCommunity(tab){
   commTab = tab;
   const p = $('#comm-panel');
@@ -2172,7 +2216,7 @@ $$('[data-img]').forEach(el=>{
 $('#discover-map').insertAdjacentHTML('afterbegin', discoverMap());
 $('#journey-map').insertAdjacentHTML('afterbegin', journeyMap());
 $('#crossing-map').insertAdjacentHTML('afterbegin', crossingMap());
-renderSpots('nearby'); renderPfPanel('works'); renderTrips(); renderInsp('All'); renderRecords(); renderCommunity('feed');
+renderSpots('nearby'); renderPfPanel('works'); renderTrips(); renderInsp('All'); renderRecords(); renderCommunity('feed'); renderDiscoverCommunity();
 syncObGate(); renderStops(); applyCapOpts(); renderLibrary(); renderCapSet(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
 
 document.addEventListener('click', e=>{
@@ -2245,6 +2289,16 @@ document.addEventListener('click', e=>{
     const open = $('#ar-settings').hidden;
     openCapSheet('#ar-settings');
     $('#ar-gear').setAttribute('aria-expanded', String(open));
+    return;
+  }
+  const commLink = t.closest('[data-comm]');
+  if(commLink){
+    const tab = commLink.dataset.comm;
+    $$('#s-community .chiprow[data-chips="comm"] .chip').forEach(c=>{
+      c.setAttribute('aria-pressed', String(c.dataset.val === tab));
+    });
+    renderCommunity(tab);
+    go('community');
     return;
   }
   if(t.closest('#ar-lib')){ renderLibrary(); openCapSheet('#ar-library'); return; }
