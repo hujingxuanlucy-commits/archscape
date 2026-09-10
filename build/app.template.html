@@ -474,8 +474,8 @@ figure{margin:0}
 .ar-mid{margin-top:auto;padding:0 18px}
 .ar-fold{display:flex;align-items:center;gap:10px;width:100%;text-align:left}
 .ar-fold .ar-inforow{flex:1;min-width:0}
-.foldname{display:none;flex:1;min-width:0;font-family:var(--disp);font-size:17px;font-weight:600;color:#fff;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.foldname{display:none;flex:1;min-width:0;font-family:var(--disp);font-size:22px;font-weight:600;color:#fff;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.002em}
 .foldcaret{width:14px;height:14px;flex:none;color:rgba(255,255,255,.6);transition:transform .2s}
 #s-capture[data-fold="1"] .foldcaret{transform:rotate(-90deg)}
 #s-capture[data-fold="1"] .ar-info > h3,
@@ -493,7 +493,7 @@ figure{margin:0}
 @keyframes popIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
 .ar-inforow{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .ar-pct{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5FBF86;flex:none}
-.ar-info h3{font-family:var(--disp);font-size:25px;font-weight:600;margin:5px 0 4px;line-height:1.05}
+.ar-info h3{font-family:var(--disp);font-size:28px;font-weight:600;margin:5px 0 4px;line-height:1.05}
 .ar-info p{margin:0;font-size:12.5px;color:rgba(255,255,255,.8);line-height:1.45}
 .ar-wrong{margin-top:10px;font-size:11.5px;font-weight:600;color:rgba(255,255,255,.7);text-decoration:underline;
   text-underline-offset:3px}
@@ -507,21 +507,9 @@ figure{margin:0}
 .ar-lib b{font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.78)}
 .ar-lib:hover b{color:#fff}
 .ar-spacer{width:64px;flex:none}
-.ar-cardnext{display:none;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;
-  background:var(--red);color:#fff;border-radius:999px;padding:11px;font-size:13.5px;font-weight:600;transition:.16s}
-.ar-cardnext:hover{background:var(--red-deep)}
-.ar-cardnext svg{width:15px;height:15px}
-#s-capture[data-confirmed="1"] .ar-cardnext{display:flex}
 .ar-look-sheet{padding-bottom:12px}
 #ar-look svg{width:22px;height:22px}
 /* confirmed: the card stops asking and simply states what this is */
-#s-capture[data-confirmed="1"] .ar-cardcta,
-#s-capture[data-confirmed="1"][data-passive] .ar-dismiss{display:none}
-#s-capture[data-confirmed="1"] .ar-info{border-color:rgba(95,191,134,.55)}
-.ar-confirmed{display:none;align-items:center;gap:7px;margin-top:9px;font-size:10px;font-weight:700;
-  letter-spacing:.12em;text-transform:uppercase;color:#5FBF86}
-.ar-confirmed svg{width:13px;height:13px}
-#s-capture[data-confirmed="1"] .ar-confirmed{display:flex}
 /* an archive registration line - this capture's own catalogue number and
    coordinates, the way a print or a museum object carries an accession ID */
 .ar-catalog{display:flex;align-items:baseline;gap:8px;margin-top:10px;padding-top:9px;
@@ -1399,10 +1387,6 @@ figure{margin:0}
                 <div class="ar-angles" id="ar-angles" hidden></div>
                 <button class="ar-dismiss" id="ar-dismiss" aria-label="Keep scanning">&#215;</button>
                 <button class="ar-cardcta" data-confirm><i></i>Capture This Building</button>
-                <span class="ar-confirmed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12.5 10 17.5 19 7"/></svg>Building confirmed</span>
-                <button class="ar-cardnext" id="ar-next" data-go="checkin">Next: add details
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 5 16 12 9 19"/></svg>
-                </button>
                 <div class="ar-inforow ar-infolinks">
                   <button class="ar-wrong" id="ar-rescan">Not this building? Scan again</button>
                   <button class="ar-wrong" id="ar-retake">New building</button>
@@ -1425,7 +1409,6 @@ figure{margin:0}
               </div>
               <div class="ar-hint" data-when="scanning">Hold steady &#183; or tap the shutter to scan your shot</div>
               <div class="ar-hint" data-when="analyzing">Matching against 50,000+ records</div>
-              <div class="ar-hint" data-when="ready" id="ar-readyhint">Same building &#183; the shutter adds another photo</div>
           </div>
         </section>
 
@@ -2016,7 +1999,6 @@ const CANDIDATES = [
 ];
 let capState = 'scanning', capTimer = null, capFrozen = false, capIndex = 0;
 let capPassive = false;   /* detected on its own, with no shot taken */
-let capConfirmed = false; /* the building is settled; photos can still be added */
 
 /* Capture settings: each switch changes how the camera actually behaves. */
 const CAP_OPTS = {grid:false, auto:true, geo:true};
@@ -2406,10 +2388,6 @@ function setCapture(st, keepFrame, keepSet){
   $('#ar-bg').classList.toggle('frozen', capFrozen);
   $('#s-capture').dataset.passive = (st === 'ready' && capPassive) ? '1' : '0';
   $('#ar-retake').hidden = !CAP_SET.length;
-  if(st !== 'ready'){
-    capConfirmed = false;
-    $('#s-capture').dataset.confirmed = '0';
-  }
   $('#s-capture').dataset.fold = (st === 'ready' && CAP_SET.length) ? '1' : '0';
   applyCandidate();
   if(st === 'scanning' || st === 'analyzing') startTagReveal();
@@ -3492,10 +3470,11 @@ document.addEventListener('click', e=>{
   if(t.closest('#si-go')){ runSignIn(); return; }
   if(t.closest('.sforgot')){ toast('Reset link sent to your email'); return; }
   if(t.closest('[data-confirm]')){
-    capConfirmed = true;
-    $('#s-capture').dataset.confirmed = '1';
+    /* one step: identify, capture, and move on - shooting more angles
+       first is still just a matter of pressing the shutter before this */
     if(!CAP_SET.length){ const f = SHOTS[shotIdx]; shotIdx = (shotIdx + 1) % SHOTS.length; addToSet(f); }
-    toast(CANDIDATES[capIndex].name + ' confirmed');
+    toast(CANDIDATES[capIndex].name + ' captured');
+    go('checkin');
     return;
   }
   if(t.closest('#ar-addtag')){
