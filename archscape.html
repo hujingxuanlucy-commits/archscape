@@ -472,29 +472,24 @@ figure{margin:0}
 .artag.add:hover{color:#fff}
 
 .ar-mid{margin-top:auto;padding:0 18px}
-.ar-fold{display:flex;align-items:center;gap:10px;width:100%;text-align:left}
-.ar-fold .ar-inforow{flex:1;min-width:0}
-.foldname{display:none;flex:1;min-width:0;font-family:var(--disp);font-size:22px;font-weight:600;color:#fff;
+/* one consistent card, always: a compact name + match line by default,
+   with architect/year available a tap away rather than the card silently
+   changing shape depending on how many photos have been taken */
+.ar-fold{display:flex;align-items:baseline;gap:10px;width:100%;text-align:left}
+.foldname{flex:1;min-width:0;font-family:var(--disp);font-size:24px;font-weight:600;color:#fff;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.002em}
-.foldcaret{width:14px;height:14px;flex:none;color:rgba(255,255,255,.6);transition:transform .2s}
-#s-capture[data-fold="1"] .foldcaret{transform:rotate(-90deg)}
-#s-capture[data-fold="1"] .ar-info > h3,
-#s-capture[data-fold="1"] .ar-info > p,
-#s-capture[data-fold="1"] .ar-angles,
-#s-capture[data-fold="1"] .ar-infolinks{display:none}
-#s-capture[data-fold="1"] .ar-fold .eyebrow{display:none}
-#s-capture[data-fold="1"] .foldname{display:block;order:1}
-#s-capture[data-fold="1"] .ar-fold .ar-inforow{order:2;flex:none}
-#s-capture[data-fold="1"] .foldcaret{order:3}
-#s-capture[data-fold="1"] .ar-cardcta{margin-top:9px;padding:9px}
-#s-capture[data-fold="1"] .ar-info{padding-bottom:11px}
-.ar-info{background:rgba(12,12,13,.86);border:1.5px solid var(--red);padding:13px 15px 14px;max-width:302px;
+.foldcaret{width:14px;height:14px;flex:none;color:rgba(255,255,255,.55);transition:transform .2s;align-self:center}
+#ar-fold[aria-expanded="true"] .foldcaret{transform:rotate(180deg)}
+.ar-detail{margin-top:8px}
+.ar-info{background:rgba(12,12,13,.86);border:1.5px solid var(--red);padding:13px 15px 13px;max-width:302px;
   animation:popIn .3s ease both}
 @keyframes popIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
 .ar-inforow{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.ar-pct{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5FBF86;flex:none}
-.ar-info h3{font-family:var(--disp);font-size:28px;font-weight:600;margin:5px 0 4px;line-height:1.05}
+.ar-pct{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5FBF86;flex:none}
+.ar-info h3{font-family:var(--disp);font-size:24px;font-weight:600;margin:0 0 4px;line-height:1.05}
 .ar-info p{margin:0;font-size:12.5px;color:rgba(255,255,255,.8);line-height:1.45}
+.ar-nomatch .eyebrow{color:rgba(255,255,255,.5)}
+.ar-nomatch h3{color:rgba(255,255,255,.92)}
 .ar-wrong{margin-top:10px;font-size:11.5px;font-weight:600;color:rgba(255,255,255,.7);text-decoration:underline;
   text-underline-offset:3px}
 .ar-wrong:hover{color:#fff}
@@ -1372,24 +1367,34 @@ figure{margin:0}
             </div>
 
             <div class="ar-mid">
-              <div class="ar-info" data-when="ready">
-                <button class="ar-fold" id="ar-fold" aria-label="Show or hide details" aria-expanded="true">
-                  <span class="ar-inforow">
-                    <span class="eyebrow">Building detected</span>
-                    <span class="ar-pct" id="ar-pct">96%</span>
-                  </span>
+              <div class="ar-info" data-when="ready" id="ar-matched">
+                <button class="ar-fold" id="ar-fold" aria-label="Show or hide details" aria-expanded="false">
                   <span class="foldname" id="ar-foldname">The Vessel</span>
+                  <span class="ar-pct" id="ar-pct">96%</span>
                   <svg class="foldcaret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <h3 id="ar-name">Seagram Building</h3>
-                <p id="ar-meta">Mies van der Rohe, 1958 &#183; Park Avenue</p>
+                <div class="ar-detail" id="ar-detail" hidden>
+                  <p id="ar-meta">Mies van der Rohe, 1958 &#183; Park Avenue</p>
+                  <div class="ar-angles" id="ar-angles" hidden></div>
+                </div>
                 <div class="ar-catalog"><i></i><b id="ar-catid">NYC&#8211;ARCH&#8211;0248</b><span id="ar-catcoord" class="tnum">40.7539&#176; N &#183; 74.0021&#176; W</span></div>
-                <div class="ar-angles" id="ar-angles" hidden></div>
                 <button class="ar-dismiss" id="ar-dismiss" aria-label="Keep scanning">&#215;</button>
                 <button class="ar-cardcta" data-confirm><i></i>Capture This Building</button>
                 <div class="ar-inforow ar-infolinks">
-                  <button class="ar-wrong" id="ar-rescan">Not this building? Scan again</button>
-                  <button class="ar-wrong" id="ar-retake">New building</button>
+                  <button class="ar-wrong" data-rescan>Not this building? Scan again</button>
+                  <button class="ar-wrong" data-retake>New building</button>
+                </div>
+              </div>
+
+              <div class="ar-info ar-nomatch" data-when="ready" id="ar-nomatch" hidden>
+                <span class="eyebrow">No confident match</span>
+                <h3>Unidentified structure</h3>
+                <p>We could not place this against our records. Describe it yourself, or try another frame.</p>
+                <div class="ar-catalog"><i></i><span class="tnum" id="ar-nomatch-coord">40.7539&#176; N &#183; 74.0021&#176; W</span></div>
+                <button class="ar-cardcta" data-addmanual><i></i>Add Manually</button>
+                <div class="ar-inforow ar-infolinks">
+                  <button class="ar-wrong" data-rescan>Scan again</button>
+                  <button class="ar-wrong" data-retake>New building</button>
                 </div>
               </div>
             </div>
@@ -1997,6 +2002,8 @@ const CANDIDATES = [
    street:'Hudson Yards', addr:'30 Hudson Yards, NYC', coords:'40.7540\u00B0 N, 74.0011\u00B0 W', pct:86,
    tags:['#30hudsonyards', '#skyline', '#curtainwall']}
 ];
+const NO_MATCH_IDX = CANDIDATES.length;
+
 let capState = 'scanning', capTimer = null, capFrozen = false, capIndex = 0;
 let capPassive = false;   /* detected on its own, with no shot taken */
 
@@ -2120,9 +2127,6 @@ function setFull(){ return CAP_SET.length >= MAX_SHOTS; }
 
 function addToSet(key){
   if(setFull()) return false;
-  /* the first photo of an identified building folds the card away, so the
-     photos have room; after that the user's own choice is left alone */
-  if(capState === 'ready' && !CAP_SET.length) $('#s-capture').dataset.fold = '1';
   CAP_SET.push(key);
   renderCapSet();
   applyCandidate();
@@ -2236,9 +2240,24 @@ function runSignIn(){
    Check-ins), since this capture is the next entry in that same archive. */
 const NEXT_CAT_NUM = 248;
 
+/* your GPS position is known even when nothing has been identified yet */
+const HERE_COORDS = '40.7539\u00b0 N \u00b7 74.0021\u00b0 W';
+
 function applyCandidate(){
+  const noMatch = capIndex === NO_MATCH_IDX;
+  $('#ar-matched').hidden = noMatch;
+  $('#ar-nomatch').hidden = !noMatch;
+  if(noMatch){
+    $('#ar-nomatch-coord').textContent = HERE_COORDS;
+    $('#ci-locname').textContent = 'Current location, NYC';
+    $('#ci-loccoords').textContent = HERE_COORDS;
+    $('#ci-name').value = '';
+    $('#ci-arch').value = '';
+    $('#ci-year').value = '';
+    $('#ci-style').value = '';
+    return;
+  }
   const c = CANDIDATES[capIndex];
-  $('#ar-name').textContent = c.name;
   $('#ar-foldname').textContent = c.name;
   $('#ar-meta').textContent = c.architect + ', ' + c.year + ' \u00b7 ' + c.street;
   const bonus = Math.min(Math.max(CAP_SET.length - 1, 0) * 2, 4);
@@ -2275,7 +2294,7 @@ function renderCapTags(animateFrom){
 
 /* building first, then what is actually in the newest frame */
 function composeTags(){
-  const out = (CANDIDATES[capIndex].tags || []).slice();
+  const out = (capIndex === NO_MATCH_IDX ? [] : (CANDIDATES[capIndex].tags || [])).slice();
   const last = CAP_SET[CAP_SET.length - 1];
   (SHOT_TAGS[last] || []).forEach(t=>{ if(!out.includes(t)) out.push(t); });
   return out.slice(0, MAX_TAGS);
@@ -2387,8 +2406,10 @@ function setCapture(st, keepFrame, keepSet){
   if(st === 'ready') capFrozen = false;   /* live again: you can keep shooting */
   $('#ar-bg').classList.toggle('frozen', capFrozen);
   $('#s-capture').dataset.passive = (st === 'ready' && capPassive) ? '1' : '0';
-  $('#ar-retake').hidden = !CAP_SET.length;
-  $('#s-capture').dataset.fold = (st === 'ready' && CAP_SET.length) ? '1' : '0';
+  $$('[data-retake]').forEach(b=>b.hidden = !CAP_SET.length);
+  /* a fresh detection always starts compact - architect/year is a tap away */
+  $('#ar-detail').hidden = true;
+  $('#ar-fold').setAttribute('aria-expanded', 'false');
   applyCandidate();
   if(st === 'scanning' || st === 'analyzing') startTagReveal();
   else if(st === 'ready'){ clearInterval(tagTimer); renderCapTags(); }
@@ -2447,8 +2468,9 @@ function renderCheckinTags(){
            (mine ? '<span class="x">&#215;</span>' : '') + '</button>';
   }).join('') + addChipHTML('tag');
 
-  const key = CANDIDATES[capIndex].bldId === 'vessel' ? 'vessel'
-            : CANDIDATES[capIndex].name === 'The Shed' ? 'shed' : 'hy30';
+  const cand = CANDIDATES[capIndex];
+  const key = !cand ? null : cand.bldId === 'vessel' ? 'vessel'
+            : cand.name === 'The Shed' ? 'shed' : 'hy30';
   const feats = (FEATURE_POOL[key] || []).concat(CI_FEATS.filter(f=>!(FEATURE_POOL[key] || []).includes(f)));
   $('#ci-features').innerHTML = feats.map((f, i)=>{
     const mine = CI_FEATS.includes(f);
@@ -3358,9 +3380,9 @@ document.addEventListener('click', e=>{
     $('#ar-scanlabel').textContent = 'Analysing your shot';
     setCapture('analyzing'); return;
   }
-  if(t.closest('#ar-retake')){ setCapture('scanning'); return; }
-  if(t.closest('#ar-rescan')){
-    capIndex = (capIndex + 1) % CANDIDATES.length;
+  if(t.closest('[data-retake]')){ setCapture('scanning'); return; }
+  if(t.closest('[data-rescan]')){
+    capIndex = (capIndex + 1) % (CANDIDATES.length + 1);   /* +1 = "no confident match" */
     curTrack = null; applyTrack(); renderAudio();
     $('#ar-scanlabel').textContent = 'Checking other matches';
     setCapture('analyzing', true);
@@ -3443,15 +3465,14 @@ document.addEventListener('click', e=>{
   if(del){
     CAP_SET.splice(+del.dataset.delshot, 1);
     renderCapSet(); applyCandidate();
-    $('#ar-retake').hidden = !CAP_SET.length;
+    $$('[data-retake]').forEach(b=>b.hidden = !CAP_SET.length);
     if(!CAP_SET.length) toast('All photos removed');
     return;
   }
   if(t.closest('#ar-fold')){
-    const sc = $('#s-capture');
-    const folded = sc.dataset.fold === '1';
-    sc.dataset.fold = folded ? '0' : '1';
-    $('#ar-fold').setAttribute('aria-expanded', String(folded));
+    const detail = $('#ar-detail');
+    detail.hidden = !detail.hidden;
+    $('#ar-fold').setAttribute('aria-expanded', String(!detail.hidden));
     return;
   }
   if(t.closest('#ar-dismiss')){ setCapture('scanning', false, true); toast('Still scanning'); return; }
@@ -3473,7 +3494,15 @@ document.addEventListener('click', e=>{
     /* one step: identify, capture, and move on - shooting more angles
        first is still just a matter of pressing the shutter before this */
     if(!CAP_SET.length){ const f = SHOTS[shotIdx]; shotIdx = (shotIdx + 1) % SHOTS.length; addToSet(f); }
-    toast(CANDIDATES[capIndex].name + ' captured');
+    toast((CANDIDATES[capIndex]?.name || 'Building') + ' captured');
+    go('checkin');
+    return;
+  }
+  if(t.closest('[data-addmanual]')){
+    /* nothing was identified, so nothing is pre-filled - the photos and
+       location still carry through, the building details do not */
+    if(!CAP_SET.length){ const f = SHOTS[shotIdx]; shotIdx = (shotIdx + 1) % SHOTS.length; addToSet(f); }
+    toast('Added - fill in the details');
     go('checkin');
     return;
   }
@@ -3663,8 +3692,8 @@ document.addEventListener('click', e=>{
   if(t.closest('[data-publish]')){
     const cap = ($('#caption').value||'').trim() || 'Untitled check-in';
     const tags = $$('#ci-tags .tag[aria-pressed="true"]').map(b=>b.dataset.citag);
-    const cand = CANDIDATES[capIndex];
-    POSTS.unshift({person:'lucy', bld:cand.bldId || null, group:null, style:cand.style,
+    const cand = CANDIDATES[capIndex];   /* undefined when nothing was matched */
+    POSTS.unshift({person:'lucy', bld:cand?.bldId || null, group:null, style:cand?.style || $('#ci-style').value || null,
       place:'New York', time:'just now', img:CAP_SET[capCover] || 'vessel_shot', quote:cap,
       tags:tags.length?tags:['#archscape'], likes:0, comments:0, liked:false, saved:false, fresh:true});
     renderCommunity(commTab); go('community');
