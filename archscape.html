@@ -375,7 +375,10 @@ figure{margin:0}
 .arset[aria-pressed="true"] i{background:var(--red)}
 .arset[aria-pressed="true"] i::after{transform:translateX(14px)}
 #s-capture[data-settings="1"] .ar-tags{opacity:0;pointer-events:none}
-.ar-tags{transition:opacity .18s;position:absolute;right:14px;top:292px;display:flex;flex-direction:column;align-items:flex-end;gap:7px;z-index:6}
+/* a flex sibling of the card and the controls, so it can never sit over them;
+   it fills the space left between them and stacks upward from the bottom */
+.ar-tags{transition:opacity .18s;flex:1;min-height:0;display:flex;flex-direction:column;
+  align-items:flex-end;justify-content:flex-end;gap:7px;padding:0 14px 10px;overflow:hidden}
 .artag-head{display:flex;align-items:center;gap:7px;background:rgba(10,10,11,.66);
   border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:5px 11px;
   font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.66)}
@@ -389,6 +392,8 @@ figure{margin:0}
 .artag.in{animation:tagIn .36s cubic-bezier(.32,.72,0,1) both}
 .artag.in.noanim{animation:none;opacity:1}
 @keyframes tagIn{from{opacity:0;transform:translateX(16px) scale(.96)}to{opacity:1;transform:none}}
+.artag.full{opacity:1;background:none;border:1px dashed rgba(255,255,255,.24);color:rgba(255,255,255,.5);
+  font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 11px}
 .artag.add{background:none;border:none;color:rgba(255,255,255,.88);font-weight:600;padding:5px 2px;font-size:13px}
 .artag.add:hover{color:#fff}
 
@@ -1062,7 +1067,6 @@ figure{margin:0}
           </div>
 
           <div class="ar-grid" id="ar-grid" hidden></div>
-          <div class="ar-tags" id="ar-tags" data-when="scanning analyzing ready"></div>
 
           <div class="ar-ui">
             <div class="ar-top">
@@ -1081,6 +1085,8 @@ figure{margin:0}
               <button class="arset" data-opt="auto"><b>Auto-detect buildings</b><span>Identify without pressing the shutter</span><i></i></button>
               <button class="arset" data-opt="geo"><b>Attach location</b><span>Save coordinates with the capture</span><i></i></button>
             </div>
+
+            <div class="ar-tags" id="ar-tags" data-when="scanning analyzing ready"></div>
 
             <div class="ar-sheet ar-sheet-lib" id="ar-library" hidden>
               <div class="eyebrow">Import from library</div>
@@ -1668,6 +1674,7 @@ const I = {
    B. shot     scanning --(shutter)--> analyzing --> ready
    Either way the user lands on 'ready' and must press Capture to commit.   */
 const CAP_TAGS = ['#street', '#UrbanVernacular', '#night'];
+const MAX_TAGS = 6;   /* the column has to stay inside the space it is given */
 const TAG_POOL = ['#brutalism', '#facade', '#goldenhour', '#concrete', '#skyline', '#reflection'];
 const CANDIDATES = [
   {name:'The Vessel',      architect:'Thomas Heatherwick',      year:'2019', style:'Contemporary',
@@ -1823,7 +1830,9 @@ function renderCapTags(animateFrom){
   $('#ar-tags').innerHTML =
     (ready ? '' : '<span class="artag-head">Reading image</span>') +
     CAP_TAGS.map((t,i)=>`<button class="artag" data-untag="${i}" title="Remove tag">${esc(t)}</button>`).join('') +
-    (ready ? '<button class="artag add in noanim" id="ar-addtag">Add +</button>' : '');
+    (ready ? (CAP_TAGS.length >= MAX_TAGS
+        ? '<span class="artag full">' + MAX_TAGS + ' tags max</span>'
+        : '<button class="artag add in noanim" id="ar-addtag">Add +</button>') : '');
   $$('#ar-tags .artag:not(.add)').forEach((b,i)=>{
     if(ready || i < capTagsShown) b.classList.add('in');
     if(i < from) b.classList.add('noanim');
@@ -2494,6 +2503,7 @@ document.addEventListener('click', e=>{
   if(t.closest('.sforgot')){ toast('Reset link sent to your email'); return; }
   if(t.closest('[data-confirm]')){ go('checkin'); toast(CANDIDATES[capIndex].name + ' captured'); return; }
   if(t.closest('#ar-addtag')){
+    if(CAP_TAGS.length >= MAX_TAGS){ toast('Up to ' + MAX_TAGS + ' tags - remove one first'); return; }
     const next = TAG_POOL.find(x=>!CAP_TAGS.includes(x));
     if(next){ CAP_TAGS.push(next); renderCapTags(CAP_TAGS.length - 1); } else toast('No more suggested tags');
     return;
