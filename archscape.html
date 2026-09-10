@@ -184,6 +184,19 @@ figure{margin:0}
 .obdots{display:flex;gap:6px;justify-content:center;padding:18px 0 26px;flex:none}
 .obdots i{width:28px;height:3px;border-radius:2px;background:#333336;display:block;transition:.25s}
 .obdots i.on{background:var(--red)}
+#s-signin .obbody{justify-content:flex-start;padding-top:26px}
+.sform{display:flex;flex-direction:column;gap:15px;transition:opacity .25s}
+.sfield{display:flex;flex-direction:column;gap:7px}
+.sfield > span{font-size:9.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#6E6862}
+.sfield input{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:8px;
+  padding:14px;font-size:14.5px;font-weight:500;color:#fff;outline:none;transition:.16s;width:100%}
+.sfield input:focus{border-color:var(--red);background:rgba(255,255,255,.08)}
+.sforgot{align-self:flex-end;font-size:12.5px;color:#9C968E;text-decoration:underline;text-underline-offset:3px}
+.sforgot:hover{color:#fff}
+.signstat{display:flex;align-items:center;gap:10px;margin-top:22px;
+  font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#9C968E}
+#s-signin[data-state="signing"] .sform{opacity:.4;pointer-events:none}
+#s-signin[data-state="signing"] .btn-red[disabled]{background:var(--red);color:#fff;opacity:.7}
 .obfoot .btn[disabled]{background:rgba(255,255,255,.07);color:#6E6862;cursor:not-allowed}
 .obfoot .btn[disabled]:hover{background:rgba(255,255,255,.07)}
 
@@ -739,7 +752,33 @@ figure{margin:0}
           </div>
           <div class="onb-actions">
             <button class="btn btn-red" data-go="obrole">Explore the City</button>
-            <button class="btn btn-ghost" data-go="discover">Sign In</button>
+            <button class="btn btn-ghost" data-go="signin">Sign In</button>
+          </div>
+          <div class="obdots"><i class="on"></i><i></i><i></i><i></i></div>
+        </section>
+
+        <!-- ============ 01a SIGN IN ============ -->
+        <section class="screen obscreen" id="s-signin" data-bleed data-state="idle">
+          <div class="obtop"><span class="obmark"><b>Arch</b>Scape</span></div>
+          <div class="obhead">
+            <h2>Welcome back</h2>
+            <p>Sign in to pick up your journeys, captures and saved buildings where you left them.</p>
+          </div>
+          <div class="obbody">
+            <div class="sform" id="si-form">
+              <label class="sfield"><span>Email</span>
+                <input id="si-email" type="email" value="hujingxuanlucy@gmail.com" autocomplete="username" aria-label="Email"></label>
+              <label class="sfield"><span>Password</span>
+                <input id="si-pass" type="password" value="architecture" autocomplete="current-password" aria-label="Password"></label>
+              <button class="sforgot">Forgot your password?</button>
+            </div>
+            <div class="signstat" id="si-status" hidden>
+              <i class="scanring"></i><span id="si-steplabel">Verifying credentials</span>
+            </div>
+          </div>
+          <div class="obfoot">
+            <button class="obprev" id="si-back" data-back>Back</button>
+            <button class="btn btn-red" id="si-go">Sign In</button>
           </div>
           <div class="obdots"><i class="on"></i><i></i><i></i><i></i></div>
         </section>
@@ -1200,6 +1239,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
 /* ---------- screens ---------- */
 const SCREENS = [
   {id:'onboarding',  name:'Onboarding',  chrome:'dark',  nav:false},
+  {id:'signin',      name:'Sign in',     chrome:'dark',  nav:false},
   {id:'obrole',      name:'Your lens',   chrome:'dark',  nav:false},
   {id:'obthemes',    name:'Your themes', chrome:'dark',  nav:false},
   {id:'obready',     name:'Ready',       chrome:'dark',  nav:false},
@@ -1231,6 +1271,7 @@ function go(id, isBack){
   const from = current;
   if(!isBack && current !== id){ navStack.push(current); if(navStack.length > 30) navStack.shift(); }
   current = id;
+  if(from === 'signin' || id === 'signin') resetSignIn();
 
   /* a move between two steps of the onboarding sequence slides sideways;
      direction comes from the step order, so Skip and Back both read right */
@@ -1474,6 +1515,41 @@ const CANDIDATES = [
    street:'Hudson Yards', addr:'30 Hudson Yards, NYC', coords:'40.7540\u00B0 N, 74.0011\u00B0 W', pct:86}
 ];
 let capState = 'scanning', capTimer = null, capFrozen = false, capIndex = 0;
+
+/* ---------- sign in: a short, staged authentication ---------- */
+const SIGN_STEPS = ['Verifying credentials', 'Syncing your captures', 'Restoring your journeys'];
+let signTimer = null;
+
+function resetSignIn(){
+  clearTimeout(signTimer);
+  const sc = $('#s-signin'); if(!sc) return;
+  sc.dataset.state = 'idle';
+  $('#si-go').disabled = false;
+  $('#si-go').textContent = 'Sign In';
+  $('#si-back').disabled = false;
+  $('#si-status').hidden = true;
+}
+
+function runSignIn(){
+  const sc = $('#s-signin');
+  if(sc.dataset.state === 'signing') return;
+  sc.dataset.state = 'signing';
+  $('#si-go').disabled = true;
+  $('#si-go').textContent = 'Signing in';
+  $('#si-back').disabled = true;
+  $('#si-status').hidden = false;
+  let i = 0;
+  (function step(){
+    $('#si-steplabel').textContent = SIGN_STEPS[i];
+    i++;
+    if(i < SIGN_STEPS.length){ signTimer = setTimeout(step, 780); return; }
+    signTimer = setTimeout(()=>{
+      resetSignIn();
+      go('discover');
+      toast('Signed in as Lucy Hu');
+    }, 820);
+  })();
+}
 
 function applyCandidate(){
   const c = CANDIDATES[capIndex];
@@ -2008,6 +2084,8 @@ document.addEventListener('click', e=>{
     setCapture('analyzing', true);
     return;
   }
+  if(t.closest('#si-go')){ runSignIn(); return; }
+  if(t.closest('.sforgot')){ toast('Reset link sent to your email'); return; }
   if(t.closest('#ar-confirm')){ go('checkin'); toast(CANDIDATES[capIndex].name + ' captured'); return; }
   if(t.closest('#ar-addtag')){
     const next = TAG_POOL.find(x=>!CAP_TAGS.includes(x));
