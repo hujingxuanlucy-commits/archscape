@@ -221,11 +221,6 @@ figure{margin:0}
 .roletext{flex:1;min-width:0}
 .roletext b{display:block;font-size:14px;font-weight:600;color:#fff}
 .roletext span{display:block;font-size:12px;color:#9C968E;margin-top:2px;line-height:1.4}
-.roletick{width:22px;height:22px;border-radius:50%;border:1.5px solid rgba(255,255,255,.32);flex:none;
-  display:grid;place-items:center;transition:.16s}
-.rolerow[aria-pressed="true"] .roletick{background:var(--red);border-color:var(--red)}
-.roletick svg{width:12px;height:12px;color:#fff;opacity:0;transition:.16s}
-.rolerow[aria-pressed="true"] .roletick svg{opacity:1}
 
 /* --- selection feedback: the card settles, its icon kicks, the tick
    draws itself, and a ring breaks outward from the border --- */
@@ -238,15 +233,9 @@ figure{margin:0}
 @keyframes cardPop{0%{transform:scale(1)}38%{transform:scale(1.03)}100%{transform:scale(1)}}
 .rolerow.picked .roleicon,.themecell.picked svg{animation:iconKick .46s cubic-bezier(.3,1.5,.45,1) both}
 @keyframes iconKick{0%{transform:scale(1) rotate(0)}42%{transform:scale(1.16) rotate(-7deg)}100%{transform:scale(1) rotate(0)}}
-.rolerow.picked .roletick{animation:tickPop .42s cubic-bezier(.28,1.5,.45,1) both}
-@keyframes tickPop{0%{transform:scale(.4)}55%{transform:scale(1.18)}100%{transform:scale(1)}}
-.roletick polyline{stroke-dasharray:26;stroke-dashoffset:0}
-.rolerow.picked .roletick polyline{animation:tickDraw .34s .08s cubic-bezier(.4,0,.2,1) both}
-@keyframes tickDraw{from{stroke-dashoffset:26}to{stroke-dashoffset:0}}
 @media (prefers-reduced-motion:reduce){
   .rolerow.picked,.themecell.picked,.rolerow.picked::after,.themecell.picked::after,
-  .rolerow.picked .roleicon,.themecell.picked svg,.rolerow.picked .roletick,
-  .rolerow.picked .roletick polyline{animation:none}
+  .rolerow.picked .roleicon,.themecell.picked svg{animation:none}
 }
 .themegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .themecell{padding:13px;border-radius:10px;background:rgba(255,255,255,.05);text-align:left;
@@ -339,6 +328,8 @@ figure{margin:0}
   font-size:12.5px;font-weight:600;color:#fff;max-width:212px;min-width:0;transition:.16s}
 .ar-music:hover{background:rgba(48,48,54,.85)}
 .ar-music .mnote{width:14px;height:14px;flex:none}
+.ar-music .mcaret{width:12px;height:12px;flex:none;opacity:.6}
+.ar-music[aria-expanded="true"] .mcaret{transform:rotate(180deg)}
 .ar-music .mtitle{overflow:hidden;white-space:nowrap;min-width:0}
 .ar-music .mtitle > span{display:inline-block}
 /* the title only scrolls when it genuinely does not fit */
@@ -356,7 +347,8 @@ figure{margin:0}
 #s-capture[data-audio="1"] .eqbars{display:flex}
 #s-capture[data-audio="1"] .ar-music .mnote{display:none}
 #s-capture[data-audio="1"] .ar-music{border-color:rgba(149,35,36,.75)}
-.ar-sheet-music{left:50%;transform:translateX(-50%);right:auto;top:100px;width:252px;bottom:auto}
+.ar-sheet.ar-sheet-music{left:15px;right:15px;width:auto;top:100px;bottom:auto;
+  background:rgba(10,10,11,.96)}
 .trackrow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px 0;
   border-bottom:1px solid rgba(255,255,255,.1)}
 #ar-audiolist .trackrow:last-child{border-bottom:0}
@@ -1004,22 +996,18 @@ figure{margin:0}
             <button class="rolerow" aria-pressed="false">
               <span class="roleicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.6"/><path d="M12 6.1 5.5 21"/><path d="M12 6.1 18.5 21"/><path d="M8.4 14h7.2"/></svg></span>
               <span class="roletext"><b>Architect</b><span>Structure, form, and urban planning.</span></span>
-              <span class="roletick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12.5 10 17.5 19 7"/></svg></span>
             </button>
             <button class="rolerow" aria-pressed="false">
               <span class="roleicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11.5V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3.5"/><path d="M3 13a2 2 0 0 1 4 0v3h10v-3a2 2 0 0 1 4 0v6H3z"/></svg></span>
               <span class="roletext"><b>Interior Designer</b><span>Atmosphere, material, and human scale.</span></span>
-              <span class="roletick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12.5 10 17.5 19 7"/></svg></span>
             </button>
             <button class="rolerow" aria-pressed="false">
               <span class="roleicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 8h3.5L8.5 5h7l2 3H21v11H3z"/><circle cx="12" cy="13" r="3.4"/></svg></span>
               <span class="roletext"><b>Photographer</b><span>Light, framing, and frozen moments.</span></span>
-              <span class="roletick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12.5 10 17.5 19 7"/></svg></span>
             </button>
             <button class="rolerow" aria-pressed="false">
               <span class="roleicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="15.6 8.4 10.9 10.9 8.4 15.6 13.1 13.1"/></svg></span>
               <span class="roletext"><b>Urban Explorer</b><span>Streets, texture, and everyday detail.</span></span>
-              <span class="roletick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12.5 10 17.5 19 7"/></svg></span>
             </button>
           </div>
           <div class="obfoot"><button class="obprev" data-back>Back</button><button class="btn btn-red" id="ob-go-themes" data-go="obthemes" disabled>Next</button></div>
@@ -1135,6 +1123,7 @@ figure{margin:0}
                 <span class="eqbars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
                 <svg class="mnote" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6.5" cy="17.5" r="2.6"/><circle cx="17.5" cy="15.5" r="2.6"/><path d="M9.1 17.5V6l11-2v11.5"/></svg>
                 <span class="mtitle" id="ar-mtitle"><span>Add ambience</span></span>
+                <svg class="mcaret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
               </button>
               <button class="ar-round" id="ar-gear" aria-label="Capture settings" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></button>
             </div>
@@ -1749,16 +1738,19 @@ const I = {
    A. passive  scanning --(auto detect)--> ready
    B. shot     scanning --(shutter)--> analyzing --> ready
    Either way the user lands on 'ready' and must press Capture to commit.   */
-const CAP_TAGS = ['#street', '#UrbanVernacular', '#night'];
+let CAP_TAGS = [];
 const MAX_TAGS = 6;   /* the column has to stay inside the space it is given */
-const TAG_POOL = ['#brutalism', '#facade', '#goldenhour', '#concrete', '#skyline', '#reflection'];
+const TAG_POOL = ['#facade', '#goldenhour', '#concrete', '#reflection', '#geometry', '#publicspace'];
 const CANDIDATES = [
   {name:'The Vessel',      architect:'Thomas Heatherwick',      year:'2019', style:'Contemporary',
-   street:'Hudson Yards', addr:'20 Hudson Yards, NYC', coords:'40.7539° N, 74.0021° W', pct:96, bldId:'vessel'},
+   street:'Hudson Yards', addr:'20 Hudson Yards, NYC', coords:'40.7539° N, 74.0021° W', pct:96, bldId:'vessel',
+   tags:['#street', '#UrbanVernacular', '#night']},
   {name:'The Shed',        architect:'Diller Scofidio + Renfro', year:'2019', style:'Contemporary',
-   street:'Hudson Yards', addr:'545 W 30th St, NYC',   coords:'40.7535° N, 74.0022° W', pct:90},
+   street:'Hudson Yards', addr:'545 W 30th St, NYC',   coords:'40.7535° N, 74.0022° W', pct:90,
+   tags:['#movable', '#steelframe', '#culture']},
   {name:'30 Hudson Yards', architect:'Kohn Pedersen Fox',        year:'2019', style:'Contemporary',
-   street:'Hudson Yards', addr:'30 Hudson Yards, NYC', coords:'40.7540° N, 74.0011° W', pct:86}
+   street:'Hudson Yards', addr:'30 Hudson Yards, NYC', coords:'40.7540° N, 74.0011° W', pct:86,
+   tags:['#skyline', '#curtainwall', '#tower']}
 ];
 let capState = 'scanning', capTimer = null, capFrozen = false, capIndex = 0;
 let capPassive = false;   /* detected on its own, with no shot taken */
@@ -2013,6 +2005,7 @@ function renderCapTags(animateFrom){
 function startTagReveal(){
   clearInterval(tagTimer);
   capTagsShown = 0;
+  CAP_TAGS = (CANDIDATES[capIndex].tags || []).slice();
   renderCapTags(0);
   tagTimer = setInterval(()=>{
     const btns = $$('#ar-tags .artag:not(.add)');
@@ -2026,7 +2019,11 @@ function setCapture(st, keepFrame, keepSet){
   capState = st;
   if(st === 'scanning'){
     capFrozen = false; capIndex = 0; capPassive = false;
-    if(!keepSet){ CAP_SET = []; capCover = 0; ciSel = 0; shotIdx = 0; $('#ar-bg').querySelector('img').src = IMG[SHOTS[0]]; }
+    if(!keepSet){
+      CAP_SET = []; capCover = 0; ciSel = 0; shotIdx = 0;
+      $('#ar-bg').querySelector('img').src = IMG[SHOTS[0]];
+      curTrack = null; applyTrack(); renderAudio();   /* ambience belongs to one capture */
+    }
     renderCapSet();
   }
   if(st === 'analyzing'){ capPassive = false; if(!keepFrame) capFrozen = true; }
@@ -2035,10 +2032,11 @@ function setCapture(st, keepFrame, keepSet){
   $$('#s-capture [data-when]').forEach(el=>{
     el.hidden = !el.dataset.when.split(' ').includes(st);
   });
+  closeCapSheets();
   $('#s-capture').dataset.passive = (st === 'ready' && capPassive) ? '1' : '0';
   $('#ar-retake').hidden = !CAP_SET.length;
   applyCandidate();
-  if(st === 'scanning') startTagReveal();
+  if(st === 'scanning' || st === 'analyzing') startTagReveal();
   else if(st === 'ready'){ clearInterval(tagTimer); renderCapTags(); }
   syncScanTimer();
   if(st === 'analyzing') capTimer = setTimeout(()=>{ if(capState==='analyzing') setCapture('ready', true); }, 1600);
@@ -2620,6 +2618,7 @@ document.addEventListener('click', e=>{
   if(t.closest('#ar-retake')){ setCapture('scanning'); return; }
   if(t.closest('#ar-rescan')){
     capIndex = (capIndex + 1) % CANDIDATES.length;
+    curTrack = null; applyTrack(); renderAudio();
     $('#ar-scanlabel').textContent = 'Checking other matches';
     setCapture('analyzing', true);
     return;
