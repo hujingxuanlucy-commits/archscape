@@ -212,19 +212,17 @@ figure{margin:0}
 .themecell[aria-pressed="true"] svg{color:var(--red)}
 .themecell b{display:block;font-size:13px;font-weight:600;color:#fff}
 
-#s-obready .obbody{padding:14px 0 0;gap:0;justify-content:flex-end}
-.readyart{position:relative;flex:1;min-height:0}
-.readyart figure{position:absolute;margin:0;overflow:hidden;
-  box-shadow:0 0 0 2px var(--ink),0 20px 44px -18px rgba(0,0,0,.92)}
+#s-obready .obbody{padding:20px 26px 0;gap:0;justify-content:flex-start}
+.readyrule{flex:none;display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,.16)}
+.readyrule span{font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6E6862}
+.readyrule span:last-child{color:var(--red)}
+.readyart{flex:1;min-height:0;display:grid;gap:5px;margin-top:12px;
+  grid-template-columns:repeat(3,1fr);grid-template-rows:1.44fr 1fr}
+.readyart figure{margin:0;overflow:hidden;position:relative}
 .readyart figure img{width:100%;height:100%;object-fit:cover;display:block}
-.rg1{left:2px;top:26px;width:148px;height:202px;transform:rotate(-3.5deg);z-index:2}
-.rg2{left:130px;top:8px;width:158px;height:174px;transform:rotate(2.5deg);z-index:1}
-.rg3{left:68px;top:148px;width:152px;height:164px;transform:rotate(-2deg);z-index:4}
-.rg4{left:212px;top:116px;width:148px;height:188px;transform:rotate(4deg);z-index:3}
-.rg5{left:290px;top:0;width:118px;height:132px;transform:rotate(-4.5deg);z-index:0}
-.readyveil{position:absolute;inset:-2px;z-index:5;pointer-events:none;
-  background:linear-gradient(180deg,rgba(15,15,15,0) 0 62%,var(--ink) 97%)}
-.readystrip{flex:none;display:flex;align-items:center;gap:11px;margin:0 26px;padding:13px 0 2px;
+.rg1{grid-column:1/3}
+.readystrip{flex:none;display:flex;align-items:center;gap:11px;margin:14px 0 2px;padding:13px 0 2px;
   border-top:1px solid rgba(255,255,255,.16)}
 .stackav{display:flex;flex:none}
 .stackav span{width:21px;height:21px;border-radius:50%;border:2px solid #0F0F0F;margin-left:-7px;display:block;
@@ -806,13 +804,13 @@ figure{margin:0}
             <p>Capture the hidden geometries of the city. Join a community of visual curators documenting the intersection of light, shadow, and human scale.</p>
           </div>
           <div class="obbody">
+            <div class="readyrule"><span>Captured this week</span><span>New York</span></div>
             <div class="readyart">
-              <figure class="rg1"><img data-img="w8" alt="Concrete stair and shadow"></figure>
-              <figure class="rg2"><img data-img="insp_heydar" alt="Curved white facade"></figure>
-              <figure class="rg3"><img data-img="w2" alt="Curved glass curtain wall"></figure>
-              <figure class="rg4"><img data-img="vessel_ar" alt="The Vessel, Hudson Yards"></figure>
-              <figure class="rg5"><img data-img="insp_bw" alt="Concrete detail in black and white"></figure>
-              <div class="readyveil"></div>
+              <figure class="rg1"><img data-img="vessel_hero" alt="The Vessel, Hudson Yards"></figure>
+              <figure><img data-img="w8" alt="Cathedral spires against deep blue"></figure>
+              <figure><img data-img="w2" alt="Curved glass curtain wall"></figure>
+              <figure><img data-img="insp_heydar" alt="Curved white facade"></figure>
+              <figure><img data-img="insp_bw" alt="Concrete detail in black and white"></figure>
             </div>
             <div class="readystrip">
               <span class="stackav">
