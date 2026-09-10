@@ -430,6 +430,19 @@ figure{margin:0}
 .ar-libgrid .del{position:absolute;right:2px;top:2px;width:16px;height:16px;border-radius:50%;
   background:rgba(10,10,11,.86);color:#fff;font-size:11px;line-height:15px;text-align:center;display:block}
 .ar-libempty{grid-column:1/-1;margin:0;font-size:11.5px;line-height:1.45;color:#8E8880;padding:2px 0}
+/* a detection nobody asked for reads as a suggestion, not a takeover */
+.ar-info{position:relative}
+#s-capture[data-passive="1"] .ar-info{border-color:rgba(149,35,36,.55);background:rgba(12,12,13,.78)}
+.ar-cardcta{display:none;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:11px;
+  background:var(--red);color:#fff;border-radius:999px;padding:11px;font-size:13.5px;font-weight:600;transition:.16s}
+.ar-cardcta:hover{background:var(--red-deep)}
+.ar-cardcta i{width:9px;height:9px;border-radius:50%;background:#fff;flex:none;display:block}
+#s-capture[data-passive="1"] .ar-cardcta{display:flex}
+.ar-dismiss{position:absolute;right:6px;top:5px;width:24px;height:24px;border-radius:50%;
+  color:rgba(255,255,255,.6);font-size:17px;line-height:1;display:none;place-items:center;transition:.16s}
+.ar-dismiss:hover{color:#fff;background:rgba(255,255,255,.12)}
+#s-capture[data-passive="1"] .ar-dismiss{display:grid}
+#s-capture[data-passive="1"] .ar-inforow .ar-pct{margin-right:22px}
 .ar-angles{display:flex;align-items:center;gap:7px;margin-top:8px;font-size:10px;font-weight:700;
   letter-spacing:.11em;text-transform:uppercase;color:#9C968E}
 .ar-angles i{width:18px;height:18px;border-radius:4px;display:block;background-size:cover;background-position:50% 50%;
@@ -1087,6 +1100,8 @@ figure{margin:0}
                 <h3 id="ar-name">Seagram Building</h3>
                 <p id="ar-meta">Mies van der Rohe, 1958 &#183; Park Avenue</p>
                 <div class="ar-angles" id="ar-angles" hidden></div>
+                <button class="ar-dismiss" id="ar-dismiss" aria-label="Keep scanning">&#215;</button>
+                <button class="ar-cardcta" data-confirm><i></i>Capture This Building</button>
                 <div class="ar-inforow ar-infolinks">
                   <button class="ar-wrong" id="ar-rescan">Not this building? Scan again</button>
                   <button class="ar-wrong" id="ar-more">Add angle</button>
@@ -1106,7 +1121,7 @@ figure{margin:0}
                   <b id="ar-setcount">0</b>
                 </button>
                 <button class="pill-ghost" id="ar-retake" data-when="ready">Retake</button>
-                <button class="btn-capture" id="ar-confirm" data-when="ready"><i></i>Capture This Building</button>
+                <button class="btn-capture" id="ar-confirm" data-confirm data-when="ready"><i></i>Capture This Building</button>
               </div>
               <div class="ar-hint" data-when="scanning">Hold steady &#183; or tap the shutter to scan your shot</div>
               <div class="ar-hint" data-when="analyzing">Matching against 50,000+ records</div>
@@ -1670,6 +1685,7 @@ const CANDIDATES = [
    street:'Hudson Yards', addr:'30 Hudson Yards, NYC', coords:'40.7540° N, 74.0011° W', pct:86}
 ];
 let capState = 'scanning', capTimer = null, capFrozen = false, capIndex = 0;
+let capPassive = false;   /* detected on its own, with no shot taken */
 
 /* Capture settings: each switch changes how the camera actually behaves. */
 const CAP_OPTS = {grid:false, auto:true, geo:true};
@@ -1727,16 +1743,35 @@ function renderLibrary(){
     '<button data-import="' + k + '" aria-label="Import this photo"><img src="' + IMG[k] + '" alt=""></button>').join('');
 }
 
+function sheetsOpen(){
+  return ['#ar-settings','#ar-library','#ar-set'].some(id=>{ const el = $(id); return el && !el.hidden; });
+}
+
+/* The passive scan may only run when the camera is actually being aimed:
+   not while a sheet is open over it, and not once something is detected. */
+function syncScanTimer(){
+  clearTimeout(capTimer);
+  if(capState === 'scanning' && CAP_OPTS.auto && !sheetsOpen()){
+    capTimer = setTimeout(()=>{
+      if(capState !== 'scanning' || sheetsOpen()) return;
+      capPassive = true;
+      setCapture('ready');
+    }, 2600);
+  }
+}
+
 function closeCapSheets(){
   ['#ar-settings','#ar-library','#ar-set'].forEach(id=>{ const el = $(id); if(el) el.hidden = true; });
   const sc = $('#s-capture'); if(sc) sc.dataset.settings = '0';
   const g = $('#ar-gear'); if(g) g.setAttribute('aria-expanded', 'false');
+  syncScanTimer();
 }
 
 function openCapSheet(id){
   const was = !$(id).hidden;
   closeCapSheets();
   if(!was){ $(id).hidden = false; $('#s-capture').dataset.settings = '1'; }
+  syncScanTimer();
 }
 
 function applyCapOpts(){
@@ -1829,20 +1864,26 @@ function setCapture(st, keepFrame, keepSet){
   clearTimeout(capTimer);
   capState = st;
   if(st === 'scanning'){
-    capFrozen = false; capIndex = 0;
+    capFrozen = false; capIndex = 0; capPassive = false;
     if(!keepSet){ CAP_SET = []; $('#ar-bg').querySelector('img').src = IMG['vessel_ar']; }
     renderCapSet();
   }
-  if(st === 'analyzing' && !keepFrame) capFrozen = true;
+  if(st === 'analyzing'){ capPassive = false; if(!keepFrame) capFrozen = true; }
   $('#s-capture').dataset.state = st;
   $('#ar-bg').classList.toggle('frozen', capFrozen);
   $$('#s-capture [data-when]').forEach(el=>{
     el.hidden = !el.dataset.when.split(' ').includes(st);
   });
+  $('#s-capture').dataset.passive = (st === 'ready' && capPassive) ? '1' : '0';
+  if(st === 'ready' && capPassive){
+    ['#ar-shutter','#ar-lib','#ar-setbtn'].forEach(id=>{ const el = $(id); if(el) el.hidden = false; });
+    $('#ar-retake').hidden = true;
+    $('#ar-confirm').hidden = true;
+  }
   applyCandidate();
   if(st === 'scanning') startTagReveal();
   else if(st === 'ready'){ clearInterval(tagTimer); renderCapTags(); }
-  if(st === 'scanning' && CAP_OPTS.auto) capTimer = setTimeout(()=>{ if(capState==='scanning') setCapture('ready'); }, 2600);
+  syncScanTimer();
   if(st === 'analyzing') capTimer = setTimeout(()=>{ if(capState==='analyzing') setCapture('ready', true); }, 1600);
 }
 /* Restart the selection animation even when the same card is tapped twice. */
@@ -2458,6 +2499,7 @@ document.addEventListener('click', e=>{
     if(!CAP_SET.length) toast('Capture set cleared');
     return;
   }
+  if(t.closest('#ar-dismiss')){ setCapture('scanning', false, true); toast('Still scanning'); return; }
   if(t.closest('#ar-more')){ setCapture('scanning', false, true); toast('Frame another angle'); return; }
   const optb = t.closest('.arset');
   if(optb){
@@ -2473,7 +2515,7 @@ document.addEventListener('click', e=>{
   if(current === 'capture' && !t.closest('.ar-sheet')) closeCapSheets();
   if(t.closest('#si-go')){ runSignIn(); return; }
   if(t.closest('.sforgot')){ toast('Reset link sent to your email'); return; }
-  if(t.closest('#ar-confirm')){ go('checkin'); toast(CANDIDATES[capIndex].name + ' captured'); return; }
+  if(t.closest('[data-confirm]')){ go('checkin'); toast(CANDIDATES[capIndex].name + ' captured'); return; }
   if(t.closest('#ar-addtag')){
     const next = TAG_POOL.find(x=>!CAP_TAGS.includes(x));
     if(next){ CAP_TAGS.push(next); renderCapTags(CAP_TAGS.length - 1); } else toast('No more suggested tags');
