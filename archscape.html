@@ -321,7 +321,29 @@ figure{margin:0}
   border-top-color:var(--red);animation:spin .8s linear infinite;display:block}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.ar-tags{position:absolute;right:14px;top:292px;display:flex;flex-direction:column;align-items:flex-end;gap:7px;z-index:6}
+.ar-grid{position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:
+    linear-gradient(to right,transparent calc(33.33% - .5px),rgba(255,255,255,.3) calc(33.33% - .5px) calc(33.33% + .5px),
+      transparent calc(33.33% + .5px),transparent calc(66.66% - .5px),rgba(255,255,255,.3) calc(66.66% - .5px) calc(66.66% + .5px),transparent calc(66.66% + .5px)),
+    linear-gradient(to bottom,transparent calc(33.33% - .5px),rgba(255,255,255,.3) calc(33.33% - .5px) calc(33.33% + .5px),
+      transparent calc(33.33% + .5px),transparent calc(66.66% - .5px),rgba(255,255,255,.3) calc(66.66% - .5px) calc(66.66% + .5px),transparent calc(66.66% + .5px))}
+.ar-sheet{position:absolute;right:15px;top:100px;width:246px;z-index:8;
+  background:rgba(12,12,13,.93);border:1px solid rgba(255,255,255,.16);border-radius:11px;padding:13px 14px 6px;
+  box-shadow:0 24px 54px -14px rgba(0,0,0,.9);animation:popIn .22s ease both}
+.ar-sheet .eyebrow{color:#8E8880;margin-bottom:4px}
+.arset{display:grid;grid-template-columns:1fr auto;align-items:center;gap:3px 12px;width:100%;text-align:left;
+  padding:11px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.ar-sheet .arset:last-child{border-bottom:0}
+.arset b{grid-column:1;grid-row:1;font-size:13px;font-weight:600;color:#fff}
+.arset span{grid-column:1;grid-row:2;font-size:11px;color:#8E8880;line-height:1.35}
+.arset i{grid-column:2;grid-row:1/3;align-self:center;width:34px;height:20px;border-radius:999px;background:rgba(255,255,255,.16);
+  position:relative;flex:none;transition:background .18s}
+.arset i::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;
+  background:#fff;transition:transform .18s cubic-bezier(.32,.72,0,1)}
+.arset[aria-pressed="true"] i{background:var(--red)}
+.arset[aria-pressed="true"] i::after{transform:translateX(14px)}
+#s-capture[data-settings="1"] .ar-tags{opacity:0;pointer-events:none}
+.ar-tags{transition:opacity .18s;position:absolute;right:14px;top:292px;display:flex;flex-direction:column;align-items:flex-end;gap:7px;z-index:6}
 .artag-head{display:flex;align-items:center;gap:7px;background:rgba(10,10,11,.66);
   border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:5px 11px;
   font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.66)}
@@ -929,17 +951,25 @@ figure{margin:0}
             <span data-when="analyzing"><i class="scanring"></i><span id="ar-scanlabel">Analysing your shot</span></span>
           </div>
 
+          <div class="ar-grid" id="ar-grid" hidden></div>
           <div class="ar-tags" id="ar-tags" data-when="scanning analyzing ready"></div>
 
           <div class="ar-ui">
             <div class="ar-top">
-              <button class="ar-round" data-go="discover" aria-label="Close camera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+              <button class="ar-round" data-back aria-label="Close camera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
               <button class="ar-music" id="ar-music">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6.5" cy="17.5" r="2.6"/><circle cx="17.5" cy="15.5" r="2.6"/><path d="M9.1 17.5V6l11-2v11.5"/></svg>
                 <span class="mtitle">Nils Frahm &#8212; Says</span>
                 <span class="mx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></span>
               </button>
-              <button class="ar-round" aria-label="Capture settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></button>
+              <button class="ar-round" id="ar-gear" aria-label="Capture settings" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></button>
+            </div>
+
+            <div class="ar-sheet" id="ar-settings" hidden>
+              <div class="eyebrow">Capture settings</div>
+              <button class="arset" data-opt="grid"><b>Framing grid</b><span>Thirds guide over the viewfinder</span><i></i></button>
+              <button class="arset" data-opt="auto"><b>Auto-detect buildings</b><span>Identify without pressing the shutter</span><i></i></button>
+              <button class="arset" data-opt="geo"><b>Attach location</b><span>Save coordinates with the capture</span><i></i></button>
             </div>
 
             <div class="ar-mid">
@@ -978,7 +1008,7 @@ figure{margin:0}
             <button class="btn btn-red" style="width:auto;padding:10px 22px;font-size:13.5px" data-publish>Publish</button>
           </div>
           <div class="ci-photo"><img data-img="vessel_shot" alt="Stair lattice inside The Vessel"></div>
-          <div class="ci-loc">
+          <div class="ci-loc" id="ci-locrow">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
             <div><b id="ci-locname">375 Park Ave, NYC</b><span class="tnum" id="ci-loccoords">40.7580&#xB0; N, 73.9764&#xB0; W</span></div>
           </div>
@@ -1272,6 +1302,7 @@ function go(id, isBack){
   if(!isBack && current !== id){ navStack.push(current); if(navStack.length > 30) navStack.shift(); }
   current = id;
   if(from === 'signin' || id === 'signin') resetSignIn();
+  if(from === 'capture') closeCapSettings();
 
   /* a move between two steps of the onboarding sequence slides sideways;
      direction comes from the step order, so Skip and Back both read right */
@@ -1516,6 +1547,24 @@ const CANDIDATES = [
 ];
 let capState = 'scanning', capTimer = null, capFrozen = false, capIndex = 0;
 
+/* Capture settings: each switch changes how the camera actually behaves. */
+const CAP_OPTS = {grid:false, auto:true, geo:true};
+
+function applyCapOpts(){
+  $('#ar-grid').hidden = !CAP_OPTS.grid;
+  $('#ci-locrow').hidden = !CAP_OPTS.geo;
+  $$('#ar-settings .arset').forEach(b=>{
+    b.setAttribute('aria-pressed', String(!!CAP_OPTS[b.dataset.opt]));
+  });
+}
+
+function closeCapSettings(){
+  const p = $('#ar-settings'); if(!p) return;
+  p.hidden = true;
+  $('#s-capture').dataset.settings = '0';
+  $('#ar-gear').setAttribute('aria-expanded', 'false');
+}
+
 /* ---------- sign in: a short, staged authentication ---------- */
 const SIGN_STEPS = ['Verifying credentials', 'Syncing your captures', 'Restoring your journeys'];
 let signTimer = null;
@@ -1572,8 +1621,7 @@ function renderCapTags(animateFrom){
   const ready = capState === 'ready';
   const from = animateFrom === undefined ? CAP_TAGS.length : animateFrom;
   $('#ar-tags').innerHTML =
-    '<span class="artag-head' + (ready ? ' done' : '') + '">' +
-      (ready ? 'AI tags' : 'Reading image') + '</span>' +
+    (ready ? '' : '<span class="artag-head">Reading image</span>') +
     CAP_TAGS.map((t,i)=>`<button class="artag" data-untag="${i}" title="Remove tag">${esc(t)}</button>`).join('') +
     (ready ? '<button class="artag add in noanim" id="ar-addtag">Add +</button>' : '');
   $$('#ar-tags .artag:not(.add)').forEach((b,i)=>{
@@ -1607,7 +1655,7 @@ function setCapture(st, keepFrame){
   applyCandidate();
   if(st === 'scanning') startTagReveal();
   else if(st === 'ready'){ clearInterval(tagTimer); renderCapTags(); }
-  if(st === 'scanning') capTimer = setTimeout(()=>{ if(capState==='scanning') setCapture('ready'); }, 2600);
+  if(st === 'scanning' && CAP_OPTS.auto) capTimer = setTimeout(()=>{ if(capState==='scanning') setCapture('ready'); }, 2600);
   if(st === 'analyzing') capTimer = setTimeout(()=>{ if(capState==='analyzing') setCapture('ready', true); }, 1600);
 }
 function syncObGate(){
@@ -2017,7 +2065,7 @@ $('#discover-map').insertAdjacentHTML('afterbegin', discoverMap());
 $('#journey-map').insertAdjacentHTML('afterbegin', journeyMap());
 $('#crossing-map').insertAdjacentHTML('afterbegin', crossingMap());
 renderSpots('nearby'); renderPfPanel('works'); renderTrips(); renderInsp('All'); renderRecords(); renderCommunity('feed');
-syncObGate(); renderStops(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
+syncObGate(); renderStops(); applyCapOpts(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
 
 document.addEventListener('click', e=>{
   const t = e.target;
@@ -2084,6 +2132,25 @@ document.addEventListener('click', e=>{
     setCapture('analyzing', true);
     return;
   }
+  if(t.closest('#ar-gear')){
+    const p = $('#ar-settings'), open = p.hidden;
+    p.hidden = !open;
+    $('#s-capture').dataset.settings = open ? '1' : '0';
+    $('#ar-gear').setAttribute('aria-expanded', String(open));
+    return;
+  }
+  const optb = t.closest('.arset');
+  if(optb){
+    const k = optb.dataset.opt;
+    CAP_OPTS[k] = !CAP_OPTS[k];
+    applyCapOpts();
+    if(k === 'auto'){
+      if(CAP_OPTS.auto){ if(capState === 'scanning') setCapture('scanning'); toast('Buildings detected automatically'); }
+      else { clearTimeout(capTimer); toast('Press the shutter to identify'); }
+    }
+    return;
+  }
+  if(current === 'capture' && !t.closest('#ar-settings')) closeCapSettings();
   if(t.closest('#si-go')){ runSignIn(); return; }
   if(t.closest('.sforgot')){ toast('Reset link sent to your email'); return; }
   if(t.closest('#ar-confirm')){ go('checkin'); toast(CANDIDATES[capIndex].name + ' captured'); return; }
