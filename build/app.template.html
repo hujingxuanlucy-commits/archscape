@@ -776,8 +776,12 @@ figure{margin:0}
 /* ============ 06 profile ============ */
 /* a quiet drafting-sheet ground rather than a decorative banner photo:
    the identity here comes from the archive's own record, not a hero shot */
-.pf-cover{position:relative;height:150px;background:var(--ink);overflow:hidden}
-.pf-cover::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--red)}
+.pf-cover{position:relative;height:150px;background:var(--ink)}
+.pf-cover::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--red);z-index:1}
+/* the avatar deliberately breaks out of this box - only the drawn/photo
+   ground beneath it needs to stay clipped to the cover's edges */
+.pf-bg{position:absolute;inset:0;overflow:hidden}
+.pf-bg img{width:100%;height:100%;object-fit:cover;display:block}
 .pf-grid{position:absolute;inset:0;
   background-image:
     linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px),
@@ -785,11 +789,16 @@ figure{margin:0}
   background-size:26px 26px}
 .pf-cover::after{content:"";position:absolute;inset:0;
   background:radial-gradient(120% 90% at 12% 0%,rgba(149,35,36,.16),transparent 60%)}
+/* a faint elevation drawing stands in for a hero photo - the record speaks
+   through the same architectural language the app uses everywhere else */
+.pf-elevation{position:absolute;right:0;top:0;width:66%;height:100%;color:rgba(255,255,255,.32);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 30%);mask-image:linear-gradient(90deg,transparent,#000 30%)}
 .pf-avatar{position:absolute;left:22px;bottom:-34px;width:88px;height:88px;object-fit:cover;
-  border:3px solid var(--paper);border-radius:50%;z-index:3;display:block}
-.pf-edit{position:absolute;right:20px;bottom:14px;z-index:3;background:var(--white);color:var(--ink);
-  font-size:12.5px;font-weight:600;padding:8px 18px;border-radius:6px;transition:.16s}
-.pf-edit:hover{background:var(--bone-soft)}
+  border:3px solid var(--paper);border-radius:50%;z-index:3;display:block;box-shadow:0 3px 10px rgba(0,0,0,.22)}
+.pf-edit{position:absolute;right:20px;bottom:14px;z-index:3;background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.24);color:rgba(255,255,255,.88);
+  font-size:12px;font-weight:600;padding:7px 16px;border-radius:6px;transition:.16s}
+.pf-edit:hover{background:rgba(255,255,255,.16);color:#fff}
 .pf-id{padding:46px 22px 0}
 .pf-id h2{font-family:var(--disp);font-size:31px;font-weight:600;margin:0;line-height:1.05;color:var(--ink)}
 .pf-handle{font-size:13px;color:var(--muted);margin:5px 0 9px}
@@ -820,19 +829,6 @@ figure{margin:0}
 .jsearch input{width:100%;padding:11px 14px 11px 34px;border-radius:9px;border:1px solid var(--bone);
   background:var(--paper);font-size:13.5px;color:var(--ink);outline:none;transition:.16s}
 .jsearch input:focus{border-color:var(--red);background:var(--white)}
-/* the profile lightbox: one photo full-frame, paged, with context beneath */
-.lightbox{position:fixed;inset:0;z-index:80;background:#0B0B0C;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;animation:popIn .2s ease both}
-.lightbox img{width:100%;height:100%;object-fit:contain;display:block;position:absolute;inset:0}
-.lb-top{position:absolute;left:15px;right:15px;top:52px;z-index:2;display:flex;align-items:center;justify-content:space-between}
-.lb-count{font-size:11px;font-weight:700;letter-spacing:.12em;color:rgba(255,255,255,.72);
-  background:rgba(20,20,23,.7);border-radius:999px;padding:6px 13px}
-.lb-cap{position:absolute;left:0;right:0;bottom:78px;z-index:2;text-align:center;padding:0 24px;
-  text-shadow:0 2px 12px rgba(0,0,0,.7)}
-.lb-cap b{display:block;font-family:var(--disp);font-size:19px;font-weight:600;color:#fff}
-.lb-cap span{display:block;font-size:12.5px;color:rgba(255,255,255,.75);margin-top:3px}
-.lightbox .pill-ghost{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);z-index:2;
-  background:rgba(28,28,32,.92);border-color:rgba(255,255,255,.32)}
 .pflink{display:block;width:100%;text-align:center;padding:16px;font-size:13px;font-weight:600;
   color:var(--red);transition:.16s}
 .pflink:hover{background:var(--bone-soft)}
@@ -1577,7 +1573,23 @@ the city folded in on itself.</textarea>
         <!-- ============ 06 PROFILE ============ -->
         <section class="screen padnav" id="s-profile">
           <div class="pf-cover">
-            <div class="pf-grid" aria-hidden="true"></div>
+            <div class="pf-bg">
+              <div class="pf-grid" aria-hidden="true"></div>
+              <svg class="pf-elevation" viewBox="0 0 260 150" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+                <rect x="42" y="26" width="64" height="124"/>
+                <line x1="42" y1="46" x2="106" y2="46"/><line x1="42" y1="66" x2="106" y2="66"/>
+                <line x1="42" y1="86" x2="106" y2="86"/><line x1="42" y1="106" x2="106" y2="106"/><line x1="42" y1="126" x2="106" y2="126"/>
+                <line x1="62" y1="26" x2="62" y2="150"/><line x1="86" y1="26" x2="86" y2="150"/>
+                <rect x="118" y="58" width="52" height="92"/>
+                <line x1="118" y1="74" x2="170" y2="74"/><line x1="118" y1="90" x2="170" y2="90"/>
+                <line x1="118" y1="106" x2="170" y2="106"/><line x1="118" y1="122" x2="170" y2="122"/><line x1="118" y1="138" x2="170" y2="138"/>
+                <line x1="144" y1="58" x2="144" y2="150"/>
+                <rect x="182" y="82" width="40" height="68"/>
+                <line x1="182" y1="96" x2="222" y2="96"/><line x1="182" y1="110" x2="222" y2="110"/>
+                <line x1="182" y1="124" x2="222" y2="124"/><line x1="182" y1="138" x2="222" y2="138"/>
+                <line x1="0" y1="150" x2="260" y2="150" stroke-width="1.4"/>
+              </svg>
+            </div>
             <img class="pf-avatar" data-img="pf_avatar" alt="Lucy's own capture: shadow line, Broadgate">
             <button class="pf-edit">Edit</button>
           </div>
@@ -1588,8 +1600,8 @@ the city folded in on itself.</textarea>
           </div>
           <div class="statgrid">
             <button class="s" data-pfjump="works"><b class="red onum">247</b><span>Check-ins</span></button>
-            <span class="s"><b class="onum">3.2k</b><span>Followers</span></span>
-            <span class="s"><b class="onum">18</b><span>Cities</span></span>
+            <button class="s" data-comm="following"><b class="onum">3.2k</b><span>Followers</span></button>
+            <button class="s" data-pfjump="journeys"><b class="onum">18</b><span>Cities</span></button>
             <button class="s" data-pfjump="saved"><b class="onum">89</b><span>Saved</span></button>
           </div>
           <div id="pf-sentinel"></div>
@@ -1600,21 +1612,16 @@ the city folded in on itself.</textarea>
             <button class="pftab" data-pftab="groups"   aria-current="false">Groups <em id="pf-gcount">2</em></button>
           </div>
           <div id="pf-panel"></div>
+        </section>
 
-          <div class="lightbox" id="lightbox" hidden>
-            <div class="lb-top">
-              <span class="lb-count tnum" id="lb-count">1 / 1</span>
-              <button class="ar-round" id="lb-close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
-            </div>
-            <img id="lb-img" alt="">
-            <button class="sv-nav prev" data-lbnav="prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 5 8 12 15 19"/></svg></button>
-            <button class="sv-nav next" data-lbnav="next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 5 16 12 9 19"/></svg></button>
-            <div class="lb-cap">
-              <b id="lb-title"></b>
-              <span id="lb-meta"></span>
-            </div>
-            <button class="pill-ghost" id="lb-unsave" data-lbunsave hidden>Remove from Saved</button>
+        <!-- ============ 06b POST DETAIL ============ -->
+        <section class="screen pad" id="s-postdetail">
+          <div class="ci-head">
+            <button class="iconbtn" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+            <h2 class="h-title sm">Post</h2>
+            <span style="width:38px"></span>
           </div>
+          <div id="postdetail-body"></div>
         </section>
 
         
@@ -1781,6 +1788,7 @@ const SCREENS = [
   {id:'checkin',     name:'Check-in',    chrome:'light', nav:false},
   {id:'journey',     name:'Journey Map', chrome:'light', nav:true, tab:'map'},
   {id:'profile',     name:'Profile',     chrome:'dark',  nav:true, tab:'profile'},
+  {id:'postdetail',  name:'Post',        chrome:'light', nav:false},
   {id:'inspiration', name:'Inspiration', chrome:'light', nav:true, tab:'profile'},
   {id:'community',   name:'Community',   chrome:'light', nav:true, tab:'explore'},
   {id:'group',       name:'Group',       chrome:'light', nav:true, tab:'explore'},
@@ -1844,7 +1852,6 @@ function go(id, isBack){
     if(!coachSeen){ coachStep = 0; showCoach(); }
   } else clearTimeout(capTimer);
   if(id === 'checkin'){ renderCheckinTags(); renderCheckinPhotos(); renderVis(); } else closeQuickAdd();
-  closeLightbox();
   $('#exitsheet').hidden = true;
   if(id === 'journey') requestAnimationFrame(()=>jmap.refit());
 }
@@ -2861,7 +2868,7 @@ function renderMember(id){
   const m = PEOPLE[id];
   $('#m-name').textContent = m.name;
   $('#m-body').innerHTML = `
-    <div class="pf-cover"><img src="${IMG[m.works[0]]}" alt="">
+    <div class="pf-cover"><div class="pf-bg"><img src="${IMG[m.works[0]]}" alt=""></div>
       <span class="avatar pf-avatar ${m.avc}">${m.av}</span></div>
     <div class="pf-id">
       <h2>${esc(m.name)}</h2>
@@ -2885,8 +2892,8 @@ function renderMember(id){
     <div class="grouptags">${m.groups.map(k=>
       `<button class="gtag" data-group="${k}">${esc(GROUPS[k].name)}</button>`).join('')}</div>
     <div class="sechead" style="padding-top:20px"><h3 class="sectitle">Recent captures</h3></div>
-    <div class="works">${m.works.map(w=>
-      `<figure class="work"><img src="${IMG[w]}" alt=""></figure>`).join('')}</div>`;
+    <div class="works">${m.works.map((w,i)=>
+      `<button class="work" data-gridopen="member" data-gridref="${id}:${i}"><img src="${IMG[w]}" alt=""></button>`).join('')}</div>`;
 }
 
 /* ---------- building ---------- */
@@ -3004,7 +3011,7 @@ function draftShelf(){
 }
 function grid(list, badgeFirst){
   return '<div class="works">' + list.map((x,i)=>`
-    <button class="work" data-work="${i}">
+    <button class="work" data-gridopen="work" data-gridref="${i}">
       <img src="${IMG[x.img]}" alt="${esc(x.t)}">
       ${badgeFirst && i===0 ? '<span class="newbadge">NEW</span>' : ''}
     </button>`).join('') + '</div>';
@@ -3039,24 +3046,78 @@ function renderJourneys(){
     }).join('') : `<p class="emptynote" style="margin:18px 22px">No journeys match ${q ? '"' + esc(jQuery) + '"' : 'that year'}.</p>`}`;
 }
 
-/* ---------- profile lightbox: paging through Captures or Saved ---------- */
-let lbKind = 'work', lbIndex = 0;
-function openLightbox(kind, i){
-  const list = kind === 'saved' ? SAVED : WORKS;
-  if(!list.length) return;
-  lbKind = kind;
-  lbIndex = Math.max(0, Math.min(i, list.length - 1));
-  const x = list[lbIndex];
-  $('#lb-img').src = IMG[x.img];
-  $('#lb-title').textContent = x.t;
-  $('#lb-meta').textContent = kind === 'saved' ? 'Saved from ' + x.by : 'Your capture';
-  $('#lb-count').textContent = (lbIndex + 1) + ' / ' + list.length;
-  $('#lb-unsave').hidden = kind !== 'saved';
-  $('[data-lbnav="prev"]').disabled = lbIndex === 0;
-  $('[data-lbnav="next"]').disabled = lbIndex === list.length - 1;
-  $('#lightbox').hidden = false;
+/* ---------- grid photos, opened as a real post ----------
+   Captures and Saved tiles - your own or another explorer's - open into
+   the same post detail a community feed entry would, rather than a bare
+   image viewer. WORKS/SAVED/member grids don't carry full post data, so
+   each tile gets one stable, once-computed post shape the first time it
+   opens; likes/saves persist on that cached object for the session. */
+const GRID_CAPTIONS = ['A quiet corner worth a second look.', 'Light doing the work the walls can’t.',
+  'Structure first, decoration never.', 'The kind of detail you only see once you stop walking.'];
+const GRID_POSTS = {};
+function synthesizeGridPost(kind, ref){
+  const key = kind + ':' + ref;
+  if(GRID_POSTS[key]) return GRID_POSTS[key];
+  let img, quote, person = null, guestHandle = null, guestName = null, place = '';
+  if(kind === 'work'){
+    const w = WORKS[+ref]; img = w.img; quote = w.t; person = 'lucy'; place = PEOPLE.lucy.city;
+  } else if(kind === 'saved'){
+    const s = SAVED[+ref]; img = s.img; quote = s.t;
+    person = Object.keys(PEOPLE).find(k => PEOPLE[k].handle === s.by) || null;
+    guestHandle = s.by;
+    guestName = person ? null : s.by.replace('@', '').split('.')[0].replace(/^./, c => c.toUpperCase());
+    place = person ? PEOPLE[person].city : '';
+  } else {
+    const [id, idx] = ref.split(':'); const m = PEOPLE[id];
+    img = m.works[+idx]; quote = GRID_CAPTIONS[+idx % GRID_CAPTIONS.length];
+    person = id; place = m.city;
+  }
+  let seed = 0; for(const c of key) seed += c.charCodeAt(0);
+  GRID_POSTS[key] = {
+    kind, ref, person, guestHandle, guestName, place,
+    time: ['3d ago', '1w ago', '2w ago', 'Last month'][seed % 4],
+    img, quote, tags: ['#archscape'],
+    likes: 40 + (seed * 17) % 260, comments: 3 + (seed * 7) % 24,
+    liked: false, saved: kind === 'saved'
+  };
+  return GRID_POSTS[key];
 }
-function closeLightbox(){ $('#lightbox').hidden = true; }
+function gridPostHTML(kind, ref){
+  const p = synthesizeGridPost(kind, ref);
+  const name = p.person ? PEOPLE[p.person].name : p.guestName;
+  const sub = (p.person ? PEOPLE[p.person].city : p.guestHandle) + ' · ' + p.time;
+  const avatarHTML = p.person ? avatarOf(p.person) : `<span class="avatar">${esc((name || '?').charAt(0).toUpperCase())}</span>`;
+  const saveAct = p.kind === 'member'
+    ? `<button class="act ${p.saved ? 'liked' : ''}" data-gridsave="${kind}" data-gridref="${ref}">${I.book}</button>`
+    : '';
+  return `<article class="post">
+    <div class="post-head">
+      ${avatarHTML}
+      <button class="grow" ${p.person ? `data-member="${p.person}"` : 'disabled'} style="text-align:left">
+        <b>${esc(name)}</b><span>${esc(sub)}</span>
+      </button>
+      ${p.person ? followBtn(p.person) : ''}
+    </div>
+    <img class="post-img" src="${IMG[p.img]}" alt="${esc(p.quote)}">
+    <div class="post-body">
+      <p class="post-quote">${esc(p.quote)}</p>
+      <div class="hashes">${p.tags.map(t => `<a>${esc(t)}</a>`).join('')}</div>
+      <div class="post-acts">
+        <button class="act ${p.liked ? 'liked' : ''}" data-gridlike="${kind}" data-gridref="${ref}">${I.heart}<span>${p.likes > 999 ? (p.likes / 1000).toFixed(1) + 'k' : p.likes}</span></button>
+        <button class="act">${I.chat}<span>${p.comments}</span></button>
+        <button class="act">${I.share}</button>
+        <span class="spacer"></span>
+        ${saveAct}
+      </div>
+    </div>
+  </article>` + (p.kind === 'saved'
+    ? `<button class="btn-outline" style="margin:4px 22px 0;width:calc(100% - 44px)" data-gridunsave="${kind}" data-gridref="${ref}">Remove from Saved</button>`
+    : '');
+}
+function openPostDetail(kind, ref){
+  $('#postdetail-body').innerHTML = gridPostHTML(kind, ref);
+  go('postdetail');
+}
 
 function renderPfPanel(tab){
   const p = $('#pf-panel');
@@ -3071,7 +3132,7 @@ function renderPfPanel(tab){
       '<button class="pflink" data-comm="groups">Find more groups</button>';
   } else if(tab === 'saved'){
     p.innerHTML = '<div class="savedgrid">' + SAVED.map((x,i)=>`
-      <button class="savedcard" data-saveditem="${i}">
+      <button class="savedcard" data-gridopen="saved" data-gridref="${i}">
         <span class="savedthumb"><img src="${IMG[x.img]}" alt="${esc(x.t)}">
           <span class="savedmark">${I.book}</span></span>
         <b>${esc(x.t)}</b><span>Saved from ${esc(x.by)}</span>
@@ -3667,22 +3728,33 @@ document.addEventListener('click', e=>{
   }
   const draftTile = t.closest('[data-draft]');
   if(draftTile){ resumeDraft(+draftTile.dataset.draft); return; }
-  const workTile = t.closest('[data-work]');
-  if(workTile){ openLightbox('work', +workTile.dataset.work); return; }
-  const savedTile = t.closest('[data-saveditem]');
-  if(savedTile){ openLightbox('saved', +savedTile.dataset.saveditem); return; }
-  if(t.closest('[data-lbunsave]')){
-    const i = lbIndex;
-    SAVED.splice(i, 1);
-    closeLightbox();
-    renderPfPanel('saved');
-    toast('Removed from Saved');
+  const gridOpen = t.closest('[data-gridopen]');
+  if(gridOpen){ openPostDetail(gridOpen.dataset.gridopen, gridOpen.dataset.gridref); return; }
+  const gridLike = t.closest('[data-gridlike]');
+  if(gridLike){
+    const p = synthesizeGridPost(gridLike.dataset.gridlike, gridLike.dataset.gridref);
+    p.liked = !p.liked; p.likes += p.liked ? 1 : -1;
+    $('#postdetail-body').innerHTML = gridPostHTML(p.kind, p.ref);
     return;
   }
-  if(t.closest('#lb-close')){ closeLightbox(); return; }
-  if(t.closest('[data-lbnav]')){
-    const dir = t.closest('[data-lbnav]').dataset.lbnav === 'next' ? 1 : -1;
-    openLightbox(lbKind, lbIndex + dir);
+  const gridSave = t.closest('[data-gridsave]');
+  if(gridSave){
+    const p = synthesizeGridPost(gridSave.dataset.gridsave, gridSave.dataset.gridref);
+    p.saved = !p.saved;
+    const handle = PEOPLE[p.person].handle;
+    if(p.saved) SAVED.push({img: p.img, t: p.quote, by: handle});
+    else { const i = SAVED.findIndex(s => s.img === p.img && s.by === handle); if(i > -1) SAVED.splice(i, 1); }
+    $('#postdetail-body').innerHTML = gridPostHTML(p.kind, p.ref);
+    toast(p.saved ? 'Saved to your library' : 'Removed from library');
+    return;
+  }
+  const gridUnsave = t.closest('[data-gridunsave]');
+  if(gridUnsave){
+    SAVED.splice(+gridUnsave.dataset.gridref, 1);
+    Object.keys(GRID_POSTS).filter(k => k.startsWith('saved:')).forEach(k => delete GRID_POSTS[k]);
+    back();
+    renderPfPanel('saved');
+    toast('Removed from Saved');
     return;
   }
 
@@ -3825,7 +3897,6 @@ document.addEventListener('click', e=>{
 });
 $('#ksearch').addEventListener('input', renderRecords);
 document.addEventListener('keydown', e=>{
-  if(e.key === 'Escape' && !$('#lightbox').hidden) closeLightbox();
   if(e.key === 'Escape' && !$('#exitsheet').hidden) $('#exitsheet').hidden = true;
 });
 document.addEventListener('input', e=>{
