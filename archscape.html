@@ -601,6 +601,11 @@ figure{margin:0}
 .cishot.addshot{background:var(--paper);display:grid;place-items:center;color:var(--muted);border-style:dashed}
 .cishot.addshot:hover{color:var(--ink);border-color:var(--ink)}
 .cishot.addshot svg{width:17px;height:17px}
+.cishot-wrap{position:relative;flex:none}
+.delshot{position:absolute;right:-5px;top:-5px;width:18px;height:18px;border-radius:50%;
+  background:var(--ink);border:1px solid var(--white);color:#fff;font-size:10.5px;line-height:1;
+  display:grid;place-items:center;transition:.16s}
+.delshot:hover{background:var(--red)}
 .ci-tools{display:flex;align-items:center;gap:7px;margin-top:10px}
 .citool{flex:none;width:34px;height:32px;border-radius:7px;border:1px solid var(--bone);background:var(--paper);
   display:grid;place-items:center;color:var(--ink);transition:.16s}
@@ -629,6 +634,14 @@ figure{margin:0}
 .dfield input:focus{color:var(--red)}
 .tag.addtag{border-style:dashed;color:var(--red);border-color:var(--red)}
 .tag.addtag:hover{background:var(--red-tint)}
+.visrow{display:flex;gap:8px;margin-top:9px}
+.visopt{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:11px 4px 9px;
+  border:1px solid var(--bone);border-radius:8px;color:var(--muted);transition:.16s}
+.visopt svg{width:19px;height:19px}
+.visopt span{font-size:11px;font-weight:600;color:inherit}
+.visopt:hover{border-color:var(--muted-2);color:var(--ink)}
+.visopt[aria-pressed="true"]{background:var(--red-tint);border-color:var(--red);color:var(--red)}
+.vis-desc{font-size:11.5px;color:var(--muted);margin:9px 1px 0;line-height:1.4}
 .ci-fold{margin:0 22px 9px;padding:0;overflow:hidden}
 .ci-row.plain{margin:0;width:100%;border:0;background:none;padding:13px 15px}
 .chev.fold{transition:transform .2s}
@@ -1449,10 +1462,7 @@ figure{margin:0}
           <div class="ci-edit" id="ci-edit" hidden>
             <div class="ci-strip" id="ci-strip"></div>
             <div class="ci-tools">
-              <button class="citool" data-photo="left" aria-label="Move earlier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 5 8 12 15 19"/></svg></button>
-              <button class="citool" data-photo="right" aria-label="Move later"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 5 16 12 9 19"/></svg></button>
-              <button class="citool wide" data-photo="cover" id="ci-setcover">Set as cover</button>
-              <button class="citool" data-photo="remove" aria-label="Remove photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+              <button class="citool wide" id="ci-setcover" data-setcover>Set Cover Photo</button>
             </div>
           </div>
           <div class="ci-loc" id="ci-locrow">
@@ -1493,9 +1503,23 @@ the city folded in on itself.</textarea>
               <div id="ci-tracklist"></div>
             </div>
           </div>
-          <div class="ci-row card">
-            <span class="grow"><b id="vis-label">Visibility: Public</b></span>
-            <button class="switch" id="vis" aria-pressed="true" aria-label="Public visibility"><i></i></button>
+          <div class="ci-block card">
+            <div class="eyebrow">Visibility</div>
+            <div class="visrow">
+              <button class="visopt" data-vis="public" aria-pressed="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.7 9h16.6M3.7 15h16.6M12 3.5c2.4 2.4 3.6 5.4 3.6 8.5s-1.2 6.1-3.6 8.5c-2.4-2.4-3.6-5.4-3.6-8.5s1.2-6.1 3.6-8.5z"/></svg>
+                <span>Public</span>
+              </button>
+              <button class="visopt" data-vis="friends" aria-pressed="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="9" r="3"/><path d="M2.5 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17" cy="8" r="2.4"/><path d="M15.3 13.7c2.5.3 4.2 2.2 4.2 5"/></svg>
+                <span>Friends</span>
+              </button>
+              <button class="visopt" data-vis="private" aria-pressed="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="10.5" width="13" height="9.5" rx="1.6"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+                <span>Private</span>
+              </button>
+            </div>
+            <p class="vis-desc" id="vis-desc">Visible to everyone on ArchScape.</p>
           </div>
           <div class="ci-cta">
             <button class="btn btn-outline" data-savedraft>Save Draft</button>
@@ -1819,7 +1843,7 @@ function go(id, isBack){
     $('#ar-shotview').hidden = true;
     if(!coachSeen){ coachStep = 0; showCoach(); }
   } else clearTimeout(capTimer);
-  if(id === 'checkin'){ renderCheckinTags(); renderCheckinPhotos(); } else closeQuickAdd();
+  if(id === 'checkin'){ renderCheckinTags(); renderCheckinPhotos(); renderVis(); } else closeQuickAdd();
   closeLightbox();
   $('#exitsheet').hidden = true;
   if(id === 'journey') requestAnimationFrame(()=>jmap.refit());
@@ -2146,19 +2170,18 @@ function renderCheckinPhotos(){
   if(n < 1) return;
 
   $('#ci-strip').innerHTML = CAP_SET.map((k,i)=>
-    '<button class="cishot" data-cishot="' + i + '" aria-pressed="' + (i === ciSel) + '" ' +
+    '<span class="cishot-wrap"><button class="cishot" data-cishot="' + i + '" aria-pressed="' + (i === ciSel) + '" ' +
     'aria-label="Photo ' + (i+1) + '" style="background-image:url(' + IMG[k] + ')">' +
-    (i === capCover ? '<span class="cover">Cover</span>' : '') + '</button>').join('') +
+    (i === capCover ? '<span class="cover">Cover</span>' : '') + '</button>' +
+    (n > 1 ? '<button class="delshot" data-cidelshot="' + i + '" aria-label="Remove photo ' + (i+1) + '">&#215;</button>' : '') +
+    '</span>').join('') +
     (setFull() ? '' : '<button class="cishot addshot" data-addphoto aria-label="Add another photo">' +
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>');
 
-  $('[data-photo="left"]').disabled  = ciSel === 0;
-  $('[data-photo="right"]').disabled = ciSel === n - 1;
   const isCover = ciSel === capCover;
   $('#ci-setcover').disabled = isCover;
-  $('#ci-setcover').textContent = isCover ? 'Cover photo' : 'Set as cover';
+  $('#ci-setcover').textContent = isCover ? 'Cover Photo' : 'Set Cover Photo';
   $('#ci-setcover').setAttribute('aria-pressed', String(isCover));
-  $('[data-photo="remove"]').disabled = n < 2;
 }
 
 function setFull(){ return CAP_SET.length >= MAX_SHOTS; }
@@ -2427,7 +2450,7 @@ function setCapture(st, keepFrame, keepSet){
   if(st === 'scanning'){
     capFrozen = false; capIndex = 0; capPassive = false;
     if(!keepSet){
-      CAP_SET = []; capCover = 0; ciSel = 0; shotIdx = 0;
+      CAP_SET = []; capCover = 0; ciSel = 0; shotIdx = 0; ciVis = 'public';
       $('#ar-bg').querySelector('img').src = IMG[SHOTS[0]];
       curTrack = null; applyTrack(); renderAudio();   /* ambience belongs to one capture */
       capLook = 'none'; applyLook();                  /* so does the look */
@@ -2471,7 +2494,17 @@ function syncObGate(){
 }
 /* the check-in owns the words: suggestions can be dropped, and anything
    the user types is theirs to remove again */
-let CI_TAGS = [], CI_FEATS = [];
+let CI_TAGS = [], CI_FEATS = [], CI_FEATS_KEY = null;
+let ciVis = 'public';
+const VIS_INFO = {
+  public:  {desc:'Visible to everyone on ArchScape.'},
+  friends: {desc:'Only people you follow each other with can see this.'},
+  private: {desc:'Only visible to you, kept in your archive.'}
+};
+function renderVis(){
+  $$('.visopt').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.vis === ciVis)));
+  $('#vis-desc').textContent = VIS_INFO[ciVis].desc;
+}
 const FEATURE_POOL = {
   vessel: ['Interlocking stairs', 'Copper-clad steel', 'Open-air atrium', 'Hexagonal geometry'],
   shed:   ['Telescoping shell', 'Exposed steel truss', 'ETFE pillows'],
@@ -2509,10 +2542,16 @@ function renderCheckinTags(){
   const cand = CANDIDATES[capIndex];
   const key = !cand ? null : cand.bldId === 'vessel' ? 'vessel'
             : cand.name === 'The Shed' ? 'shed' : 'hy30';
-  const feats = (FEATURE_POOL[key] || []).concat(CI_FEATS.filter(f=>!(FEATURE_POOL[key] || []).includes(f)));
-  $('#ci-features').innerHTML = feats.map((f, i)=>{
-    const mine = CI_FEATS.includes(f);
-    return `<button class="tag" data-cifeat="${esc(f)}" aria-pressed="${mine || i === 0}">${esc(f)}` +
+  /* CI_FEATS is the full selection, not just custom additions - it only
+     seeds a default (the pool's first item) the first time a building's
+     features are shown, so a user's own picks and deselections stick. */
+  const pool = FEATURE_POOL[key] || [];
+  if(key !== CI_FEATS_KEY){ CI_FEATS_KEY = key; CI_FEATS = pool.length ? [pool[0]] : []; }
+  const feats = pool.concat(CI_FEATS.filter(f=>!pool.includes(f)));
+  $('#ci-features').innerHTML = feats.map(f=>{
+    const on = CI_FEATS.includes(f);
+    const mine = on && !pool.includes(f);
+    return `<button class="tag" data-cifeat="${esc(f)}" aria-pressed="${on}">${esc(f)}` +
            (mine ? '<span class="x">&#215;</span>' : '') + '</button>';
   }).join('') + addChipHTML('feat');
 
@@ -2933,8 +2972,8 @@ function snapshotDraft(){
     photos: CAP_SET.slice(), cover: capCover, sel: ciSel,
     name: $('#ci-name').value, arch: $('#ci-arch').value, year: $('#ci-year').value, style: $('#ci-style').value,
     caption: $('#caption').value, locname: $('#ci-locname').textContent, loccoords: $('#ci-loccoords').textContent,
-    tags: CI_TAGS.slice(), feats: CI_FEATS.slice(), track: curTrack,
-    vis: $('#vis').getAttribute('aria-pressed') === 'true', bldId: c?.bldId || null
+    tags: CI_TAGS.slice(), feats: CI_FEATS.slice(), featKey: CI_FEATS_KEY, track: curTrack,
+    vis: ciVis, bldId: c?.bldId || null
   };
 }
 function saveDraft(){
@@ -2945,14 +2984,13 @@ function resumeDraft(i){
   const d = DRAFTS[i]; if(!d) return;
   DRAFTS.splice(i, 1);
   CAP_SET = d.photos.slice(); capCover = d.cover; ciSel = Math.min(d.sel, CAP_SET.length - 1);
-  CI_TAGS = d.tags.slice(); CI_FEATS = d.feats.slice(); curTrack = d.track;
+  CI_TAGS = d.tags.slice(); CI_FEATS = d.feats.slice(); CI_FEATS_KEY = d.featKey; curTrack = d.track;
+  ciVis = d.vis || 'public';
   go('checkin');
   $('#ci-name').value = d.name; $('#ci-arch').value = d.arch;
   $('#ci-year').value = d.year; $('#ci-style').value = d.style;
   $('#ci-locname').textContent = d.locname; $('#ci-loccoords').textContent = d.loccoords;
   $('#caption').value = d.caption;
-  $('#vis').setAttribute('aria-pressed', String(d.vis));
-  $('#vis-label').textContent = 'Visibility: ' + (d.vis ? 'Public' : 'Private');
   applyTrack(); renderAudio(); renderCheckinTags(); renderCheckinPhotos();
 }
 function draftShelf(){
@@ -3701,36 +3739,20 @@ document.addEventListener('click', e=>{
     if(on) toast('Message sent to @javier.arq'); return;
   }
   if(t.closest('#meetup')){ toast('Meet-up invite sent \u2014 400m away'); return; }
-  if(t.closest('#vis')){
-    const b = $('#vis');
-    const on = b.getAttribute('aria-pressed')!=='true';
-    b.setAttribute('aria-pressed', String(on));
-    $('#vis-label').textContent = 'Visibility: ' + (on ? 'Public' : 'Private');
-    return;
-  }
+  const vo = t.closest('[data-vis]');
+  if(vo){ ciVis = vo.dataset.vis; renderVis(); return; }
 
   const cish = t.closest('[data-cishot]');
   if(cish){ ciSel = +cish.dataset.cishot; renderCheckinPhotos(); return; }
 
-  const pact = t.closest('[data-photo]');
-  if(pact){
-    const act = pact.dataset.photo, n = CAP_SET.length;
-    if(act === 'cover'){ capCover = ciSel; toast('Cover photo set'); }
-    if(act === 'remove'){
-      CAP_SET.splice(ciSel, 1);
-      if(capCover === ciSel) capCover = 0;
-      else if(capCover > ciSel) capCover--;
-      ciSel = Math.min(ciSel, CAP_SET.length - 1);
-    }
-    if(act === 'left' || act === 'right'){
-      const to = act === 'left' ? ciSel - 1 : ciSel + 1;
-      if(to < 0 || to >= n) return;
-      const [m] = CAP_SET.splice(ciSel, 1);
-      CAP_SET.splice(to, 0, m);
-      if(capCover === ciSel) capCover = to;
-      else if(capCover === to) capCover = ciSel;
-      ciSel = to;
-    }
+  if(t.closest('[data-setcover]')){ capCover = ciSel; toast('Cover photo set'); renderCheckinPhotos(); return; }
+  const cidel = t.closest('[data-cidelshot]');
+  if(cidel){
+    const i = +cidel.dataset.cidelshot;
+    CAP_SET.splice(i, 1);
+    if(capCover === i) capCover = 0;
+    else if(capCover > i) capCover--;
+    ciSel = Math.min(ciSel, CAP_SET.length - 1);
     renderCheckinPhotos();
     return;
   }
@@ -3751,7 +3773,10 @@ document.addEventListener('click', e=>{
   if(cifeat){
     const v = cifeat.dataset.cifeat;
     if(t.closest('.x')){ CI_FEATS = CI_FEATS.filter(x=>x !== v); renderCheckinTags(); return; }
-    cifeat.setAttribute('aria-pressed', String(cifeat.getAttribute('aria-pressed') !== 'true'));
+    const on = cifeat.getAttribute('aria-pressed') === 'true';
+    if(on){ CI_FEATS = CI_FEATS.filter(x=>x !== v); }
+    else if(!CI_FEATS.includes(v)){ CI_FEATS.push(v); }
+    renderCheckinTags();
     return;
   }
   if(t.closest('#ci-music')){
@@ -3786,11 +3811,15 @@ document.addEventListener('click', e=>{
     const cap = ($('#caption').value||'').trim() || 'Untitled check-in';
     const tags = $$('#ci-tags .tag[aria-pressed="true"]').map(b=>b.dataset.citag);
     const cand = CANDIDATES[capIndex];   /* undefined when nothing was matched */
-    POSTS.unshift({person:'lucy', bld:cand?.bldId || null, group:null, style:cand?.style || $('#ci-style').value || null,
-      place:'New York', time:'just now', img:CAP_SET[capCover] || 'vessel_shot', quote:cap,
-      tags:tags.length?tags:['#archscape'], likes:0, comments:0, liked:false, saved:false, fresh:true});
-    renderCommunity(commTab); go('community');
-    toast($('#vis').getAttribute('aria-pressed')==='true' ? 'Published to Community' : 'Saved privately');
+    if(ciVis !== 'private'){
+      POSTS.unshift({person:'lucy', bld:cand?.bldId || null, group:null, style:cand?.style || $('#ci-style').value || null,
+        place:'New York', time:'just now', img:CAP_SET[capCover] || 'vessel_shot', quote:cap,
+        tags:tags.length?tags:['#archscape'], likes:0, comments:0, liked:false, saved:false, fresh:true,
+        friendsOnly: ciVis === 'friends'});
+      renderCommunity(commTab);
+    }
+    go('community');
+    toast(ciVis === 'public' ? 'Published to Community' : ciVis === 'friends' ? 'Shared with friends' : 'Saved privately');
     return;
   }
 });
