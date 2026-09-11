@@ -1328,22 +1328,12 @@ figure{margin:0}
             <button class="chip" aria-pressed="false" data-val="following">Following</button>
             <button class="chip" aria-pressed="false" data-val="saved">Saved</button>
           </div>
-          <div class="mapframe" id="discover-map">
-            <button class="mapbadge" data-go="crossing">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 20 21 4"/><path d="M3 4l18 16"/></svg>
-              Paths crossing · <b>3 nearby</b>
-            </button>
-          </div>
+          <div class="mapframe" id="discover-map"></div>
           <div class="sechead" style="padding-top:18px">
             <h3 class="sectitle" id="spots-title">Nearby Spots</h3>
             <button class="seelink" data-go="knowledge">See All</button>
           </div>
           <div class="spots" id="spots"></div>
-          <div class="sechead">
-            <h3 class="sectitle">Community</h3>
-            <button class="seelink" data-comm="groups">All groups</button>
-          </div>
-          <div id="disc-comm"></div>
         </section>
 
         <!-- ============ 03 AR CAPTURE ============ -->
@@ -1567,11 +1557,14 @@ the city folded in on itself.</textarea>
         <!-- ============ 05 JOURNEY MAP ============ -->
         <section class="screen pad padnav" id="s-journey">
           <div class="ci-head">
-            <button class="iconbtn" data-go="discover" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
             <h2 class="h-title sm">My Journey Map</h2>
             <button class="iconbtn" aria-label="Share journey"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><line x1="8.3" y1="10.8" x2="15.7" y2="6.2"/><line x1="8.3" y1="13.2" x2="15.7" y2="17.8"/></svg></button>
           </div>
           <div class="jmap" id="journey-map">
+            <button class="mapbadge" data-go="crossing">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 20 21 4"/><path d="M3 4l18 16"/></svg>
+              Paths crossing · <b>3 nearby</b>
+            </button>
             <svg class="mapcanvas" id="jmap-svg" aria-label="Map of your journey through Manhattan"></svg>
             <div class="mapsearch">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
@@ -1600,6 +1593,11 @@ the city folded in on itself.</textarea>
             <button class="seelink" data-pfjump="journeys">All journeys</button>
           </div>
           <div id="stops"></div>
+          <div class="sechead" style="padding-top:4px">
+            <h3 class="sectitle">Friends Nearby</h3>
+            <button class="seelink" data-go="crossing">Paths crossing</button>
+          </div>
+          <div id="map-friends"></div>
         </section>
 
         <!-- ============ 06 PROFILE ============ -->
@@ -1709,7 +1707,7 @@ the city folded in on itself.</textarea>
         <!-- ============ 10 PATHS CROSSING ============ -->
         <section class="screen pad padnav" id="s-crossing">
           <div class="ci-head">
-            <button class="iconbtn" data-go="discover" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+            <button class="iconbtn" data-go="journey" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
             <h2 class="h-title sm">Paths Crossing</h2>
             <span class="seelink" style="cursor:default">3 nearby</span>
           </div>
@@ -1822,7 +1820,7 @@ const SCREENS = [
   {id:'profile',     name:'Profile',     chrome:'dark',  nav:true, tab:'profile'},
   {id:'postdetail',  name:'Post',        chrome:'light', nav:false},
   {id:'inspiration', name:'Inspiration', chrome:'light', nav:true, tab:'profile'},
-  {id:'community',   name:'Community',   chrome:'light', nav:true, tab:'explore'},
+  {id:'community',   name:'Community',   chrome:'light', nav:true, tab:'profile'},
   {id:'group',       name:'Group',       chrome:'light', nav:true, tab:'explore'},
   {id:'member',      name:'Explorer',    chrome:'light', nav:true, tab:'explore'},
   {id:'building',    name:'Building',    chrome:'light', nav:true, tab:'explore'},
@@ -2749,6 +2747,19 @@ function renderDiscoverCommunity(){
      </div>`;
 }
 
+function renderMapSocial(){
+  const near = ['mia','sofia','kenji','javier'];
+  $('#map-friends').innerHTML =
+    `<div class="nearrow">
+       ${near.map(k=>{
+         const p = PEOPLE[k];
+         return `<button class="nearp" data-member="${k}">
+           ${avatarOf(k)}<b>${esc(p.name.split(' ')[0])}</b><span>${esc(p.city)}</span></button>`;
+       }).join('')}
+       <button class="nearp nearall" data-go="crossing"><i>&#43;</i><b>Nearby</b><span>See all</span></button>
+     </div>`;
+}
+
 /* What has someone actually done lately: their newest post, named by the
    building it captured, so a row says something a bare avatar cannot. */
 function lastActivity(k){
@@ -3512,7 +3523,7 @@ $('#discover-map').insertAdjacentHTML('afterbegin', discoverMap());
 const jmap = makeLiveMap($('#journey-map'), $('#jmap-svg'), $$('#journey-map .zoomctl button'));
 wireMapSearch();
 $('#crossing-map').insertAdjacentHTML('afterbegin', crossingMap());
-renderSpots('nearby'); renderPfPanel('works'); renderInsp('All'); renderRecords(); renderCommunity('feed'); renderDiscoverCommunity();
+renderSpots('nearby'); renderPfPanel('works'); renderInsp('All'); renderRecords(); renderCommunity('feed'); renderMapSocial();
 syncObGate(); renderStops(); applyCapOpts(); applyTrack(); renderAudio(); applyLook(); renderLibrary(); renderCapSet(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
 
 document.addEventListener('click', e=>{
