@@ -191,8 +191,9 @@ figure{margin:0}
 .obhead h2{font-family:var(--disp);font-size:34px;font-weight:600;line-height:1.12;margin:0 0 10px;
   letter-spacing:.004em;text-wrap:balance}
 .obhead p{margin:0;color:#9C968E;font-size:13.5px;line-height:1.6;max-width:35ch}
-.obbody{flex:1;min-height:0;padding:20px 26px 0;display:flex;flex-direction:column;justify-content:flex-start;
+.obbody{flex:1;min-height:0;padding:0 26px;display:flex;flex-direction:column;justify-content:center;
   gap:10px;overflow:hidden}
+.obbody > .obhead{padding:0 0 20px}
 .obfoot{padding:14px 26px 0;flex:none;display:flex;gap:11px}
 .obfoot .btn{width:auto;flex:1}
 .obprev{flex:none;padding:16px 22px;border-radius:8px;font-size:15px;font-weight:600;color:#CFC9C0;
@@ -201,7 +202,7 @@ figure{margin:0}
 .obdots{display:flex;gap:6px;justify-content:center;padding:18px 0 26px;flex:none}
 .obdots i{width:28px;height:3px;border-radius:2px;background:#333336;display:block;transition:.25s}
 .obdots i.on{background:var(--red)}
-#s-signin .obbody{justify-content:flex-start;padding-top:26px}
+#s-signin .obbody{justify-content:flex-start;padding:26px 26px 0}
 .sform{display:flex;flex-direction:column;gap:15px;transition:opacity .25s}
 .sfield{display:flex;flex-direction:column;gap:7px}
 .sfield > span{font-size:9.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#6E6862}
@@ -252,7 +253,7 @@ figure{margin:0}
 .themecell[aria-pressed="true"] svg{color:var(--red)}
 .themecell b{display:block;font-size:13px;font-weight:600;color:#fff}
 
-#s-obready .obbody{padding:20px 26px 0;gap:0;justify-content:flex-start}
+#s-obready .obbody{padding:0 26px;gap:0;justify-content:center}
 .readyrule{flex:none;display:flex;align-items:baseline;justify-content:space-between;gap:12px;
   padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,.16)}
 .readyrule span{font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6E6862}
@@ -1208,11 +1209,11 @@ figure{margin:0}
             <span class="obmark"><b>Arch</b>Scape</span>
             <button class="obskip" data-go="obready">Skip <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></button>
           </div>
-          <div class="obhead">
-            <h2>How do you see the city?</h2>
-            <p>ArchScape adapts to your perspective. Select the role that best defines your creative lens.</p>
-          </div>
           <div class="obbody" id="ob-roles">
+            <div class="obhead">
+              <h2>How do you see the city?</h2>
+              <p>ArchScape adapts to your perspective. Select the role that best defines your creative lens.</p>
+            </div>
             <button class="rolerow" aria-pressed="false">
               <span class="roleicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.6"/><path d="M12 6.1 5.5 21"/><path d="M12 6.1 18.5 21"/><path d="M8.4 14h7.2"/></svg></span>
               <span class="roletext"><b>Architect</b><span>Structure, form, and urban planning.</span></span>
@@ -1240,11 +1241,11 @@ figure{margin:0}
             <span class="obmark"><b>Arch</b>Scape</span>
             <button class="obskip" data-go="obready">Skip <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></button>
           </div>
-          <div class="obhead">
-            <h2>What inspires you most?</h2>
-            <p>Select the themes that define your aesthetic journey. Pick as many as you like.</p>
-          </div>
           <div class="obbody">
+            <div class="obhead">
+              <h2>What inspires you most?</h2>
+              <p>Select the themes that define your aesthetic journey. Pick as many as you like.</p>
+            </div>
             <div class="themegrid" id="ob-themes">
               <button class="themecell" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 21V6l7-3 7 3v15"/><path d="M9 21v-5h6v5"/><path d="M9 10h2M13 10h2"/></svg><b>Architecture</b></button>
               <button class="themecell" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="7" y="9" width="8" height="12" rx="2"/><path d="M9.5 9V6h3v3"/><circle cx="18" cy="5" r="1"/><circle cx="18" cy="9" r="1"/><circle cx="21" cy="7" r="1"/></svg><b>Street Art</b></button>
@@ -1266,11 +1267,11 @@ figure{margin:0}
             <span class="obmark"><b>Arch</b>Scape</span>
             
           </div>
-          <div class="obhead">
-            <h2>Your creative journey begins</h2>
-            <p>Capture the city's hidden geometries and join a community of visual curators.</p>
-          </div>
           <div class="obbody">
+            <div class="obhead">
+              <h2>Your creative journey begins</h2>
+              <p>Capture the city's hidden geometries and join a community of visual curators.</p>
+            </div>
             <div class="readyrule"><span>Captured this week</span><span>New York</span></div>
             <div class="readyart">
               <div class="readyrow">
