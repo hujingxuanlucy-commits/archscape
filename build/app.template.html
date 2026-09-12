@@ -310,6 +310,39 @@ figure{margin:0}
 .spot span{display:block;font-size:10.5px;color:rgba(255,255,255,.74);margin-top:2px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
+/* the map is a location answer, so it belongs to Nearby alone */
+#s-discover:not([data-dtab="nearby"]) .mapframe{display:none}
+.mappin{cursor:pointer}
+.mappin circle{transition:r .16s}
+.mappin:hover circle:first-child,.mappin:focus-visible circle:first-child{r:17}
+
+/* Trending: rank is the point, so the list is ordered and numbered */
+.trendlist,.actlist{display:flex;flex-direction:column;padding:0 22px 22px}
+.trendrow,.actrow{display:flex;align-items:center;gap:13px;padding:12px 0;width:100%;
+  text-align:left;border-bottom:1px solid var(--divider)}
+.trendrow:last-child,.actrow:last-child{border-bottom:0}
+.trendrank{flex:none;width:24px;font-family:var(--disp);font-size:18px;font-weight:600;color:var(--muted-2)}
+.trendrow:nth-child(-n+3) .trendrank{color:var(--red)}
+.trendimg{width:54px;height:54px;border-radius:8px;object-fit:cover;flex:none}
+.trendinfo{flex:1;min-width:0}
+.trendinfo b{display:block;font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.25}
+.trendinfo span{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+.trendstat{flex:none;display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--red)}
+.trendstat svg{width:11px;height:11px}
+
+/* Following: what someone did, not what a place is */
+.actinfo{flex:1;min-width:0}
+.actinfo b{font-size:13px;font-weight:600;color:var(--ink)}
+.actinfo p{margin:2px 0 0;font-size:12px;color:var(--muted);line-height:1.35;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.acttime{display:block;margin-top:3px;font-size:10.5px;color:var(--muted-2)}
+.actthumb{width:46px;height:46px;border-radius:7px;object-fit:cover;flex:none}
+
+/* Saved: a bookmark marker separates it from plain discovery cards */
+.spot .savemark{position:absolute;top:9px;right:9px;z-index:2;width:24px;height:24px;border-radius:6px;
+  display:grid;place-items:center;background:rgba(10,10,10,.55);backdrop-filter:blur(3px)}
+.spot .savemark svg{width:12px;height:12px;color:#fff;fill:#fff}
+
 .feedcard{display:flex;gap:12px;padding:12px;margin:0 22px 12px;align-items:flex-start;text-align:left;width:calc(100% - 44px);
   transition:.16s}
 .feedcard:hover{border-color:var(--muted-2)}
@@ -1330,7 +1363,7 @@ figure{margin:0}
         </section>
 
         <!-- ============ 02 DISCOVER ============ -->
-        <section class="screen pad padnav" id="s-discover">
+        <section class="screen pad padnav" id="s-discover" data-dtab="nearby">
           <div class="apphead">
             <h2 class="h-title">Discover</h2>
             <button class="iconbtn" data-go="knowledge" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
@@ -1344,9 +1377,9 @@ figure{margin:0}
           <div class="mapframe" id="discover-map"></div>
           <div class="sechead" style="padding-top:18px">
             <h3 class="sectitle" id="spots-title">Nearby Spots</h3>
-            <button class="seelink" data-go="knowledge">See All</button>
+            <button class="seelink" id="spots-link" data-go="knowledge">See All</button>
           </div>
-          <div class="spots" id="spots"></div>
+          <div id="spots"></div>
         </section>
 
         <!-- ============ 03 AR CAPTURE ============ -->
@@ -1946,14 +1979,20 @@ function routeSVG(pts, colour){
 
 function discoverMap(){
   const pins = [
-    {x:112, y:96,  r:11, c:'#952324'},
-    {x:232, y:152, r:8,  c:'#952324'},
-    {x:302, y:74,  r:8,  c:'#3E6B9A'}
+    {x:112, y:96,  r:11, c:'#952324', id:'vessel'},
+    {x:232, y:152, r:8,  c:'#952324', id:'seagram'},
+    {x:302, y:74,  r:8,  c:'#3E6B9A', id:'tate'}
   ];
   return `<img class="mapimg" src="${IMG.map_city}" alt="Street map of nearby architectural spots">
-    <svg class="mapsvg" viewBox="0 0 393 250" aria-hidden="true">
-      ${pins.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="${p.r+3.5}" fill="#fff" opacity=".92"/>
-        <circle cx="${p.x}" cy="${p.y}" r="${p.r}" fill="${p.c}"/>`).join('')}
+    <svg class="mapsvg" viewBox="0 0 393 250">
+      ${pins.map(p=>{
+        const r = RECORDS.find(x=>x.id===p.id);
+        return `<g class="mappin" data-building="${p.id}" role="button" tabindex="0"
+            aria-label="${esc(r ? r.name : p.id)}">
+          <circle cx="${p.x}" cy="${p.y}" r="${p.r+3.5}" fill="#fff" opacity=".92"/>
+          <circle cx="${p.x}" cy="${p.y}" r="${p.r}" fill="${p.c}"/>
+        </g>`;
+      }).join('')}
     </svg>`;
 }
 
@@ -2997,9 +3036,67 @@ function openMember(id){ renderMember(id); go('member'); }
 function openBuilding(id){ renderBuilding(id); go('building'); }
 
 /* ---------- renderers ---------- */
+/* Each Discover tab answers a different question, so each gets the shape that
+   answers it: Nearby a map and cards, Trending a ranking, Following a feed of
+   what people did, Saved your own shelf. */
 function renderSpots(key){
   $('#spots-title').textContent = SPOT_TITLE[key];
-  $('#spots').innerHTML = SPOTS[key].map(s=>`
+  $('#s-discover').dataset.dtab = key;
+  const link = $('#spots-link'), box = $('#spots');
+
+  if(key === 'trending'){
+    link.textContent = 'See All';
+    link.removeAttribute('data-comm');
+    link.dataset.go = 'knowledge';
+    const list = RECORDS.slice().sort((a,b)=>b.captures - a.captures).slice(0,8);
+    box.className = 'trendlist';
+    box.innerHTML = list.map((r,i)=>`
+      <button class="trendrow" data-building="${r.id}">
+        <span class="trendrank onum">${i+1}</span>
+        <img class="trendimg" src="${IMG[r.img]}" alt="${esc(r.name)}">
+        <span class="trendinfo"><b>${esc(r.name)}</b>
+          <span>${esc(r.city)} · ${esc(r.style)}</span></span>
+        <span class="trendstat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 14 15 20 8"/><polyline points="15 8 20 8 20 13"/></svg>
+          <span class="onum">${(r.captures/1000).toFixed(1)}k</span></span>
+      </button>`).join('');
+    return;
+  }
+
+  if(key === 'following'){
+    link.textContent = 'See All';
+    link.removeAttribute('data-go');
+    link.dataset.comm = 'following';
+    box.className = 'actlist';
+    box.innerHTML = POSTS.map(p=>{
+      const who = PEOPLE[p.person];
+      const b = p.bld && bldById(p.bld);
+      return `<button class="actrow" ${b ? `data-building="${p.bld}"` : `data-member="${p.person}"`}>
+        ${avatarOf(p.person)}
+        <span class="actinfo"><b>${esc(who.name.split(' ')[0])}</b>
+          <p>${b ? 'Captured ' + esc(b.name) : 'Posted from ' + esc(p.place)}</p>
+          <span class="acttime">${esc(p.time)} · ${esc(p.place)}</span></span>
+        <img class="actthumb" src="${IMG[p.img]}" alt="">
+      </button>`;
+    }).join('');
+    return;
+  }
+
+  link.textContent = 'See All';
+  link.removeAttribute('data-comm');
+  link.dataset.go = 'knowledge';
+  box.className = 'spots';
+  if(key === 'saved'){
+    const ids = ['serpentine','greatcourt','trellick','k11','tate','habitat'];
+    box.innerHTML = ids.map(id=>{
+      const r = bldById(id);
+      return `<button class="spot" data-building="${r.id}"><img src="${IMG[r.img]}" alt="${esc(r.name)}">
+        <span class="savemark">${I.book}</span>
+        <figcaption><b>${esc(r.name)}</b><span>${esc(r.city)} · ${esc(r.style)}</span></figcaption></button>`;
+    }).join('');
+    return;
+  }
+  box.innerHTML = SPOTS[key].map(s=>`
     <button class="spot" data-building="${s.id}"><img src="${IMG[s.img]}" alt="${esc(s.name)}">
       <figcaption><b>${esc(s.name)}</b><span>${esc(s.city)} &#183; ${s.n} check-ins</span></figcaption></button>`).join('');
 }
