@@ -1088,7 +1088,7 @@ figure{margin:0}
 .xav span{font-size:11.5px;color:var(--muted)}
 
 /* ============ 11 knowledge ============ */
-.kn-hero{padding:14px 22px 12px;background:var(--surface)}
+.kn-hero{padding:14px 22px 12px;background:var(--surface);border-bottom:1px solid var(--divider)}
 .kn-hero img{display:none}
 .kn-in{}
 .kn-toprow{display:flex;align-items:center;gap:10px;margin-bottom:10px}
@@ -1098,12 +1098,12 @@ figure{margin:0}
 .knback svg{width:19px;height:19px}
 .kn-toploc{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted)}
 .kn-toploc svg{width:13px;height:13px;flex:none;color:var(--red)}
-.kn-nearby{padding:0 22px;flex-direction:column;gap:0;display:none}
+.kn-nearby{flex-direction:column;gap:0;display:none}
 #s-knowledge.search-active .kn-nearby{display:flex}
 #s-knowledge.search-active .kn-browse{display:none}
 #s-knowledge.search-active .kcount{display:none}
 #s-knowledge.search-active .kgrid{display:none}
-.kn-nearrow{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--divider)}
+.kn-nearrow{display:flex;align-items:center;gap:12px;padding:11px 22px;border-bottom:1px solid var(--divider);text-align:left;width:100%}
 .kn-nearrow:last-child{border-bottom:0}
 .kn-nearimg{width:48px;height:48px;border-radius:8px;object-fit:cover;flex:none}
 .kn-nearinfo{flex:1;min-width:0}
@@ -1773,7 +1773,7 @@ the city folded in on itself.</textarea>
           </div>
           <div class="kn-nearby" id="kn-nearby"></div>
           <div class="kn-browse">
-            <div class="sechead" style="padding:10px 0 0"><h3 class="sectitle">Browse by style</h3></div>
+            <div class="sechead" style="padding:14px 22px 6px"><h3 class="sectitle">Browse by style</h3></div>
             <div class="chiprow" data-chips="kstyle">
               <button class="chip" aria-pressed="true"  data-val="All">All</button>
               <button class="chip" aria-pressed="false" data-val="Brutalism">Brutalism</button>
@@ -1783,9 +1783,7 @@ the city folded in on itself.</textarea>
               <button class="chip" aria-pressed="false" data-val="Contemporary">Contemporary</button>
             </div>
           </div>
-          <div class="kcount">
-            <h3 class="sectitle"><span id="kheading">All records</span> <span style="color:var(--muted-2);font-size:15px">· <span id="kcount" class="onum">12</span></span></h3>
-          </div>
+          <span id="kheading" hidden></span><span id="kcount" hidden></span>
           <div class="kgrid" id="kgrid"></div>
         </section>
 
@@ -3234,25 +3232,18 @@ function renderInsp(filter){
   }).join('');
 }
 function renderKnNearby(){
-  const nearby = [
-    {id:'vessel',   dist:'0.3 km'},
-    {id:'seagram',  dist:'0.8 km'},
-    {id:'k11',       dist:'1.4 km'},
-  ];
   const el = $('#kn-nearby');
   if(!el) return;
-  el.innerHTML = nearby.map(({id, dist})=>{
-    const r = RECORDS.find(x=>x.id===id);
-    if(!r) return '';
-    return `<button class="kn-nearrow" data-building="${r.id}">
+  const dists = ['0.3 km','0.8 km','1.1 km','1.4 km','2.1 km','2.8 km','3.2 km','4.0 km','4.7 km','5.3 km','6.1 km','7.4 km','8.2 km','9.0 km','10.4 km'];
+  el.innerHTML = RECORDS.map((r,i)=>`
+    <button class="kn-nearrow" data-building="${r.id}">
       <img class="kn-nearimg" src="${IMG[r.img]}" alt="${esc(r.name)}">
       <div class="kn-nearinfo">
         <b>${esc(r.name)}</b>
         <span>${esc(r.city)} · ${esc(r.style)}</span>
       </div>
-      <span class="kn-dist">${dist}</span>
-    </button>`;
-  }).join('');
+      <span class="kn-dist">${dists[i]||'—'}</span>
+    </button>`).join('');
 }
 
 function renderRecords(){
