@@ -299,6 +299,9 @@ figure{margin:0}
 .mapbadge b{color:var(--red)}
 .mapbadge svg{width:14px;height:14px;color:var(--red)}
 .pin{filter:drop-shadow(0 3px 5px rgba(0,0,0,.28))}
+/* the journey map's bottom edge belongs to search and zoom, so the badge
+   takes the one free corner instead of stacking on top of them */
+#journey-map .mapbadge{top:14px;bottom:auto}
 
 .spots{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 22px 22px}
 .spot{position:relative;aspect-ratio:1/1.18;border-radius:var(--r-card);overflow:hidden;text-align:left;display:block}
@@ -753,22 +756,25 @@ figure{margin:0}
 .exitsheet .linkbtn{display:block;width:100%;text-align:center;padding:10px;font-size:13px;font-weight:600;color:var(--muted)}
 
 /* ============ 05 journey map ============ */
-.jmap{position:relative;height:330px;overflow:hidden;background:#F1ECE2;border-bottom:1px solid var(--bone);
+.jmap{position:relative;height:330px;overflow:hidden;background:#E7DFCA;border-bottom:1px solid var(--bone);
   touch-action:none}
-/* drawn map: paper ground, bone streets, brand red for your own places */
+/* drawn map: tan blocks with the roadway cut through them in white, the way a
+   printed street map reads - the ground is the block, not the paper */
 .jmap{cursor:grab}
 .jmap.grabbing{cursor:grabbing}
-.mapcanvas{position:absolute;inset:0;width:100%;height:100%;background:#F4F0E7;display:block}
-.mpark{fill:#DCE6D5;stroke:#C9D6C0;stroke-width:1}
-.mst{stroke:#DED5C3;stroke-linecap:round}
-.mav{stroke:#CDBFA5;stroke-linecap:round}
-.mroute{fill:none;stroke-linejoin:round;stroke-linecap:round;opacity:.92}
+.mapcanvas{position:absolute;inset:0;width:100%;height:100%;background:#E7DFCA;display:block}
+.mpark{fill:#CCDBBE;stroke:#B6C9A6;stroke-width:1}
+.mst{stroke:#FAF7EF;stroke-linecap:round}
+.mav{stroke:#FFFDF7;stroke-linecap:round}
+.mroute{fill:none;stroke-linejoin:round;stroke-linecap:round;opacity:.95}
 .mlabel{font-family:var(--ui);font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
-  fill:#A79E8E}
+  fill:#9A9078}
 .mname{font-family:var(--ui);font-size:10px;font-weight:700;fill:var(--ink);paint-order:stroke;
-  stroke:rgba(250,248,244,.92);stroke-width:3.4px;stroke-linejoin:round}
-.mparklab{fill:#7E9271;letter-spacing:.2em}
+  stroke:rgba(255,253,247,.94);stroke-width:3.4px;stroke-linejoin:round}
+.mparklab{fill:#6E8560;letter-spacing:.2em}
 .mstop{cursor:pointer}
+.mmeet rect{fill:#C9922E}
+.mmeet text{font-family:var(--ui);font-size:8.5px;font-weight:700;letter-spacing:.12em;fill:#fff}
 .mapsearch{position:absolute;left:14px;right:60px;bottom:12px;z-index:6}
 .mapsearch > svg{position:absolute;left:11px;top:11px;width:15px;height:15px;color:var(--muted);pointer-events:none}
 .mapsearch input{width:100%;padding:10px 12px 10px 33px;border-radius:9px;border:1px solid var(--bone);
@@ -1098,12 +1104,7 @@ figure{margin:0}
   padding:3px 8px;margin-left:8px;vertical-align:2px}
 
 /* ============ 10 crossing ============ */
-.xmap{position:relative;height:330px;overflow:hidden;background:#F1ECE2;border-bottom:1px solid var(--bone)}
-.meethere{position:absolute;z-index:4;transform:translate(-50%,0);text-align:center;pointer-events:none}
-.meethere i{width:17px;height:17px;border-radius:50%;background:var(--amber);border:3px solid #fff;display:block;
-  margin:0 auto 5px;box-shadow:0 3px 9px rgba(0,0,0,.3)}
-.meethere b{background:var(--amber);color:#231A00;font-size:8.5px;font-weight:700;letter-spacing:.13em;padding:4px 8px;
-  white-space:nowrap;display:block}
+.xmap{height:330px}
 .xperson{display:flex;align-items:center;gap:13px;padding:16px 22px;border-bottom:1px solid var(--bone)}
 .xperson .avatar{width:52px;height:52px;font-size:16px}
 .xperson .grow{flex:1;min-width:0}
@@ -1374,7 +1375,14 @@ figure{margin:0}
             <button class="chip" aria-pressed="false" data-val="following">Following</button>
             <button class="chip" aria-pressed="false" data-val="saved">Saved</button>
           </div>
-          <div class="mapframe" id="discover-map"></div>
+          <div class="mapframe jmap" id="discover-map" style="height:250px">
+            <svg class="mapcanvas" id="dmap-svg" aria-label="Map of architectural spots near you"></svg>
+            <div class="zoomctl">
+              <button data-zoom="in" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+              <button data-zoom="out" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+              <button data-zoom="reset" aria-label="Fit all">Fit</button>
+            </div>
+          </div>
           <div class="sechead" style="padding-top:18px">
             <h3 class="sectitle" id="spots-title">Nearby Spots</h3>
             <button class="seelink" id="spots-link" data-go="knowledge">See All</button>
@@ -1757,8 +1765,13 @@ the city folded in on itself.</textarea>
             <h2 class="h-title sm">Paths Crossing</h2>
             <span class="seelink" style="cursor:default">3 nearby</span>
           </div>
-          <div class="xmap" id="crossing-map">
-            <div class="meethere" style="left:57.5%;top:46%"><i></i><b>MEET HERE</b></div>
+          <div class="xmap jmap" id="crossing-map">
+            <svg class="mapcanvas" id="xmap-svg" aria-label="Map of your path crossing another explorer's"></svg>
+            <div class="zoomctl">
+              <button data-zoom="in" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+              <button data-zoom="out" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+              <button data-zoom="reset" aria-label="Fit all">Fit</button>
+            </div>
           </div>
           <div class="xperson">
             <span class="avatar steel" data-member="javier" style="width:52px;height:52px;font-size:16px;cursor:pointer">J</span>
@@ -1933,7 +1946,10 @@ function go(id, isBack){
   } else clearTimeout(capTimer);
   if(id === 'checkin'){ renderCheckinTags(); renderCheckinPhotos(); renderVis(); } else closeQuickAdd();
   $('#exitsheet').hidden = true;
-  if(id === 'journey') requestAnimationFrame(()=>jmap.refit());
+  /* a map cannot size itself while its screen is hidden, so fit on the way in */
+  if(id === 'journey')  requestAnimationFrame(()=>jmap.refit());
+  if(id === 'discover') requestAnimationFrame(()=>dmap.refit());
+  if(id === 'crossing') requestAnimationFrame(()=>xmap.refit());
 }
 let toastT;
 function toast(msg){
@@ -1975,45 +1991,6 @@ function routeSVG(pts, colour){
             stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>
           <polyline points="${pts}" fill="none" stroke="${colour}" stroke-width="4"
             stroke-linecap="round" stroke-linejoin="round"/>`;
-}
-
-function discoverMap(){
-  const pins = [
-    {x:112, y:96,  r:11, c:'#952324', id:'vessel'},
-    {x:232, y:152, r:8,  c:'#952324', id:'seagram'},
-    {x:302, y:74,  r:8,  c:'#3E6B9A', id:'tate'}
-  ];
-  return `<img class="mapimg" src="${IMG.map_city}" alt="Street map of nearby architectural spots">
-    <svg class="mapsvg" viewBox="0 0 393 250">
-      ${pins.map(p=>{
-        const r = RECORDS.find(x=>x.id===p.id);
-        return `<g class="mappin" data-building="${p.id}" role="button" tabindex="0"
-            aria-label="${esc(r ? r.name : p.id)}">
-          <circle cx="${p.x}" cy="${p.y}" r="${p.r+3.5}" fill="#fff" opacity=".92"/>
-          <circle cx="${p.x}" cy="${p.y}" r="${p.r}" fill="${p.c}"/>
-        </g>`;
-      }).join('')}
-    </svg>`;
-}
-
-
-
-function crossingMap(){
-  return `<img class="mapimg" src="${IMG.map_grid}" alt="Two explorer paths crossing nearby">
-    <svg class="mapsvg" viewBox="0 0 393 330">
-      <g transform="rotate(${TILT} ${PIVOT})">
-        <polyline points="70,238 150,238 150,166 250,166 250,104" fill="none" stroke="#fff"
-          stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>
-        <polyline points="70,238 150,238 150,166 250,166 250,104" fill="none" stroke="#952324"
-          stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 6"/>
-        <polyline points="320,214 226,214 226,150 132,150 132,88" fill="none" stroke="#fff"
-          stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>
-        <polyline points="320,214 226,214 226,150 132,150 132,88" fill="none" stroke="#3E6B9A"
-          stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="70" cy="238" r="8" fill="#952324" stroke="#fff" stroke-width="3"/>
-        <circle cx="320" cy="214" r="8" fill="#3E6B9A" stroke="#fff" stroke-width="3"/>
-      </g>
-    </svg>`;
 }
 
 /* ---------- data ---------- */
@@ -3399,6 +3376,32 @@ const ROUTES = {
   photo: {c:'#666666', stops:['grand','parkav','moma']}
 };
 
+/* Discover shows the places you could walk to now; the two that exist as full
+   records open them, the rest just name themselves on the map. */
+const DPLACES = [
+  {id:'seagram', name:'Seagram Building', lat:40.7587, lng:-73.9720, c:'#952324', kind:'Architecture', bld:'seagram'},
+  {id:'moma',    name:'MoMA',             lat:40.7614, lng:-73.9776, c:'#3E6B9A', kind:'Art Spaces'},
+  {id:'parkav',  name:'Park Ave Facades', lat:40.7549, lng:-73.9756, c:'#666666', kind:'Photography'},
+  {id:'grand',   name:'Grand Central',    lat:40.7527, lng:-73.9772, c:'#666666', kind:'Photography'}
+];
+let dmapView = {lat: 40.7572, lng: -73.9758, scale: 0.155, sel: null};
+
+/* Paths crossing: two walked tracks, not two lists of places */
+const XPLACES = [
+  {id:'you',    name:'You',          lat:40.7508, lng:-73.9852, c:'#952324', kind:''},
+  {id:'javier', name:'@javier.arq',  lat:40.7605, lng:-73.9738, c:'#3E6B9A', kind:''}
+];
+const XROUTES = {
+  you:   {c:'#952324', dash:true, pts:[
+    {lat:40.7508,lng:-73.9852},{lat:40.7512,lng:-73.9818},
+    {lat:40.7549,lng:-73.9818},{lat:40.7556,lng:-73.9792}]},
+  them:  {c:'#3E6B9A', pts:[
+    {lat:40.7605,lng:-73.9738},{lat:40.7582,lng:-73.9772},
+    {lat:40.7556,lng:-73.9772},{lat:40.7556,lng:-73.9792}]}
+};
+const XMEET = {lat:40.7556, lng:-73.9792, label:'MEET HERE'};
+let xmapView = {lat: 40.7556, lng: -73.9795, scale: 0.7, sel: null};
+
 /* --- Web Mercator, metres --- */
 const R_E = 6378137;
 const merc = (lat, lng) => ({
@@ -3421,29 +3424,35 @@ function gridPt(a, s){
 let mapView = {lat: 40.7640, lng: -73.9790, scale: 0.34, sel: null};
 const mapLayers = {arch:true, art:true, photo:true};
 
-function makeLiveMap(frame, svg, buttons){
+function makeLiveMap(frame, svg, buttons, opts){
+  opts = opts || {};
+  const places = opts.places || PLACES;
+  const routes = opts.routes || ROUTES;
+  const view   = opts.view   || mapView;
+  const layers = opts.layers || mapLayers;
+  const meet   = opts.meet   || null;
   const MIN = 0.09, MAX = 2.6;
   const pts = new Map();
-  let last = null, pinch = 0;
+  let last = null, pinch = 0, down = null, held = false;
 
   const size = () => ({w: frame.clientWidth, h: frame.clientHeight});
-  const centre = () => merc(mapView.lat, mapView.lng);
+  const centre = () => merc(view.lat, view.lng);
   const toScreen = p => {
     const {w, h} = size(), c = centre();
-    return {x: w / 2 + (p.x - c.x) * mapView.scale, y: h / 2 - (p.y - c.y) * mapView.scale};
+    return {x: w / 2 + (p.x - c.x) * view.scale, y: h / 2 - (p.y - c.y) * view.scale};
   };
   const fromScreen = (sx, sy) => {
     const {w, h} = size(), c = centre();
-    return {x: c.x + (sx - w / 2) / mapView.scale, y: c.y - (sy - h / 2) / mapView.scale};
+    return {x: c.x + (sx - w / 2) / view.scale, y: c.y - (sy - h / 2) / view.scale};
   };
   const setCentreMerc = m => {
-    mapView.lng = m.x / R_E * 180 / Math.PI;
-    mapView.lat = (2 * Math.atan(Math.exp(m.y / R_E)) - Math.PI / 2) * 180 / Math.PI;
+    view.lng = m.x / R_E * 180 / Math.PI;
+    view.lat = (2 * Math.atan(Math.exp(m.y / R_E)) - Math.PI / 2) * 180 / Math.PI;
   };
 
   function draw(){
     const {w, h} = size();
-    const sc = mapView.scale;
+    const sc = view.scale;
     const P = (a, s) => toScreen(gridPt(a, s));
     const line = (p1, p2, cls, sw) =>
       `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" class="${cls}" stroke-width="${sw}"/>`;
@@ -3456,7 +3465,9 @@ function makeLiveMap(frame, svg, buttons){
 
     /* blocks: cross streets first, then the heavier avenues over them */
     const sw = Math.max(.7, Math.min(2.4, sc * 3.2));
-    const every = sc > .55 ? 1 : sc > .28 ? 2 : 5;   /* fewer streets when zoomed out */
+    /* keep roughly 13px between drawn streets, so the blocks stay legible
+       instead of thinning out into stripes as you zoom back */
+    const every = sc > .15 ? 1 : sc > .075 ? 2 : 5;
     for(let s = MAP.streets.from; s <= MAP.streets.to; s++){
       if(s % every) continue;
       const inPark = s > pk.s && s < pk.n;
@@ -3499,59 +3510,84 @@ function makeLiveMap(frame, svg, buttons){
       }
     }
 
-    /* the journeys */
-    const byId = Object.fromEntries(PLACES.map(p=>[p.id, p]));
-    Object.entries(ROUTES).forEach(([k, r])=>{
-      const pl = r.stops.map(id=>{
-        const q = byId[id], p = toScreen(merc(q.lat, q.lng));
+    /* the journeys: named stops for your own routes, raw coordinates where the
+       line is a walked path rather than a list of places */
+    const byId = Object.fromEntries(places.map(p=>[p.id, p]));
+    Object.entries(routes).forEach(([k, r])=>{
+      const src = r.pts || r.stops.map(id=>byId[id]);
+      const pl = src.map(q=>{
+        const p = toScreen(merc(q.lat, q.lng));
         return p.x.toFixed(1) + ',' + p.y.toFixed(1);
       }).join(' ');
-      out += `<g data-route="${k}" style="transition:opacity .25s" opacity="${mapLayers[k] ? 1 : 0}">
-        <polyline class="mroute" points="${pl}" stroke="${r.c}" stroke-width="${Math.max(2.4, sc * 9).toFixed(1)}"/>
+      const wide = Math.max(3.4, sc * 9);
+      out += `<g data-route="${k}" style="transition:opacity .25s" opacity="${layers[k] === false ? 0 : 1}">
+        ${r.dash ? `<polyline class="mroute" points="${pl}" stroke="#fff" stroke-width="${(wide + 3.5).toFixed(1)}" opacity=".8"/>` : ''}
+        <polyline class="mroute" points="${pl}" stroke="${r.c}" stroke-width="${wide.toFixed(1)}"
+          ${r.dash ? `stroke-dasharray="${(wide * 2.2).toFixed(1)} ${(wide * 1.5).toFixed(1)}"` : ''}/>
       </g>`;
     });
 
     /* places */
-    PLACES.forEach(q=>{
+    places.forEach(q=>{
       const p = toScreen(merc(q.lat, q.lng));
       if(p.x < -60 || p.x > w + 60 || p.y < -40 || p.y > h + 40) return;
-      const on = mapView.sel === q.id;
-      const r = on ? 8 : Math.max(4, Math.min(7, sc * 16));
+      const on = view.sel === q.id;
+      const r = on ? 9 : Math.max(5.5, Math.min(8, sc * 16));
       out += `<g class="mstop${on ? ' on' : ''}" data-place="${q.id}">
         ${on ? `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${(r + 7).toFixed(1)}" fill="${q.c}" opacity=".2"/>` : ''}
         <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${r.toFixed(1)}" fill="${q.c}" stroke="#fff" stroke-width="${(r / 2.6).toFixed(1)}"/>
-        ${(sc > .3 || on) ? `<text class="mname" x="${p.x.toFixed(1)}" y="${(p.y - r - 7).toFixed(1)}" text-anchor="middle">${esc(q.name)}</text>` : ''}
+        ${(sc > .11 || on) ? `<text class="mname" x="${p.x.toFixed(1)}" y="${(p.y - r - 7).toFixed(1)}" text-anchor="middle">${esc(q.name)}</text>` : ''}
       </g>`;
     });
+
+    /* where two paths actually meet, called out on the map rather than beside it */
+    if(meet){
+      const p = toScreen(merc(meet.lat, meet.lng));
+      const bw = 78, bh = 17;
+      out += `<g class="mmeet">
+        <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="7.5" fill="#C9922E" stroke="#fff" stroke-width="3"/>
+        <rect x="${(p.x - bw / 2).toFixed(1)}" y="${(p.y + 11).toFixed(1)}" width="${bw}" height="${bh}" rx="3"/>
+        <text x="${p.x.toFixed(1)}" y="${(p.y + 22.5).toFixed(1)}" text-anchor="middle">${esc(meet.label)}</text>
+      </g>`;
+    }
 
     svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
     svg.innerHTML = out;
     buttons.forEach(b=>{
-      if(b.dataset.zoom === 'in')  b.disabled = mapView.scale >= MAX - .001;
-      if(b.dataset.zoom === 'out') b.disabled = mapView.scale <= MIN + .001;
+      if(b.dataset.zoom === 'in')  b.disabled = view.scale >= MAX - .001;
+      if(b.dataset.zoom === 'out') b.disabled = view.scale <= MIN + .001;
     });
   }
 
   const zoomTo = (ns, cx, cy)=>{
     ns = Math.min(MAX, Math.max(MIN, ns));
-    if(ns === mapView.scale) return;
+    if(ns === view.scale) return;
     const before = fromScreen(cx, cy);
-    mapView.scale = ns;
+    view.scale = ns;
     const after = fromScreen(cx, cy);
     const c = centre();
     setCentreMerc({x: c.x + (before.x - after.x), y: c.y + (before.y - after.y)});
     draw();
   };
 
+  /* Capture is taken only once a drag really starts. Capturing on pointerdown
+     would retarget the click to the frame, and a tap on a pin would never
+     reach the pin. */
+  const grab = id=>{
+    if(held) return;
+    held = true;
+    frame.setPointerCapture(id);
+    frame.classList.add('grabbing');
+  };
   frame.addEventListener('pointerdown', e=>{
     if(e.target.closest('.zoomctl, .legend, .mapsearch')) return;
     pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
-    frame.setPointerCapture(e.pointerId);
-    frame.classList.add('grabbing');
     last = {x:e.clientX, y:e.clientY};
+    down = {x:e.clientX, y:e.clientY};
     if(pts.size === 2){
       const [a, b] = [...pts.values()];
       pinch = Math.hypot(a.x - b.x, a.y - b.y);
+      grab(e.pointerId);
     }
   });
   frame.addEventListener('pointermove', e=>{
@@ -3561,61 +3597,71 @@ function makeLiveMap(frame, svg, buttons){
     if(pts.size === 2){
       const [a, b] = [...pts.values()];
       const d = Math.hypot(a.x - b.x, a.y - b.y);
-      if(pinch) zoomTo(mapView.scale * (d / pinch), (a.x + b.x) / 2 - r.left, (a.y + b.y) / 2 - r.top);
+      if(pinch) zoomTo(view.scale * (d / pinch), (a.x + b.x) / 2 - r.left, (a.y + b.y) / 2 - r.top);
       pinch = d;
       return;
     }
     if(!last) return;
+    if(!held){
+      if(down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 4) return;
+      grab(e.pointerId);
+    }
     const c = centre();
-    setCentreMerc({x: c.x - (e.clientX - last.x) / mapView.scale,
-                   y: c.y + (e.clientY - last.y) / mapView.scale});
+    setCentreMerc({x: c.x - (e.clientX - last.x) / view.scale,
+                   y: c.y + (e.clientY - last.y) / view.scale});
     last = {x:e.clientX, y:e.clientY};
     draw();
   });
   const release = e=>{
     pts.delete(e.pointerId);
     if(pts.size < 2) pinch = 0;
-    if(!pts.size){ last = null; frame.classList.remove('grabbing'); }
+    if(!pts.size){ last = null; down = null; held = false; frame.classList.remove('grabbing'); }
   };
   frame.addEventListener('pointerup', release);
   frame.addEventListener('pointercancel', release);
   frame.addEventListener('wheel', e=>{
     e.preventDefault();
     const r = frame.getBoundingClientRect();
-    zoomTo(mapView.scale * (e.deltaY < 0 ? 1.14 : 1 / 1.14), e.clientX - r.left, e.clientY - r.top);
+    zoomTo(view.scale * (e.deltaY < 0 ? 1.14 : 1 / 1.14), e.clientX - r.left, e.clientY - r.top);
   }, {passive:false});
 
   buttons.forEach(b=>b.addEventListener('click', ()=>{
     const {w, h} = size();
-    if(b.dataset.zoom === 'in')  zoomTo(mapView.scale * 1.7, w / 2, h / 2);
-    if(b.dataset.zoom === 'out') zoomTo(mapView.scale / 1.7, w / 2, h / 2);
+    if(b.dataset.zoom === 'in')  zoomTo(view.scale * 1.7, w / 2, h / 2);
+    if(b.dataset.zoom === 'out') zoomTo(view.scale / 1.7, w / 2, h / 2);
     if(b.dataset.zoom === 'reset') fitAll();
   }));
 
   function fitAll(){
-    const ms = PLACES.map(q=>merc(q.lat, q.lng));
+    const all = places.concat(...Object.values(routes).map(r=>r.pts || []));
+    const ms = all.map(q=>merc(q.lat, q.lng));
     const xs = ms.map(m=>m.x), ys = ms.map(m=>m.y);
     const {w, h} = size();
-    const pad = 46;
-    mapView.scale = Math.min((w - pad * 2) / (Math.max(...xs) - Math.min(...xs)),
+    const pad = Math.max(24, Math.min(46, Math.min(w, h) * 0.13));
+    view.scale = Math.min((w - pad * 2) / (Math.max(...xs) - Math.min(...xs)),
                              (h - pad * 2) / (Math.max(...ys) - Math.min(...ys)));
     setCentreMerc({x: (Math.max(...xs) + Math.min(...xs)) / 2,
                    y: (Math.max(...ys) + Math.min(...ys)) / 2});
-    mapView.sel = null;
+    view.sel = null;
     draw();
   }
   function flyTo(id){
-    const q = PLACES.find(p=>p.id === id); if(!q) return;
-    mapView.sel = id;
-    mapView.scale = Math.max(mapView.scale, 1.15);
+    const q = places.find(p=>p.id === id); if(!q) return;
+    view.sel = id;
+    view.scale = Math.max(view.scale, 1.15);
     setCentreMerc(merc(q.lat, q.lng));
     draw();
   }
 
   window.addEventListener('resize', draw);
   let fitted = false;
-  /* the screen is hidden at boot, so there is nothing to fit to until it shows */
-  const refit = ()=>{ if(!size().w) return; if(!fitted){ fitted = true; fitAll(); } else draw(); };
+  /* the screen is hidden at boot, so there is nothing to fit to until it shows.
+     Maps that want a chosen framing rather than the whole extent skip the fit. */
+  const refit = ()=>{
+    if(!size().w) return;
+    if(!fitted){ fitted = true; if(opts.autofit === false) draw(); else fitAll(); }
+    else draw();
+  };
   refit();
   return {draw, flyTo, fitAll, refit};
 }
@@ -3648,10 +3694,12 @@ $$('[data-img]').forEach(el=>{
   const src = IMG[el.dataset.img]; if(!src) return;
   if(el.tagName === 'IMG') el.src = src; else el.style.backgroundImage = `url(${src})`;
 });
-$('#discover-map').insertAdjacentHTML('afterbegin', discoverMap());
 const jmap = makeLiveMap($('#journey-map'), $('#jmap-svg'), $$('#journey-map .zoomctl button'));
 wireMapSearch();
-$('#crossing-map').insertAdjacentHTML('afterbegin', crossingMap());
+const dmap = makeLiveMap($('#discover-map'), $('#dmap-svg'), $$('#discover-map .zoomctl button'),
+  {places: DPLACES, routes: {}, view: dmapView, autofit: false});
+const xmap = makeLiveMap($('#crossing-map'), $('#xmap-svg'), $$('#crossing-map .zoomctl button'),
+  {places: XPLACES, routes: XROUTES, view: xmapView, meet: XMEET});
 renderSpots('nearby'); renderPfPanel('works'); renderInsp('All'); renderRecords(); renderKnNearby(); renderCommunity('feed'); renderMapSocial();
 syncObGate(); renderStops(); applyCapOpts(); applyTrack(); renderAudio(); applyLook(); renderLibrary(); renderCapSet(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
 
@@ -3659,7 +3707,18 @@ document.addEventListener('click', e=>{
   const t = e.target;
 
   const mp = t.closest('[data-place]');
-  if(mp){ jmap.flyTo(mp.dataset.place); return; }
+  if(mp){
+    const id = mp.dataset.place;
+    /* on Discover a pin that has a full record opens it; otherwise the map
+       just centres on it, the same as tapping a stop on your own journey */
+    if(mp.closest('#discover-map')){
+      const q = DPLACES.find(p=>p.id === id);
+      if(q && q.bld){ openBuilding(q.bld); return; }
+      dmap.flyTo(id); return;
+    }
+    if(mp.closest('#crossing-map')){ xmap.flyTo(id); return; }
+    jmap.flyTo(id); return;
+  }
   if(t.closest('[data-back]')){ back(); return; }
 
   const fol = t.closest('[data-follow]');
