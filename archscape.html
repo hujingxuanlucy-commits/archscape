@@ -69,6 +69,7 @@ figure{margin:0}
   justify-content:space-between;padding:0 24px;font-size:13.5px;font-weight:600;letter-spacing:.01em;
   pointer-events:none;color:var(--ink);transition:color .3s}
 .viewport[data-chrome="dark"] .statusbar{color:#fff}
+.viewport.sb-onlight .statusbar{color:var(--ink)}
 .sb-right{display:flex;align-items:center;gap:5px}
 .sb-dots{display:flex;gap:2.5px}
 .sb-dots i{width:5px;height:5px;border-radius:50%;background:currentColor;display:block}
@@ -907,7 +908,15 @@ figure{margin:0}
 .pftab[aria-current="true"] em{color:var(--red)}
 .work{cursor:pointer;transition:.16s}
 .work:active{opacity:.8}
-.jsearch{position:relative;margin:14px 22px 12px}
+.jbar{display:flex;align-items:stretch;border-bottom:1px solid var(--bone)}
+.jbar .chiprow{flex:1;min-width:0;border-bottom:0}
+/* search is occasional here - the years are the everyday filter, so search
+   waits behind an icon on the same line rather than taking a row of its own */
+.jsearchbtn{flex:none;display:grid;place-items:center;width:44px;color:var(--muted);transition:.16s}
+.jsearchbtn svg{width:17px;height:17px}
+.jsearchbtn:hover{color:var(--ink)}
+.jsearchbtn.on{color:var(--red)}
+.jsearch{position:relative;margin:12px 22px 4px}
 .jsearch > svg{position:absolute;left:11px;top:50%;margin-top:-8px;width:16px;height:16px;color:var(--muted)}
 .jsearch input{width:100%;padding:11px 14px 11px 34px;border-radius:9px;border:1px solid var(--bone);
   background:var(--paper);font-size:13.5px;color:var(--ink);outline:none;transition:.16s}
@@ -1990,6 +1999,7 @@ function go(id, isBack){
     slideTimer = setTimeout(()=>{ fromEl.classList.remove(...TRANS); }, 700);
   }
   viewport.dataset.chrome = s.chrome;
+  if(id !== 'profile') viewport.classList.remove('sb-onlight');
   tabbar.hidden = !s.nav;
   tabbar.classList.toggle('appear', entering);
   /* Several screens hang off more than one tab - Community is reached from
@@ -2029,10 +2039,15 @@ function fitDevice(){
 }
 window.addEventListener('resize', fitDevice);
 
-/* profile tabs pin under the status bar */
+/* profile tabs pin under the status bar. Once pinned they paint paper behind
+   it, and the profile's white status text would vanish into that, so the
+   status bar goes dark for as long as the light background is there. */
 function pfPin(){
   const tabs = $('#pf-tabs'), sc = $('#s-profile'), sen = $('#pf-sentinel');
-  if(tabs && sc && sen) tabs.classList.toggle('pinned', sc.scrollTop >= sen.offsetTop - 44);
+  if(!(tabs && sc && sen)) return;
+  const pinned = sc.scrollTop >= sen.offsetTop - 44;
+  tabs.classList.toggle('pinned', pinned);
+  viewport.classList.toggle('sb-onlight', pinned);
 }
 $('#s-profile').addEventListener('scroll', pfPin);
 
@@ -2072,18 +2087,18 @@ const SPOTS = {
 const SPOT_TITLE = {nearby:'Nearby Spots', trending:'Trending Now'};
 
 const TRIPS = [
-  {img:'arc_bcn',     dot:'#952324', name:'Barcelona \u2014 Architecture Walk', date:'Nov 12, 2024', year:'2024', meta:'14 check-ins \u00B7 Gaud\u00ED buildings \u00B7 6.2 km'},
-  {img:'arc_tky',     dot:'#3E6B9A', name:'Tokyo \u2014 Art District',          date:'Sep 3, 2024',  year:'2024', meta:'9 check-ins \u00B7 Modern Art \u00B7 3.8 km'},
-  {img:'vessel_hero', dot:'#952324', name:'New York \u2014 Hudson Yards',      date:'Aug 14, 2024', year:'2024', meta:'6 check-ins \u00B7 Contemporary \u00B7 2.1 km'},
-  {img:'kn_habitat',  dot:'#666666', name:'Montreal \u2014 Habitat 67',        date:'Jun 2, 2024',  year:'2024', meta:'4 check-ins \u00B7 Brutalism \u00B7 1.4 km'},
-  {img:'arc_par',     dot:'#666666', name:'Paris \u2014 Haussmann Routes',     date:'Mar 20, 2024', year:'2024', meta:'22 check-ins \u00B7 Classical France \u00B7 9.1 km'},
-  {img:'insp_heydar', dot:'#3E6B9A', name:'Baku \u2014 Heydar Aliyev Centre',  date:'Jan 9, 2024',  year:'2024', meta:'3 check-ins \u00B7 Contemporary \u00B7 0.8 km'},
-  {img:'kn_trellick', dot:'#666666', name:'London \u2014 Brutalist London',    date:'Nov 2, 2023',  year:'2023', meta:'11 check-ins \u00B7 Brutalism \u00B7 5.3 km'},
-  {img:'duomo',       dot:'#952324', name:'Milan \u2014 Duomo & Galleria',     date:'Jul 18, 2023', year:'2023', meta:'8 check-ins \u00B7 Gothic \u00B7 2.9 km'},
-  {img:'highline',    dot:'#666666', name:'New York \u2014 High Line Walk',    date:'May 6, 2023',  year:'2023', meta:'7 check-ins \u00B7 Photography \u00B7 3.2 km'},
-  {img:'tate',        dot:'#3E6B9A', name:'London \u2014 Bankside Galleries',  date:'Feb 24, 2023', year:'2023', meta:'5 check-ins \u00B7 Modernism \u00B7 1.7 km'},
-  {img:'k11',         dot:'#666666', name:'Hong Kong \u2014 K11 Musea',        date:'Oct 30, 2022', year:'2022', meta:'6 check-ins \u00B7 Contemporary \u00B7 2.0 km'},
-  {img:'onb_night',   dot:'#3E6B9A', name:'Tokyo \u2014 Shibuya Night Walk',   date:'Sep 12, 2022', year:'2022', meta:'9 check-ins \u00B7 Photography \u00B7 4.6 km'}
+  {img:'arc_bcn',     dot:'#952324', name:'Barcelona \u2014 Architecture Walk', date:'Nov 12, 2026', year:'2026', meta:'14 check-ins \u00B7 Gaud\u00ED buildings \u00B7 6.2 km'},
+  {img:'arc_tky',     dot:'#3E6B9A', name:'Tokyo \u2014 Art District',          date:'Sep 3, 2026',  year:'2026', meta:'9 check-ins \u00B7 Modern Art \u00B7 3.8 km'},
+  {img:'vessel_hero', dot:'#952324', name:'New York \u2014 Hudson Yards',      date:'Aug 14, 2026', year:'2026', meta:'6 check-ins \u00B7 Contemporary \u00B7 2.1 km'},
+  {img:'kn_habitat',  dot:'#666666', name:'Montreal \u2014 Habitat 67',        date:'Jun 2, 2026',  year:'2026', meta:'4 check-ins \u00B7 Brutalism \u00B7 1.4 km'},
+  {img:'arc_par',     dot:'#666666', name:'Paris \u2014 Haussmann Routes',     date:'Mar 20, 2026', year:'2026', meta:'22 check-ins \u00B7 Classical France \u00B7 9.1 km'},
+  {img:'insp_heydar', dot:'#3E6B9A', name:'Baku \u2014 Heydar Aliyev Centre',  date:'Jan 9, 2026',  year:'2026', meta:'3 check-ins \u00B7 Contemporary \u00B7 0.8 km'},
+  {img:'kn_trellick', dot:'#666666', name:'London \u2014 Brutalist London',    date:'Nov 2, 2025',  year:'2025', meta:'11 check-ins \u00B7 Brutalism \u00B7 5.3 km'},
+  {img:'duomo',       dot:'#952324', name:'Milan \u2014 Duomo & Galleria',     date:'Jul 18, 2025', year:'2025', meta:'8 check-ins \u00B7 Gothic \u00B7 2.9 km'},
+  {img:'highline',    dot:'#666666', name:'New York \u2014 High Line Walk',    date:'May 6, 2025',  year:'2025', meta:'7 check-ins \u00B7 Photography \u00B7 3.2 km'},
+  {img:'tate',        dot:'#3E6B9A', name:'London \u2014 Bankside Galleries',  date:'Feb 24, 2025', year:'2025', meta:'5 check-ins \u00B7 Modernism \u00B7 1.7 km'},
+  {img:'k11',         dot:'#666666', name:'Hong Kong \u2014 K11 Musea',        date:'Oct 30, 2024', year:'2024', meta:'6 check-ins \u00B7 Contemporary \u00B7 2.0 km'},
+  {img:'onb_night',   dot:'#3E6B9A', name:'Tokyo \u2014 Shibuya Night Walk',   date:'Sep 12, 2024', year:'2024', meta:'9 check-ins \u00B7 Photography \u00B7 4.6 km'}
 ];
 
 const INSP = [
@@ -3253,7 +3268,7 @@ function grid(list, badgeFirst){
 
 /* ---------- journeys: filter and search live in the profile tab itself,
    so there is nowhere else to send someone looking for "all of it" ---------- */
-let jFilter = 'all', jQuery = '';
+let jFilter = 'all', jQuery = '', jOpen = false;
 function journeyYears(){
   return [...new Set(TRIPS.map(t=>t.year))].sort((a,b)=>b - a);
 }
@@ -3264,12 +3279,17 @@ function renderJourneys(){
     (jFilter === 'all' || t.year === jFilter) &&
     (!q || (t.name + ' ' + t.meta).toLowerCase().includes(q)));
   return `
-    <div class="jsearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
-      <input id="j-q" type="search" placeholder="Search your journeys" value="${esc(jQuery)}" aria-label="Search journeys"></div>
-    <div class="chiprow" id="j-years" data-chips="jyear">
-      <button class="chip" data-jyear="all" aria-pressed="${jFilter==='all'}">All years</button>
-      ${years.map(y=>`<button class="chip" data-jyear="${y}" aria-pressed="${jFilter===String(y)}">${y}</button>`).join('')}
+    <div class="jbar">
+      <div class="chiprow" id="j-years" data-chips="jyear">
+        <button class="chip" data-jyear="all" aria-pressed="${jFilter==='all'}">All years</button>
+        ${years.map(y=>`<button class="chip" data-jyear="${y}" aria-pressed="${jFilter===String(y)}">${y}</button>`).join('')}
+      </div>
+      <button class="jsearchbtn${jOpen ? ' on' : ''}" id="j-toggle" aria-expanded="${jOpen}" aria-label="Search journeys">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+      </button>
     </div>
+    ${jOpen ? `<div class="jsearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+      <input id="j-q" type="search" placeholder="Search your journeys" value="${esc(jQuery)}" aria-label="Search journeys"></div>` : ''}
     ${list.length ? list.map(t=>{
       const i = TRIPS.indexOf(t);
       return `<button class="trip" data-go="journey" data-trip="${i}">
@@ -4102,6 +4122,13 @@ document.addEventListener('click', e=>{
   }
   /* stat tiles and "All journeys" jump straight into a profile tab, from
      wherever the tap happened - the profile screen and its tab render first */
+  if(t.closest('#j-toggle')){
+    jOpen = !jOpen;
+    if(!jOpen) jQuery = '';
+    $('#pf-panel').innerHTML = renderJourneys();
+    if(jOpen) $('#j-q').focus();
+    return;
+  }
   const statBtn = t.closest('[data-stat]');
   if(statBtn){ openStat(statBtn.dataset.stat); return; }
   const jump = t.closest('[data-pfjump]');
