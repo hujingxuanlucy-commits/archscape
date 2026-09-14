@@ -112,6 +112,7 @@ figure{margin:0}
 
 /* ============ shared app atoms ============ */
 .apphead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 22px 14px}
+.headacts{display:flex;align-items:center;gap:2px}
 .h-title{font-family:var(--disp);font-size:29px;font-weight:600;color:var(--ink);line-height:1;letter-spacing:.004em}
 .h-title.sm{font-size:24px}
 .iconbtn{width:34px;height:34px;display:grid;place-items:center;color:var(--ink);border-radius:8px;transition:.15s}
@@ -1400,7 +1401,10 @@ figure{margin:0}
         <section class="screen pad padnav" id="s-discover" data-dtab="nearby">
           <div class="apphead">
             <h2 class="h-title">Discover</h2>
-            <button class="iconbtn" data-go="knowledge" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
+            <div class="headacts">
+              <button class="iconbtn" data-go="community" aria-label="Community"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 19a6 6 0 0 1 12 0"/><path d="M16.5 5.6a3.2 3.2 0 0 1 0 6.1"/><path d="M18 14.4a6 6 0 0 1 3 4.6"/></svg></button>
+              <button class="iconbtn" data-go="knowledge" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
+            </div>
           </div>
           <div class="chiprow" data-chips="discover">
             <button class="chip" aria-pressed="true" data-val="nearby">Nearby</button>
@@ -1933,6 +1937,10 @@ const SCREENS = [
   {id:'crossing',    name:'Crossing',    chrome:'light', nav:true, tab:'explore'},
   {id:'knowledge',   name:'Knowledge',   chrome:'light', nav:true, tab:'explore'}
 ];
+/* the four screens a tab bar button actually lands on; everything else is a
+   sub-screen and borrows whichever of these you came through */
+const TAB_ROOT = {discover:'explore', capture:'capture', journey:'map', profile:'profile'};
+let navTab = 'explore';
 const viewport = $('#viewport'), tabbar = $('#tabbar'), toastEl = $('#toast');
 let current = 'onboarding';
 
@@ -1979,7 +1987,12 @@ function go(id, isBack){
   viewport.dataset.chrome = s.chrome;
   tabbar.hidden = !s.nav;
   tabbar.classList.toggle('appear', entering);
-  $$('.tabitem').forEach(b => b.setAttribute('aria-current', String(b.dataset.tab === s.tab)));
+  /* Several screens hang off more than one tab - Community is reached from
+     Explore, Map and Profile - so the lit tab follows the route you took
+     rather than a fixed owner, and the bar never claims the wrong origin. */
+  if(TAB_ROOT[id]) navTab = TAB_ROOT[id];
+  const litTab = TAB_ROOT[id] || navTab || s.tab;
+  $$('.tabitem').forEach(b => b.setAttribute('aria-current', String(b.dataset.tab === litTab)));
   const sc = $('#s'+'-'+id); if(sc) sc.scrollTop = 0;
   if(id === 'capture'){
     setCapture('scanning', false, capAppendMode);
@@ -2818,38 +2831,6 @@ function groupCard(id){
     <span class="gkind">${esc(g.kind)}</span>
   </button>`;
 }
-/* Discover's community block is location-first: the next walk you could
-   actually turn up to, then the people already out there nearby. */
-function renderDiscoverCommunity(){
-  const gk = Object.keys(GROUPS).find(k=>GROUPS[k].walk);
-  const g = GROUPS[gk], w = g.walk;
-  const near = ['mia','sofia','kenji','javier'];
-  $('#disc-comm').innerHTML =
-    `<button class="card walknear" data-group="${gk}">
-       <span class="wn-head">
-         <span class="walkdate"><b class="onum">${esc(w.d)}</b><span>${esc(w.m)}</span></span>
-         <span class="wn-body">
-           <span class="eyebrow">Next walk near you</span>
-           <b>${esc(w.title)}</b>
-           <span class="wn-place">${esc(w.place)} &#183; ${esc(w.time)}</span>
-         </span>
-       </span>
-       <span class="wn-foot">
-         ${stackOf(g.people)}
-         <em>${w.going} going &#183; ${esc(g.name)}</em>
-         <span class="wn-cta">Details</span>
-       </span>
-     </button>
-     <div class="nearrow">
-       ${near.map(k=>{
-         const p = PEOPLE[k];
-         return `<button class="nearp" data-member="${k}">
-           ${avatarOf(k)}<b>${esc(p.name.split(' ')[0])}</b><span>${esc(p.city)}</span></button>`;
-       }).join('')}
-       <button class="nearp nearall" data-comm="following"><i>&#43;</i><b>Following</b><span>Your people</span></button>
-     </div>`;
-}
-
 function renderMapSocial(){
   const near = ['mia','sofia','kenji','javier'];
   $('#map-friends').innerHTML =
