@@ -342,10 +342,6 @@ figure{margin:0}
 .acttime{display:block;margin-top:3px;font-size:10.5px;color:var(--muted-2)}
 .actthumb{width:46px;height:46px;border-radius:7px;object-fit:cover;flex:none}
 
-/* Saved: a bookmark marker separates it from plain discovery cards */
-.spot .savemark{position:absolute;top:9px;right:9px;z-index:2;width:24px;height:24px;border-radius:6px;
-  display:grid;place-items:center;background:rgba(10,10,10,.55);backdrop-filter:blur(3px)}
-.spot .savemark svg{width:12px;height:12px;color:#fff;fill:#fff}
 
 .feedcard{display:flex;gap:12px;padding:12px;margin:0 22px 12px;align-items:flex-start;text-align:left;width:calc(100% - 44px);
   transition:.16s}
@@ -1408,7 +1404,6 @@ figure{margin:0}
             <button class="chip" aria-pressed="false" data-val="trending">Trending</button>
             <button class="chip" aria-pressed="false" data-val="following">Following</button>
             <button class="chip" aria-pressed="false" data-val="groups">Groups</button>
-            <button class="chip" aria-pressed="false" data-val="saved">Saved</button>
           </div>
           <div class="mapframe jmap" id="discover-map" style="height:250px">
             <svg class="mapcanvas" id="dmap-svg" aria-label="Map of architectural spots near you"></svg>
@@ -2048,7 +2043,7 @@ const SPOTS = {
     {id:'serpentine', img:'insp_pavil', name:'Serpentine Pavilion', city:'London', n:97},
     {id:'greatcourt', img:'insp_glass', name:'Great Court', city:'London', n:355}]
 };
-const SPOT_TITLE = {nearby:'Nearby Spots', trending:'Trending Now', saved:'Your Saved Spots'};
+const SPOT_TITLE = {nearby:'Nearby Spots', trending:'Trending Now'};
 
 const TRIPS = [
   {img:'arc_bcn',     dot:'#952324', name:'Barcelona \u2014 Architecture Walk', date:'Nov 12, 2024', year:'2024', meta:'14 check-ins \u00B7 Gaud\u00ED buildings \u00B7 6.2 km'},
@@ -3099,16 +3094,6 @@ function renderSpots(key){
   link.removeAttribute('data-comm');
   link.dataset.go = 'knowledge';
   box.className = 'spots';
-  if(key === 'saved'){
-    const ids = ['serpentine','greatcourt','trellick','k11','tate','habitat'];
-    box.innerHTML = ids.map(id=>{
-      const r = bldById(id);
-      return `<button class="spot" data-building="${r.id}"><img src="${IMG[r.img]}" alt="${esc(r.name)}">
-        <span class="savemark">${I.book}</span>
-        <figcaption><b>${esc(r.name)}</b><span>${esc(r.city)} \u00B7 ${esc(r.style)}</span></figcaption></button>`;
-    }).join('');
-    return;
-  }
   box.innerHTML = SPOTS[key].map(s=>`
     <button class="spot" data-building="${s.id}"><img src="${IMG[s.img]}" alt="${esc(s.name)}">
       <figcaption><b>${esc(s.name)}</b><span>${esc(s.city)} &#183; ${s.n} check-ins</span></figcaption></button>`).join('');
