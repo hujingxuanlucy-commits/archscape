@@ -683,9 +683,27 @@ figure{margin:0}
 .dfield:last-child{border-bottom:0}
 .dfield > span{flex:none;width:70px;font-size:10px;font-weight:700;letter-spacing:.11em;
   text-transform:uppercase;color:var(--muted)}
-.dfield input{flex:1;min-width:0;border:0;background:none;outline:none;font-size:14px;font-weight:500;
-  color:var(--ink);padding:2px 0}
-.dfield input:focus{color:var(--red)}
+.dhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+/* a wrong identification is corrected by picking the right building, not by
+   retyping four fields, so the candidates stay reachable from here */
+.dpick{display:flex;flex-direction:column;margin-top:9px;border:1px solid var(--bone);border-radius:6px;overflow:hidden}
+.dpickrow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px 12px;
+  border-bottom:1px solid var(--bone-soft);transition:.16s}
+.dpickrow:last-child{border-bottom:0}
+.dpickrow:hover{background:var(--paper)}
+.dpickrow[aria-current="true"]{background:var(--red-tint)}
+.dpickrow b{flex:1;min-width:0;font-size:13px;font-weight:600;color:var(--ink);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dpickrow em{flex:none;font-size:10.5px;font-style:normal;color:var(--muted)}
+.dpickrow i{flex:none;width:7px;height:7px;border-radius:50%;background:var(--bone);display:block}
+.dpickrow[aria-current="true"] i{background:var(--red)}
+.dpickrow.manual b{color:var(--muted)}
+/* the value is editable, so it has to look it - flat text reads as a label */
+.dfield input{flex:1;min-width:0;border:0;outline:none;font-size:14px;font-weight:500;color:var(--ink);
+  background:none;padding:5px 8px;margin:-3px 0;border-radius:4px;transition:background .16s,color .16s}
+.dfield input::placeholder{color:var(--muted-2);font-weight:400}
+.dfield:hover input{background:var(--bone-soft)}
+.dfield input:focus{background:var(--bone-soft);color:var(--red)}
 .tag.addtag{border-style:dashed;color:var(--red);border-color:var(--red)}
 .tag.addtag:hover{background:var(--red-tint)}
 .visrow{display:flex;gap:8px;margin-top:9px}
@@ -1546,12 +1564,16 @@ figure{margin:0}
             <div><b id="ci-locname">375 Park Ave, NYC</b><span class="tnum" id="ci-loccoords">40.7580° N, 73.9764° W</span></div>
           </div>
           <div class="ci-block card">
-            <div class="eyebrow">Building details</div>
+            <div class="dhead">
+              <div class="eyebrow">Building details</div>
+              <button class="seelink" id="ci-change" aria-expanded="false">Not this building?</button>
+            </div>
+            <div class="dpick" id="ci-pick" hidden></div>
             <div class="dfields">
-              <label class="dfield"><span>Name</span><input id="ci-name" value="Seagram Building" aria-label="Building name"></label>
-              <label class="dfield"><span>Architect</span><input id="ci-arch" value="Mies van der Rohe" aria-label="Architect"></label>
-              <label class="dfield"><span>Year</span><input id="ci-year" value="1958" inputmode="numeric" aria-label="Year"></label>
-              <label class="dfield"><span>Style</span><input id="ci-style" value="International Style" aria-label="Style"></label>
+              <label class="dfield"><span>Name</span><input id="ci-name" value="Seagram Building" placeholder="Add a name" aria-label="Building name"></label>
+              <label class="dfield"><span>Architect</span><input id="ci-arch" value="Mies van der Rohe" placeholder="Add an architect" aria-label="Architect"></label>
+              <label class="dfield"><span>Year</span><input id="ci-year" value="1958" inputmode="numeric" placeholder="Add a year" aria-label="Year"></label>
+              <label class="dfield"><span>Style</span><input id="ci-style" value="International Style" placeholder="Add a style" aria-label="Style"></label>
             </div>
           </div>
           <div class="ci-block card">
@@ -1948,7 +1970,7 @@ function go(id, isBack){
     $('#ar-shotview').hidden = true;
     if(!coachSeen){ coachStep = 0; showCoach(); }
   } else clearTimeout(capTimer);
-  if(id === 'checkin'){ renderCheckinTags(); renderCheckinPhotos(); renderVis(); } else closeQuickAdd();
+  if(id === 'checkin'){ renderCheckinTags(); renderCheckinPhotos(); renderVis(); togglePick(false); } else closeQuickAdd();
   $('#exitsheet').hidden = true;
   /* a map cannot size itself while its screen is hidden, so fit on the way in */
   if(id === 'journey')  requestAnimationFrame(()=>jmap.refit());
@@ -2409,6 +2431,26 @@ function applyCandidate(){
   /* the suggested caption describes the building, so it follows the match the
      way the other suggested fields do */
   $('#caption').value = c.caption;
+}
+
+/* The check-in is where a wrong identification actually gets corrected, so the
+   other candidates for this frame are offered here too, not just on the camera. */
+function renderPick(){
+  $('#ci-pick').innerHTML = CANDIDATES.map((c, i)=>`
+    <button class="dpickrow" data-cand="${i}" aria-current="${i === capIndex}">
+      <i></i><b>${esc(c.name)}</b><em>${c.pct}% match</em>
+    </button>`).join('') +
+    `<button class="dpickrow manual" data-cand="${NO_MATCH_IDX}" aria-current="${capIndex === NO_MATCH_IDX}">
+      <i></i><b>None of these — enter it myself</b>
+    </button>`;
+}
+function togglePick(open){
+  const pick = $('#ci-pick'), btn = $('#ci-change');
+  const show = open === undefined ? pick.hidden : open;
+  if(show) renderPick();
+  pick.hidden = !show;
+  btn.setAttribute('aria-expanded', String(show));
+  btn.textContent = show ? 'Close' : 'Not this building?';
 }
 
 /* Tags are 'AI generated': they surface one at a time while the image is
@@ -3912,6 +3954,18 @@ document.addEventListener('click', e=>{
     if(!CAP_SET.length){ const f = SHOTS[shotIdx]; shotIdx = (shotIdx + 1) % SHOTS.length; addToSet(f); }
     toast((CANDIDATES[capIndex]?.name || 'Building') + ' captured');
     go('checkin');
+    return;
+  }
+  if(t.closest('#ci-change')){ togglePick(); return; }
+  const cand = t.closest('[data-cand]');
+  if(cand){
+    capIndex = +cand.dataset.cand;
+    applyCandidate();
+    /* the building's own tags came from the old match, so rebuild them */
+    CAP_TAGS = composeTags();
+    renderCheckinTags();
+    togglePick(false);
+    toast(capIndex === NO_MATCH_IDX ? 'Cleared — fill in the details' : CANDIDATES[capIndex].name + ' set');
     return;
   }
   if(t.closest('[data-addmanual]')){
