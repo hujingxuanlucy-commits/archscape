@@ -2127,13 +2127,16 @@ const TAG_POOL = ['#facade', '#goldenhour', '#concrete', '#reflection', '#geomet
 const CANDIDATES = [
   {name:'The Vessel',      architect:'Thomas Heatherwick',      year:'2019', style:'Contemporary',
    street:'Hudson Yards', addr:'20 Hudson Yards, NYC', coords:'40.7539° N, 74.0021° W', pct:96, bldId:'vessel',
-   tags:['#thevessel', '#hudsonyards', '#heatherwick']},
+   tags:['#thevessel', '#hudsonyards', '#heatherwick'],
+   caption:'A lattice of stairs rising —\nthe city folded in on itself.'},
   {name:'The Shed',        architect:'Diller Scofidio + Renfro', year:'2019', style:'Contemporary',
    street:'Hudson Yards', addr:'545 W 30th St, NYC',   coords:'40.7535° N, 74.0022° W', pct:90,
-   tags:['#theshed', '#hudsonyards', '#movable']},
+   tags:['#theshed', '#hudsonyards', '#movable'],
+   caption:'The shell rolled back on its wheels —\na block that changes size.'},
   {name:'30 Hudson Yards', architect:'Kohn Pedersen Fox',        year:'2019', style:'Contemporary',
    street:'Hudson Yards', addr:'30 Hudson Yards, NYC', coords:'40.7540° N, 74.0011° W', pct:86,
-   tags:['#30hudsonyards', '#skyline', '#curtainwall']}
+   tags:['#30hudsonyards', '#skyline', '#curtainwall'],
+   caption:'Glass stacked until the weather\nstarted happening below.'}
 ];
 const NO_MATCH_IDX = CANDIDATES.length;
 
@@ -2387,6 +2390,7 @@ function applyCandidate(){
     $('#ci-arch').value = '';
     $('#ci-year').value = '';
     $('#ci-style').value = '';
+    $('#caption').value = '';
     return;
   }
   const c = CANDIDATES[capIndex];
@@ -2402,6 +2406,9 @@ function applyCandidate(){
   $('#ci-arch').value = c.architect;
   $('#ci-year').value = c.year;
   $('#ci-style').value = c.style;
+  /* the suggested caption describes the building, so it follows the match the
+     way the other suggested fields do */
+  $('#caption').value = c.caption;
 }
 
 /* Tags are 'AI generated': they surface one at a time while the image is
