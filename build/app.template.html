@@ -1017,16 +1017,30 @@ figure{margin:0}
 .pchip .phandle{display:block;font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;
   text-overflow:ellipsis}
 
-.gcard{display:flex;gap:13px;align-items:flex-start;margin:0 22px 10px;padding:13px 14px;
-  width:calc(100% - 44px);text-align:left;transition:.16s}
+.gcard{display:block;margin:0 22px 10px;padding:0;width:calc(100% - 44px);text-align:left;
+  overflow:hidden;transition:.16s}
+.gcard:first-child{margin-top:14px}
 .gcard:hover{border-color:var(--muted-2)}
-.gcard > img{width:64px;height:64px;border-radius:var(--r-card);object-fit:cover;flex:none}
+.gcmain{display:flex;gap:13px;align-items:flex-start;padding:13px 14px}
+.gcard img{width:64px;height:64px;border-radius:var(--r-card);object-fit:cover;flex:none}
 .gcard .grow{flex:1;min-width:0}
-.gcard b{display:block;font-size:14px;font-weight:600;color:var(--ink)}
-.gcard .blurb{display:block;font-size:12px;color:var(--muted);line-height:1.45;margin:3px 0 6px}
-.gcard .gmeta{display:block;font-size:11.5px;color:var(--muted-2)}
-.gcard .gwalk{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--red);margin-top:6px}
-.gcard .gwalk i{width:6px;height:6px;border-radius:50%;background:var(--red);display:block;flex:none}
+.ghead{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.gcard b{font-size:14px;font-weight:600;color:var(--ink)}
+.gcard .blurb{display:block;font-size:12px;color:var(--muted);line-height:1.45;margin:3px 0 8px}
+.gfoot{display:flex;align-items:center;gap:8px}
+.gcard .gmeta{font-size:11.5px;color:var(--muted-2)}
+.gcard .gmeta b{font-size:11.5px;font-weight:600;color:var(--muted)}
+/* the walk is a date you could turn up to, so it reads as its own strip */
+.gcard .gwalk{display:flex;align-items:center;gap:11px;padding:9px 14px;
+  border-top:1px solid var(--bone-soft);background:var(--red-tint)}
+.gwdate{flex:none;display:flex;flex-direction:column;align-items:center;line-height:1;min-width:26px}
+.gwdate b{font-size:15px;font-weight:600;color:var(--red)}
+.gwdate span{font-size:8.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--red);opacity:.75;margin-top:2px}
+.gwbody{flex:1;min-width:0}
+.gwbody b{display:block;font-size:12.5px;font-weight:600;color:var(--ink);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gwbody span{display:block;font-size:11px;color:var(--muted);margin-top:1px}
 .gkind{flex:none;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
   color:var(--muted);border:1px solid var(--bone);border-radius:4px;padding:3px 7px}
 
@@ -2817,17 +2831,27 @@ function postHTML(p, i){
 }
 
 /* ---------- community panel ---------- */
+/* The walk is the one thing on a group card you can act on, so it gets its own
+   strip with the name and hour rather than a date buried under the blurb. */
 function groupCard(id){
   const g = GROUPS[id];
   return `<button class="gcard card" data-group="${id}">
-    <img src="${IMG[g.img]}" alt="">
-    <span class="grow">
-      <b>${esc(g.name)}</b>
-      <span class="blurb">${esc(g.blurb)}</span>
-      <span class="gmeta">${g.members} members &#183; ${g.posts} posts</span>
-      ${g.walk ? `<span class="gwalk"><i></i>Walk on ${esc(g.walk.d)} ${esc(g.walk.m)} &#183; ${g.walk.going} going</span>` : ''}
+    <span class="gcmain">
+      <img src="${IMG[g.img]}" alt="">
+      <span class="grow">
+        <span class="ghead"><b>${esc(g.name)}</b><span class="gkind">${esc(g.kind)}</span></span>
+        <span class="blurb">${esc(g.blurb)}</span>
+        <span class="gfoot">
+          ${stackOf(g.people)}
+          <span class="gmeta"><b class="onum">${g.members}</b> members &#183; <b class="onum">${g.posts}</b> posts</span>
+        </span>
+      </span>
     </span>
-    <span class="gkind">${esc(g.kind)}</span>
+    ${g.walk ? `<span class="gwalk">
+      <span class="gwdate"><b class="onum">${esc(g.walk.d)}</b><span>${esc(g.walk.m)}</span></span>
+      <span class="gwbody"><b>${esc(g.walk.title)}</b>
+        <span>${esc(g.walk.time)} &#183; ${g.walk.going} going</span></span>
+    </span>` : ''}
   </button>`;
 }
 function renderMapSocial(){
