@@ -785,25 +785,34 @@ figure{margin:0}
 .exitsheet .linkbtn{display:block;width:100%;text-align:center;padding:10px;font-size:13px;font-weight:600;color:var(--muted)}
 
 /* ============ 05 journey map ============ */
-.jmap{position:relative;height:330px;overflow:hidden;background:#E7DFCA;border-bottom:1px solid var(--bone);
+.jmap{position:relative;height:330px;overflow:hidden;background:#F2EFE5;border-bottom:1px solid var(--bone);
   touch-action:none}
-/* drawn map: tan blocks with the roadway cut through them in white, the way a
-   printed street map reads - the ground is the block, not the paper */
+/* Editorial cartography: ivory paper, a fine grey street network drawn on top
+   of it, and colour spent only on the routes and the places you chose. Every
+   layer below is geography - it pans and zooms with the projection. */
 .jmap{cursor:grab}
 .jmap.grabbing{cursor:grabbing}
-.mapcanvas{position:absolute;inset:0;width:100%;height:100%;background:#E7DFCA;display:block}
-.mpark{fill:#CCDBBE;stroke:#B6C9A6;stroke-width:1}
-.mst{stroke:#FAF7EF;stroke-linecap:round}
-.mav{stroke:#FFFDF7;stroke-linecap:round}
-.mroute{fill:none;stroke-linejoin:round;stroke-linecap:round;opacity:.95}
+.mapcanvas{position:absolute;inset:0;width:100%;height:100%;background:#F2EFE5;display:block}
+.mwater{fill:#DBE2E4}
+.mpark{fill:#D9DFCF}
+/* footprints sit barely above the paper - urban texture, never a subject */
+.mblock{fill:#E4DECD}
+.mst{stroke:#C6BEA9;stroke-linecap:round}
+.mav{stroke:#B2A98F;stroke-linecap:round}
+.mav.major{stroke:#9E9578}
+.mroute{fill:none;stroke-linejoin:round;stroke-linecap:round}
 .mlabel{font-family:var(--ui);font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
-  fill:#9A9078}
-.mname{font-family:var(--ui);font-size:10px;font-weight:700;fill:var(--ink);paint-order:stroke;
-  stroke:rgba(255,253,247,.94);stroke-width:3.4px;stroke-linejoin:round}
-.mparklab{fill:#6E8560;letter-spacing:.2em}
-.mstop{cursor:pointer}
-.mmeet rect{fill:#C9922E}
-.mmeet text{font-family:var(--ui);font-size:8.5px;font-weight:700;letter-spacing:.12em;fill:#fff}
+  fill:#A29A85}
+.mname{font-family:var(--ui);font-size:10px;font-weight:600;fill:#2B2B2B;paint-order:stroke;
+  stroke:rgba(242,239,229,.92);stroke-width:3.2px;stroke-linejoin:round}
+.mparklab{fill:#84957A;letter-spacing:.2em}
+/* markers answer the pointer, but quietly */
+.mstop{cursor:pointer;transform-box:fill-box;transform-origin:center;
+  transition:transform .18s ease}
+.mstop:hover{transform:scale(1.14)}
+.mstop .mhit{fill:transparent}
+.mmeet rect{fill:#F6C515}
+.mmeet text{font-family:var(--ui);font-size:8.5px;font-weight:700;letter-spacing:.12em;fill:#3A2E00}
 .mapsearch{position:absolute;left:14px;right:60px;bottom:12px;z-index:6}
 .mapsearch > svg{position:absolute;left:11px;top:11px;width:15px;height:15px;color:var(--muted);pointer-events:none}
 .mapsearch input{width:100%;padding:10px 12px 10px 33px;border-radius:9px;border:1px solid var(--bone);
@@ -3627,34 +3636,67 @@ function makeLiveMap(frame, svg, buttons, opts){
       `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" class="${cls}" stroke-width="${sw}"/>`;
 
     let out = '';
-    /* Central Park sits on the grid, so it is drawn from the same frame */
     const pk = MAP.park;
-    const corners = [P(pk.w, pk.s), P(pk.e, pk.s), P(pk.e, pk.n), P(pk.w, pk.n)];
-    out += `<polygon class="mpark" points="${corners.map(p=>p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ')}"/>`;
+    const poly = (pts, cls) =>
+      `<polygon class="${cls}" points="${pts.map(p=>p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ')}"/>`;
+    /* everything here is placed through the same projection as the routes, so
+       the paper layers stay locked to the ground while you pan and zoom */
+    const s0 = MAP.streets.from - 6, s1 = MAP.streets.to + 6;
 
-    /* blocks: cross streets first, then the heavier avenues over them */
-    const sw = Math.max(.7, Math.min(2.4, sc * 3.2));
+    /* the two rivers the grid runs between */
+    out += poly([P(5.55, s0), P(9.5, s0), P(9.5, s1), P(5.55, s1)], 'mwater');
+    out += poly([P(-3.75, s0), P(-7.5, s0), P(-7.5, s1), P(-3.75, s1)], 'mwater');
+
+    /* Central Park sits on the grid, so it is drawn from the same frame */
+    out += poly([P(pk.w, pk.s), P(pk.e, pk.s), P(pk.e, pk.n), P(pk.w, pk.n)], 'mpark');
+
+    /* Building footprints: one quiet block per city block, inset to leave the
+       roadway. Only close in, and only the blocks actually on screen. */
+    if(sc > .11){
+      const pad = 40;
+      const av = MAP.avenues;
+      for(let ai = 0; ai < av.length - 1; ai++){
+        const a0 = av[ai].i, a1 = av[ai + 1].i;
+        for(let st = MAP.streets.from; st < MAP.streets.to; st++){
+          if(st >= pk.s && st < pk.n && a0 >= pk.w && a1 <= pk.e) continue;
+          const c = [P(a0, st), P(a1, st), P(a1, st + 1), P(a0, st + 1)];
+          if(c.every(q => q.x < -pad || q.x > w + pad || q.y < -pad || q.y > h + pad)) continue;
+          const cx = (c[0].x + c[1].x + c[2].x + c[3].x) / 4;
+          const cy = (c[0].y + c[1].y + c[2].y + c[3].y) / 4;
+          /* zoomed out the blocks carry the urban texture, so they close up
+             and the roadway thins to a hairline between them */
+          const k = sc > .5 ? .76 : sc > .25 ? .80 : .86;
+          out += poly(c.map(q => ({x: cx + (q.x - cx) * k, y: cy + (q.y - cy) * k})), 'mblock');
+        }
+      }
+    }
+
+    /* the street network, thinnest first so the avenues read over it */
+    const sw = Math.max(.6, Math.min(2.1, sc * 2.8));
     /* keep roughly 13px between drawn streets, so the blocks stay legible
        instead of thinning out into stripes as you zoom back */
     const every = sc > .15 ? 1 : sc > .075 ? 2 : 5;
-    for(let s = MAP.streets.from; s <= MAP.streets.to; s++){
-      if(s % every) continue;
-      const inPark = s > pk.s && s < pk.n;
+    for(let st = MAP.streets.from; st <= MAP.streets.to; st++){
+      if(st % every) continue;
+      const inPark = st > pk.s && st < pk.n;
       if(inPark){
-        out += line(P(pk.e, s), P(5.4, s), 'mst', sw);
-        out += line(P(-3.6, s), P(pk.w, s), 'mst', sw);
+        out += line(P(pk.e, st), P(5.4, st), 'mst', sw);
+        out += line(P(-3.6, st), P(pk.w, st), 'mst', sw);
       } else {
-        out += line(P(-3.6, s), P(5.4, s), 'mst', sw);
+        out += line(P(-3.6, st), P(5.4, st), 'mst', sw);
       }
     }
-    MAP.avenues.forEach(av=>{
-      const s0 = MAP.streets.from, s1 = MAP.streets.to;
-      const crossesPark = av.i >= pk.w && av.i <= pk.e;
+    MAP.avenues.forEach(a=>{
+      const f = MAP.streets.from, t = MAP.streets.to;
+      /* a few avenues carry the island, so they are drawn a shade heavier */
+      const cls = 'mav' + (/5th|Park|7th/.test(a.name) ? ' major' : '');
+      const wgt = sw * (/5th|Park|7th/.test(a.name) ? 2.1 : 1.6);
+      const crossesPark = a.i >= pk.w && a.i <= pk.e;
       if(crossesPark){
-        out += line(P(av.i, s0), P(av.i, pk.s), 'mav', sw * 1.7);
-        out += line(P(av.i, pk.n), P(av.i, s1), 'mav', sw * 1.7);
+        out += line(P(a.i, f), P(a.i, pk.s), cls, wgt);
+        out += line(P(a.i, pk.n), P(a.i, t), cls, wgt);
       } else {
-        out += line(P(av.i, s0), P(av.i, s1), 'mav', sw * 1.7);
+        out += line(P(a.i, f), P(a.i, t), cls, wgt);
       }
     });
 
@@ -3701,11 +3743,17 @@ function makeLiveMap(frame, svg, buttons, opts){
       const p = toScreen(merc(q.lat, q.lng));
       if(p.x < -60 || p.x > w + 60 || p.y < -40 || p.y > h + 40) return;
       const on = view.sel === q.id;
-      const r = on ? 9 : Math.max(5.5, Math.min(8, sc * 16));
+      /* a plain disc with a white keyline; the chosen one opens into a ring,
+         which is the loudest mark anywhere on the paper */
+      const base = Math.max(5, Math.min(7.5, sc * 14));
+      const r = on ? base * 1.6 : base;
+      const x = p.x.toFixed(1), y = p.y.toFixed(1);
       out += `<g class="mstop${on ? ' on' : ''}" data-place="${q.id}">
-        ${on ? `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${(r + 7).toFixed(1)}" fill="${q.c}" opacity=".2"/>` : ''}
-        <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${r.toFixed(1)}" fill="${q.c}" stroke="#fff" stroke-width="${(r / 2.6).toFixed(1)}"/>
-        ${(sc > .11 || on) ? `<text class="mname" x="${p.x.toFixed(1)}" y="${(p.y - r - 7).toFixed(1)}" text-anchor="middle">${esc(q.name)}</text>` : ''}
+        <circle class="mhit" cx="${x}" cy="${y}" r="${(r + 9).toFixed(1)}"/>
+        <circle cx="${x}" cy="${y}" r="${r.toFixed(1)}" fill="${q.c}"
+          stroke="#FBF9F3" stroke-width="${(r * (on ? .34 : .3)).toFixed(1)}"/>
+        ${on ? `<circle cx="${x}" cy="${y}" r="${(r * .34).toFixed(1)}" fill="#FBF9F3"/>` : ''}
+        ${(sc > .11 || on) ? `<text class="mname" x="${x}" y="${(p.y - r - 8).toFixed(1)}" text-anchor="middle">${esc(q.name)}</text>` : ''}
       </g>`;
     });
 
