@@ -785,27 +785,31 @@ figure{margin:0}
 .exitsheet .linkbtn{display:block;width:100%;text-align:center;padding:10px;font-size:13px;font-weight:600;color:var(--muted)}
 
 /* ============ 05 journey map ============ */
-.jmap{position:relative;height:330px;overflow:hidden;background:#F2EFE5;border-bottom:1px solid var(--bone);
+.jmap{position:relative;height:330px;overflow:hidden;background:#DCE3E2;border-bottom:1px solid var(--bone);
   touch-action:none}
 /* Editorial cartography: ivory paper, a fine grey street network drawn on top
    of it, and colour spent only on the routes and the places you chose. Every
    layer below is geography - it pans and zooms with the projection. */
 .jmap{cursor:grab}
 .jmap.grabbing{cursor:grabbing}
-.mapcanvas{position:absolute;inset:0;width:100%;height:100%;background:#F2EFE5;display:block}
-.mwater{fill:#DBE2E4}
-.mpark{fill:#D9DFCF}
+.mapcanvas{position:absolute;inset:0;width:100%;height:100%;background:#DCE3E2;display:block}
+.mland{fill:#F2EFE7}
+.mwater{fill:#DCE3E2}
+.mpark{fill:#D9DECF}
 /* footprints sit barely above the paper - urban texture, never a subject */
-.mblock{fill:#E4DECD}
-.mst{stroke:#C6BEA9;stroke-linecap:round}
-.mav{stroke:#B2A98F;stroke-linecap:round}
-.mav.major{stroke:#9E9578}
+.mblock{fill:#E5E1D8;opacity:.7}
+.mst{stroke:#DDD8CD;stroke-linecap:round}
+.mav{stroke:#CBC5B8;stroke-linecap:round}
+.mav.major{stroke:#B8B1A2}
 .mroute{fill:none;stroke-linejoin:round;stroke-linecap:round}
 .mlabel{font-family:var(--ui);font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
-  fill:#A29A85}
+  fill:#8A857B}
 .mname{font-family:var(--ui);font-size:10px;font-weight:600;fill:#2B2B2B;paint-order:stroke;
-  stroke:rgba(242,239,229,.92);stroke-width:3.2px;stroke-linejoin:round}
-.mparklab{fill:#84957A;letter-spacing:.2em}
+  stroke:rgba(242,239,231,.92);stroke-width:3.2px;stroke-linejoin:round}
+/* district names are basemap, not app data, so they stay warm grey */
+.mdistrict{font-family:var(--ui);font-size:9px;font-weight:600;letter-spacing:.07em;
+  fill:#66635D;paint-order:stroke;stroke:rgba(242,239,231,.75);stroke-width:2.6px;stroke-linejoin:round}
+.mparklab{fill:#8A9A80;letter-spacing:.2em}
 /* markers answer the pointer, but quietly */
 .mstop{cursor:pointer;transform-box:fill-box;transform-origin:center;
   transition:transform .18s ease}
@@ -1719,9 +1723,9 @@ the city folded in on itself.</textarea>
             </div>
             <div class="legend">
               <h4>My routes</h4>
-              <button data-layer="arch" aria-pressed="true"><i style="background:#952324"></i>Architecture</button>
-              <button data-layer="art" aria-pressed="true"><i style="background:#3E6B9A"></i>Art Spaces</button>
-              <button data-layer="photo" aria-pressed="true"><i style="background:#666666"></i>Photography</button>
+              <button data-layer="arch" aria-pressed="true"><i style="background:#A8252B"></i>Architecture</button>
+              <button data-layer="art" aria-pressed="true"><i style="background:#356B9A"></i>Art Spaces</button>
+              <button data-layer="photo" aria-pressed="true"><i style="background:#6E706F"></i>Photography</button>
             </div>
           </div>
           <div class="statbar">
@@ -3528,39 +3532,85 @@ const MAP = {
   avSpacing: 274,   /* metres between avenues */
   stSpacing: 81,    /* metres between cross streets */
   avenues: [
+    {i: -6, name: '1st Ave'},       {i: -5, name: '2nd Ave'},  {i: -4, name: '3rd Ave'},
     {i: -3, name: 'Lexington Ave'}, {i: -2, name: 'Park Ave'}, {i: -1, name: 'Madison Ave'},
     {i: 0,  name: '5th Ave'},       {i: 1,  name: '6th Ave'},  {i: 2,  name: '7th Ave'},
-    {i: 3,  name: '8th Ave'},       {i: 4,  name: '9th Ave'},  {i: 5,  name: '10th Ave'}
+    {i: 3,  name: '8th Ave'},       {i: 4,  name: '9th Ave'},  {i: 5,  name: '10th Ave'},
+    {i: 6,  name: '11th Ave'},      {i: 7,  name: '12th Ave'}
   ],
-  streets: {from: -20, to: 62, label: 5},   /* 22nd St up to 104th St */
+  /* the commissioners' grid as actually laid out: 14th St to 155th St, and
+     river to river. Below 14th the streets stop being a grid, so they stop
+     here rather than being invented. */
+  streets: {from: -28, to: 113, label: 5},
   park: {s: 17, n: 68, w: 0, e: 3}          /* 59th-110th, 5th to 8th */
 };
 
+/* Real geography, carried in the file because the page ships as one offline
+   document - no tile server is reachable from it. Coordinates are the actual
+   shoreline, parks and districts, simplified the way a printed guide map
+   simplifies them, not generated from a pattern. */
+const SHORE = [
+  [40.7060,-74.0190],[40.7190,-74.0162],[40.7310,-74.0128],[40.7440,-74.0102],
+  [40.7570,-74.0086],[40.7700,-73.9996],[40.7830,-73.9882],[40.7960,-73.9766],
+  [40.8090,-73.9652],[40.8230,-73.9542],[40.8370,-73.9442],[40.8510,-73.9352],
+  [40.8660,-73.9268],[40.8730,-73.9232],[40.8790,-73.9212],[40.8735,-73.9112],
+  [40.8600,-73.9202],[40.8460,-73.9288],[40.8320,-73.9330],[40.8170,-73.9340],
+  [40.8020,-73.9332],[40.7880,-73.9372],[40.7760,-73.9430],[40.7640,-73.9520],
+  [40.7520,-73.9612],[40.7420,-73.9680],[40.7330,-73.9718],[40.7230,-73.9732],
+  [40.7130,-73.9762],[40.7060,-73.9830],[40.7012,-73.9978],[40.7005,-74.0135]
+];
+/* parks as their own outlines - Central Park is a true rectangle on the grid,
+   the rest are the squares the city is actually laid out around */
+const PARKS = [
+  [[40.7681,-73.9819],[40.7644,-73.9730],[40.8003,-73.9498],[40.8039,-73.9588]],
+  [[40.7940,-73.9770],[40.7930,-73.9730],[40.8350,-73.9540],[40.8360,-73.9585]],
+  [[40.7526,-73.9847],[40.7546,-73.9836],[40.7538,-73.9818],[40.7518,-73.9829]],
+  [[40.7411,-73.9899],[40.7438,-73.9880],[40.7428,-73.9857],[40.7401,-73.9876]],
+  [[40.7345,-73.9922],[40.7370,-73.9905],[40.7362,-73.9887],[40.7337,-73.9904]],
+  [[40.7295,-73.9995],[40.7320,-73.9977],[40.7311,-73.9958],[40.7286,-73.9976]],
+  [[40.7020,-74.0190],[40.7060,-74.0175],[40.7048,-74.0130],[40.7008,-74.0148]],
+  [[40.7120,-73.9760],[40.7290,-73.9700],[40.7300,-73.9720],[40.7130,-73.9785]],
+  [[40.8660,-73.9290],[40.8740,-73.9250],[40.8720,-73.9195],[40.8640,-73.9240]]
+];
+/* the names you need at city scale, and nothing else */
+const DISTRICTS = [
+  {n:'Upper West Side', lat:40.7870, lng:-73.9754},
+  {n:'Upper East Side', lat:40.7736, lng:-73.9566},
+  {n:'Harlem',          lat:40.8116, lng:-73.9465},
+  {n:'Midtown',         lat:40.7549, lng:-73.9840},
+  {n:'Chelsea',         lat:40.7465, lng:-74.0014},
+  {n:'Greenwich Village',lat:40.7336, lng:-74.0027},
+  {n:'SoHo',            lat:40.7233, lng:-74.0030},
+  {n:'Lower East Side', lat:40.7150, lng:-73.9843},
+  {n:'Financial District',lat:40.7077,lng:-74.0090},
+  {n:'Washington Heights',lat:40.8417,lng:-73.9393}
+];
+
 const PLACES = [
-  {id:'moma',   name:'MoMA',                lat:40.7614, lng:-73.9776, c:'#3E6B9A', kind:'Art Spaces'},
-  {id:'seagram',name:'Seagram Building',    lat:40.7587, lng:-73.9720, c:'#952324', kind:'Architecture'},
-  {id:'gugg',   name:'Guggenheim',          lat:40.7830, lng:-73.9590, c:'#3E6B9A', kind:'Art Spaces'},
-  {id:'parkav', name:'Park Ave Facades',    lat:40.7549, lng:-73.9756, c:'#666666', kind:'Photography'},
-  {id:'vessel', name:'The Vessel',          lat:40.7539, lng:-74.0021, c:'#952324', kind:'Architecture'},
-  {id:'chrysler',name:'Chrysler Building',  lat:40.7516, lng:-73.9755, c:'#952324', kind:'Architecture'},
-  {id:'empire', name:'Empire State',        lat:40.7484, lng:-73.9857, c:'#952324', kind:'Architecture'},
-  {id:'whitney',name:'Whitney Museum',      lat:40.7396, lng:-74.0089, c:'#3E6B9A', kind:'Art Spaces'},
-  {id:'grand',  name:'Grand Central',       lat:40.7527, lng:-73.9772, c:'#666666', kind:'Photography'}
+  {id:'moma',   name:'MoMA',                lat:40.7614, lng:-73.9776, c:'#356B9A', kind:'Art Spaces'},
+  {id:'seagram',name:'Seagram Building',    lat:40.7587, lng:-73.9720, c:'#A8252B', kind:'Architecture'},
+  {id:'gugg',   name:'Guggenheim',          lat:40.7830, lng:-73.9590, c:'#356B9A', kind:'Art Spaces'},
+  {id:'parkav', name:'Park Ave Facades',    lat:40.7549, lng:-73.9756, c:'#6E706F', kind:'Photography'},
+  {id:'vessel', name:'The Vessel',          lat:40.7539, lng:-74.0021, c:'#A8252B', kind:'Architecture'},
+  {id:'chrysler',name:'Chrysler Building',  lat:40.7516, lng:-73.9755, c:'#A8252B', kind:'Architecture'},
+  {id:'empire', name:'Empire State',        lat:40.7484, lng:-73.9857, c:'#A8252B', kind:'Architecture'},
+  {id:'whitney',name:'Whitney Museum',      lat:40.7396, lng:-74.0089, c:'#356B9A', kind:'Art Spaces'},
+  {id:'grand',  name:'Grand Central',       lat:40.7527, lng:-73.9772, c:'#6E706F', kind:'Photography'}
 ];
 
 const ROUTES = {
-  arch:  {c:'#952324', stops:['vessel','empire','seagram','chrysler']},
-  art:   {c:'#3E6B9A', stops:['whitney','moma','gugg']},
-  photo: {c:'#666666', stops:['grand','parkav','moma']}
+  arch:  {c:'#A8252B', stops:['vessel','empire','seagram','chrysler']},
+  art:   {c:'#356B9A', stops:['whitney','moma','gugg']},
+  photo: {c:'#6E706F', stops:['grand','parkav','moma']}
 };
 
 /* Discover shows the places you could walk to now; the two that exist as full
    records open them, the rest just name themselves on the map. */
 const DPLACES = [
-  {id:'seagram', name:'Seagram Building', lat:40.7587, lng:-73.9720, c:'#952324', kind:'Architecture', bld:'seagram'},
-  {id:'moma',    name:'MoMA',             lat:40.7614, lng:-73.9776, c:'#3E6B9A', kind:'Art Spaces'},
-  {id:'parkav',  name:'Park Ave Facades', lat:40.7549, lng:-73.9756, c:'#666666', kind:'Photography'},
-  {id:'grand',   name:'Grand Central',    lat:40.7527, lng:-73.9772, c:'#666666', kind:'Photography'}
+  {id:'seagram', name:'Seagram Building', lat:40.7587, lng:-73.9720, c:'#A8252B', kind:'Architecture', bld:'seagram'},
+  {id:'moma',    name:'MoMA',             lat:40.7614, lng:-73.9776, c:'#356B9A', kind:'Art Spaces'},
+  {id:'parkav',  name:'Park Ave Facades', lat:40.7549, lng:-73.9756, c:'#6E706F', kind:'Photography'},
+  {id:'grand',   name:'Grand Central',    lat:40.7527, lng:-73.9772, c:'#6E706F', kind:'Photography'}
 ];
 let dmapView = {lat: 40.7572, lng: -73.9758, scale: 0.155, sel: null};
 
@@ -3609,7 +3659,11 @@ function makeLiveMap(frame, svg, buttons, opts){
   const view   = opts.view   || mapView;
   const layers = opts.layers || mapLayers;
   const meet   = opts.meet   || null;
-  const MIN = 0.09, MAX = 2.6;
+  /* scale is pixels per mercator metre; z = log2(scale * 40075016 / 256).
+     MIN was 0.09, about zoom 13.8, so the map could not be pulled back far
+     enough to see a city at all - that is the whole of the "too close" bug. */
+  const MIN = 0.009, MAX = 2.6;          /* roughly zoom 10.5 to 18 */
+  const FIT_MAX = 0.052;                 /* never fit closer than about zoom 13 */
   const pts = new Map();
   let last = null, pinch = 0, down = null, held = false;
 
@@ -3637,24 +3691,44 @@ function makeLiveMap(frame, svg, buttons, opts){
 
     let out = '';
     const pk = MAP.park;
-    const poly = (pts, cls) =>
-      `<polygon class="${cls}" points="${pts.map(p=>p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ')}"/>`;
-    /* everything here is placed through the same projection as the routes, so
-       the paper layers stay locked to the ground while you pan and zoom */
-    const s0 = MAP.streets.from - 6, s1 = MAP.streets.to + 6;
+    const ll = q => toScreen(merc(q[0], q[1]));
+    const poly = (pts, cls, extra) =>
+      `<polygon class="${cls}" ${extra || ''} points="${pts.map(p=>p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ')}"/>`;
 
-    /* the two rivers the grid runs between */
-    out += poly([P(5.55, s0), P(9.5, s0), P(9.5, s1), P(5.55, s1)], 'mwater');
-    out += poly([P(-3.75, s0), P(-7.5, s0), P(-7.5, s1), P(-3.75, s1)], 'mwater');
+    /* Water is the ground everywhere, and the island is drawn as paper on top
+       of it, so the coastline is a real edge rather than a painted band. */
+    out += `<rect class="mwater" x="0" y="0" width="${w}" height="${h}"/>`;
+    out += poly(SHORE.map(ll), 'mland');
+    PARKS.forEach(pts => { out += poly(pts.map(ll), 'mpark'); });
 
-    /* Central Park sits on the grid, so it is drawn from the same frame */
-    out += poly([P(pk.w, pk.s), P(pk.e, pk.s), P(pk.e, pk.n), P(pk.w, pk.n)], 'mpark');
+    /* Progressive disclosure: at city scale only the avenues that structure
+       the island survive, and the local grid arrives as you come down. */
+    const Z = {city: sc < .028, district: sc < .07, hood: sc < .2};
+    const sw = Math.max(.5, Math.min(1.6, sc * 2.2));
+    const majorRe = /5th|Park|7th|Broadway/;
 
-    /* Building footprints: one quiet block per city block, inset to leave the
-       roadway. Only close in, and only the blocks actually on screen. */
-    if(sc > .11){
-      const pad = 40;
-      const av = MAP.avenues;
+    if(!Z.city){
+      /* cross streets: every 20 blocks at district scale, then denser */
+      const every = sc > .34 ? 1 : sc > .16 ? 2 : sc > .07 ? 10 : 20;
+      for(let st = MAP.streets.from; st <= MAP.streets.to; st++){
+        if(st % every) continue;
+        const major = st % 20 === 0;
+        if(Z.district && !major) continue;
+        const cls = major ? 'mav' : 'mst';
+        const wgt = major ? sw * 1.5 : sw;
+        const inPark = st > pk.s && st < pk.n;
+        if(inPark){
+          out += line(P(pk.e, st), P(7.4, st), cls, wgt);
+          out += line(P(-6.4, st), P(pk.w, st), cls, wgt);
+        } else {
+          out += line(P(-6.4, st), P(7.4, st), cls, wgt);
+        }
+      }
+    }
+
+    /* footprints only once a block is big enough to read as a building */
+    if(sc > .55){
+      const pad = 40, av = MAP.avenues;
       for(let ai = 0; ai < av.length - 1; ai++){
         const a0 = av[ai].i, a1 = av[ai + 1].i;
         for(let st = MAP.streets.from; st < MAP.streets.to; st++){
@@ -3663,34 +3737,17 @@ function makeLiveMap(frame, svg, buttons, opts){
           if(c.every(q => q.x < -pad || q.x > w + pad || q.y < -pad || q.y > h + pad)) continue;
           const cx = (c[0].x + c[1].x + c[2].x + c[3].x) / 4;
           const cy = (c[0].y + c[1].y + c[2].y + c[3].y) / 4;
-          /* zoomed out the blocks carry the urban texture, so they close up
-             and the roadway thins to a hairline between them */
-          const k = sc > .5 ? .76 : sc > .25 ? .80 : .86;
-          out += poly(c.map(q => ({x: cx + (q.x - cx) * k, y: cy + (q.y - cy) * k})), 'mblock');
+          out += poly(c.map(q => ({x: cx + (q.x - cx) * .76, y: cy + (q.y - cy) * .76})), 'mblock');
         }
       }
     }
 
-    /* the street network, thinnest first so the avenues read over it */
-    const sw = Math.max(.6, Math.min(2.1, sc * 2.8));
-    /* keep roughly 13px between drawn streets, so the blocks stay legible
-       instead of thinning out into stripes as you zoom back */
-    const every = sc > .15 ? 1 : sc > .075 ? 2 : 5;
-    for(let st = MAP.streets.from; st <= MAP.streets.to; st++){
-      if(st % every) continue;
-      const inPark = st > pk.s && st < pk.n;
-      if(inPark){
-        out += line(P(pk.e, st), P(5.4, st), 'mst', sw);
-        out += line(P(-3.6, st), P(pk.w, st), 'mst', sw);
-      } else {
-        out += line(P(-3.6, st), P(5.4, st), 'mst', sw);
-      }
-    }
     MAP.avenues.forEach(a=>{
       const f = MAP.streets.from, t = MAP.streets.to;
-      /* a few avenues carry the island, so they are drawn a shade heavier */
-      const cls = 'mav' + (/5th|Park|7th/.test(a.name) ? ' major' : '');
-      const wgt = sw * (/5th|Park|7th/.test(a.name) ? 2.1 : 1.6);
+      const major = majorRe.test(a.name);
+      if(Z.city && !major) return;
+      const cls = 'mav' + (major ? ' major' : '');
+      const wgt = sw * (major ? 2 : 1.35);
       const crossesPark = a.i >= pk.w && a.i <= pk.e;
       if(crossesPark){
         out += line(P(a.i, f), P(a.i, pk.s), cls, wgt);
@@ -3699,6 +3756,15 @@ function makeLiveMap(frame, svg, buttons, opts){
         out += line(P(a.i, f), P(a.i, t), cls, wgt);
       }
     });
+
+    /* the city names carry the wide view; they go once streets can do the job */
+    if(Z.district){
+      DISTRICTS.forEach(d=>{
+        const p = toScreen(merc(d.lat, d.lng));
+        if(p.x < 4 || p.x > w - 4 || p.y < 10 || p.y > h - 6) return;
+        out += `<text class="mdistrict" x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}" text-anchor="middle">${esc(d.n)}</text>`;
+      });
+    }
 
     if(sc > .18){
       const pc = P((pk.w + pk.e) / 2, (pk.s + pk.n) / 2);
@@ -3730,7 +3796,8 @@ function makeLiveMap(frame, svg, buttons, opts){
         const p = toScreen(merc(q.lat, q.lng));
         return p.x.toFixed(1) + ',' + p.y.toFixed(1);
       }).join(' ');
-      const wide = Math.max(3.4, sc * 9);
+      /* an annotation drawn over a printed map, so it barely thickens */
+      const wide = Math.max(2.2, Math.min(3.8, 2.4 + sc * 1.6));
       out += `<g data-route="${k}" style="transition:opacity .25s" opacity="${layers[k] === false ? 0 : 1}">
         ${r.dash ? `<polyline class="mroute" points="${pl}" stroke="#fff" stroke-width="${(wide + 3.5).toFixed(1)}" opacity=".8"/>` : ''}
         <polyline class="mroute" points="${pl}" stroke="${r.c}" stroke-width="${wide.toFixed(1)}"
@@ -3745,13 +3812,13 @@ function makeLiveMap(frame, svg, buttons, opts){
       const on = view.sel === q.id;
       /* a plain disc with a white keyline; the chosen one opens into a ring,
          which is the loudest mark anywhere on the paper */
-      const base = Math.max(5, Math.min(7.5, sc * 14));
-      const r = on ? base * 1.6 : base;
+      const base = Math.max(4.4, Math.min(6, 4.2 + sc * 1.4));
+      const r = on ? base * 1.55 : base;
       const x = p.x.toFixed(1), y = p.y.toFixed(1);
       out += `<g class="mstop${on ? ' on' : ''}" data-place="${q.id}">
         <circle class="mhit" cx="${x}" cy="${y}" r="${(r + 9).toFixed(1)}"/>
         <circle cx="${x}" cy="${y}" r="${r.toFixed(1)}" fill="${q.c}"
-          stroke="#FBF9F3" stroke-width="${(r * (on ? .34 : .3)).toFixed(1)}"/>
+          stroke="#F6F3EB" stroke-width="${(on ? 2 : 1.7)}"/>
         ${on ? `<circle cx="${x}" cy="${y}" r="${(r * .34).toFixed(1)}" fill="#FBF9F3"/>` : ''}
         ${(sc > .11 || on) ? `<text class="mname" x="${x}" y="${(p.y - r - 8).toFixed(1)}" text-anchor="middle">${esc(q.name)}</text>` : ''}
       </g>`;
@@ -3855,8 +3922,11 @@ function makeLiveMap(frame, svg, buttons, opts){
     const xs = ms.map(m=>m.x), ys = ms.map(m=>m.y);
     const {w, h} = size();
     const pad = Math.max(24, Math.min(46, Math.min(w, h) * 0.13));
-    view.scale = Math.min((w - pad * 2) / (Math.max(...xs) - Math.min(...xs)),
-                             (h - pad * 2) / (Math.max(...ys) - Math.min(...ys)));
+    /* a short route must not pull the camera down to a street corner: keep the
+       surrounding city in frame instead */
+    view.scale = Math.min(FIT_MAX,
+      (w - pad * 2) / (Math.max(...xs) - Math.min(...xs)),
+      (h - pad * 2) / (Math.max(...ys) - Math.min(...ys)));
     setCentreMerc({x: (Math.max(...xs) + Math.min(...xs)) / 2,
                    y: (Math.max(...ys) + Math.min(...ys)) / 2});
     view.sel = null;
