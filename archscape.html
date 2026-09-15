@@ -908,19 +908,18 @@ figure{margin:0}
 .pftab[aria-current="true"] em{color:var(--red)}
 .work{cursor:pointer;transition:.16s}
 .work:active{opacity:.8}
-.jbar{display:flex;align-items:stretch;border-bottom:1px solid var(--bone)}
+.jbar{display:flex;align-items:stretch;border-bottom:1px solid var(--bone);padding-right:8px}
 .jbar .chiprow{flex:1;min-width:0;border-bottom:0}
-/* search is occasional here - the years are the everyday filter, so search
-   waits behind an icon on the same line rather than taking a row of its own */
-.jsearchbtn{flex:none;display:grid;place-items:center;width:44px;color:var(--muted);transition:.16s}
+/* search takes the place of the years rather than opening a row beneath them,
+   so the list never jumps down to make room for a box */
+.jfield{flex:1;min-width:0;display:flex;align-items:center;gap:9px;padding:13px 0 11px}
+.jfield > svg{width:16px;height:16px;color:var(--muted);flex:none}
+.jfield input{flex:1;min-width:0;border:0;outline:none;background:none;font-size:13.5px;color:var(--ink)}
+.jfield input::placeholder{color:var(--muted-2)}
+.jsearchbtn{flex:none;display:grid;place-items:center;width:36px;color:var(--muted);transition:.16s}
 .jsearchbtn svg{width:17px;height:17px}
 .jsearchbtn:hover{color:var(--ink)}
-.jsearchbtn.on{color:var(--red)}
-.jsearch{position:relative;margin:12px 22px 4px}
-.jsearch > svg{position:absolute;left:11px;top:50%;margin-top:-8px;width:16px;height:16px;color:var(--muted)}
-.jsearch input{width:100%;padding:11px 14px 11px 34px;border-radius:9px;border:1px solid var(--bone);
-  background:var(--paper);font-size:13.5px;color:var(--ink);outline:none;transition:.16s}
-.jsearch input:focus{border-color:var(--red);background:var(--white)}
+.jcount{margin:12px 22px 0;font-size:11.5px;color:var(--muted)}
 .pflink{display:block;width:100%;text-align:center;padding:16px;font-size:13px;font-weight:600;
   color:var(--red);transition:.16s}
 .pflink:hover{background:var(--bone-soft)}
@@ -3280,16 +3279,24 @@ function renderJourneys(){
     (!q || (t.name + ' ' + t.meta).toLowerCase().includes(q)));
   return `
     <div class="jbar">
-      <div class="chiprow" id="j-years" data-chips="jyear">
-        <button class="chip" data-jyear="all" aria-pressed="${jFilter==='all'}">All years</button>
-        ${years.map(y=>`<button class="chip" data-jyear="${y}" aria-pressed="${jFilter===String(y)}">${y}</button>`).join('')}
-      </div>
-      <button class="jsearchbtn${jOpen ? ' on' : ''}" id="j-toggle" aria-expanded="${jOpen}" aria-label="Search journeys">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
-      </button>
+      ${jOpen ? `
+        <span class="jfield">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+          <input id="j-q" type="search" placeholder="Search your journeys" value="${esc(jQuery)}" aria-label="Search journeys">
+        </span>
+        <button class="jsearchbtn" id="j-toggle" aria-expanded="true" aria-label="Close search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+        </button>`
+      : `
+        <div class="chiprow" id="j-years" data-chips="jyear">
+          <button class="chip" data-jyear="all" aria-pressed="${jFilter==='all'}">All years</button>
+          ${years.map(y=>`<button class="chip" data-jyear="${y}" aria-pressed="${jFilter===String(y)}">${y}</button>`).join('')}
+        </div>
+        <button class="jsearchbtn" id="j-toggle" aria-expanded="false" aria-label="Search journeys">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+        </button>`}
     </div>
-    ${jOpen ? `<div class="jsearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
-      <input id="j-q" type="search" placeholder="Search your journeys" value="${esc(jQuery)}" aria-label="Search journeys"></div>` : ''}
+    ${jOpen && q ? `<p class="jcount">${list.length} of ${TRIPS.length} journeys</p>` : ''}
     ${list.length ? list.map(t=>{
       const i = TRIPS.indexOf(t);
       return `<button class="trip" data-go="journey" data-trip="${i}">
@@ -4124,6 +4131,9 @@ document.addEventListener('click', e=>{
      wherever the tap happened - the profile screen and its tab render first */
   if(t.closest('#j-toggle')){
     jOpen = !jOpen;
+    /* the years are hidden while searching, so a filter left on would quietly
+       narrow the results with nothing on screen explaining why */
+    jFilter = 'all';
     if(!jOpen) jQuery = '';
     $('#pf-panel').innerHTML = renderJourneys();
     if(jOpen) $('#j-q').focus();
