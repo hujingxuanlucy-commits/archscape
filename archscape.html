@@ -794,21 +794,29 @@ figure{margin:0}
 .jmap.grabbing{cursor:grabbing}
 .mapcanvas{position:absolute;inset:0;width:100%;height:100%;background:#DCE3E2;display:block}
 .mland{fill:#F2EFE7}
-.mwater{fill:#DCE3E2}
+.mwater{fill:#DFE5E3}
 .mpark{fill:#D9DECF}
 /* footprints sit barely above the paper - urban texture, never a subject */
 .mblock{fill:#E5E1D8;opacity:.7}
-.mst{stroke:#DDD8CD;stroke-linecap:round}
-.mav{stroke:#CBC5B8;stroke-linecap:round}
-.mav.major{stroke:#B8B1A2}
+.mst{stroke:#D8D2C7;stroke-linecap:round}
+.mav{stroke:#C8C1B5;stroke-linecap:round}
+.mav.major{stroke:#B9B2A5}
 .mroute{fill:none;stroke-linejoin:round;stroke-linecap:round}
 .mlabel{font-family:var(--ui);font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
   fill:#8A857B}
 .mname{font-family:var(--ui);font-size:10px;font-weight:600;fill:#2B2B2B;paint-order:stroke;
   stroke:rgba(242,239,231,.92);stroke-width:3.2px;stroke-linejoin:round}
 /* district names are basemap, not app data, so they stay warm grey */
-.mdistrict{font-family:var(--ui);font-size:9px;font-weight:600;letter-spacing:.07em;
-  fill:#66635D;paint-order:stroke;stroke:rgba(242,239,231,.75);stroke-width:2.6px;stroke-linejoin:round}
+.mdistrict{font-family:var(--ui);font-size:8.5px;font-weight:500;letter-spacing:.04em;
+  fill:#747068;paint-order:stroke;stroke:rgba(242,239,231,.7);stroke-width:2.4px;stroke-linejoin:round}
+.mborough{font-family:var(--ui);font-size:9px;font-weight:700;letter-spacing:.18em;
+  fill:#8C877C;paint-order:stroke;stroke:rgba(242,239,231,.7);stroke-width:2.6px;stroke-linejoin:round}
+/* the arterial network is what makes the far boroughs read as a city */
+.mexp{stroke:#B9B2A5;stroke-linecap:round;stroke-linejoin:round}
+.mart{stroke:#C8C1B5;stroke-linecap:round;stroke-linejoin:round}
+.mbridge{stroke:#B0A99C;stroke-linecap:butt}
+/* borough street fabric: present, never assertive */
+.mfabric{stroke:#D8D2C7;fill:none;stroke-linecap:round}
 .mparklab{fill:#8A9A80;letter-spacing:.2em}
 /* markers answer the pointer, but quietly */
 .mstop{cursor:pointer;transform-box:fill-box;transform-origin:center;
@@ -3546,44 +3554,120 @@ const MAP = {
 };
 
 /* Real geography, carried in the file because the page ships as one offline
-   document - no tile server is reachable from it. Coordinates are the actual
-   shoreline, parks and districts, simplified the way a printed guide map
-   simplifies them, not generated from a pattern. */
-const SHORE = [
-  [40.7060,-74.0190],[40.7190,-74.0162],[40.7310,-74.0128],[40.7440,-74.0102],
-  [40.7570,-74.0086],[40.7700,-73.9996],[40.7830,-73.9882],[40.7960,-73.9766],
-  [40.8090,-73.9652],[40.8230,-73.9542],[40.8370,-73.9442],[40.8510,-73.9352],
-  [40.8660,-73.9268],[40.8730,-73.9232],[40.8790,-73.9212],[40.8735,-73.9112],
-  [40.8600,-73.9202],[40.8460,-73.9288],[40.8320,-73.9330],[40.8170,-73.9340],
-  [40.8020,-73.9332],[40.7880,-73.9372],[40.7760,-73.9430],[40.7640,-73.9520],
-  [40.7520,-73.9612],[40.7420,-73.9680],[40.7330,-73.9718],[40.7230,-73.9732],
-  [40.7130,-73.9762],[40.7060,-73.9830],[40.7012,-73.9978],[40.7005,-74.0135]
+   document - no tile server is reachable from it. These are the actual
+   shorelines, arterials, crossings and parks of the New York core, simplified
+   the way a printed guide simplifies them. */
+const LAND = {
+  manhattan: [
+    [40.7060,-74.0190],[40.7190,-74.0162],[40.7310,-74.0128],[40.7440,-74.0102],
+    [40.7570,-74.0086],[40.7700,-73.9996],[40.7830,-73.9882],[40.7960,-73.9766],
+    [40.8090,-73.9652],[40.8230,-73.9542],[40.8370,-73.9442],[40.8510,-73.9352],
+    [40.8660,-73.9268],[40.8730,-73.9232],[40.8790,-73.9212],[40.8735,-73.9112],
+    [40.8600,-73.9202],[40.8460,-73.9288],[40.8320,-73.9330],[40.8170,-73.9340],
+    [40.8020,-73.9332],[40.7880,-73.9372],[40.7760,-73.9430],[40.7640,-73.9520],
+    [40.7520,-73.9612],[40.7420,-73.9680],[40.7330,-73.9718],[40.7230,-73.9732],
+    [40.7130,-73.9762],[40.7060,-73.9830],[40.7012,-73.9978],[40.7005,-74.0135]
+  ],
+  /* Brooklyn and Queens are one land mass on the western end of Long Island */
+  longisland: [
+    [40.7390,-73.9585],[40.7470,-73.9545],[40.7600,-73.9430],[40.7700,-73.9370],
+    [40.7800,-73.9250],[40.7890,-73.9110],[40.7910,-73.8900],[40.7930,-73.8560],
+    [40.7920,-73.8200],[40.7860,-73.7800],[40.7790,-73.7480],[40.7640,-73.7280],
+    [40.7450,-73.7000],[40.7230,-73.6960],[40.7000,-73.7020],[40.6800,-73.7300],
+    [40.6620,-73.7460],[40.6420,-73.7680],[40.6240,-73.8100],[40.6100,-73.8600],
+    [40.5760,-73.8700],[40.5720,-73.9400],[40.5790,-73.9820],[40.5930,-74.0080],
+    [40.6180,-74.0350],[40.6470,-74.0330],[40.6720,-74.0180],[40.6900,-74.0060],
+    [40.7000,-73.9960],[40.7070,-73.9930],[40.7180,-73.9720],[40.7290,-73.9620]
+  ],
+  bronx: [
+    [40.8000,-73.9180],[40.8120,-73.9280],[40.8320,-73.9330],[40.8500,-73.9260],
+    [40.8700,-73.9230],[40.8800,-73.9190],[40.8990,-73.9090],[40.9130,-73.9000],
+    [40.9150,-73.8600],[40.9080,-73.8200],[40.9000,-73.7900],[40.8830,-73.7830],
+    [40.8600,-73.7860],[40.8400,-73.7920],[40.8200,-73.8000],[40.8100,-73.8200],
+    [40.8060,-73.8500],[40.8020,-73.8800],[40.7960,-73.9000]
+  ],
+  /* the Jersey shore of the Hudson: Jersey City, Hoboken, Weehawken */
+  jersey: [
+    [40.6900,-74.0480],[40.7100,-74.0430],[40.7330,-74.0360],[40.7500,-74.0270],
+    [40.7700,-74.0180],[40.7900,-74.0080],[40.8100,-73.9960],[40.8300,-73.9860],
+    [40.8600,-73.9700],[40.8800,-73.9600],[40.8850,-74.1200],[40.6800,-74.1600]
+  ],
+  roosevelt: [
+    [40.7510,-73.9600],[40.7560,-73.9580],[40.7700,-73.9490],[40.7720,-73.9460],
+    [40.7700,-73.9445],[40.7550,-73.9560],[40.7505,-73.9585]
+  ],
+  governors: [
+    [40.6890,-74.0200],[40.6920,-74.0150],[40.6880,-74.0120],[40.6855,-74.0170]
+  ],
+  statenisland: [
+    [40.6480,-74.0620],[40.6390,-74.0750],[40.6070,-74.0670],[40.5780,-74.1000],
+    [40.5030,-74.2420],[40.5430,-74.2560],[40.6000,-74.2000],[40.6400,-74.1400]
+  ]
+};
+/* the roads that structure the city, drawn at every zoom */
+const ARTERIALS = [
+  {k:'exp', p:[[40.7010,-74.0170],[40.7280,-74.0110],[40.7560,-74.0090],[40.7760,-73.9930],[40.8080,-73.9640],[40.8500,-73.9400]]},
+  {k:'exp', p:[[40.7080,-73.9760],[40.7300,-73.9720],[40.7560,-73.9600],[40.7800,-73.9400],[40.8000,-73.9330]]},
+  {k:'exp', p:[[40.8480,-73.9330],[40.8460,-73.9100],[40.8420,-73.8900],[40.8360,-73.8570],[40.8260,-73.8300],[40.8150,-73.8100]]},
+  {k:'exp', p:[[40.7390,-73.9580],[40.7000,-73.9950],[40.6830,-74.0050],[40.6550,-74.0300],[40.6330,-74.0330]]},
+  {k:'exp', p:[[40.7420,-73.9560],[40.7440,-73.9280],[40.7420,-73.8900],[40.7380,-73.8400],[40.7330,-73.7900],[40.7290,-73.7300]]},
+  {k:'exp', p:[[40.7780,-73.9160],[40.7660,-73.8900],[40.7540,-73.8500],[40.7430,-73.8300],[40.7180,-73.8150]]},
+  {k:'exp', p:[[40.6050,-74.0400],[40.6000,-73.9600],[40.5930,-73.9000],[40.6100,-73.8300],[40.6350,-73.7800],[40.6600,-73.7600]]},
+  {k:'art', p:[[40.7030,-73.9900],[40.6880,-73.9760],[40.6720,-73.9700],[40.6550,-73.9600],[40.6300,-73.9450]]},
+  {k:'art', p:[[40.6900,-74.0000],[40.6820,-73.9700],[40.6780,-73.9300],[40.6760,-73.8900],[40.6790,-73.8300],[40.6800,-73.7800]]},
+  {k:'art', p:[[40.7430,-73.9490],[40.7420,-73.9200],[40.7350,-73.8700],[40.7100,-73.8200],[40.7020,-73.7900]]},
+  {k:'art', p:[[40.6560,-73.9800],[40.6300,-73.9750],[40.6000,-73.9700],[40.5780,-73.9670]]},
+  {k:'art', p:[[40.8100,-73.9260],[40.8300,-73.9130],[40.8500,-73.8980],[40.8680,-73.8800],[40.8820,-73.8600]]},
+  {k:'art', p:[[40.7900,-73.9470],[40.7960,-73.9200],[40.8020,-73.8900],[40.8060,-73.8500]]}
 ];
-/* parks as their own outlines - Central Park is a true rectangle on the grid,
-   the rest are the squares the city is actually laid out around */
+/* the crossings that make the shape of the city legible */
+const BRIDGES = [
+  [[40.7061,-73.9969],[40.7030,-73.9895]],
+  [[40.7075,-73.9903],[40.7100,-73.9855]],
+  [[40.7132,-73.9725],[40.7140,-73.9630]],
+  [[40.7570,-73.9620],[40.7560,-73.9480]],
+  [[40.7880,-73.9330],[40.7800,-73.9210]],
+  [[40.8517,-73.9527],[40.8520,-73.9740]],
+  [[40.6066,-74.0447],[40.6060,-74.0680]],
+  [[40.8000,-73.9180],[40.8060,-73.9330]]
+];
 const PARKS = [
   [[40.7681,-73.9819],[40.7644,-73.9730],[40.8003,-73.9498],[40.8039,-73.9588]],
   [[40.7940,-73.9770],[40.7930,-73.9730],[40.8350,-73.9540],[40.8360,-73.9585]],
+  [[40.6520,-73.9720],[40.6620,-73.9790],[40.6680,-73.9690],[40.6600,-73.9600]],
+  [[40.7300,-73.8550],[40.7480,-73.8480],[40.7520,-73.8280],[40.7340,-73.8350]],
+  [[40.8880,-73.9000],[40.9020,-73.8940],[40.8980,-73.8700],[40.8840,-73.8760]],
+  [[40.8580,-73.8180],[40.8780,-73.8100],[40.8720,-73.7860],[40.8520,-73.7940]],
+  [[40.6960,-73.8700],[40.7060,-73.8620],[40.7020,-73.8420],[40.6920,-73.8500]],
+  [[40.6520,-73.9950],[40.6620,-73.9900],[40.6580,-73.9780],[40.6480,-73.9830]],
   [[40.7526,-73.9847],[40.7546,-73.9836],[40.7538,-73.9818],[40.7518,-73.9829]],
   [[40.7411,-73.9899],[40.7438,-73.9880],[40.7428,-73.9857],[40.7401,-73.9876]],
-  [[40.7345,-73.9922],[40.7370,-73.9905],[40.7362,-73.9887],[40.7337,-73.9904]],
-  [[40.7295,-73.9995],[40.7320,-73.9977],[40.7311,-73.9958],[40.7286,-73.9976]],
-  [[40.7020,-74.0190],[40.7060,-74.0175],[40.7048,-74.0130],[40.7008,-74.0148]],
-  [[40.7120,-73.9760],[40.7290,-73.9700],[40.7300,-73.9720],[40.7130,-73.9785]],
-  [[40.8660,-73.9290],[40.8740,-73.9250],[40.8720,-73.9195],[40.8640,-73.9240]]
+  [[40.7020,-74.0190],[40.7060,-74.0175],[40.7048,-74.0130],[40.7008,-74.0148]]
 ];
-/* the names you need at city scale, and nothing else */
+/* two tiers: the boroughs carry the wide view, neighbourhoods the closer one */
+const BOROUGHS = [
+  {n:'MANHATTAN', lat:40.7800, lng:-73.9660},
+  {n:'BROOKLYN',  lat:40.6500, lng:-73.9500},
+  {n:'QUEENS',    lat:40.7300, lng:-73.8200},
+  {n:'THE BRONX', lat:40.8500, lng:-73.8700},
+  {n:'JERSEY CITY',lat:40.7200,lng:-74.0650},
+  {n:'STATEN ISLAND',lat:40.5800,lng:-74.1500}
+];
 const DISTRICTS = [
+  {n:'Harlem',          lat:40.8116, lng:-73.9465},
   {n:'Upper West Side', lat:40.7870, lng:-73.9754},
   {n:'Upper East Side', lat:40.7736, lng:-73.9566},
-  {n:'Harlem',          lat:40.8116, lng:-73.9465},
   {n:'Midtown',         lat:40.7549, lng:-73.9840},
   {n:'Chelsea',         lat:40.7465, lng:-74.0014},
-  {n:'Greenwich Village',lat:40.7336, lng:-74.0027},
-  {n:'SoHo',            lat:40.7233, lng:-74.0030},
+  {n:'Greenwich Village',lat:40.7336,lng:-74.0027},
   {n:'Lower East Side', lat:40.7150, lng:-73.9843},
   {n:'Financial District',lat:40.7077,lng:-74.0090},
-  {n:'Washington Heights',lat:40.8417,lng:-73.9393}
+  {n:'Williamsburg',    lat:40.7120, lng:-73.9570},
+  {n:'Long Island City',lat:40.7450, lng:-73.9490},
+  {n:'Astoria',         lat:40.7700, lng:-73.9250},
+  {n:'Park Slope',      lat:40.6700, lng:-73.9810},
+  {n:'Bushwick',        lat:40.6940, lng:-73.9210},
+  {n:'Flushing',        lat:40.7650, lng:-73.8330}
 ];
 
 const PLACES = [
@@ -3612,18 +3696,18 @@ const DPLACES = [
   {id:'parkav',  name:'Park Ave Facades', lat:40.7549, lng:-73.9756, c:'#6E706F', kind:'Photography'},
   {id:'grand',   name:'Grand Central',    lat:40.7527, lng:-73.9772, c:'#6E706F', kind:'Photography'}
 ];
-let dmapView = {lat: 40.7572, lng: -73.9758, scale: 0.155, sel: null};
+let dmapView = {lat: 40.7320, lng: -73.9650, scale: 0.0175, sel: null};
 
 /* Paths crossing: two walked tracks, not two lists of places */
 const XPLACES = [
-  {id:'you',    name:'You',          lat:40.7508, lng:-73.9852, c:'#952324', kind:''},
-  {id:'javier', name:'@javier.arq',  lat:40.7605, lng:-73.9738, c:'#3E6B9A', kind:''}
+  {id:'you',    name:'You',          lat:40.7508, lng:-73.9852, c:'#A8252B', kind:''},
+  {id:'javier', name:'@javier.arq',  lat:40.7605, lng:-73.9738, c:'#356B9A', kind:''}
 ];
 const XROUTES = {
-  you:   {c:'#952324', dash:true, pts:[
+  you:   {c:'#A8252B', dash:true, pts:[
     {lat:40.7508,lng:-73.9852},{lat:40.7512,lng:-73.9818},
     {lat:40.7549,lng:-73.9818},{lat:40.7556,lng:-73.9792}]},
-  them:  {c:'#3E6B9A', pts:[
+  them:  {c:'#356B9A', pts:[
     {lat:40.7605,lng:-73.9738},{lat:40.7582,lng:-73.9772},
     {lat:40.7556,lng:-73.9772},{lat:40.7556,lng:-73.9792}]}
 };
@@ -3649,7 +3733,7 @@ function gridPt(a, s){
   return {x: o.x + dx * k, y: o.y + dy * k};
 }
 
-let mapView = {lat: 40.7640, lng: -73.9790, scale: 0.34, sel: null};
+let mapView = {lat: 40.7280, lng: -73.9620, scale: 0.0150, sel: null};
 const mapLayers = {arch:true, art:true, photo:true};
 
 function makeLiveMap(frame, svg, buttons, opts){
@@ -3662,7 +3746,7 @@ function makeLiveMap(frame, svg, buttons, opts){
   /* scale is pixels per mercator metre; z = log2(scale * 40075016 / 256).
      MIN was 0.09, about zoom 13.8, so the map could not be pulled back far
      enough to see a city at all - that is the whole of the "too close" bug. */
-  const MIN = 0.009, MAX = 2.6;          /* roughly zoom 10.5 to 18 */
+  const MIN = 0.0045, MAX = 2.6;         /* roughly zoom 9.5 to 18 */
   const FIT_MAX = 0.052;                 /* never fit closer than about zoom 13 */
   const pts = new Map();
   let last = null, pinch = 0, down = null, held = false;
@@ -3698,24 +3782,75 @@ function makeLiveMap(frame, svg, buttons, opts){
     /* Water is the ground everywhere, and the island is drawn as paper on top
        of it, so the coastline is a real edge rather than a painted band. */
     out += `<rect class="mwater" x="0" y="0" width="${w}" height="${h}"/>`;
-    out += poly(SHORE.map(ll), 'mland');
+    const keys = Object.keys(LAND);
+    out += '<defs>' + keys.map(k =>
+      `<clipPath id="clip-${k}">${poly(LAND[k].map(ll), '')}</clipPath>`).join('') + '</defs>';
+    keys.forEach(k => { out += poly(LAND[k].map(ll), 'mland'); });
+
+    /* Each borough has its own grid, at its own real bearing, clipped to its
+       own shoreline. Without it the far boroughs read as empty paper, which is
+       not what a city looks like from above. */
+    if(sc > .012){
+      const fabric = [
+        {k:'longisland', b:150, o:[40.690,-73.950], n:110, g:420},
+        {k:'longisland', b: 60, o:[40.690,-73.950], n:110, g:420},
+        {k:'bronx',      b:120, o:[40.850,-73.880], n:60,  g:420},
+        {k:'bronx',      b: 30, o:[40.850,-73.880], n:60,  g:420},
+        {k:'jersey',     b:145, o:[40.740,-74.060], n:50,  g:400},
+        {k:'jersey',     b: 55, o:[40.740,-74.060], n:50,  g:400},
+        {k:'statenisland',b:135,o:[40.580,-74.150], n:40,  g:500},
+        {k:'statenisland',b:45, o:[40.580,-74.150], n:40,  g:500}
+      ];
+      const mPerDegLat = 111320, mPerDegLng = 111320 * Math.cos(40.72 * Math.PI / 180);
+      fabric.forEach(f=>{
+        const th = f.b * Math.PI / 180;
+        const dir = {x: Math.sin(th), y: Math.cos(th)};
+        const nor = {x: Math.cos(th), y: -Math.sin(th)};
+        let d = '';
+        for(let i = -f.n; i <= f.n; i++){
+          const off = i * f.g;
+          const cLat = f.o[0] + (nor.y * off) / mPerDegLat;
+          const cLng = f.o[1] + (nor.x * off) / mPerDegLng;
+          const half = 26000;
+          const a1 = [cLat + (dir.y * half) / mPerDegLat, cLng + (dir.x * half) / mPerDegLng];
+          const a2 = [cLat - (dir.y * half) / mPerDegLat, cLng - (dir.x * half) / mPerDegLng];
+          const p1 = ll(a1), p2 = ll(a2);
+          if(Math.max(p1.x, p2.x) < 0 || Math.min(p1.x, p2.x) > w) continue;
+          if(Math.max(p1.y, p2.y) < 0 || Math.min(p1.y, p2.y) > h) continue;
+          d += `M${p1.x.toFixed(1)} ${p1.y.toFixed(1)}L${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+        }
+        if(d) out += `<path class="mfabric" clip-path="url(#clip-${f.k})" d="${d}" stroke-width="${
+          Math.max(.35, Math.min(.9, sc * 1.4)).toFixed(2)}"/>`;
+      });
+    }
+
     PARKS.forEach(pts => { out += poly(pts.map(ll), 'mpark'); });
 
-    /* Progressive disclosure: at city scale only the avenues that structure
-       the island survive, and the local grid arrives as you come down. */
-    const Z = {city: sc < .028, district: sc < .07, hood: sc < .2};
-    const sw = Math.max(.5, Math.min(1.6, sc * 2.2));
+    /* Progressive disclosure: the arterials and crossings carry the city view,
+       Manhattan's grid arrives as you come down into it. */
+    const Z = {city: sc < .028, district: sc < .07};
+    /* the avenues that carry the island keep their weight at every zoom */
     const majorRe = /5th|Park|7th|Broadway/;
+    const sw = Math.max(.42, Math.min(1.2, sc * 1.8));
+    const path = (pts, cls, wgt) =>
+      `<polyline class="${cls}" stroke-width="${wgt.toFixed(2)}" fill="none" points="${
+        pts.map(ll).map(p=>p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ')}"/>`;
 
+    ARTERIALS.forEach(r => {
+      out += path(r.p, r.k === 'exp' ? 'mexp' : 'mart', r.k === 'exp' ? sw * 1.5 : sw * 1.1);
+    });
+    BRIDGES.forEach(b => { out += path(b, 'mbridge', sw * 1.3); });
+
+    /* Manhattan's grid: the avenues that structure the island survive the wide
+       view, the cross streets and then the local grid arrive on the way down */
     if(!Z.city){
-      /* cross streets: every 20 blocks at district scale, then denser */
       const every = sc > .34 ? 1 : sc > .16 ? 2 : sc > .07 ? 10 : 20;
       for(let st = MAP.streets.from; st <= MAP.streets.to; st++){
         if(st % every) continue;
         const major = st % 20 === 0;
         if(Z.district && !major) continue;
         const cls = major ? 'mav' : 'mst';
-        const wgt = major ? sw * 1.5 : sw;
+        const wgt = major ? sw * 1.2 : sw * .85;
         const inPark = st > pk.s && st < pk.n;
         if(inPark){
           out += line(P(pk.e, st), P(7.4, st), cls, wgt);
@@ -3758,13 +3893,15 @@ function makeLiveMap(frame, svg, buttons, opts){
     });
 
     /* the city names carry the wide view; they go once streets can do the job */
-    if(Z.district){
-      DISTRICTS.forEach(d=>{
-        const p = toScreen(merc(d.lat, d.lng));
-        if(p.x < 4 || p.x > w - 4 || p.y < 10 || p.y > h - 6) return;
-        out += `<text class="mdistrict" x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}" text-anchor="middle">${esc(d.n)}</text>`;
-      });
-    }
+    /* boroughs name the wide view; stacking every Manhattan neighbourhood down
+       one narrow island at city scale is what made it read as a diagram */
+    const nameAt = (list, cls) => list.forEach(d=>{
+      const p = toScreen(merc(d.lat, d.lng));
+      if(p.x < 6 || p.x > w - 6 || p.y < 12 || p.y > h - 8) return;
+      out += `<text class="${cls}" x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}" text-anchor="middle">${esc(d.n)}</text>`;
+    });
+    if(Z.district) nameAt(BOROUGHS, 'mborough');
+    if(!Z.city && sc < .5) nameAt(DISTRICTS, 'mdistrict');
 
     if(sc > .18){
       const pc = P((pk.w + pk.e) / 2, (pk.s + pk.n) / 2);
@@ -3981,7 +4118,10 @@ $$('[data-img]').forEach(el=>{
   const src = IMG[el.dataset.img]; if(!src) return;
   if(el.tagName === 'IMG') el.src = src; else el.style.backgroundImage = `url(${src})`;
 });
-const jmap = makeLiveMap($('#journey-map'), $('#jmap-svg'), $$('#journey-map .zoomctl button'));
+/* opens on the city so the first read is New York, not one neighbourhood;
+   FIT then frames your routes inside it */
+const jmap = makeLiveMap($('#journey-map'), $('#jmap-svg'), $$('#journey-map .zoomctl button'),
+  {autofit: false});
 wireMapSearch();
 const dmap = makeLiveMap($('#discover-map'), $('#dmap-svg'), $$('#discover-map .zoomctl button'),
   {places: DPLACES, routes: {}, view: dmapView, autofit: false});
