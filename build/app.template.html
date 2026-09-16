@@ -1219,6 +1219,9 @@ figure{margin:0}
 /* the screen already carries a 44px inset for the status bar, so the row
    sticks at the top of that content box rather than 44px below it */
 #s-knowledge .kn-styles{position:sticky;top:0;z-index:12;background:var(--paper)}
+/* the Explore tabs stay reachable the same way; this screen also carries a
+   44px inset for the status bar, so the row sticks at the top of that box */
+#s-discover .chiprow[data-chips="discover"]{position:sticky;top:0;z-index:12;background:var(--paper)}
 .kn-hero img{display:none}
 .kn-in{}
 .kn-toprow{display:flex;align-items:center;gap:10px;margin-bottom:10px}
@@ -1462,7 +1465,7 @@ figure{margin:0}
         <!-- ============ 02 DISCOVER ============ -->
         <section class="screen pad padnav" id="s-discover" data-dtab="nearby">
           <div class="apphead">
-            <h2 class="h-title">Discover</h2>
+            <h2 class="h-title">Explore</h2>
             <button class="iconbtn" data-go="knowledge" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
           </div>
           <div class="chiprow" data-chips="discover">
@@ -4202,7 +4205,14 @@ document.addEventListener('click', e=>{
     const group = chip.closest('[data-chips]');
     $$('.chip', group).forEach(c=>c.setAttribute('aria-pressed', String(c===chip)));
     const g = group.dataset.chips;
-    if(g==='discover') renderSpots(chip.dataset.val);
+    if(g==='discover'){
+      renderSpots(chip.dataset.val);
+      /* measured from the title, which never moves - a stuck row reports its
+         stuck position - and never further up than the row itself */
+      const sc = $('#s-discover'), head = $('#s-discover .apphead');
+      const rest = head ? head.offsetTop + head.offsetHeight - 44 : 0;
+      if(sc && sc.scrollTop > rest) sc.scrollTo({top: rest});
+    }
     if(g==='insp')     renderInsp(chip.dataset.val);
     if(g==='kstyle'){
       $('#ksearch').value='';
@@ -4214,7 +4224,7 @@ document.addEventListener('click', e=>{
       /* measured from the heading, which never moves - the row reports its
          stuck position once it is sticky, which would drift the target */
       const rest = head ? head.offsetTop + head.offsetHeight - 44 : 0;
-      if(sc && sc.scrollTop > rest) sc.scrollTo({top: rest, behavior:'smooth'});
+      if(sc && sc.scrollTop > rest) sc.scrollTo({top: rest});
       /* and keep the style you just chose in view on a crowded row */
       if(row){
         const l = chip.offsetLeft, r = l + chip.offsetWidth;
