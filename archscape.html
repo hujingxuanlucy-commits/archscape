@@ -1213,7 +1213,12 @@ figure{margin:0}
 .kn-hero{padding:14px 22px 10px;background:var(--surface);border-bottom:1px solid var(--divider)}
 /* the style chips sit right under their heading here, so they carry less of
    the standing height they need as a screen's main tab row */
-#s-knowledge .kn-browse .chip{padding:9px 0 8px}
+#s-knowledge .kn-styles .chip{padding:9px 0 8px}
+/* the styles stay reachable however far the grid is scrolled; it is the
+   same row sticking, not a second copy floating over the first */
+/* the screen already carries a 44px inset for the status bar, so the row
+   sticks at the top of that content box rather than 44px below it */
+#s-knowledge .kn-styles{position:sticky;top:0;z-index:12;background:var(--paper)}
 .kn-hero img{display:none}
 .kn-in{}
 .kn-toprow{display:flex;align-items:center;gap:10px;margin-bottom:10px}
@@ -1225,7 +1230,8 @@ figure{margin:0}
 .kn-toploc svg{width:13px;height:13px;flex:none;color:var(--red)}
 .kn-nearby{flex-direction:column;gap:0;display:none}
 #s-knowledge.search-active .kn-nearby{display:flex}
-#s-knowledge.search-active .kn-browse{display:none}
+#s-knowledge.search-active .kn-browse,
+#s-knowledge.search-active .kn-styles{display:none}
 #s-knowledge.search-active .kcount{display:none}
 #s-knowledge.search-active .kgrid{display:none}
 .kn-nearrow{display:flex;align-items:center;gap:12px;padding:11px 22px;border-bottom:1px solid var(--divider);text-align:left;width:100%}
@@ -1902,14 +1908,14 @@ the city folded in on itself.</textarea>
           <div class="kn-nearby" id="kn-nearby"></div>
           <div class="kn-browse">
             <div class="sechead" style="padding:6px 22px 0"><h3 class="sectitle">Browse by style</h3></div>
-            <div class="chiprow" data-chips="kstyle">
+          </div>
+          <div class="chiprow kn-styles" data-chips="kstyle">
               <button class="chip" aria-pressed="true"  data-val="All">All</button>
               <button class="chip" aria-pressed="false" data-val="Brutalism">Brutalism</button>
               <button class="chip" aria-pressed="false" data-val="Modernism">Modernism</button>
               <button class="chip" aria-pressed="false" data-val="Deconstructivism">Deconstructivism</button>
               <button class="chip" aria-pressed="false" data-val="Gothic">Gothic</button>
-              <button class="chip" aria-pressed="false" data-val="Contemporary">Contemporary</button>
-            </div>
+            <button class="chip" aria-pressed="false" data-val="Contemporary">Contemporary</button>
           </div>
           <span id="kheading" hidden></span><span id="kcount" hidden></span>
           <div class="kgrid" id="kgrid"></div>
@@ -4198,7 +4204,24 @@ document.addEventListener('click', e=>{
     const g = group.dataset.chips;
     if(g==='discover') renderSpots(chip.dataset.val);
     if(g==='insp')     renderInsp(chip.dataset.val);
-    if(g==='kstyle'){ $('#ksearch').value=''; renderRecords(); }
+    if(g==='kstyle'){
+      $('#ksearch').value='';
+      renderRecords();
+      /* start at the top of the new style rather than halfway down the last
+         one, but no further up than the row itself - the tabs stay put */
+      const sc = $('#s-knowledge'), row = $('#s-knowledge .kn-styles');
+      const head = $('#s-knowledge .kn-browse');
+      /* measured from the heading, which never moves - the row reports its
+         stuck position once it is sticky, which would drift the target */
+      const rest = head ? head.offsetTop + head.offsetHeight - 44 : 0;
+      if(sc && sc.scrollTop > rest) sc.scrollTo({top: rest, behavior:'smooth'});
+      /* and keep the style you just chose in view on a crowded row */
+      if(row){
+        const l = chip.offsetLeft, r = l + chip.offsetWidth;
+        if(l < row.scrollLeft + 22 || r > row.scrollLeft + row.clientWidth - 22)
+          row.scrollTo({left: Math.max(0, l - 22), behavior:'smooth'});
+      }
+    }
     if(g==='jyear'){ jFilter = chip.dataset.jyear; $('#pf-panel').innerHTML = renderJourneys(); }
     return;
   }
