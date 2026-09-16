@@ -793,14 +793,14 @@ figure{margin:0}
 .jmap{cursor:grab}
 .jmap.grabbing{cursor:grabbing}
 .mapcanvas{position:absolute;inset:0;width:100%;height:100%;background:#DCE3E2;display:block}
-.mland{fill:#F2EFE7}
-.mwater{fill:#DFE5E3}
-.mpark{fill:#D9DECF}
+.mland{fill:#F3F0E7}
+.mwater{fill:#DCE3E3}
+.mpark{fill:#D6DDCD}
 /* footprints sit barely above the paper - urban texture, never a subject */
-.mblock{fill:#E5E1D8;opacity:.7}
-.mst{stroke:#D8D2C7;stroke-linecap:round}
-.mav{stroke:#C8C1B5;stroke-linecap:round}
-.mav.major{stroke:#B9B2A5}
+.mblock{fill:#E7E3DA;opacity:.6}
+.mst{stroke:#D2CCC0;stroke-linecap:round}
+.mav{stroke:#BEB7AA;stroke-linecap:round}
+.mav.major{stroke:#AFA89C}
 .mroute{fill:none;stroke-linejoin:round;stroke-linecap:round}
 .mlabel{font-family:var(--ui);font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
   fill:#8A857B}
@@ -808,15 +808,15 @@ figure{margin:0}
   stroke:rgba(242,239,231,.92);stroke-width:3.2px;stroke-linejoin:round}
 /* district names are basemap, not app data, so they stay warm grey */
 .mdistrict{font-family:var(--ui);font-size:8.5px;font-weight:500;letter-spacing:.04em;
-  fill:#747068;paint-order:stroke;stroke:rgba(242,239,231,.7);stroke-width:2.4px;stroke-linejoin:round}
+  fill:#6E6A64;paint-order:stroke;stroke:rgba(242,239,231,.7);stroke-width:2.4px;stroke-linejoin:round}
 .mborough{font-family:var(--ui);font-size:9px;font-weight:700;letter-spacing:.18em;
   fill:#8C877C;paint-order:stroke;stroke:rgba(242,239,231,.7);stroke-width:2.6px;stroke-linejoin:round}
 /* the arterial network is what makes the far boroughs read as a city */
-.mexp{stroke:#B9B2A5;stroke-linecap:round;stroke-linejoin:round}
-.mart{stroke:#C8C1B5;stroke-linecap:round;stroke-linejoin:round}
+.mexp{stroke:#AFA89C;stroke-linecap:round;stroke-linejoin:round}
+.mart{stroke:#BEB7AA;stroke-linecap:round;stroke-linejoin:round}
 .mbridge{stroke:#B0A99C;stroke-linecap:butt}
 /* borough street fabric: present, never assertive */
-.mfabric{stroke:#D8D2C7;fill:none;stroke-linecap:round}
+.mfabric{stroke:#D2CCC0;fill:none;stroke-linecap:round}
 .mparklab{fill:#8A9A80;letter-spacing:.2em}
 /* markers answer the pointer, but quietly */
 .mstop{cursor:pointer;transform-box:fill-box;transform-origin:center;
@@ -1731,9 +1731,9 @@ the city folded in on itself.</textarea>
             </div>
             <div class="legend">
               <h4>My routes</h4>
-              <button data-layer="arch" aria-pressed="true"><i style="background:#A8252B"></i>Architecture</button>
-              <button data-layer="art" aria-pressed="true"><i style="background:#356B9A"></i>Art Spaces</button>
-              <button data-layer="photo" aria-pressed="true"><i style="background:#6E706F"></i>Photography</button>
+              <button data-layer="arch" aria-pressed="true"><i style="background:#AF2B34"></i>Architecture</button>
+              <button data-layer="art" aria-pressed="true"><i style="background:#3B6E9D"></i>Art Spaces</button>
+              <button data-layer="photo" aria-pressed="true"><i style="background:#7B7C79"></i>Photography</button>
             </div>
           </div>
           <div class="statbar">
@@ -3671,43 +3671,43 @@ const DISTRICTS = [
 ];
 
 const PLACES = [
-  {id:'moma',   name:'MoMA',                lat:40.7614, lng:-73.9776, c:'#356B9A', kind:'Art Spaces'},
-  {id:'seagram',name:'Seagram Building',    lat:40.7587, lng:-73.9720, c:'#A8252B', kind:'Architecture'},
-  {id:'gugg',   name:'Guggenheim',          lat:40.7830, lng:-73.9590, c:'#356B9A', kind:'Art Spaces'},
-  {id:'parkav', name:'Park Ave Facades',    lat:40.7549, lng:-73.9756, c:'#6E706F', kind:'Photography'},
-  {id:'vessel', name:'The Vessel',          lat:40.7539, lng:-74.0021, c:'#A8252B', kind:'Architecture'},
-  {id:'chrysler',name:'Chrysler Building',  lat:40.7516, lng:-73.9755, c:'#A8252B', kind:'Architecture'},
-  {id:'empire', name:'Empire State',        lat:40.7484, lng:-73.9857, c:'#A8252B', kind:'Architecture'},
-  {id:'whitney',name:'Whitney Museum',      lat:40.7396, lng:-74.0089, c:'#356B9A', kind:'Art Spaces'},
-  {id:'grand',  name:'Grand Central',       lat:40.7527, lng:-73.9772, c:'#6E706F', kind:'Photography'}
+  {id:'moma',   name:'MoMA',                lat:40.7614, lng:-73.9776, c:'#3B6E9D', kind:'Art Spaces'},
+  {id:'seagram',name:'Seagram Building',    lat:40.7587, lng:-73.9720, c:'#AF2B34', kind:'Architecture'},
+  {id:'gugg',   name:'Guggenheim',          lat:40.7830, lng:-73.9590, c:'#3B6E9D', kind:'Art Spaces'},
+  {id:'parkav', name:'Park Ave Facades',    lat:40.7549, lng:-73.9756, c:'#7B7C79', kind:'Photography'},
+  {id:'vessel', name:'The Vessel',          lat:40.7539, lng:-74.0021, c:'#AF2B34', kind:'Architecture'},
+  {id:'chrysler',name:'Chrysler Building',  lat:40.7516, lng:-73.9755, c:'#AF2B34', kind:'Architecture'},
+  {id:'empire', name:'Empire State',        lat:40.7484, lng:-73.9857, c:'#AF2B34', kind:'Architecture'},
+  {id:'whitney',name:'Whitney Museum',      lat:40.7396, lng:-74.0089, c:'#3B6E9D', kind:'Art Spaces'},
+  {id:'grand',  name:'Grand Central',       lat:40.7527, lng:-73.9772, c:'#7B7C79', kind:'Photography'}
 ];
 
 const ROUTES = {
-  arch:  {c:'#A8252B', stops:['vessel','empire','seagram','chrysler']},
-  art:   {c:'#356B9A', stops:['whitney','moma','gugg']},
-  photo: {c:'#6E706F', stops:['grand','parkav','moma']}
+  arch:  {c:'#AF2B34', stops:['vessel','empire','seagram','chrysler']},
+  art:   {c:'#3B6E9D', stops:['whitney','moma','gugg']},
+  photo: {c:'#7B7C79', stops:['grand','parkav','moma']}
 };
 
 /* Discover shows the places you could walk to now; the two that exist as full
    records open them, the rest just name themselves on the map. */
 const DPLACES = [
-  {id:'seagram', name:'Seagram Building', lat:40.7587, lng:-73.9720, c:'#A8252B', kind:'Architecture', bld:'seagram'},
-  {id:'moma',    name:'MoMA',             lat:40.7614, lng:-73.9776, c:'#356B9A', kind:'Art Spaces'},
-  {id:'parkav',  name:'Park Ave Facades', lat:40.7549, lng:-73.9756, c:'#6E706F', kind:'Photography'},
-  {id:'grand',   name:'Grand Central',    lat:40.7527, lng:-73.9772, c:'#6E706F', kind:'Photography'}
+  {id:'seagram', name:'Seagram Building', lat:40.7587, lng:-73.9720, c:'#AF2B34', kind:'Architecture', bld:'seagram'},
+  {id:'moma',    name:'MoMA',             lat:40.7614, lng:-73.9776, c:'#3B6E9D', kind:'Art Spaces'},
+  {id:'parkav',  name:'Park Ave Facades', lat:40.7549, lng:-73.9756, c:'#7B7C79', kind:'Photography'},
+  {id:'grand',   name:'Grand Central',    lat:40.7527, lng:-73.9772, c:'#7B7C79', kind:'Photography'}
 ];
-let dmapView = {lat: 40.7320, lng: -73.9650, scale: 0.0175, sel: null};
+let dmapView = {lat: 40.7585, lng: -73.9735, scale: 0.105, sel: null};
 
 /* Paths crossing: two walked tracks, not two lists of places */
 const XPLACES = [
-  {id:'you',    name:'You',          lat:40.7508, lng:-73.9852, c:'#A8252B', kind:''},
-  {id:'javier', name:'@javier.arq',  lat:40.7605, lng:-73.9738, c:'#356B9A', kind:''}
+  {id:'you',    name:'You',          lat:40.7508, lng:-73.9852, c:'#AF2B34', kind:''},
+  {id:'javier', name:'@javier.arq',  lat:40.7605, lng:-73.9738, c:'#3B6E9D', kind:''}
 ];
 const XROUTES = {
-  you:   {c:'#A8252B', dash:true, pts:[
+  you:   {c:'#AF2B34', dash:true, pts:[
     {lat:40.7508,lng:-73.9852},{lat:40.7512,lng:-73.9818},
     {lat:40.7549,lng:-73.9818},{lat:40.7556,lng:-73.9792}]},
-  them:  {c:'#356B9A', pts:[
+  them:  {c:'#3B6E9D', pts:[
     {lat:40.7605,lng:-73.9738},{lat:40.7582,lng:-73.9772},
     {lat:40.7556,lng:-73.9772},{lat:40.7556,lng:-73.9792}]}
 };
@@ -3733,7 +3733,7 @@ function gridPt(a, s){
   return {x: o.x + dx * k, y: o.y + dy * k};
 }
 
-let mapView = {lat: 40.7280, lng: -73.9620, scale: 0.0150, sel: null};
+let mapView = {lat: 40.7640, lng: -73.9800, scale: 0.095, sel: null};
 const mapLayers = {arch:true, art:true, photo:true};
 
 function makeLiveMap(frame, svg, buttons, opts){
@@ -3747,7 +3747,9 @@ function makeLiveMap(frame, svg, buttons, opts){
      MIN was 0.09, about zoom 13.8, so the map could not be pulled back far
      enough to see a city at all - that is the whole of the "too close" bug. */
   const MIN = 0.0045, MAX = 2.6;         /* roughly zoom 9.5 to 18 */
-  const FIT_MAX = 0.052;                 /* never fit closer than about zoom 13 */
+  /* the wider city is still reachable by zooming out; what Fit must not do
+     is leave the district scale this screen is designed at */
+  const FIT_MAX = 0.16;
   const pts = new Map();
   let last = null, pinch = 0, down = null, held = false;
 
@@ -3828,10 +3830,10 @@ function makeLiveMap(frame, svg, buttons, opts){
 
     /* Progressive disclosure: the arterials and crossings carry the city view,
        Manhattan's grid arrives as you come down into it. */
-    const Z = {city: sc < .028, district: sc < .07};
+    const Z = {city: sc < .022, district: sc < .045};
     /* the avenues that carry the island keep their weight at every zoom */
     const majorRe = /5th|Park|7th|Broadway/;
-    const sw = Math.max(.42, Math.min(1.2, sc * 1.8));
+    const sw = Math.max(.45, Math.min(1.15, .5 + sc * .7));
     const path = (pts, cls, wgt) =>
       `<polyline class="${cls}" stroke-width="${wgt.toFixed(2)}" fill="none" points="${
         pts.map(ll).map(p=>p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ')}"/>`;
@@ -3844,7 +3846,9 @@ function makeLiveMap(frame, svg, buttons, opts){
     /* Manhattan's grid: the avenues that structure the island survive the wide
        view, the cross streets and then the local grid arrive on the way down */
     if(!Z.city){
-      const every = sc > .34 ? 1 : sc > .16 ? 2 : sc > .07 ? 10 : 20;
+      /* every cross street once they are 5px apart - that dense orthogonal
+         field is the strongest style cue the reference has */
+      const every = sc > .055 ? 1 : sc > .03 ? 2 : sc > .015 ? 5 : 20;
       for(let st = MAP.streets.from; st <= MAP.streets.to; st++){
         if(st % every) continue;
         const major = st % 20 === 0;
@@ -3901,7 +3905,9 @@ function makeLiveMap(frame, svg, buttons, opts){
       out += `<text class="${cls}" x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}" text-anchor="middle">${esc(d.n)}</text>`;
     });
     if(Z.district) nameAt(BOROUGHS, 'mborough');
-    if(!Z.city && sc < .5) nameAt(DISTRICTS, 'mdistrict');
+    /* a narrow band only: at district scale the landmark names do the work,
+       and stacking neighbourhoods over them is the clutter to avoid */
+    if(sc >= .022 && sc < .06) nameAt(DISTRICTS, 'mdistrict');
 
     if(sc > .18){
       const pc = P((pk.w + pk.e) / 2, (pk.s + pk.n) / 2);
@@ -3934,7 +3940,8 @@ function makeLiveMap(frame, svg, buttons, opts){
         return p.x.toFixed(1) + ',' + p.y.toFixed(1);
       }).join(' ');
       /* an annotation drawn over a printed map, so it barely thickens */
-      const wide = Math.max(2.2, Math.min(3.8, 2.4 + sc * 1.6));
+      /* an overlay drawn on a printed map: crisp, flat, barely thickening */
+      const wide = Math.max(2.2, Math.min(3.1, 2.3 + sc * .8));
       out += `<g data-route="${k}" style="transition:opacity .25s" opacity="${layers[k] === false ? 0 : 1}">
         ${r.dash ? `<polyline class="mroute" points="${pl}" stroke="#fff" stroke-width="${(wide + 3.5).toFixed(1)}" opacity=".8"/>` : ''}
         <polyline class="mroute" points="${pl}" stroke="${r.c}" stroke-width="${wide.toFixed(1)}"
@@ -3949,7 +3956,7 @@ function makeLiveMap(frame, svg, buttons, opts){
       const on = view.sel === q.id;
       /* a plain disc with a white keyline; the chosen one opens into a ring,
          which is the loudest mark anywhere on the paper */
-      const base = Math.max(4.4, Math.min(6, 4.2 + sc * 1.4));
+      const base = Math.max(4.6, Math.min(6, 4.4 + sc * 1.2));
       const r = on ? base * 1.55 : base;
       const x = p.x.toFixed(1), y = p.y.toFixed(1);
       out += `<g class="mstop${on ? ' on' : ''}" data-place="${q.id}">
@@ -3957,7 +3964,7 @@ function makeLiveMap(frame, svg, buttons, opts){
         <circle cx="${x}" cy="${y}" r="${r.toFixed(1)}" fill="${q.c}"
           stroke="#F6F3EB" stroke-width="${(on ? 2 : 1.7)}"/>
         ${on ? `<circle cx="${x}" cy="${y}" r="${(r * .34).toFixed(1)}" fill="#FBF9F3"/>` : ''}
-        ${(sc > .11 || on) ? `<text class="mname" x="${x}" y="${(p.y - r - 8).toFixed(1)}" text-anchor="middle">${esc(q.name)}</text>` : ''}
+        ${(sc > .05 || on) ? `<text class="mname" x="${x}" y="${(p.y - r - 8).toFixed(1)}" text-anchor="middle">${esc(q.name)}</text>` : ''}
       </g>`;
     });
 
