@@ -933,8 +933,9 @@ figure{margin:0}
 .jbar .chiprow{flex:1;min-width:0;border-bottom:0}
 /* search takes the place of the years rather than opening a row beneath them,
    so the list never jumps down to make room for a box */
-.jfield{flex:1;min-width:0;display:flex;align-items:center;gap:9px;padding:13px 0 11px}
-.jfield > svg{width:16px;height:16px;color:var(--muted);flex:none}
+/* once you are typing, the magnifier has said all it can; the field drops it
+   and starts on the same 22px gutter as the journeys underneath */
+.jfield{flex:1;min-width:0;display:flex;align-items:center;padding:13px 0 11px 22px}
 .jfield input{flex:1;min-width:0;border:0;outline:none;background:none;font-size:13.5px;color:var(--ink)}
 .jfield input::placeholder{color:var(--muted-2)}
 .jsearchbtn{flex:none;display:grid;place-items:center;width:36px;color:var(--muted);transition:.16s}
@@ -3302,7 +3303,6 @@ function renderJourneys(){
     <div class="jbar">
       ${jOpen ? `
         <span class="jfield">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
           <input id="j-q" type="search" placeholder="Search your journeys" value="${esc(jQuery)}" aria-label="Search journeys">
         </span>
         <button class="jsearchbtn" id="j-toggle" aria-expanded="true" aria-label="Close search">
