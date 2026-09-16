@@ -959,8 +959,8 @@ figure{margin:0}
 .savedcard{display:block;width:100%;text-align:left}
 .savedthumb{position:relative;display:block;border-radius:var(--r-card);overflow:hidden;aspect-ratio:1/1.04;
   background:var(--bone-soft)}
-.savedthumb img{width:100%;height:100%;object-fit:cover;transition:transform .45s}
-.savedcard:hover .savedthumb img{transform:scale(1.05)}
+.savedthumb img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform .45s}
+.savedcard:hover .savedthumb img{transform:scale(1.09)}
 .savedmark{position:absolute;right:8px;top:8px;width:27px;height:27px;border-radius:7px;display:grid;
   place-items:center;background:var(--red);box-shadow:0 3px 10px rgba(0,0,0,.3)}
 .savedmark svg{width:13px;height:13px;color:#fff;fill:#fff}
@@ -968,8 +968,8 @@ figure{margin:0}
 .savedcard > span{display:block;font-size:11.5px;color:var(--muted);margin-top:3px}
 .works{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
 .work{position:relative;aspect-ratio:1;overflow:hidden;display:block}
-.work img{width:100%;height:100%;object-fit:cover;transition:transform .45s}
-.work:hover img{transform:scale(1.07)}
+.work img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform .45s}
+.work:hover img{transform:scale(1.11)}
 .newbadge{position:absolute;left:0;top:9px;background:var(--red);color:#fff;font-size:8.5px;font-weight:700;
   letter-spacing:.13em;padding:4px 9px}
 .draftbadge{position:absolute;left:0;top:9px;background:rgba(15,15,15,.72);color:#fff;font-size:8.5px;font-weight:700;
@@ -1244,8 +1244,8 @@ figure{margin:0}
    variant reshuffled the grid and left holes between the cards */
 .kgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:14px 22px 22px}
 .kcard{position:relative;border-radius:var(--r-card);overflow:hidden;aspect-ratio:1/1;display:block;background:var(--ink)}
-.kcard img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.kcard:hover img{transform:scale(1.05)}
+.kcard img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform .5s}
+.kcard:hover img{transform:scale(1.09)}
 .kcard figcaption{position:absolute;left:0;right:0;bottom:0;padding:26px 13px 12px;text-align:left;
   background:linear-gradient(transparent,rgba(10,10,10,.85));color:#fff}
 .kcard b{display:block;font-size:13.5px;font-weight:600;line-height:1.25}
@@ -1417,12 +1417,12 @@ figure{margin:0}
                   <figure><img data-img="w8" alt="Cathedral spires against deep blue"></figure>
                   <figure><img data-img="w2" alt="Curved glass curtain wall"></figure>
                   <figure><img data-img="insp_heydar" alt="Curved white facade"></figure>
-                  <figure><img data-img="insp_bw" alt="Concrete detail in black and white"></figure>
+                  <figure><img data-img="onb_lattice" alt="Concrete detail in black and white"></figure>
                   <figure aria-hidden="true"><img data-img="vessel_hero" alt=""></figure>
                   <figure aria-hidden="true"><img data-img="w8" alt=""></figure>
                   <figure aria-hidden="true"><img data-img="w2" alt=""></figure>
                   <figure aria-hidden="true"><img data-img="insp_heydar" alt=""></figure>
-                  <figure aria-hidden="true"><img data-img="insp_bw" alt=""></figure>
+                  <figure aria-hidden="true"><img data-img="onb_lattice" alt=""></figure>
                 </div>
               </div>
               <div class="readyrow">
@@ -1431,12 +1431,12 @@ figure{margin:0}
                   <figure><img data-img="kn_barbican" alt="Barbican Estate"></figure>
                   <figure><img data-img="onb_lattice" alt="Diagonal lattice facade"></figure>
                   <figure><img data-img="w9" alt="Spires against blue sky"></figure>
-                  <figure><img data-img="insp_pavil" alt="Serpentine Pavilion"></figure>
+                  <figure><img data-img="w5" alt="Serpentine Pavilion"></figure>
                   <figure aria-hidden="true"><img data-img="duomo" alt=""></figure>
                   <figure aria-hidden="true"><img data-img="kn_barbican" alt=""></figure>
                   <figure aria-hidden="true"><img data-img="onb_lattice" alt=""></figure>
                   <figure aria-hidden="true"><img data-img="w9" alt=""></figure>
-                  <figure aria-hidden="true"><img data-img="insp_pavil" alt=""></figure>
+                  <figure aria-hidden="true"><img data-img="w5" alt=""></figure>
                 </div>
               </div>
             </div>
@@ -2094,16 +2094,16 @@ function routeSVG(pts, colour){
 const SPOTS = {
   nearby:[
     {id:'k11', img:'k11', name:'K11 Musea', city:'Hong Kong', n:128},
-    {id:'tate', img:'tate', name:'Tate Modern', city:'London', n:412}],
+    {id:'tate', img:'tate', name:'Atelier Wall', city:'London', n:412}],
   trending:[
-    {id:'heydar', img:'insp_heydar', name:'Heydar Aliyev Centre', city:'Baku', n:906},
+    {id:'heydar', img:'insp_heydar', name:'Azadi Tower', city:'Tehran', n:906},
     {id:'nest', img:'insp_nest', name:"Bird's Nest", city:'Beijing', n:734}],
   following:[
-    {id:'barbican', img:'kn_barbican', name:'Barbican Estate', city:'London', n:288},
-    {id:'habitat', img:'kn_habitat', name:'Habitat 67', city:'Montreal', n:161}],
+    {id:'barbican', img:'kn_barbican', name:'Albion Street Terrace', city:'London', n:288},
+    {id:'habitat', img:'w1', name:'Habitat 67', city:'Montreal', n:161}],
   saved:[
-    {id:'serpentine', img:'insp_pavil', name:'Serpentine Pavilion', city:'London', n:97},
-    {id:'greatcourt', img:'insp_glass', name:'Great Court', city:'London', n:355}]
+    {id:'serpentine', img:'w5', name:'Serpentine Pavilion', city:'London', n:97},
+    {id:'greatcourt', img:'onb_glass', name:'Great Court', city:'London', n:355}]
 };
 const SPOT_TITLE = {nearby:'Nearby Spots', trending:'Trending Now'};
 
@@ -2111,7 +2111,7 @@ const TRIPS = [
   {img:'arc_bcn',     dot:'#952324', name:'Barcelona — Architecture Walk', date:'Nov 12, 2026', year:'2026', meta:'14 check-ins · Gaudí buildings · 6.2 km'},
   {img:'arc_tky',     dot:'#3E6B9A', name:'Tokyo — Art District',          date:'Sep 3, 2026',  year:'2026', meta:'9 check-ins · Modern Art · 3.8 km'},
   {img:'vessel_hero', dot:'#952324', name:'New York — Hudson Yards',      date:'Aug 14, 2026', year:'2026', meta:'6 check-ins · Contemporary · 2.1 km'},
-  {img:'kn_habitat',  dot:'#666666', name:'Montreal — Habitat 67',        date:'Jun 2, 2026',  year:'2026', meta:'4 check-ins · Brutalism · 1.4 km'},
+  {img:'w1',          dot:'#666666', name:'Montreal — Habitat 67',        date:'Jun 2, 2026',  year:'2026', meta:'4 check-ins · Brutalism · 1.4 km'},
   {img:'arc_par',     dot:'#666666', name:'Paris — Haussmann Routes',     date:'Mar 20, 2026', year:'2026', meta:'22 check-ins · Classical France · 9.1 km'},
   {img:'insp_heydar', dot:'#3E6B9A', name:'Baku — Heydar Aliyev Centre',  date:'Jan 9, 2026',  year:'2026', meta:'3 check-ins · Contemporary · 0.8 km'},
   {img:'kn_trellick', dot:'#666666', name:'London — Brutalist London',    date:'Nov 2, 2025',  year:'2025', meta:'11 check-ins · Brutalism · 5.3 km'},
@@ -2123,12 +2123,12 @@ const TRIPS = [
 ];
 
 const INSP = [
-  {img:'insp_heydar', name:'Heydar Aliyev Centre', by:'Zaha Hadid',        style:'Modernism', ar:.78, saved:false},
+  {img:'insp_heydar', name:'Azadi Tower',          by:'Hossein Amanat',    style:'Modernism', ar:.78, saved:false},
   {img:'insp_stair',  name:'Balcony Stair',        by:'Alison Smithson',   style:'Brutalism', ar:1.3, saved:true},
-  {img:'insp_pavil',  name:'Serpentine Pavilion',  by:'Sou Fujimoto',      style:'Modernism', ar:1.15,saved:false},
-  {img:'insp_bw',     name:'National Theatre',     by:'Denys Lasdun',      style:'Brutalism', ar:1.25,saved:false},
+  {img:'w5',          name:'Rotunda Chandelier',   by:'Charles Barry',     style:'Classical', ar:1.15,saved:false},
+  {img:'onb_lattice', name:'Concrete Lattice',     by:'Denys Lasdun',      style:'Brutalism', ar:1.25,saved:false},
   {img:'insp_nest',   name:"Bird's Nest",          by:'Herzog & de Meuron',style:'Modernism', ar:1.3, saved:false},
-  {img:'insp_glass',  name:'Great Court',          by:'Foster + Partners', style:'Modernism', ar:1.7, saved:false}
+  {img:'onb_glass',   name:'Green Curtain Wall',   by:'Foster + Partners', style:'Modernism', ar:1.7, saved:false}
 ];
 
 const RECORDS = [
@@ -2136,33 +2136,33 @@ const RECORDS = [
    architect:'Thomas Heatherwick', year:'2019', captures:3184, explorers:729,
    shots:[['vessel_a','mia'],['vessel_b','kenji'],['vessel_c','sofia'],
           ['vessel_shot','marco'],['vessel_ar','javier'],['vessel_hero','mia']]},
-  {id:'barbican', img:'kn_barbican', name:'Barbican Estate', city:'London', style:'Brutalism',
-   architect:'Chamberlin, Powell & Bon', year:'1976', captures:1284, explorers:312,
-   shots:[['kn_barbican','javier'],['insp_bw','marco'],['w7','sofia']]},
-  {id:'habitat', img:'kn_habitat', name:'Habitat 67', city:'Montreal', style:'Brutalism',
+  {id:'barbican', img:'kn_barbican', name:'Albion Street Terrace', city:'London', style:'Georgian',
+   architect:'Thomas Cubitt', year:'1840', captures:1284, explorers:312,
+   shots:[['kn_barbican','javier'],['onb_lattice','marco'],['w7','sofia']]},
+  {id:'habitat', img:'w1', name:'Habitat 67', city:'Montreal', style:'Brutalism',
    architect:'Moshe Safdie', year:'1967', captures:842, explorers:203,
-   shots:[['kn_habitat','sofia'],['w1','mia'],['onb_lattice','kenji']]},
-  {id:'trellick', img:'kn_trellick', name:'Trellick Tower', city:'London', style:'Brutalism', wide:true,
-   architect:'Erno Goldfinger', year:'1972', captures:519, explorers:147,
+   shots:[['w1','sofia'],['w1','mia'],['onb_lattice','kenji']]},
+  {id:'trellick', img:'kn_trellick', name:'Elizabeth Tower', city:'London', style:'Gothic Revival',
+   architect:'Augustus Pugin', year:'1859', captures:519, explorers:147,
    shots:[['kn_trellick','javier'],['insp_stair','marco'],['w7','kenji']]},
-  {id:'national', img:'insp_bw', name:'National Theatre', city:'London', style:'Brutalism',
+  {id:'national', img:'onb_lattice', name:'National Theatre', city:'London', style:'Brutalism',
    architect:'Denys Lasdun', year:'1976', captures:673, explorers:188,
-   shots:[['insp_bw','marco'],['kn_barbican','javier'],['w1','mia']]},
+   shots:[['onb_lattice','marco'],['kn_barbican','javier'],['w1','mia']]},
   {id:'seagram', img:'ar_facade', name:'Seagram Building', city:'New York', style:'Modernism',
    architect:'Mies van der Rohe', year:'1958', captures:2104, explorers:498,
    shots:[['w7','mia'],['feedthumb','marco'],['checkin','kenji'],['w12','sofia'],['w2','javier'],['ar_facade','mia']]},
   {id:'willis', img:'w2', name:'Willis Building', city:'London', style:'Modernism',
    architect:'Foster + Partners', year:'2008', captures:311, explorers:96,
-   shots:[['w2','sofia'],['insp_glass','marco'],['w4','mia']]},
-  {id:'greatcourt', img:'insp_glass', name:'Great Court', city:'London', style:'Modernism', wide:true,
+   shots:[['w2','sofia'],['onb_glass','marco'],['w4','mia']]},
+  {id:'greatcourt', img:'onb_glass', name:'Great Court', city:'London', style:'Modernism',
    architect:'Foster + Partners', year:'2000', captures:1466, explorers:377,
-   shots:[['insp_glass','sofia'],['w6','marco'],['w4','kenji']]},
-  {id:'serpentine', img:'insp_pavil', name:'Serpentine Pavilion', city:'London', style:'Modernism',
+   shots:[['onb_glass','sofia'],['w6','marco'],['w4','kenji']]},
+  {id:'serpentine', img:'w5', name:'Serpentine Pavilion', city:'London', style:'Modernism',
    architect:'Sou Fujimoto', year:'2013', captures:428, explorers:131,
-   shots:[['insp_pavil','sofia'],['insp_heydar','marco'],['w5','mia']]},
-  {id:'heydar', img:'insp_heydar', name:'Heydar Aliyev Centre', city:'Baku', style:'Deconstructivism',
-   architect:'Zaha Hadid', year:'2012', captures:1893, explorers:441,
-   shots:[['insp_heydar','marco'],['insp_pavil','sofia'],['insp_nest','kenji']]},
+   shots:[['w5','sofia'],['insp_heydar','marco'],['w5','mia']]},
+  {id:'heydar', img:'insp_heydar', name:'Azadi Tower', city:'Tehran', style:'Modernist',
+   architect:'Hossein Amanat', year:'1971', captures:1893, explorers:441,
+   shots:[['insp_heydar','marco'],['w5','sofia'],['insp_nest','kenji']]},
   {id:'nest', img:'insp_nest', name:"Bird's Nest", city:'Beijing', style:'Deconstructivism',
    architect:'Herzog & de Meuron', year:'2008', captures:1207, explorers:356,
    shots:[['insp_nest','kenji'],['insp_heydar','marco'],['onb_lattice','javier']]},
@@ -2174,10 +2174,10 @@ const RECORDS = [
    shots:[['w9','marco'],['w8','kenji'],['duomo','sofia']]},
   {id:'k11', img:'k11', name:'K11 Musea', city:'Hong Kong', style:'Contemporary',
    architect:'Kohn Pedersen Fox', year:'2019', captures:596, explorers:174,
-   shots:[['k11','kenji'],['w6','mia'],['insp_glass','sofia']]},
-  {id:'tate', img:'tate', name:'Tate Modern', city:'London', style:'Contemporary',
+   shots:[['k11','kenji'],['w6','mia'],['onb_glass','sofia']]},
+  {id:'tate', img:'tate', name:'Atelier Wall', city:'London', style:'Contemporary',
    architect:'Herzog & de Meuron', year:'2000', captures:2870, explorers:640,
-   shots:[['tate','sofia'],['insp_bw','marco'],['kn_barbican','javier']]}
+   shots:[['tate','sofia'],['onb_lattice','marco'],['kn_barbican','javier']]}
 ];
 
 let POSTS = [
@@ -2190,7 +2190,7 @@ let POSTS = [
   {person:'mia', bld:'seagram', group:'modernism', style:'Modernism', place:'New York', time:'2h ago', img:'feedthumb',
    quote:'The light at Seagram today — pure Mies perfection.',
    tags:['#modernism','#mies','#nyc'], likes:284, comments:42, liked:false, saved:false},
-  {person:'sofia', bld:'greatcourt', group:'light', style:'Modernism', place:'London', time:'5h ago', img:'insp_glass',
+  {person:'sofia', bld:'greatcourt', group:'light', style:'Modernism', place:'London', time:'5h ago', img:'onb_glass',
    quote:'Foster’s lattice turns the whole court into a sundial.',
    tags:['#daylight','#foster','#london'], likes:912, comments:63, liked:false, saved:true},
   {person:'kenji', bld:null, group:'tokyo', style:'Urban Vernacular', place:'Tokyo', time:'8h ago', img:'onb_night',
@@ -2767,12 +2767,12 @@ const PEOPLE = {
            bio:'Lombard baroque and everything that came after it. Slow walks, long lenses.',
            followers:'4.1k', captures:312, cities:9, following:true, groups:['brutalism','light'],
            crossed:'Your paths crossed at the Duomo, Milan — Nov 2024',
-           works:['duomo','w8','w9','insp_bw','w11','arc_bcn']},
+           works:['duomo','w8','w9','onb_lattice','w11','arc_bcn']},
   sofia:  {name:'Sofia Bergmann', handle:'@sofia.b', av:'S', avc:'', city:'Copenhagen',
            bio:'Danish modernism, daylight, and the space between gallery and landscape.',
            followers:'2.8k', captures:196, cities:6, following:false, groups:['light','modernism'],
            crossed:'You have both captured the Barbican Estate',
-           works:['insp_pavil','w5','insp_glass','w2','kn_habitat','w12']},
+           works:['w5','w5','onb_glass','w2','w1','w12']},
   kenji:  {name:'Kenji Tanaka', handle:'@kenji.t', av:'K', avc:'grey', city:'Tokyo',
            bio:'Night walks through Shibuya. Neon, concrete, and the vernacular of small streets.',
            followers:'5.6k', captures:428, cities:12, following:false, groups:['tokyo','light'],
@@ -2782,18 +2782,18 @@ const PEOPLE = {
            bio:'Brutalism, photography and urban design. Currently 400m from you.',
            followers:'1.9k', captures:143, cities:5, following:false, groups:['brutalism'],
            crossed:'Your paths crossed today — 400m away',
-           works:['insp_stair','insp_bw','kn_trellick','kn_barbican','w7','onb_lattice']},
+           works:['insp_stair','onb_lattice','kn_trellick','kn_barbican','w7','onb_lattice']},
   mia:    {name:'Mia Liu', handle:'@mia.liu', av:'M', avc:'', city:'New York',
            bio:'Midtown light, curtain walls, and the hour before sunset.',
            followers:'3.4k', captures:271, cities:8, following:true, groups:['modernism','light'],
            crossed:'Your paths crossed on Park Avenue — today',
-           works:['feedthumb','w12','w2','checkin','w1','kn_habitat']},
+           works:['feedthumb','w12','w2','checkin','w1','w1']},
   /* the rest of Lucy's followers - people who follow her without her having
      followed back yet, which is what makes the count differ from Following */
   elena:  {name:'Elena Rossi', handle:'@elena.r', av:'E', avc:'steel', city:'Rome',
            bio:'Roman concrete, from Hadrian to the Sixties.',
            followers:'980', captures:141, cities:6, groups:[], crossed:'',
-           works:['duomo','w9','insp_glass']},
+           works:['duomo','w9','onb_glass']},
   omar:   {name:'Omar Haddad', handle:'@omar.builds', av:'O', avc:'grey', city:'Casablanca',
            bio:'Whitewash, shade and the geometry of a hot street.',
            followers:'612', captures:88, cities:4, groups:[], crossed:'',
@@ -2801,11 +2801,11 @@ const PEOPLE = {
   hana:   {name:'Hana Petrova', handle:'@hana.p', av:'H', avc:'', city:'Prague',
            bio:'Panel blocks and the people still living well in them.',
            followers:'1.4k', captures:205, cities:11, groups:[], crossed:'',
-           works:['kn_trellick','insp_bw','w5']},
+           works:['kn_trellick','onb_lattice','w5']},
   theo:   {name:'Theo Lindqvist', handle:'@theo.l', av:'T', avc:'steel', city:'Stockholm',
            bio:'Timber, daylight and the long northern winter.',
            followers:'743', captures:119, cities:5, groups:[], crossed:'',
-           works:['insp_pavil','w10','onb_glass']},
+           works:['w5','w10','onb_glass']},
   nadia:  {name:'Nadia Okonkwo', handle:'@nadia.o', av:'N', avc:'grey', city:'Lagos',
            bio:'Documenting what gets built between the plans.',
            followers:'2.2k', captures:268, cities:8, groups:[], crossed:'',
@@ -2813,7 +2813,7 @@ const PEOPLE = {
   pedro:  {name:'Pedro Vargas', handle:'@pedro.v', av:'P', avc:'', city:'Mexico City',
            bio:'Colour as a structural decision. Barragan taught me that.',
            followers:'1.1k', captures:174, cities:7, groups:[], crossed:'',
-           works:['insp_glass','w12','arc_bcn']},
+           works:['onb_glass','w12','arc_bcn']},
   sara:   {name:'Sara Frames', handle:'@sara.frames', av:'S', avc:'steel', city:'Lisbon',
            bio:'Tiles, tramlines and the hour before the light goes.',
            followers:'865', captures:132, cities:6, groups:[], crossed:'',
@@ -2821,7 +2821,7 @@ const PEOPLE = {
   kai:    {name:'Kai Bergstrom', handle:'@kai.builds', av:'K', avc:'grey', city:'Oslo',
            bio:'Concrete in the rain, which is most of the time.',
            followers:'1.9k', captures:221, cities:9, groups:[], crossed:'',
-           works:['kn_habitat','w2','insp_heydar']}
+           works:['w1','w2','insp_heydar']}
 };
 
 const GROUPS = {
@@ -3221,8 +3221,8 @@ const WORKS = [
   {img:'w3', t:'Carved arcade, Midtown'},   {img:'w4', t:'Cable stay detail'},
   {img:'w5', t:'Rotunda chandelier'},       {img:'w6', t:'Mosaic stair soffit'},
   {img:'onb_lattice', t:'Diagonal lattice'},{img:'insp_heydar', t:'Heydar Aliyev Centre'},
-  {img:'kn_barbican', t:'Barbican Estate'}, {img:'insp_pavil', t:'Serpentine Pavilion'},
-  {img:'onb_glass', t:'Green curtain wall'},{img:'kn_habitat', t:'Habitat 67'},
+  {img:'kn_barbican', t:'Albion Street Terrace'}, {img:'w5', t:'Rotunda Chandelier'},
+  {img:'onb_glass', t:'Green curtain wall'},{img:'w1', t:'Shadow Line, Broadgate'},
   {img:'duomo', t:'Duomo di Milano'},       {img:'insp_nest', t:"Bird's Nest"},
   {img:'checkin', t:'Midtown through glass'},{img:'w7', t:'Bronze mullions, Park Ave'},
   {img:'w8', t:'Duomo, west front'},         {img:'w9', t:'Spires against blue'},
@@ -3230,15 +3230,15 @@ const WORKS = [
   {img:'w12', t:'Empire State, framed'}
 ];
 const SAVED = [
-  {img:'insp_stair',  t:'Balcony Stair',    by:'@javier.arq'},
-  {img:'insp_bw',     t:'National Theatre', by:'@marco.design'},
-  {img:'kn_trellick', t:'Trellick Tower',   by:'@kai.builds'},
-  {img:'k11',         t:'K11 Musea',        by:'@mia.liu'},
-  {img:'tate',        t:'Tate Modern',      by:'@sara.frames'},
-  {img:'insp_glass',  t:'Great Court',      by:'@pedro.v'},
-  {img:'highline',    t:'High Line at Dusk',by:'@nora.k'},
-  {img:'onb_night',   t:'Night Street',     by:'@kenji.t'},
-  {img:'arc_bcn',     t:'Gaudi Facade',     by:'@marco.design'}
+  {img:'insp_stair',  t:'Balcony Stair',       by:'@javier.arq'},
+  {img:'onb_lattice', t:'Concrete Lattice',    by:'@marco.design'},
+  {img:'kn_trellick', t:'Elizabeth Tower',     by:'@kai.builds'},
+  {img:'k11',         t:'K11 Musea',           by:'@mia.liu'},
+  {img:'tate',        t:'Atelier Wall',        by:'@sara.frames'},
+  {img:'onb_glass',   t:'Green Curtain Wall',  by:'@pedro.v'},
+  {img:'highline',    t:'High Line at Dusk',   by:'@nora.k'},
+  {img:'onb_night',   t:'Night Street',        by:'@kenji.t'},
+  {img:'arc_bcn',     t:'Passeig de Gracia',   by:'@marco.design'}
 ];
 /* ---------- unfinished check-ins: kept out of the community feed, but not
    lost - they live under the Captures tab in Profile until sent or dropped ---------- */
@@ -3411,7 +3411,7 @@ const CITIES = [
   {name:'Tokyo',     country:'Japan',         n:19, img:'onb_night'},
   {name:'Hong Kong', country:'China',         n:14, img:'k11'},
   {name:'Barcelona', country:'Spain',         n:12, img:'arc_bcn'},
-  {name:'Montreal',  country:'Canada',        n:9,  img:'kn_habitat'},
+  {name:'Montreal',  country:'Canada',        n:9,  img:'w1'},
   {name:'Beijing',   country:'China',         n:7,  img:'insp_nest'},
   {name:'Baku',      country:'Azerbaijan',    n:5,  img:'insp_heydar'}
 ];
