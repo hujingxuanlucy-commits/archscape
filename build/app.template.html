@@ -785,46 +785,50 @@ figure{margin:0}
 .exitsheet .linkbtn{display:block;width:100%;text-align:center;padding:10px;font-size:13px;font-weight:600;color:var(--muted)}
 
 /* ============ 05 journey map ============ */
-.jmap{position:relative;height:364px;overflow:hidden;background:#D4DDE4;border-bottom:1px solid var(--bone);
+.jmap{position:relative;height:364px;overflow:hidden;background:#C7D7E1;border-bottom:1px solid var(--bone);
   touch-action:none}
 /* Editorial cartography: ivory paper, a fine grey street network drawn on top
    of it, and colour spent only on the routes and the places you chose. Every
    layer below is geography - it pans and zooms with the projection. */
 .jmap{cursor:grab}
 .jmap.grabbing{cursor:grabbing}
-.mapcanvas{position:absolute;inset:0;width:100%;height:100%;background:#D4DDE4;display:block}
-.mland{fill:#F6F2E6}
-.mwater{fill:#D4DDE4}
-.mpark{fill:#CEDAC1}
+.mapcanvas{position:absolute;inset:0;width:100%;height:100%;background:#C7D7E1;display:block}
+.mland{fill:#EAE3D4}
+.mwater{fill:#C7D7E1}
+.mpark{fill:#CBD8B9}
 /* footprints sit barely above the paper - urban texture, never a subject */
-.mblock{fill:#EDE6D6;opacity:.9}
-.mst{stroke:#DCD3C0;stroke-linecap:round}
-.mav{stroke:#C7BDA7;stroke-linecap:round}
-.mav.major{stroke:#B4A992}
+.mblock{fill:#E1D7C2;opacity:.9}
+.mst{stroke:#FAF7EF;stroke-linecap:round}
+.mav{stroke:#FDFBF4;stroke-linecap:round}
+.mav.major{stroke:#FFFEF9}
 .mroute{fill:none;stroke-linejoin:round;stroke-linecap:round}
 .mlabel{font-family:var(--ui);font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
   fill:#8A857B}
 .mname{font-family:var(--ui);font-size:10px;font-weight:600;fill:#2B2B2B;paint-order:stroke;
-  stroke:rgba(246,242,230,.94);stroke-width:3.2px;stroke-linejoin:round}
+  stroke:rgba(250,246,236,.95);stroke-width:3.4px;stroke-linejoin:round}
 /* district names are basemap, not app data, so they stay warm grey */
-.mdistrict{font-family:var(--ui);font-size:8px;font-weight:500;letter-spacing:.06em;
-  fill:#8A857A;paint-order:stroke;stroke:rgba(246,242,230,.8);stroke-width:2.4px;stroke-linejoin:round}
-.mborough{font-family:var(--ui);font-size:9px;font-weight:700;letter-spacing:.18em;
-  fill:#948F83;paint-order:stroke;stroke:rgba(246,242,230,.8);stroke-width:2.6px;stroke-linejoin:round}
+.mdistrict{font-family:var(--ui);font-size:8.5px;font-weight:600;letter-spacing:.17em;
+  text-transform:uppercase;fill:#8C8272;paint-order:stroke;stroke:rgba(234,227,212,.75);
+  stroke-width:2.6px;stroke-linejoin:round}
+.mborough{font-family:var(--ui);font-size:11px;font-weight:600;letter-spacing:.22em;
+  fill:#6F6758;paint-order:stroke;stroke:rgba(234,227,212,.7);stroke-width:3px;stroke-linejoin:round}
+.mhydro{font-family:var(--disp);font-style:italic;font-size:13.5px;fill:#6F8CA1;letter-spacing:.01em}
+.mgreen{font-family:var(--disp);font-style:italic;font-size:13.5px;fill:#6D875E;letter-spacing:.01em}
 /* the arterial network is what makes the far boroughs read as a city */
-.mexp{stroke:#B4A992;stroke-linecap:round;stroke-linejoin:round}
-.mart{stroke:#C2B8A3;stroke-linecap:round;stroke-linejoin:round}
-.mbridge{stroke:#B4A992;stroke-linecap:butt}
+.mexp{stroke:#FDFBF4;stroke-linecap:round;stroke-linejoin:round}
+.mart{stroke:#FAF7EF;stroke-linecap:round;stroke-linejoin:round}
+.mbridge{stroke:#F2EDE1;stroke-linecap:butt}
 /* borough street fabric: present, never assertive */
-.mfabric{stroke:#DCD3C0;fill:none;stroke-linecap:round}
-.mparklab{fill:#7F9174;letter-spacing:.2em}
+.mfabric{stroke:#F4EFE4;fill:none;stroke-linecap:round}
+.mparklab{fill:#78906A;letter-spacing:.2em}
 /* markers answer the pointer, but quietly */
 .mstop{cursor:pointer;transform-box:fill-box;transform-origin:center;
   transition:transform .18s ease}
 .mstop:hover{transform:scale(1.14)}
 .mstop .mhit{fill:transparent}
-.mmeet rect{fill:#2B2B2B}
-.mmeet text{font-family:var(--ui);font-size:7.5px;font-weight:700;letter-spacing:.14em;fill:#F6F2E6}
+.mcross{fill:#AF2B34;opacity:.22}
+.legend .legsplit{margin:7px 0 5px;border-top:1px solid rgba(0,0,0,.09);padding-top:6px}
+.legend button i.dotted{height:0;border-top:2.5px dotted currentColor;border-radius:0;opacity:1}
 .mapsearch{position:absolute;left:14px;right:60px;bottom:12px;z-index:6}
 .mapsearch > svg{position:absolute;left:11px;top:11px;width:15px;height:15px;color:var(--muted);pointer-events:none}
 .mapsearch input{width:100%;padding:10px 12px 10px 33px;border-radius:9px;border:1px solid var(--bone);
@@ -854,11 +858,11 @@ figure{margin:0}
   opacity:0;transition:opacity .25s}
 .zoomhint.on{opacity:1}
 .legend{position:absolute;left:14px;top:14px;z-index:4;background:rgba(250,248,243,.93);border:1px solid rgba(0,0,0,.07);
-  border-radius:6px;padding:8px 11px 9px;box-shadow:0 6px 16px -12px rgba(0,0,0,.28)}
-.legend h4{font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:0 0 7px}
-.legend button{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:500;color:var(--ink);
-  padding:2px 0;width:100%;transition:.16s}
-.legend button i{width:18px;height:2.5px;border-radius:2px;display:block;flex:none;transition:.16s}
+  border-radius:6px;padding:10px 13px 11px;box-shadow:0 6px 16px -12px rgba(0,0,0,.28)}
+.legend h4{font-size:8.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.legend button{display:flex;align-items:center;gap:9px;font-size:11.5px;font-weight:500;color:var(--ink);
+  padding:2.5px 0;width:100%;transition:.16s}
+.legend button i{width:21px;height:3px;border-radius:2px;display:block;flex:none;transition:.16s}
 .legend button[aria-pressed="false"]{color:var(--muted-2)}
 .legend button[aria-pressed="false"] i{opacity:.25}
 .statbar{display:flex;align-items:stretch;border-bottom:1px solid var(--bone);background:var(--paper)}
@@ -1474,7 +1478,7 @@ figure{margin:0}
             <button class="chip" aria-pressed="false" data-val="following">Following</button>
             <button class="chip" aria-pressed="false" data-val="groups">Groups</button>
           </div>
-          <div class="mapframe jmap" id="discover-map" style="height:250px">
+          <div class="mapframe jmap" id="discover-map" style="height:272px">
             <svg class="mapcanvas" id="dmap-svg" aria-label="Map of architectural spots near you"></svg>
             <div class="zoomctl">
               <button data-zoom="in" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
@@ -1857,7 +1861,17 @@ the city folded in on itself.</textarea>
             <span class="seelink" style="cursor:default">3 nearby</span>
           </div>
           <div class="xmap jmap" id="crossing-map">
-            <svg class="mapcanvas" id="xmap-svg" aria-label="Map of your path crossing another explorer's"></svg>
+            <svg class="mapcanvas" id="xmap-svg" aria-label="Map of your path crossing other explorers'"></svg>
+            <div class="legend">
+              <h4>My route</h4>
+              <button data-layer="arch" aria-pressed="true"><i style="background:#AF2B34"></i>Architecture</button>
+              <button data-layer="art" aria-pressed="true"><i style="background:#3B6E9D"></i>Art Spaces</button>
+              <button data-layer="photo" aria-pressed="true"><i style="background:#7B7C79"></i>Photography</button>
+              <h4 class="legsplit">Other explorers</h4>
+              <button data-layer="javier" aria-pressed="true" style="color:#C2748C"><i class="dotted"></i>@javier.arq</button>
+              <button data-layer="kai" aria-pressed="true" style="color:#6E93B8"><i class="dotted"></i>@kai</button>
+              <button data-layer="sara" aria-pressed="true" style="color:#6F8F63"><i class="dotted"></i>@sara</button>
+            </div>
             <div class="zoomctl">
               <button data-zoom="in" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
               <button data-zoom="out" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
@@ -3654,6 +3668,11 @@ const PARKS = [
   [[40.7020,-74.0190],[40.7060,-74.0175],[40.7048,-74.0130],[40.7008,-74.0148]]
 ];
 /* two tiers: the boroughs carry the wide view, neighbourhoods the closer one */
+const HYDRO = [
+  {lat:40.7560, lng:-74.0060, cls:'mhydro', wrap:['Hudson','River']},
+  {lat:40.7480, lng:-73.9620, cls:'mhydro', wrap:['East','River']},
+  {lat:40.7800, lng:-73.9670, cls:'mgreen', wrap:['Central','Park']}
+];
 const BOROUGHS = [
   {n:'MANHATTAN', lat:40.7800, lng:-73.9660},
   {n:'BROOKLYN',  lat:40.6500, lng:-73.9500},
@@ -3699,29 +3718,43 @@ const ROUTES = {
 
 /* Discover shows the places you could walk to now; the two that exist as full
    records open them, the rest just name themselves on the map. */
-const DPLACES = [
-  {id:'seagram', name:'Seagram Building', lat:40.7587, lng:-73.9720, c:'#AF2B34', kind:'Architecture', bld:'seagram'},
-  {id:'moma',    name:'MoMA',             lat:40.7614, lng:-73.9776, c:'#3B6E9D', kind:'Art Spaces'},
-  {id:'parkav',  name:'Park Ave Facades', lat:40.7549, lng:-73.9756, c:'#7B7C79', kind:'Photography'},
-  {id:'grand',   name:'Grand Central',    lat:40.7527, lng:-73.9772, c:'#7B7C79', kind:'Photography'}
-];
-let dmapView = {lat: 40.7585, lng: -73.9838, scale: 0.082, sel: null};
-
-/* Paths crossing: two walked tracks, not two lists of places */
-const XPLACES = [
-  {id:'you',    name:'You',          lat:40.7508, lng:-73.9852, c:'#AF2B34', kind:''},
-  {id:'javier', name:'@javier.arq',  lat:40.7605, lng:-73.9738, c:'#3B6E9D', kind:''}
-];
-const XROUTES = {
-  you:   {c:'#AF2B34', pts:[
-    {lat:40.7508,lng:-73.9852},{lat:40.7512,lng:-73.9818},
-    {lat:40.7549,lng:-73.9818},{lat:40.7556,lng:-73.9792}]},
-  them:  {c:'#3B6E9D', dash:true, soft:true, pts:[
-    {lat:40.7605,lng:-73.9738},{lat:40.7582,lng:-73.9772},
-    {lat:40.7556,lng:-73.9772},{lat:40.7556,lng:-73.9792}]}
+const DPLACES = PLACES.map(q =>
+  q.id === 'seagram' ? Object.assign({}, q, {bld:'seagram'}) : q);
+/* two fragments, not the whole journey - enough to orient, never a second
+   copy of the journey map */
+const DROUTES = {
+  arch: ROUTES.arch,
+  art:  {c: ROUTES.art.c, stops: ['whitney', 'moma']}
 };
-const XMEET = {lat:40.7556, lng:-73.9792, label:'MEET HERE'};
-let xmapView = {lat: 40.7558, lng: -73.9795, scale: 0.62, sel: null};
+let dmapView = {lat: 40.7601, lng: -73.9820, scale: 0.0423, sel: null};
+
+/* Paths crossing: your own three routes with other explorers' tracks laid
+   over them. Theirs are dotted and in their own hue, so ownership reads
+   without a label on every line. */
+const XWALK = {
+  javier: {c:'#C2748C', pts:[
+    {lat:40.7790,lng:-73.9560},{lat:40.7700,lng:-73.9618},{lat:40.7640,lng:-73.9672},
+    {lat:40.7587,lng:-73.9720},{lat:40.7512,lng:-73.9790},{lat:40.7432,lng:-73.9848},
+    {lat:40.7378,lng:-73.9822}]},
+  kai:    {c:'#6E93B8', pts:[
+    {lat:40.7346,lng:-74.0058},{lat:40.7424,lng:-74.0040},{lat:40.7488,lng:-74.0028},
+    {lat:40.7539,lng:-74.0021},{lat:40.7596,lng:-73.9958},{lat:40.7652,lng:-73.9902}]},
+  sara:   {c:'#6F8F63', pts:[
+    {lat:40.7724,lng:-73.9818},{lat:40.7676,lng:-73.9796},{lat:40.7604,lng:-73.9782},
+    {lat:40.7549,lng:-73.9756},{lat:40.7494,lng:-73.9726},{lat:40.7446,lng:-73.9714}]}
+};
+const XPLACES = PLACES.concat(Object.entries(XWALK).map(([id, r])=>({
+  id: 'x-' + id, name: '@' + id, lat: r.pts[0].lat, lng: r.pts[0].lng,
+  c: r.c, kind: '', small: true
+})));
+const XROUTES = Object.assign({}, ROUTES,
+  Object.fromEntries(Object.entries(XWALK).map(([id, r])=>
+    [id, {c: r.c, dot: true, pts: r.pts}])));
+/* the three stops of yours that another walk actually passes through */
+const XCROSS = [
+  {lat:40.7587, lng:-73.9720}, {lat:40.7539, lng:-74.0021}, {lat:40.7549, lng:-73.9756}
+];
+let xmapView = {lat: 40.7584, lng: -73.9820, scale: 0.0401, sel: null};
 
 /* --- Web Mercator, metres --- */
 const R_E = 6378137;
@@ -3742,8 +3775,40 @@ function gridPt(a, s){
   return {x: o.x + dx * k, y: o.y + dy * k};
 }
 
-let mapView = {lat: 40.7620, lng: -73.9832, scale: 0.0435, sel: null};
-const mapLayers = {arch:true, art:true, photo:true};
+/* the inverse of gridPt: where a point falls in avenues-and-streets */
+function gridInv(m){
+  const th = MAP.bearing * Math.PI / 180;
+  const up = {x: Math.sin(th), y: Math.cos(th)};
+  const cross = {x: -Math.cos(th), y: Math.sin(th)};
+  const o = merc(MAP.o.lat, MAP.o.lng);
+  const k = 1 / Math.cos(MAP.o.lat * Math.PI / 180);
+  const dx = (m.x - o.x) / k, dy = (m.y - o.y) / k;
+  return {a: (dx * cross.x + dy * cross.y) / MAP.avSpacing,
+          s: (dx * up.x + dy * up.y) / MAP.stSpacing};
+}
+/* a walked leg is a staircase along the grid, not one long dog-leg */
+function gridLeg(m1, m2){
+  const g1 = gridInv(m1), g2 = gridInv(m2);
+  const da = g2.a - g1.a, ds = g2.s - g1.s;
+  if(Math.abs(da) < .3 || Math.abs(ds) < 1.5) return [m2];
+  const n = Math.max(2, Math.min(4, Math.round(Math.abs(da))));
+  const out = [];
+  for(let i = 1; i <= n; i++){
+    const s = g1.s + ds * i / n;
+    out.push(gridPt(g1.a + da * (i - 1) / n, s));   /* up the avenue */
+    out.push(gridPt(g1.a + da * i / n, s));         /* then across */
+  }
+  out.push(m2); return out;
+}
+function walked(list){
+  const out = [list[0]];
+  for(let i = 1; i < list.length; i++) gridLeg(out[out.length - 1], list[i]).forEach(q=>out.push(q));
+  return out;
+}
+
+let mapView = {lat: 40.7584, lng: -73.9820, scale: 0.0401, sel: null};
+const mapLayers  = {arch:true, art:true, photo:true};
+const xmapLayers = {arch:true, art:true, photo:true, javier:true, kai:true, sara:true};
 
 function makeLiveMap(frame, svg, buttons, opts){
   opts = opts || {};
@@ -3751,9 +3816,7 @@ function makeLiveMap(frame, svg, buttons, opts){
   const routes = opts.routes || ROUTES;
   const view   = opts.view   || mapView;
   const layers = opts.layers || mapLayers;
-  const meet   = opts.meet   || null;
-  /* Explore's map orients you; it must not out-talk the spots under it */
-  const quiet  = !!opts.quiet;
+
   /* scale is pixels per mercator metre; z = log2(scale * 40075016 / 256).
      MIN was 0.09, about zoom 13.8, so the map could not be pulled back far
      enough to see a city at all - that is the whole of the "too close" bug. */
@@ -3841,10 +3904,10 @@ function makeLiveMap(frame, svg, buttons, opts){
 
     /* Progressive disclosure: the arterials and crossings carry the city view,
        Manhattan's grid arrives as you come down into it. */
-    const Z = {city: sc < .022, district: sc < .038};
+    const Z = {city: sc < .019, district: sc < .032};
     /* the avenues that carry the island keep their weight at every zoom */
     const majorRe = /5th|Park|7th|Broadway/;
-    const sw = Math.max(.45, Math.min(1.15, .5 + sc * .7));
+    const sw = Math.max(.8, Math.min(2.4, .95 + sc * 9));
     const path = (pts, cls, wgt) =>
       `<polyline class="${cls}" stroke-width="${wgt.toFixed(2)}" fill="none" points="${
         pts.map(ll).map(p=>p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ')}"/>`;
@@ -3859,7 +3922,7 @@ function makeLiveMap(frame, svg, buttons, opts){
     if(!Z.city){
       /* every cross street once they are 5px apart - that dense orthogonal
          field is the strongest style cue the reference has */
-      const every = sc > .042 ? 1 : sc > .025 ? 2 : sc > .014 ? 5 : 20;
+      const every = sc > .034 ? 1 : sc > .021 ? 2 : sc > .012 ? 5 : 20;
       for(let st = MAP.streets.from; st <= MAP.streets.to; st++){
         if(st % every) continue;
         const major = st % 20 === 0;
@@ -3879,7 +3942,7 @@ function makeLiveMap(frame, svg, buttons, opts){
     /* footprints from the district scale up. They are two pixels wide at
        the top of that range - not buildings, but the grain that makes a grid
        read as a city rather than as ruled paper. */
-    if(sc > .042){
+    if(sc > .3){
       const pad = 40, av = MAP.avenues, inset = .74;
       for(let ai = 0; ai < av.length - 1; ai++){
         const a0 = av[ai].i, a1 = av[ai + 1].i;
@@ -3914,15 +3977,21 @@ function makeLiveMap(frame, svg, buttons, opts){
        one narrow island at city scale is what made it read as a diagram */
     const nameAt = (list, cls) => list.forEach(d=>{
       const p = toScreen(merc(d.lat, d.lng));
-      if(p.x < 40 || p.x > w - 40 || p.y < 14 || p.y > h - 10) return;
+      if(p.x < 44 || p.x > w - 62 || p.y < 16 || p.y > h - 12) return;
       out += `<text class="${cls}" x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}" text-anchor="middle">${esc(d.n)}</text>`;
     });
-    if(Z.district && !quiet) nameAt(BOROUGHS, 'mborough');
-    /* a narrow band only: at district scale the landmark names do the work,
-       and stacking neighbourhoods over them is the clutter to avoid */
-    if(!quiet && sc >= .022 && sc < .075) nameAt(DISTRICTS, 'mdistrict');
+    if(Z.district) nameAt(BOROUGHS, 'mborough');
+    if(sc >= .019 && sc < .1) nameAt(DISTRICTS, 'mdistrict');
+    /* rivers and the park name themselves in the display italic, set over two
+       lines the way the reference sets them */
+    if(sc > .026 && sc < .3) HYDRO.forEach(d=>{
+      const q = toScreen(merc(d.lat, d.lng));
+      if(q.x < 30 || q.x > w - 30 || q.y < 22 || q.y > h - 28) return;
+      out += d.wrap.map((t, i) =>
+        `<text class="${d.cls}" x="${q.x.toFixed(1)}" y="${(q.y + i * 14.5).toFixed(1)}" text-anchor="middle">${esc(t)}</text>`).join('');
+    });
 
-    if(sc > .18){
+    if(sc >= .3){
       const pc = P((pk.w + pk.e) / 2, (pk.s + pk.n) / 2);
       out += `<text class="mlabel mparklab" x="${pc.x.toFixed(1)}" y="${pc.y.toFixed(1)}" text-anchor="middle">Central Park</text>`;
     }
@@ -3948,21 +4017,25 @@ function makeLiveMap(frame, svg, buttons, opts){
     const byId = Object.fromEntries(places.map(p=>[p.id, p]));
     Object.entries(routes).forEach(([k, r])=>{
       const src = r.pts || r.stops.map(id=>byId[id]);
-      const pl = src.map(q=>{
-        const p = toScreen(merc(q.lat, q.lng));
-        return p.x.toFixed(1) + ',' + p.y.toFixed(1);
-      }).join(' ');
+      const pl = walked(src.map(q=>merc(q.lat, q.lng)))
+        .map(toScreen).map(p=>p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' ');
       /* an annotation drawn over a printed map, so it barely thickens */
       /* an overlay drawn on a printed map: crisp, flat, barely thickening */
-      let wide = Math.max(2.1, Math.min(3, 2.2 + sc * .7));
-      if(r.soft) wide *= .72;                 /* another explorer's path */
-      const halo = (wide + 2.4).toFixed(1);
+      let wide = Math.max(3.4, Math.min(5.2, 3.4 + sc * 30));
+      if(r.dot) wide *= .7;                  /* another explorer's path */
       out += `<g data-route="${k}" style="transition:opacity .25s" opacity="${
-        layers[k] === false ? 0 : (r.soft ? .72 : 1)}">
-        <polyline class="mroute" points="${pl}" stroke="#F6F2E6" stroke-width="${halo}" opacity=".75"/>
+        layers[k] === false ? 0 : (r.dot ? .85 : 1)}">
+        ${r.dot ? '' : `<polyline class="mroute" points="${pl}" stroke="#FBF8F1" stroke-width="${(wide + 2.2).toFixed(1)}" opacity=".6"/>`}
         <polyline class="mroute" points="${pl}" stroke="${r.c}" stroke-width="${wide.toFixed(1)}"
-          ${r.dash ? `stroke-dasharray="${(wide * 1.9).toFixed(1)} ${(wide * 1.7).toFixed(1)}"` : ''}/>
+          ${r.dot ? `stroke-dasharray="0.1 ${(wide * 1.75).toFixed(1)}"` : ''}/>
       </g>`;
+    });
+
+    /* where another explorer's path meets yours */
+    (opts.cross || []).forEach(c=>{
+      const q = toScreen(merc(c.lat, c.lng));
+      out += `<circle class="mcross" cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="${
+        Math.max(12, Math.min(19, 10 + sc * 110)).toFixed(1)}"/>`;
     });
 
     /* places. A printed map drops a name rather than overprinting one, so
@@ -3981,31 +4054,20 @@ function makeLiveMap(frame, svg, buttons, opts){
       const on = view.sel === q.id;
       /* a plain disc with a white keyline; the chosen one opens into a ring,
          which is the loudest mark anywhere on the paper */
-      const base = Math.max(4, Math.min(5.4, 3.9 + sc * 1.1));
-      const r = on ? base * 1.55 : base;
+      const base = q.small ? Math.max(4, Math.min(5.4, 3.7 + sc * 14))
+                            : Math.max(6.4, Math.min(8.4, 5.8 + sc * 40));
+      const r = on ? base * 1.4 : base;
       const x = p.x.toFixed(1), y = p.y.toFixed(1);
       out += `<g class="mstop${on ? ' on' : ''}" data-place="${q.id}">
         <circle class="mhit" cx="${x}" cy="${y}" r="${(r + 9).toFixed(1)}"/>
         <circle cx="${x}" cy="${y}" r="${r.toFixed(1)}" fill="${q.c}"
-          stroke="#F6F3EB" stroke-width="${(on ? 2 : 1.7)}"/>
+          stroke="#FBF8F1" stroke-width="${(on ? 2.6 : 2)}"/>
         ${on ? `<circle cx="${x}" cy="${y}" r="${(r * .34).toFixed(1)}" fill="#FBF9F3"/>` : ''}
-        ${((sc > .04 || on) && p.y - r - 8 > 14 && p.y < h - 46
-            && (on || roomFor(p.x, p.y - r - 8, q.name)))
-          ? `<text class="mname" x="${x}" y="${(p.y - r - 8).toFixed(1)}" text-anchor="middle">${esc(q.name)}</text>` : ''}
+        ${((on || sc > .34) && p.y - r - 9 > 14 && p.y < h - 46
+            && (on || roomFor(p.x, p.y - r - 9, q.name)))
+          ? `<text class="mname" x="${x}" y="${(p.y - r - 9).toFixed(1)}" text-anchor="middle">${esc(q.name)}</text>` : ''}
       </g>`;
     });
-
-    /* where two paths actually meet, called out on the map rather than beside it */
-    if(meet){
-      const p = toScreen(merc(meet.lat, meet.lng));
-      const bw = 66, bh = 14;
-      out += `<g class="mmeet">
-        <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="8.5" fill="none" stroke="#C9922E" stroke-width="1.4" opacity=".6"/>
-        <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4.5" fill="#C9922E" stroke="#F6F2E6" stroke-width="2"/>
-        <rect x="${(p.x - bw / 2).toFixed(1)}" y="${(p.y + 11).toFixed(1)}" width="${bw}" height="${bh}" rx="2"/>
-        <text x="${p.x.toFixed(1)}" y="${(p.y + 20.8).toFixed(1)}" text-anchor="middle">${esc(meet.label)}</text>
-      </g>`;
-    }
 
     svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
     svg.innerHTML = out;
@@ -4159,9 +4221,10 @@ const jmap = makeLiveMap($('#journey-map'), $('#jmap-svg'), $$('#journey-map .zo
   {autofit: false});
 wireMapSearch();
 const dmap = makeLiveMap($('#discover-map'), $('#dmap-svg'), $$('#discover-map .zoomctl button'),
-  {places: DPLACES, routes: {}, view: dmapView, autofit: false, quiet: true});
+  {places: DPLACES, routes: DROUTES, view: dmapView, autofit: false});
 const xmap = makeLiveMap($('#crossing-map'), $('#xmap-svg'), $$('#crossing-map .zoomctl button'),
-  {places: XPLACES, routes: XROUTES, view: xmapView, meet: XMEET});
+  {places: XPLACES, routes: XROUTES, view: xmapView, cross: XCROSS,
+   layers: xmapLayers, autofit: false});
 renderSpots('nearby'); renderPfPanel('works'); renderInsp('All'); renderRecords(); renderKnNearby(); renderMapSocial();
 syncObGate(); renderStops(); applyCapOpts(); applyTrack(); renderAudio(); applyLook(); renderLibrary(); renderCapSet(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
 
@@ -4518,9 +4581,12 @@ document.addEventListener('click', e=>{
   if(layer){
     const on = layer.getAttribute('aria-pressed')!=='true';
     layer.setAttribute('aria-pressed', String(on));
-    const g = $(`#journey-map [data-route="${layer.dataset.layer}"]`);
-    if(g) g.style.opacity = on ? '1' : '0';
-    mapLayers[layer.dataset.layer] = on;
+    const frame = layer.closest('.jmap');
+    const g = frame && frame.querySelector(`[data-route="${layer.dataset.layer}"]`);
+    /* clearing the override hands the line back to its own resting opacity,
+       which is not 1 for another explorer's dotted path */
+    if(g) g.style.opacity = on ? '' : '0';
+    (frame && frame.id === 'crossing-map' ? xmapLayers : mapLayers)[layer.dataset.layer] = on;
     return;
   }
 
