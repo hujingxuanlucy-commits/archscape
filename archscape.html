@@ -909,8 +909,7 @@ figure{margin:0}
 .bfactlist dd{margin:0;flex:1;font-size:13.5px;line-height:1.5;color:var(--ink)}
 
 /* ---- the same building through other people's eyes ---- */
-.capintro{margin:2px 22px 18px;font-size:13.5px;line-height:1.6;color:var(--muted);max-width:60ch}
-.caplist{display:grid;grid-template-columns:1fr 1fr;gap:20px 13px;padding:0 22px 26px}
+.caplist{display:grid;grid-template-columns:1fr 1fr;gap:20px 13px;padding:6px 22px 26px}
 .capcard{margin:0;min-width:0}
 .capcard img{display:block;border-radius:9px;background:var(--bone-soft);
   width:100%;aspect-ratio:4/3;object-fit:cover}
@@ -3483,9 +3482,6 @@ function renderCaptures(id){
   $('#cap-title').textContent = b.name;
   $('#cap-count').textContent = b.shots.length + ' from your circle';
   $('#cap-body').innerHTML = `
-    <p class="capintro">Captures of ${esc(b.name)} by explorers you follow.
-      ${b.captures.toLocaleString('en-US')} in total, across
-      ${b.explorers.toLocaleString('en-US')} people.</p>
     <div class="caplist">${b.shots.map(([img, who], i)=>{
       const p = PEOPLE[who];
       return `<figure class="capcard">
