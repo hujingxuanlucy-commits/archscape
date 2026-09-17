@@ -71,6 +71,9 @@ figure{margin:0}
   pointer-events:none;color:var(--ink);transition:color .3s}
 .viewport[data-chrome="dark"] .statusbar{color:#fff}
 .viewport.sb-onlight .statusbar{color:var(--ink)}
+/* screens whose content scrolls up under the clock get a solid strip behind
+   it; the ones that mean to bleed (a cover photo, the camera) do not */
+.viewport.sb-solid .statusbar{background:var(--paper)}
 .sb-right{display:flex;align-items:center;gap:5px}
 .sb-dots{display:flex;gap:2.5px}
 .sb-dots i{width:5px;height:5px;border-radius:50%;background:currentColor;display:block}
@@ -2018,6 +2021,9 @@ const TRANS = ['leaving','to-left','to-right','from-left','from-right','appear',
 /* Finishing onboarding or signing in opens the app rather than just swapping screens. */
 const ENTER_FROM = ['obready','signin'];
 
+/* content on these scrolls up behind the status bar, so the strip behind the
+   clock is painted rather than left transparent */
+const SB_SOLID = new Set(['discover', 'knowledge', 'journey', 'crossing', 'stat', 'member', 'group']);
 function go(id, isBack){
   const s = SCREENS.find(x=>x.id===id); if(!s) return;
   const from = current;
@@ -2052,6 +2058,7 @@ function go(id, isBack){
   }
   viewport.dataset.chrome = s.chrome;
   if(id !== 'profile') viewport.classList.remove('sb-onlight');
+  viewport.classList.toggle('sb-solid', SB_SOLID.has(id));
   tabbar.hidden = !s.nav;
   tabbar.classList.toggle('appear', entering);
   /* Several screens hang off more than one tab - Community is reached from
