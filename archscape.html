@@ -75,9 +75,13 @@ figure{margin:0}
    it; the ones that mean to bleed (a cover photo, the camera) do not */
 .viewport.sb-solid .statusbar{background:var(--paper)}
 .sb-right{display:flex;align-items:center;gap:5px}
-.sb-dots{display:flex;gap:2.5px}
-.sb-dots i{width:5px;height:5px;border-radius:50%;background:currentColor;display:block}
-.sb-tri{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:9px solid currentColor}
+.sb-ico{display:block;flex:none;fill:currentColor}
+.sb-cell{height:10.5px;width:15.8px}
+.sb-wifi{height:10.5px;width:14px;margin-left:.5px}
+.sb-batt{height:11.5px;width:23.9px;margin-left:1.5px}
+/* the shell and its cap sit back; only the charge itself reads at full weight */
+.sb-batt .sb-shell{fill:none;stroke:currentColor;stroke-width:1.2;opacity:.38}
+.sb-batt .sb-cap{opacity:.38}
 
 .screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
   background:var(--paper);display:none;z-index:1;scrollbar-width:none}
@@ -1351,9 +1355,24 @@ figure{margin:0}
         <div class="statusbar">
           <span class="tnum">9:41</span>
           <span class="sb-right">
-            <span class="sb-dots"><i></i><i></i><i></i></span>
-            <span class="sb-tri"></span>
+            <svg class="sb-ico sb-cell" viewBox="0 0 18 12" aria-hidden="true">
+              <rect x="0" y="8" width="3" height="4" rx="1"/>
+              <rect x="5" y="5.5" width="3" height="6.5" rx="1"/>
+              <rect x="10" y="3" width="3" height="9" rx="1"/>
+              <rect x="15" y="0" width="3" height="12" rx="1"/>
+            </svg>
+            <svg class="sb-ico sb-wifi" viewBox="0 0 16 12" aria-hidden="true"
+              fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+              <path d="M1.4 4.6A9.4 9.4 0 0 1 14.6 4.6"/>
+              <path d="M3.9 7.2A6 6 0 0 1 12.1 7.2"/>
+              <path d="M6.4 9.8A2.6 2.6 0 0 1 9.6 9.8"/>
+            </svg>
             <span class="tnum">100%</span>
+            <svg class="sb-ico sb-batt" viewBox="0 0 27 13" aria-hidden="true">
+              <rect class="sb-shell" x=".6" y=".6" width="21.8" height="11.8" rx="3.6"/>
+              <path class="sb-cap" d="M24.2 4.6a2.6 2.6 0 0 1 0 3.8z"/>
+              <rect class="sb-level" x="2.2" y="2.2" width="18.6" height="8.6" rx="2.2"/>
+            </svg>
           </span>
         </div>
 
