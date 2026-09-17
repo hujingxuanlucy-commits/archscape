@@ -1057,6 +1057,8 @@ figure{margin:0}
 .savebtn svg{width:15px;height:15px}
 .savebtn[aria-pressed="true"]{background:var(--red);border-color:var(--red)}
 .savebtn[aria-pressed="true"] svg{fill:#fff}
+.iconbtn[aria-pressed="true"]{color:var(--red)}
+.iconbtn[aria-pressed="true"] svg{fill:currentColor}
 .empty{grid-column:1/-1;text-align:center;padding:44px 26px;color:var(--muted)}
 .empty p{margin:0 0 16px;font-size:13.5px;line-height:1.6}
 .empty .sectitle{margin-bottom:8px}
@@ -1909,7 +1911,7 @@ the city folded in on itself.</textarea>
 
         <!-- ============ BUILDING ============ -->
         <section class="screen pad padnav" id="s-building">
-          <div class="ci-head"><button class="iconbtn" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><h2 class="h-title sm">Building</h2><button class="iconbtn" aria-label="Save building"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg></button></div>
+          <div class="ci-head"><button class="iconbtn" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><h2 class="h-title sm">Building</h2><button class="iconbtn" id="b-save" data-bsave aria-pressed="false" aria-label="Save this building"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg></button></div>
           <div id="b-body"></div>
         </section>
 
@@ -3434,6 +3436,11 @@ function renderBuilding(id){
   curBuilding = id;
   const b = bldById(id);
   if(!b) return;
+  const save = $('#b-save');
+  if(save){
+    save.setAttribute('aria-pressed', String(!!b.saved));
+    save.setAttribute('aria-label', (b.saved ? 'Remove ' : 'Save ') + b.name);
+  }
   const walkKey = Object.keys(GROUPS).find(k => GROUPS[k].walk && GROUPS[k].walk.bld === id);
   const g = walkKey ? GROUPS[walkKey] : null;
   $('#b-body').innerHTML = `
@@ -5171,6 +5178,18 @@ document.addEventListener('click', e=>{
     p.saved = !p.saved; reExplore();
     toast(p.saved ? 'Saved to your library' : 'Removed from library'); return;
   }
+  if(t.closest('[data-bsave]')){
+    const b = bldById(curBuilding);
+    if(b){
+      b.saved = !b.saved;
+      const btn = $('#b-save');
+      btn.setAttribute('aria-pressed', String(b.saved));
+      btn.setAttribute('aria-label', (b.saved ? 'Remove ' : 'Save ') + b.name);
+      toast(b.saved ? 'Saved ' + b.name : 'Removed ' + b.name);
+    }
+    return;
+  }
+
   const sv = t.closest('[data-save]');
   if(sv){
     const x = INSP[+sv.dataset.save]; x.saved = !x.saved;
