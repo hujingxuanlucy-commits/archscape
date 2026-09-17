@@ -2202,6 +2202,39 @@ const INSP = [
 ];
 
 const RECORDS = [
+  {id:'nypl', img:'w3', name:'New York Public Library', city:'New York', style:'Beaux-Arts',
+   architect:'Carrere & Hastings', year:'1911', captures:1103, explorers:288,
+   about:'Built on the bones of the Croton Reservoir, and it still carries the reservoir\'s logic - the stacks were engineered first and the reading room floated on top of them. The carving on the Fifth Avenue front only pays off from across the street.',
+   facts:[['Architects','Carrere & Hastings, opened 1911'],
+          ['Reading room','Rose Main Reading Room, 297 ft long, 52 ft ceilings'],
+          ['Stone','Vermont marble'],
+          ['The lions','Patience and Fortitude, Edward Clark Potter, 1911'],
+          ['Status','National Historic Landmark, 1965']],
+   shots:[['w3','sofia']]},
+  {id:'empire', img:'w12', name:'Empire State Building', city:'New York', style:'Art Deco',
+   architect:'Shreve, Lamb & Harmon', year:'1931', captures:2871, explorers:704,
+   about:'Put up in about 410 days during the Depression, a storey a day at its fastest, and then half empty for years - the papers called it the Empty State Building. The setbacks are not styling; they are the 1916 zoning code drawn in limestone.',
+   facts:[['Height','381 m to the roof, 443 m to the tip'],['Storeys','102'],
+          ['Built','March 1930 to April 1931, about 410 days'],
+          ['Frame','About 57,000 tons of steel'],
+          ['Status','National Historic Landmark, 1986']],
+   shots:[['w12','mia'],['checkin','kenji']]},
+  {id:'parkav', img:'w7', name:'Park Avenue Facades', city:'New York', style:'Modernism',
+   architect:'Bunshaft, Mies and after', year:'1952-1970', captures:742, explorers:210,
+   about:'Twelve blocks of curtain wall put up inside twenty years, each one arguing with the last about how a mullion should meet the sky. Read it walking north in the late afternoon, when the whole corridor turns one colour.',
+   facts:[['Where','Park Avenue, roughly 46th to 59th'],
+          ['Opened by','Lever House 1952, Seagram 1958'],
+          ['Material','Bronze, stainless steel, tinted glass'],
+          ['Why it looks like this','The 1961 zoning traded height for plazas']],
+   shots:[['w7','mia'],['ar_facade','marco'],['feedthumb','sofia']]},
+  {id:'highline', img:'highline', name:'The High Line', city:'New York', style:'Contemporary',
+   architect:'Field Operations with Diller Scofidio + Renfro', year:'2009', captures:1520, explorers:431,
+   about:'A freight viaduct that carried meat into the West Side until 1980, then grew its own meadow for twenty-five years while nobody came. What you walk through now is a designed version of what turned up on its own.',
+   facts:[['Opened','Section one, 2009; finished 2014'],['Length','1.45 miles / 2.33 km'],
+          ['Was','A New York Central freight spur - last train 1980'],
+          ['Planting','Modelled on the self-seeded meadow that grew after it closed'],
+          ['Height','About 30 ft above the street']],
+   shots:[['highline','nora'],['w10','nadia']]},
   {id:'vessel', img:'vessel_hero', name:'The Vessel', city:'New York', style:'Contemporary',
    architect:'Thomas Heatherwick', year:'2019',
    about:'Sixteen storeys of staircase that go nowhere except back into themselves. The pleasure of it is watching other people climb - every landing frames somebody else mid-flight, which is a strange thing for a building to be for.',
@@ -3430,7 +3463,7 @@ function renderBuilding(id){
         <div style="margin-top:13px"><button class="btn-outline" data-group="${walkKey}">Open group</button></div>
       </div>` : ''}
     <div class="sechead" style="padding-top:18px"><h3 class="sectitle">Captured by</h3>
-      <button class="seelink" data-captures="${id}">See all ${b.shots.length}</button></div>
+      <button class="seelink" data-captures="${id}">${b.shots.length} capture${b.shots.length === 1 ? '' : 's'}</button></div>
     <div class="shots">${b.shots.map(([img, who])=>
       `<button class="shot" data-member="${who}"><img src="${IMG[img]}" alt="">
         <span class="who">${esc(PEOPLE[who].handle)}</span></button>`).join('')}</div>
@@ -4004,19 +4037,18 @@ const PLACES = [
    img:'ar_facade', n:2104, bld:'seagram'},
   {id:'gugg',   name:'Guggenheim',          lat:40.7830, lng:-73.9590, c:'#3B6E9D', kind:'Art Spaces'},
   {id:'parkav', name:'Park Ave Facades',    lat:40.7549, lng:-73.9756, c:'#7B7C79', kind:'Photography',
-   img:'w7', n:742},
+   img:'w7', n:742, bld:'parkav'},
   {id:'vessel', name:'The Vessel',          lat:40.7539, lng:-74.0021, c:'#AF2B34', kind:'Architecture',
    img:'vessel_hero', n:3184, bld:'vessel'},
   {id:'chrysler',name:'Chrysler Building',  lat:40.7516, lng:-73.9755, c:'#AF2B34', kind:'Architecture'},
   {id:'empire', name:'Empire State',        lat:40.7484, lng:-73.9857, c:'#AF2B34', kind:'Architecture',
-   img:'w12', n:2871},
+   img:'w12', n:2871, bld:'empire'},
   {id:'whitney',name:'Whitney Museum',      lat:40.7396, lng:-74.0089, c:'#3B6E9D', kind:'Art Spaces'},
-  {id:'grand',  name:'Grand Central',       lat:40.7527, lng:-73.9772, c:'#7B7C79', kind:'Photography',
-   img:'checkin', n:964},
+  {id:'grand',  name:'Grand Central',       lat:40.7527, lng:-73.9772, c:'#7B7C79', kind:'Photography'},
   {id:'highline',name:'The High Line',      lat:40.7480, lng:-74.0048, c:'#7B7C79', kind:'Photography',
-   img:'highline', n:1520},
+   img:'highline', n:1520, bld:'highline'},
   {id:'nypl',   name:'NY Public Library',   lat:40.7532, lng:-73.9822, c:'#AF2B34', kind:'Architecture',
-   img:'w3', n:1103},
+   img:'w3', n:1103, bld:'nypl'},
   {id:'rock',   name:'Rockefeller Center',  lat:40.7587, lng:-73.9787, c:'#AF2B34', kind:'Architecture'},
   {id:'radio',  name:'Radio City',          lat:40.7599, lng:-73.9800, c:'#3B6E9D', kind:'Art Spaces'},
   {id:'stpat',  name:"St Patrick's",        lat:40.7585, lng:-73.9760, c:'#AF2B34', kind:'Architecture'},
