@@ -5,6 +5,7 @@
 <style>
 :root{
   --red:#952324; --red-deep:#761618; --red-tint:#F5E9E9;
+  --route:#75202F;   /* my own path - kept apart from the Architecture crimson */
   --ink:#0F0F0F; --ink-soft:#1C1C1E; --ink-line:#2E2E32;
   --paper:#FAF8F5; --white:#FFFFFF;
   --steel:#3E6B9A; --graphite:#666666;
@@ -894,8 +895,14 @@ figure{margin:0}
 .stop::after{content:"";position:absolute;left:80px;top:22px;bottom:-4px;width:2px;background:var(--bone)}
 .stop:last-child::after{display:none}
 .stoptime{flex:none;width:42px;font-size:11.5px;color:var(--muted-2);padding-top:11px}
-.stopdot{flex:none;width:11px;height:11px;border-radius:50%;background:var(--c);margin-top:13px;
+/* the same three states the map draws: done is solid, current is emphasised,
+   next is hollow - all in the journey colour, never the category's */
+.stopdot{flex:none;width:11px;height:11px;border-radius:50%;background:var(--route);margin-top:13px;
   box-shadow:0 0 0 3.5px var(--paper);position:relative;z-index:2}
+.stopdot.done{width:9px;height:9px;margin-top:14px}
+.stopdot.current{width:13px;height:13px;margin-top:12px;background:var(--paper);
+  border:3.5px solid var(--route);box-shadow:0 0 0 3.5px var(--paper),0 0 0 7px rgba(117,32,47,.15)}
+.stopdot.next{background:var(--paper);border:2px solid var(--route);opacity:.7}
 .stopbody{flex:1;min-width:0;padding:9px 0 13px}
 .stopbody b{display:block;font-size:13.5px;font-weight:600;color:var(--ink)}
 .stopbody > span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
@@ -1876,35 +1883,18 @@ the city folded in on itself.</textarea>
           <div class="ci-head">
             <button class="iconbtn" data-go="journey" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
             <h2 class="h-title sm">Paths Crossing</h2>
-            <span class="seelink" style="cursor:default">3 nearby</span>
+            <span class="seelink" style="cursor:default">3 path crossings</span>
           </div>
           <div class="xmap jmap" id="crossing-map">
             <svg class="mapcanvas" id="xmap-svg" aria-label="Map of your path crossing other explorers'"></svg>
-            <div class="legend legend-people">
-              <h4>Paths</h4>
-              <span class="legme"><i style="background:#75202F"></i>You</span>
-              <button data-layer="javier" aria-pressed="true" style="color:#C2748C">
-                <em class="legav" data-av="javier"></em><i class="dotted"></i>@javier.arq</button>
-              <button data-layer="kai" aria-pressed="true" style="color:#6E93B8">
-                <em class="legav" data-av="kai"></em><i class="dotted"></i>@kai</button>
-              <button data-layer="sara" aria-pressed="true" style="color:#6F8F63">
-                <em class="legav" data-av="sara"></em><i class="dotted"></i>@sara</button>
-            </div>
+
             <div class="zoomctl">
               <button data-zoom="in" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
               <button data-zoom="out" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
               <button data-zoom="reset" aria-label="Fit all">Fit</button>
             </div>
           </div>
-          <div class="xperson">
-            <span class="avatar" data-av="javier" data-member="javier" style="width:52px;height:52px;font-size:16px;cursor:pointer"></span>
-            <button class="grow" data-member="javier" style="text-align:left">
-              <b>@javier.arq</b>
-              <span>Madrid · 400m away</span>
-              <span class="likes">Loves Brutalism, Photography, Urban Design</span>
-            </button>
-            <button class="sayhi" id="sayhi" aria-pressed="false">Message</button>
-          </div>
+          <div class="xperson" id="xperson"></div>
           <div class="xcta">
             <button class="btn btn-red" id="meetup">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 19a6.5 6.5 0 0 1 13 0"/><path d="M16.5 5.4a3.2 3.2 0 0 1 0 5.2"/><path d="M18 14.2a6.5 6.5 0 0 1 3.5 4.8"/></svg>
@@ -1916,8 +1906,8 @@ the city folded in on itself.</textarea>
             <button class="seelink" data-comm="following">See All</button>
           </div>
           <div class="xavatars">
-            <div class="xav"><span class="avatar" data-av="kai" data-member="kai"></span><span>@kai</span></div>
-            <div class="xav"><span class="avatar" data-av="sara" data-member="sara"></span><span>@sara</span></div>
+            <div class="xav"><span class="avatar" data-av="mia" data-member="mia"></span><span>@mia.liu</span></div>
+            <div class="xav"><span class="avatar" data-av="nora" data-member="nora"></span><span>@nora.k</span></div>
             <div class="xav"><span class="avatar" data-av="pedro" data-member="pedro"></span><span>@pedro</span></div>
           </div>
         </section>
@@ -3278,6 +3268,30 @@ function renderGroup(id){
       : '<div class="empty"><p>No posts in this group yet.</p></div>'}`;
 }
 
+/* ---------- the person whose crossing you are looking at ---------- */
+function renderXPerson(){
+  const p = PEOPLE[xSel], m = XMETA.find(x => x.id === xSel);
+  /* which of my own stops the crossing happened beside */
+  let near = '';
+  if(m && m.at){
+    let bd = Infinity;
+    STOPS.forEach(st=>{
+      const q = PLACES.find(z => z.id === st.id); if(!q) return;
+      const o = merc(q.lat, q.lng);
+      const d = Math.hypot(o.x - m.at.x, o.y - m.at.y) * XKLAT;
+      if(d < bd){ bd = d; near = st.name; }
+    });
+  }
+  $('#xperson').innerHTML = `
+    <span class="avatar art" data-member="${xSel}" style="width:52px;height:52px;cursor:pointer">${AV[xSel] || ''}</span>
+    <button class="grow" data-member="${xSel}" style="text-align:left">
+      <b>${esc(p.handle)}</b>
+      <span>${esc(p.city)}${near ? ' &#183; your paths crossed near ' + esc(near) : ''}</span>
+      <span class="likes">${esc(p.bio)}</span>
+    </button>
+    <button class="sayhi" id="sayhi" aria-pressed="false">Message</button>`;
+}
+
 /* ---------- member ---------- */
 function renderMember(id){
   curMember = id;
@@ -3399,9 +3413,15 @@ function renderSpots(key){
   link.removeAttribute('data-comm');
   link.dataset.go = 'knowledge';
   box.className = 'spots';
-  box.innerHTML = SPOTS[key].map(s=>`
-    <button class="spot" data-building="${s.id}"><img src="${IMG[s.img]}" alt="${esc(s.name)}">
-      <figcaption><b>${esc(s.name)}</b><span>${esc(s.city)} &#183; ${s.n} check-ins</span></figcaption></button>`).join('');
+  box.innerHTML = NEARBY.map(s=>{
+    const m = Math.round(walkFrom(s));
+    const away = m < 950 ? m + ' m' : (m / 1000).toFixed(1) + ' km';
+    /* the two that exist as full records open them; the rest put themselves
+       on the map above, which is where they came from */
+    const act = s.bld ? `data-building="${s.bld}"` : `data-spot="${s.id}"`;
+    return `<button class="spot" ${act}><img src="${IMG[s.img]}" alt="${esc(s.name)}">
+      <figcaption><b>${esc(s.name)}</b><span>${away} away &#183; ${s.n} check-ins</span></figcaption></button>`;
+  }).join('');
 }
 const WORKS = [
   {img:'w1', t:'Shadow line, Broadgate'},   {img:'w2', t:'Willis Building curve'},
@@ -3666,7 +3686,7 @@ function renderStops(){
   $('#stops').innerHTML = STOPS.map(s=>`
     <button class="stop" data-stop="${s.id}" aria-pressed="${mapView.sel === s.id}">
       <span class="stoptime tnum">${esc(s.t)}</span>
-      <span class="stopdot" style="--c:${s.c}"></span>
+      <span class="stopdot ${s.status}"></span>
       <span class="stopbody"><b>${esc(s.name)}</b><span>${esc(s.meta)}</span></span>
     </button>`).join('');
 }
@@ -3880,14 +3900,29 @@ const MAPINK = {
 
 const PLACES = [
   {id:'moma',   name:'MoMA',                lat:40.7614, lng:-73.9776, c:'#3B6E9D', kind:'Art Spaces'},
-  {id:'seagram',name:'Seagram Building',    lat:40.7587, lng:-73.9720, c:'#AF2B34', kind:'Architecture'},
+  {id:'seagram',name:'Seagram Building',    lat:40.7587, lng:-73.9720, c:'#AF2B34', kind:'Architecture',
+   img:'ar_facade', n:2104, bld:'seagram'},
   {id:'gugg',   name:'Guggenheim',          lat:40.7830, lng:-73.9590, c:'#3B6E9D', kind:'Art Spaces'},
-  {id:'parkav', name:'Park Ave Facades',    lat:40.7549, lng:-73.9756, c:'#7B7C79', kind:'Photography'},
-  {id:'vessel', name:'The Vessel',          lat:40.7539, lng:-74.0021, c:'#AF2B34', kind:'Architecture'},
+  {id:'parkav', name:'Park Ave Facades',    lat:40.7549, lng:-73.9756, c:'#7B7C79', kind:'Photography',
+   img:'w7', n:742},
+  {id:'vessel', name:'The Vessel',          lat:40.7539, lng:-74.0021, c:'#AF2B34', kind:'Architecture',
+   img:'vessel_hero', n:3184, bld:'vessel'},
   {id:'chrysler',name:'Chrysler Building',  lat:40.7516, lng:-73.9755, c:'#AF2B34', kind:'Architecture'},
-  {id:'empire', name:'Empire State',        lat:40.7484, lng:-73.9857, c:'#AF2B34', kind:'Architecture'},
+  {id:'empire', name:'Empire State',        lat:40.7484, lng:-73.9857, c:'#AF2B34', kind:'Architecture',
+   img:'w12', n:2871},
   {id:'whitney',name:'Whitney Museum',      lat:40.7396, lng:-74.0089, c:'#3B6E9D', kind:'Art Spaces'},
-  {id:'grand',  name:'Grand Central',       lat:40.7527, lng:-73.9772, c:'#7B7C79', kind:'Photography'}
+  {id:'grand',  name:'Grand Central',       lat:40.7527, lng:-73.9772, c:'#7B7C79', kind:'Photography',
+   img:'checkin', n:964},
+  {id:'highline',name:'The High Line',      lat:40.7480, lng:-74.0048, c:'#7B7C79', kind:'Photography',
+   img:'highline', n:1520},
+  {id:'nypl',   name:'NY Public Library',   lat:40.7532, lng:-73.9822, c:'#AF2B34', kind:'Architecture',
+   img:'w3', n:1103},
+  {id:'rock',   name:'Rockefeller Center',  lat:40.7587, lng:-73.9787, c:'#AF2B34', kind:'Architecture'},
+  {id:'radio',  name:'Radio City',          lat:40.7599, lng:-73.9800, c:'#3B6E9D', kind:'Art Spaces'},
+  {id:'stpat',  name:"St Patrick's",        lat:40.7585, lng:-73.9760, c:'#AF2B34', kind:'Architecture'},
+  {id:'paley',  name:'Paley Park',          lat:40.7590, lng:-73.9744, c:'#7B7C79', kind:'Photography'},
+  {id:'morgan', name:'Morgan Library',      lat:40.7492, lng:-73.9814, c:'#3B6E9D', kind:'Art Spaces'},
+  {id:'ford',   name:'Ford Foundation',     lat:40.7497, lng:-73.9707, c:'#AF2B34', kind:'Architecture'}
 ];
 
 /* Discover shows the places you could walk to now; the two that exist as full
@@ -3900,8 +3935,19 @@ const DPLACES = PLACES.map(q => Object.assign({}, q, {
   state: DSTATE[q.id] || '',
   bld: q.id === 'seagram' ? 'seagram' : undefined
 }));
-const DYOU = {lat: 40.7570, lng: -73.9795};
-let dmapView = {lat: 40.7601, lng: -73.9820, scale: 0.0423, sel: null};
+const DYOU = {lat: 40.7550, lng: -73.9870};
+/* how far each place is from you, in metres, which is what decides both the
+   framing and which cards appear underneath */
+function walkFrom(q){
+  const dLat = (q.lat - DYOU.lat) * 111320;
+  const dLng = (q.lng - DYOU.lng) * 111320 * Math.cos(DYOU.lat * Math.PI / 180);
+  return Math.hypot(dLat, dLng);
+}
+/* the cards below the map are the nearest places that have a picture, so what
+   you read is always what you are looking at - no Hong Kong under a
+   Midtown map */
+const NEARBY = DPLACES.filter(q => q.img).sort((a, b) => walkFrom(a) - walkFrom(b)).slice(0, 6);
+let dmapView = {lat: DYOU.lat + .0016, lng: DYOU.lng + .0026, scale: 0.108, sel: null};
 
 /* Paths crossing: your own three routes with other explorers' tracks laid
    over them. Theirs are dotted and in their own hue, so ownership reads
@@ -3960,6 +4006,21 @@ function gridPt(a, s){
   return {x: o.x + dx * k, y: o.y + dy * k};
 }
 
+/* metres from a point to a segment, corrected back to ground distance -
+   mercator stretches north-south by 1/cos(lat) */
+function segMetres(q, a, b, kLat){
+  const dx = b.x - a.x, dy = b.y - a.y, l2 = dx*dx + dy*dy;
+  let t = l2 ? ((q.x-a.x)*dx + (q.y-a.y)*dy) / l2 : 0;
+  t = t < 0 ? 0 : t > 1 ? 1 : t;
+  return Math.hypot(a.x + t*dx - q.x, a.y + t*dy - q.y) * kLat;
+}
+function metresToPath(q, pts, kLat){
+  let best = Infinity;
+  for(let i = 1; i < pts.length; i++)
+    best = Math.min(best, segMetres(q, pts[i-1], pts[i], kLat));
+  return best;
+}
+
 /* the inverse of gridPt: where a point falls in avenues-and-streets */
 function gridInv(m){
   const th = MAP.bearing * Math.PI / 180;
@@ -3991,6 +4052,23 @@ function walked(list){
   return out;
 }
 
+const XKLAT = Math.cos(40.758 * Math.PI / 180);
+const XMINE = walked(Object.values(JROUTES)
+  .flatMap(r => r.stops.map(id => PLACES.find(q => q.id === id)))
+  .map(q => merc(q.lat, q.lng)));
+const XMETA = Object.entries(XWALK).map(([id, r])=>{
+  const pts = walked(r.pts.map(q => merc(q.lat, q.lng)));
+  let best = null, bd = Infinity;
+  pts.forEach(m=>{ const d = metresToPath(m, XMINE, XKLAT); if(d < bd){ bd = d; best = m; } });
+  return {id, c: r.c, at: best, d: bd};
+});
+/* the frame is the overlap, not the island: the three crossings plus the
+   stretch of my own walk that runs between them */
+const XFOCUS = XMETA.map(m=>m.at)
+  .concat(XMINE.filter(m => metresToPath(m, XMETA.map(x=>x.at), XKLAT) < 1400))
+  .map(m => ({lat: (2 * Math.atan(Math.exp(m.y / R_E)) - Math.PI / 2) * 180 / Math.PI,
+              lng: m.x / R_E * 180 / Math.PI}));
+let xSel = 'javier';
 let mapView = {lat: 40.7584, lng: -73.9820, scale: 0.0401, sel: null};
 const xmapLayers = {walked:true, next:true, javier:true, kai:true, sara:true};
 
@@ -4029,6 +4107,10 @@ function makeLiveMap(frame, svg, buttons, opts){
   function draw(){
     const {w, h} = size();
     const sc = view.scale;
+    /* clipPath ids used to be the same string in all three maps, so every
+       reference resolved to whichever map was first in the document - and
+       that map's clip is computed for its own view. Scope them per map. */
+    const uid = svg.id || 'map';
     const P = (a, s) => toScreen(gridPt(a, s));
     const line = (p1, p2, cls, sw) =>
       `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" class="${cls}" stroke-width="${sw}"/>`;
@@ -4044,7 +4126,9 @@ function makeLiveMap(frame, svg, buttons, opts){
     out += `<rect class="mwater" x="0" y="0" width="${w}" height="${h}"/>`;
     const keys = Object.keys(LAND);
     out += '<defs>' + keys.map(k =>
-      `<clipPath id="clip-${k}">${poly(LAND[k].map(ll), '')}</clipPath>`).join('') + '</defs>';
+      `<clipPath id="${uid}-clip-${k}">${poly(LAND[k].map(ll), '')}</clipPath>`).join('')
+      + `<clipPath id="${uid}-land">` + keys.map(k => poly(LAND[k].map(ll), '')).join('')
+      + '</clipPath></defs>';
     keys.forEach(k => { out += poly(LAND[k].map(ll), 'mland'); });
 
     /* Each borough has its own grid, at its own real bearing, clipped to its
@@ -4079,7 +4163,7 @@ function makeLiveMap(frame, svg, buttons, opts){
           if(Math.max(p1.y, p2.y) < 0 || Math.min(p1.y, p2.y) > h) continue;
           d += `M${p1.x.toFixed(1)} ${p1.y.toFixed(1)}L${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
         }
-        if(d) out += `<path class="mfabric" clip-path="url(#clip-${f.k})" d="${d}" stroke-width="${
+        if(d) out += `<path class="mfabric" clip-path="url(#${uid}-clip-${f.k})" d="${d}" stroke-width="${
           Math.max(.35, Math.min(.9, sc * 1.4)).toFixed(2)}"/>`;
       });
     }
@@ -4096,13 +4180,16 @@ function makeLiveMap(frame, svg, buttons, opts){
       `<polyline class="${cls}" stroke-width="${wgt.toFixed(2)}" fill="none" points="${
         pts.map(ll).map(p=>p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ')}"/>`;
 
-    ARTERIALS.forEach(r => {
-      out += path(r.p, r.k === 'exp' ? 'mexp' : 'mart', r.k === 'exp' ? sw * 1.5 : sw * 1.1);
-    });
+    out += `<g clip-path="url(#${uid}-land)">` + ARTERIALS.map(r =>
+      path(r.p, r.k === 'exp' ? 'mexp' : 'mart', r.k === 'exp' ? sw * 1.5 : sw * 1.1)
+    ).join('') + '</g>';
     BRIDGES.forEach(b => { out += path(b, 'mbridge', sw * 1.3); });
 
     /* Manhattan's grid: the avenues that structure the island survive the wide
-       view, the cross streets and then the local grid arrive on the way down */
+       view, the cross streets and then the local grid arrive on the way down.
+       All of it is generated in grid space, which runs past the shoreline, so
+       it is clipped to the island rather than trusted to stop on its own. */
+    let grid = '';
     if(!Z.city){
       /* every cross street once they are 5px apart - that dense orthogonal
          field is the strongest style cue the reference has */
@@ -4115,10 +4202,10 @@ function makeLiveMap(frame, svg, buttons, opts){
         const wgt = major ? sw * 1.2 : sw * .85;
         const inPark = st > pk.s && st < pk.n;
         if(inPark){
-          out += line(P(pk.e, st), P(7.4, st), cls, wgt);
-          out += line(P(-6.4, st), P(pk.w, st), cls, wgt);
+          grid += line(P(pk.e, st), P(7.4, st), cls, wgt);
+          grid += line(P(-6.4, st), P(pk.w, st), cls, wgt);
         } else {
-          out += line(P(-6.4, st), P(7.4, st), cls, wgt);
+          grid += line(P(-6.4, st), P(7.4, st), cls, wgt);
         }
       }
     }
@@ -4136,7 +4223,7 @@ function makeLiveMap(frame, svg, buttons, opts){
           if(c.every(q => q.x < -pad || q.x > w + pad || q.y < -pad || q.y > h + pad)) continue;
           const cx = (c[0].x + c[1].x + c[2].x + c[3].x) / 4;
           const cy = (c[0].y + c[1].y + c[2].y + c[3].y) / 4;
-          out += poly(c.map(q => ({x: cx + (q.x - cx) * inset, y: cy + (q.y - cy) * inset})), 'mblock');
+          grid += poly(c.map(q => ({x: cx + (q.x - cx) * inset, y: cy + (q.y - cy) * inset})), 'mblock');
         }
       }
     }
@@ -4149,12 +4236,15 @@ function makeLiveMap(frame, svg, buttons, opts){
       const wgt = sw * (major ? 2 : 1.35);
       const crossesPark = a.i >= pk.w && a.i <= pk.e;
       if(crossesPark){
-        out += line(P(a.i, f), P(a.i, pk.s), cls, wgt);
-        out += line(P(a.i, pk.n), P(a.i, t), cls, wgt);
+        grid += line(P(a.i, f), P(a.i, pk.s), cls, wgt);
+        grid += line(P(a.i, pk.n), P(a.i, t), cls, wgt);
       } else {
-        out += line(P(a.i, f), P(a.i, t), cls, wgt);
+        grid += line(P(a.i, f), P(a.i, t), cls, wgt);
       }
     });
+
+    /* the island holds its own streets */
+    out += `<g clip-path="url(#${uid}-clip-manhattan)">` + grid + '</g>';
 
     /* the city names carry the wide view; they go once streets can do the job */
     /* boroughs name the wide view; stacking every Manhattan neighbourhood down
@@ -4165,7 +4255,7 @@ function makeLiveMap(frame, svg, buttons, opts){
       out += `<text class="${cls}" x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}" text-anchor="middle">${esc(d.n)}</text>`;
     });
     if(Z.district) nameAt(BOROUGHS, 'mborough');
-    if(sc >= .019 && sc < .1) nameAt(DISTRICTS, 'mdistrict');
+    if(sc >= .019 && sc < .17) nameAt(DISTRICTS, 'mdistrict');
     /* rivers and the park name themselves in the display italic, set over two
        lines the way the reference sets them */
     if(sc > .026 && sc < .3) HYDRO.forEach(d=>{
@@ -4201,7 +4291,6 @@ function makeLiveMap(frame, svg, buttons, opts){
        geometry underneath is identical on every screen. */
     const byId = Object.fromEntries(places.map(p=>[p.id, p]));
     const mode = opts.mode || 'journey';
-    const uid  = svg.id || 'map';
 
     /* An annotation drawn over a printed map: thin, flat, no casing and no
        glow. Navigation UI is thick because it is the subject; here the city
@@ -4219,26 +4308,14 @@ function makeLiveMap(frame, svg, buttons, opts){
       if(r.kind === 'friend') return;
       expand(r).forEach(m=>mine.push(m));
     });
-    /* metres from a point to my track. Mercator stretches north-south by
-       1/cos(lat), so the raw distance is corrected back to ground metres. */
     const kLat = Math.cos(view.lat * Math.PI / 180);
-    const toMine = q => {
-      let best = Infinity;
-      for(let i = 1; i < mine.length; i++){
-        const a = mine[i-1], b = mine[i];
-        const dx = b.x - a.x, dy = b.y - a.y, l2 = dx*dx + dy*dy;
-        let t = l2 ? ((q.x-a.x)*dx + (q.y-a.y)*dy) / l2 : 0;
-        t = t < 0 ? 0 : t > 1 ? 1 : t;
-        const d = Math.hypot(a.x + t*dx - q.x, a.y + t*dy - q.y) * kLat;
-        if(d < best) best = d;
-      }
-      return best;
-    };
+    const toMine = q => metresToPath(q, mine, kLat);
 
     /* How close a friend's walk has to come before it is worth drawing at
        strength. Past FAR it is someone else's day and it drops away. */
     const NEAR = 550, FAR = 1500;
     const halos = [], faces = [];
+    const chosen = opts.sel ? opts.sel() : null;
 
     Object.entries(routes).forEach(([k, r])=>{
       const pts = expand(r);
@@ -4252,10 +4329,15 @@ function makeLiveMap(frame, svg, buttons, opts){
         let run = [], band = null, near = null, best = null, bd = Infinity;
         const emit = ()=>{
           if(run.length < 2 || !band) return;
+          /* the chosen walk keeps its near stretch at full strength; the other
+             two sit back so there is one story on the page, not three */
+          const near = band === 'near';
           body += `<polyline class="mroute" points="${screenPts(run)}" stroke="${r.c}"
-            stroke-width="${(rw * .85).toFixed(1)}" opacity="${band === 'near' ? '.9' : '.28'}"
+            stroke-width="${(rw * (pick && near ? .9 : .78)).toFixed(1)}"
+            opacity="${near ? (pick ? '.95' : '.5') : (pick ? '.3' : '.16')}"
             stroke-dasharray="0.1 ${(rw * 2).toFixed(1)}"/>`;
         };
+        const pick = r.who && r.who === chosen;
         pts.forEach(m=>{
           const d = toMine(m);
           if(d < bd){ bd = d; best = m; }
@@ -4267,10 +4349,10 @@ function makeLiveMap(frame, svg, buttons, opts){
           } else run.push(m);
         });
         emit();
-        if(lit && best && bd < 300) halos.push(best);
+        if(lit && best && bd < 300 && pick) halos.push(best);
         /* their face sits where their walk entered my neighbourhood, so it
            reads as "this is whose line that is" without landing on the halo */
-        if(lit && r.who) faces.push({who: r.who, c: r.c, at: near || best || pts[0]});
+        if(lit && r.who) faces.push({who: r.who, c: r.c, at: near || best || pts[0], pick});
       } else {
         body = `<polyline class="mroute" points="${screenPts(pts)}" stroke="${r.c}"
           stroke-width="${rw.toFixed(1)}"${r.dash
@@ -4281,14 +4363,14 @@ function makeLiveMap(frame, svg, buttons, opts){
 
     /* Where two walks came close. A soft falloff rather than a flat disc, so
        it reads as an area of overlap and not as a drawn radius. */
+    out += `<defs><clipPath id="${uid}-circ" clipPathUnits="objectBoundingBox">
+      <circle cx=".5" cy=".5" r=".5"/></clipPath></defs>`;
     if(halos.length){
       out += `<defs><radialGradient id="${uid}-halo">
         <stop offset="0%" stop-color="${MAPINK.route}" stop-opacity=".24"/>
         <stop offset="55%" stop-color="${MAPINK.route}" stop-opacity=".13"/>
         <stop offset="100%" stop-color="${MAPINK.route}" stop-opacity="0"/>
-      </radialGradient>
-      <clipPath id="${uid}-circ" clipPathUnits="objectBoundingBox">
-        <circle cx=".5" cy=".5" r=".5"/></clipPath></defs>`;
+      </radialGradient></defs>`;
       halos.forEach(m=>{
         const q = toScreen(m);
         out += `<circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="${
@@ -4359,18 +4441,23 @@ function makeLiveMap(frame, svg, buttons, opts){
     });
 
     /* the people, drawn last so a face is never buried under a line */
+    faces.sort((a, b)=>(a.pick ? 1 : 0) - (b.pick ? 1 : 0));   /* chosen on top */
     faces.forEach(f=>{
-      const q = toScreen(f.at), z = 22, art = AV[f.who];
+      const q = toScreen(f.at), z = f.pick ? 32 : 24, art = AV[f.who];
       if(!art) return;
+      const cx = q.x.toFixed(1), cy = q.y.toFixed(1);
       const bx = (q.x - z/2).toFixed(1), by = (q.y - z/2).toFixed(1);
-      out += `<g class="mstop mface" data-member="${f.who}" data-place="x-${f.who}">
-        <circle class="mhit" cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="16"/>
+      out += `<g class="mstop mface${f.pick ? ' on' : ''}" data-face="${f.who}">
+        ${f.pick ? `<circle cx="${cx}" cy="${cy}" r="${(z/2 + 9).toFixed(1)}"
+          fill="${f.c}" opacity=".16"/>` : ''}
+        <circle class="mhit" cx="${cx}" cy="${cy}" r="${(z/2 + 6).toFixed(1)}"/>
         <g clip-path="url(#${uid}-circ)">${
           art.replace('<svg viewBox', `<svg x="${bx}" y="${by}" width="${z}" height="${z}" viewBox`)}</g>
-        <circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="${(z/2).toFixed(1)}"
-          fill="none" stroke="${MAPINK.paper}" stroke-width="2"/>
-        <circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="${(z/2 + 1).toFixed(1)}"
-          fill="none" stroke="${f.c}" stroke-width="1.2"/>
+        <circle cx="${cx}" cy="${cy}" r="${(z/2).toFixed(1)}"
+          fill="none" stroke="${MAPINK.paper}" stroke-width="${f.pick ? 2.4 : 2}"/>
+        <circle cx="${cx}" cy="${cy}" r="${(z/2 + (f.pick ? 1.6 : 1)).toFixed(1)}"
+          fill="none" stroke="${f.c}" stroke-width="${f.pick ? 1.8 : 1.1}"
+          opacity="${f.pick ? 1 : .75}"/>
       </g>`;
     });
 
@@ -4466,14 +4553,16 @@ function makeLiveMap(frame, svg, buttons, opts){
   }));
 
   function fitAll(){
-    const all = places.concat(...Object.values(routes).map(r=>r.pts || []));
+    const all = opts.fitPoints ? opts.fitPoints()
+      : places.concat(...Object.values(routes).map(r=>r.pts || []));
+    if(!all.length) return;
     const ms = all.map(q=>merc(q.lat, q.lng));
     const xs = ms.map(m=>m.x), ys = ms.map(m=>m.y);
     const {w, h} = size();
     const pad = Math.max(24, Math.min(46, Math.min(w, h) * 0.13));
     /* a short route must not pull the camera down to a street corner: keep the
        surrounding city in frame instead */
-    view.scale = Math.min(FIT_MAX,
+    view.scale = Math.min(opts.fitMax || FIT_MAX,
       (w - pad * 2) / (Math.max(...xs) - Math.min(...xs)),
       (h - pad * 2) / (Math.max(...ys) - Math.min(...ys)));
     setCentreMerc({x: (Math.max(...xs) + Math.min(...xs)) / 2,
@@ -4552,15 +4641,25 @@ const jmap = makeLiveMap($('#journey-map'), $('#jmap-svg'), $$('#journey-map .zo
 wireMapSearch();
 const dmap = makeLiveMap($('#discover-map'), $('#dmap-svg'), $$('#discover-map .zoomctl button'),
   {places: DPLACES, routes: {}, view: dmapView, autofit: false,
-   mode: 'explore', you: DYOU, flyScale: 0.085});
+   mode: 'explore', you: DYOU, flyScale: 0.085,
+   fitPoints: () => NEARBY.concat([DYOU]), fitMax: 0.2});
 const xmap = makeLiveMap($('#crossing-map'), $('#xmap-svg'), $$('#crossing-map .zoomctl button'),
   {places: XPLACES, routes: XROUTES, view: xmapView,
-   layers: xmapLayers, autofit: false, mode: 'crossing', flyScale: 0});
-renderSpots('nearby'); renderPfPanel('works'); renderInsp('All'); renderRecords(); renderKnNearby(); renderMapSocial();
+   layers: xmapLayers, autofit: true, mode: 'crossing', flyScale: 0,
+   fitPoints: () => XFOCUS, fitMax: 0.30, sel: () => xSel});
+renderXPerson(); renderSpots('nearby'); renderPfPanel('works'); renderInsp('All'); renderRecords(); renderKnNearby(); renderMapSocial();
 syncObGate(); renderStops(); applyCapOpts(); applyTrack(); renderAudio(); applyLook(); renderLibrary(); renderCapSet(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
 
 document.addEventListener('click', e=>{
   const t = e.target;
+
+  const face = t.closest('[data-face]');
+  if(face){
+    xSel = face.dataset.face;
+    renderXPerson();
+    xmap.draw();
+    return;
+  }
 
   const mp = t.closest('[data-place]');
   if(mp){
@@ -4583,6 +4682,8 @@ document.addEventListener('click', e=>{
   }
   const st = t.closest('[data-stop]');
   if(st){ jmap.flyTo(st.dataset.stop); renderStops(); return; }
+  const spotBtn = t.closest('[data-spot]');
+  if(spotBtn){ dmap.flyTo(spotBtn.dataset.spot); return; }
   if(t.closest('[data-back]')){ back(); return; }
 
   const fol = t.closest('[data-follow]');
