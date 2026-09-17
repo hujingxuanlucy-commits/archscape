@@ -910,22 +910,19 @@ figure{margin:0}
 
 /* ---- the same building through other people's eyes ---- */
 .capintro{margin:2px 22px 18px;font-size:13.5px;line-height:1.6;color:var(--muted);max-width:60ch}
-.caplist{display:flex;flex-wrap:wrap;align-items:flex-start;gap:20px 14px;padding:0 22px 24px}
-.capcard{margin:0;flex:0 1 auto;max-width:100%}
-.capcard img{display:block;border-radius:10px;background:var(--bone-soft);
-  width:100%;max-width:100%;height:auto}
-.capcard figcaption{display:flex;align-items:flex-start;gap:10px;padding:9px 2px 0;flex-wrap:wrap}
-.capwho{display:flex;align-items:center;gap:9px;flex:none;text-align:left}
-.capwho .avatar{width:32px;height:32px}
-.capname b{display:block;font-size:13px;font-weight:600;color:var(--ink)}
-.capname span{display:block;font-size:11.5px;color:var(--muted)}
-.capnote{flex:1 1 100%;font-size:12.5px;line-height:1.45;color:var(--muted);padding-top:2px}
-/* a capture too small to carry a caption beside it keeps just the face */
-.capcard.tight figcaption{gap:7px;padding-top:7px}
-.capcard.tight .capnote,.capcard.tight .capname b{display:none}
-.capcard.tight .capname span{font-size:11px;line-height:1.3}
-.capcard.tight .capwho{align-items:flex-start;gap:7px}
-.capcard.tight .capwho .avatar{width:24px;height:24px}
+.caplist{display:grid;grid-template-columns:1fr 1fr;gap:20px 13px;padding:0 22px 26px}
+.capcard{margin:0;min-width:0}
+.capcard img{display:block;border-radius:9px;background:var(--bone-soft);
+  width:100%;aspect-ratio:4/3;object-fit:cover}
+.capcard figcaption{padding:9px 1px 0}
+.capwho{display:flex;align-items:center;gap:8px;width:100%;text-align:left}
+.capwho .avatar{width:24px;height:24px}
+.capname{min-width:0}
+.capname b{display:block;font-size:12.5px;font-weight:600;color:var(--ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.capname span{display:block;font-size:11px;color:var(--muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.capnote{display:block;font-size:12px;line-height:1.42;color:var(--muted);padding-top:6px}
 
 .stopdot{flex:none;width:11px;height:11px;border-radius:50%;background:var(--route);margin-top:13px;
   box-shadow:0 0 0 3.5px var(--paper);position:relative;z-index:2}
@@ -2232,7 +2229,7 @@ const RECORDS = [
           ['Opened by','Lever House 1952, Seagram 1958'],
           ['Material','Bronze, stainless steel, tinted glass'],
           ['Why it looks like this','The 1961 zoning traded height for plazas']],
-   shots:[['w7','mia'],['ar_facade','marco'],['feedthumb','sofia']]},
+   shots:[['w7','mia'],['ar_facade','marco']]},
   {id:'highline', img:'highline', name:'The High Line', city:'New York', style:'Contemporary',
    architect:'Field Operations with Diller Scofidio + Renfro', year:'2009', captures:1520, explorers:431,
    about:'A freight viaduct that carried meat into the West Side until 1980, then grew its own meadow for twenty-five years while nobody came. What you walk through now is a designed version of what turned up on its own.',
@@ -2245,18 +2242,17 @@ const RECORDS = [
    architect:'Thomas Heatherwick', year:'2019',
    about:'Sixteen storeys of staircase that go nowhere except back into themselves. The pleasure of it is watching other people climb - every landing frames somebody else mid-flight, which is a strange thing for a building to be for.',
    facts:[['Height','46 m / 150 ft'], ['Climb','154 flights, 80 landings, about 2,500 steps'], ['Structure','Painted steel frame, copper-finish cladding'], ['Opened','15 March 2019'], ['Since','Closed 2021; reopened October 2024 behind floor-to-ceiling mesh']], captures:3184, explorers:729,
-   shots:[['vessel_a','mia'],['vessel_b','kenji'],['vessel_c','sofia'],
-          ['vessel_shot','marco'],['vessel_ar','javier'],['vessel_hero','mia']]},
+   shots:[['vessel_a','mia'],['vessel_b','kenji'],['vessel_c','sofia'],['vessel_shot','marco'],['vessel_ar','javier'],['vessel_hero','mia']]},
   {id:'barbican', img:'kn_barbican', name:'Albion Street Terrace', city:'London', style:'Georgian',
    architect:'Thomas Cubitt', year:'1840',
    about:'A speculative terrace doing what speculative terraces do: London stock brick, lime mortar, and windows that shrink storey by storey so the front reads taller than it is. The sashes sit four inches back from the face - the fire acts saw to that.',
    facts:[['Type','Speculative brick terrace'], ['Wall','London stock brick in lime mortar'], ['Windows','Six-over-six sash, recessed after the 1709 Building Act'], ['Rhythm','Storey heights diminishing upward']], captures:1284, explorers:312,
-   shots:[['kn_barbican','javier'],['onb_lattice','marco'],['w7','sofia']]},
+   shots:[['kn_barbican','javier'],['w7','sofia']]},
   {id:'habitat', img:'w1', name:'Habitat 67', city:'Montreal', style:'Brutalism',
    architect:'Moshe Safdie', year:'1967',
    about:'Safdie\'s student thesis, built. Three hundred and fifty-four concrete boxes craned into a stack so that every roof is somebody\'s garden and no two flats have the same view. It was meant to be the cheap prototype; it became the expensive one-off.',
    facts:[['Modules','354 precast concrete units'], ['Homes','146 residences in 15 layouts'], ['Built for','Expo 67'], ['Method','Craned into place, post-tensioned together'], ['Status','Quebec heritage building, 2009']], captures:842, explorers:203,
-   shots:[['w1','sofia'],['w1','mia'],['onb_lattice','kenji']]},
+   shots:[['w1','sofia']]},
   {id:'trellick', img:'kn_trellick', name:'Elizabeth Tower', city:'London', style:'Gothic Revival',
    architect:'Augustus Pugin', year:'1859',
    about:'Pugin\'s last drawing before his health broke, detailed at a scale nobody sees from the ground - crockets and tracery seventy metres up. Barry did the Palace; this tower is Pugin\'s, down to the ironwork.',
@@ -2266,12 +2262,12 @@ const RECORDS = [
    architect:'Denys Lasdun', year:'1976',
    about:'Board-marked concrete poured against Douglas fir, so the grain of the shuttering is still in the surface. Lasdun stacked the terraces like strata and talked about the building as landscape rather than facade - it reads best from the river, at dusk.',
    facts:[['Opened','Lyttelton and Olivier 1976, Cottesloe 1977'], ['Surface','In-situ concrete, Douglas fir board marks'], ['Idea','Terraces as geological strata over the Thames'], ['Status','Grade II* listed, 1994']], captures:673, explorers:188,
-   shots:[['onb_lattice','marco'],['kn_barbican','javier'],['w1','mia']]},
+   shots:[['kn_barbican','javier'],['w1','mia']]},
   {id:'seagram', img:'ar_facade', name:'Seagram Building', city:'New York', style:'Modernism',
    architect:'Mies van der Rohe', year:'1958',
    about:'The bronze mullions running up the face are not holding anything up. The real frame is fireproofed inside the wall, so what you are looking at is a drawing of the structure laid over the structure - Mies explaining the building to you.',
    facts:[['Height','157 m, 38 storeys'], ['Material','Bronze mullions, topaz-tinted glass'], ['Plaza','Set back 100 ft from Park Avenue'], ['Consequence','The setback shaped New York\'s 1961 Zoning Resolution'], ['Status','New York City landmark, 1989']], captures:2104, explorers:498,
-   shots:[['ar_facade','mia'],['w7','marco'],['feedthumb','kenji']]},
+   shots:[['ar_facade','mia'],['w7','marco']]},
   {id:'willis', img:'w2', name:'Willis Building', city:'London', style:'Modernism',
    architect:'Foster + Partners', year:'2008',
    about:'Three stepped tiers dropping down toward Lloyd\'s, so the tower gets out of the way of its neighbour rather than competing with it. The curve on the north face follows the line of the street, not a diagram.',
@@ -2286,7 +2282,7 @@ const RECORDS = [
    architect:'Sou Fujimoto', year:'2013',
    about:'A cloud of twenty-millimetre steel poles you were allowed to climb into and sit inside. Fujimoto built it to dissolve at the edges, which works until it rains and the whole lattice picks out the light.',
    facts:[['Commission','13th Serpentine Pavilion, 2013'], ['Lattice','20 mm white steel grid'], ['Footprint','About 350 sq m'], ['Life','Three months in Kensington Gardens']], captures:428, explorers:131,
-   shots:[['w5','sofia'],['insp_heydar','marco'],['w5','mia']]},
+   shots:[['w5','sofia'],['insp_heydar','marco']]},
   {id:'heydar', img:'insp_heydar', name:'Azadi Tower', city:'Tehran', style:'Modernist',
    architect:'Hossein Amanat', year:'1971',
    about:'Won in competition by an architect of twenty-four. The arch is Sassanid, the geometry underneath it is not - eight thousand blocks of Isfahan marble cut to a pattern that changes as you walk around it.',
@@ -2294,7 +2290,7 @@ const RECORDS = [
    shots:[['insp_heydar','marco'],['w5','sofia'],['insp_nest','kenji']]},
   {id:'nest', img:'insp_nest', name:"Bird's Nest", city:'Beijing', style:'Deconstructivism',
    architect:'Herzog & de Meuron', year:'2008', captures:1207, explorers:356,
-   shots:[['insp_nest','kenji'],['insp_heydar','marco'],['onb_lattice','javier']]},
+   shots:[['insp_nest','kenji'],['insp_heydar','marco']]},
   {id:'duomo', img:'duomo', name:'Duomo di Milano', city:'Milan', style:'Gothic',
    architect:'Simone da Orsenigo', year:'1386',
    about:'Five hundred and seventy-nine years from the first stone to the finished front. The Candoglia quarry that supplied the marble in 1386 still supplies the marble for repairs, which is its own kind of architecture.',
@@ -2314,7 +2310,7 @@ const RECORDS = [
    architect:'Herzog & de Meuron', year:'2000',
    about:'Worth stopping for the surface rather than the building - the way the lettering has been allowed to weather into the render instead of being kept clean.',
    facts:[['Surface','Pigmented render over blockwork'], ['Detail','Signage left to weather in']], captures:2870, explorers:640,
-   shots:[['tate','sofia'],['onb_lattice','marco'],['kn_barbican','javier']]}
+   shots:[['tate','sofia'],['kn_barbican','javier']]}
 ];
 
 let POSTS = [
@@ -3493,7 +3489,7 @@ function renderCaptures(id){
     <div class="caplist">${b.shots.map(([img, who], i)=>{
       const p = PEOPLE[who];
       return `<figure class="capcard">
-        <img src="${IMG[img]}" alt="${esc(b.name)} by ${esc(p.handle)}" data-fit>
+        <img src="${IMG[img]}" alt="${esc(b.name)} by ${esc(p.handle)}">
         <figcaption>
           <button class="capwho" data-member="${who}">
             <span class="avatar art">${AV[who] || ''}</span>
@@ -3504,26 +3500,7 @@ function renderCaptures(id){
       </figure>`;
     }).join('')}</div>`;
 }
-/* Hold every picture to the size its pixels support: at most one image pixel
-   per device pixel, so nothing is ever magnified. Small files become small,
-   crisp cards instead of large soft ones. */
-function fitToPixels(scope){
-  const dpr = Math.max(1, window.devicePixelRatio || 1);
-  $$('img[data-fit]', scope).forEach(im=>{
-    const apply = ()=>{
-      if(!im.naturalWidth) return;
-      const w = Math.max(112, Math.round(im.naturalWidth / dpr));
-      im.style.maxWidth = w + 'px';
-      const card = im.closest('.capcard');
-      if(card){
-        card.style.width = w + 'px';
-        card.classList.toggle('tight', w < 190);
-      }
-    };
-    if(im.complete) apply(); else im.addEventListener('load', apply, {once: true});
-  });
-}
-function openCaptures(id){ renderCaptures(id); fitToPixels($('#cap-body')); go('captures'); }
+function openCaptures(id){ renderCaptures(id); go('captures'); }
 
 function openGroup(id){ renderGroup(id); go('group'); }
 function openMember(id){ renderMember(id); go('member'); }
