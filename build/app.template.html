@@ -910,16 +910,22 @@ figure{margin:0}
 
 /* ---- the same building through other people's eyes ---- */
 .capintro{margin:2px 22px 18px;font-size:13.5px;line-height:1.6;color:var(--muted);max-width:60ch}
-.caplist{display:flex;flex-direction:column;gap:22px;padding:0 22px 24px}
-.capcard{margin:0}
-.capcard img{width:100%;display:block;border-radius:10px;aspect-ratio:4/3;object-fit:cover;
-  background:var(--bone-soft)}
-.capcard figcaption{display:flex;align-items:flex-start;gap:12px;padding:11px 2px 0}
+.caplist{display:flex;flex-wrap:wrap;align-items:flex-start;gap:20px 14px;padding:0 22px 24px}
+.capcard{margin:0;flex:0 1 auto;max-width:100%}
+.capcard img{display:block;border-radius:10px;background:var(--bone-soft);
+  width:100%;max-width:100%;height:auto}
+.capcard figcaption{display:flex;align-items:flex-start;gap:10px;padding:9px 2px 0;flex-wrap:wrap}
 .capwho{display:flex;align-items:center;gap:9px;flex:none;text-align:left}
 .capwho .avatar{width:32px;height:32px}
 .capname b{display:block;font-size:13px;font-weight:600;color:var(--ink)}
 .capname span{display:block;font-size:11.5px;color:var(--muted)}
-.capnote{flex:1;font-size:12.5px;line-height:1.45;color:var(--muted);text-align:right;padding-top:3px}
+.capnote{flex:1 1 100%;font-size:12.5px;line-height:1.45;color:var(--muted);padding-top:2px}
+/* a capture too small to carry a caption beside it keeps just the face */
+.capcard.tight figcaption{gap:7px;padding-top:7px}
+.capcard.tight .capnote,.capcard.tight .capname b{display:none}
+.capcard.tight .capname span{font-size:11px;line-height:1.3}
+.capcard.tight .capwho{align-items:flex-start;gap:7px}
+.capcard.tight .capwho .avatar{width:24px;height:24px}
 
 .stopdot{flex:none;width:11px;height:11px;border-radius:50%;background:var(--route);margin-top:13px;
   box-shadow:0 0 0 3.5px var(--paper);position:relative;z-index:2}
@@ -2265,7 +2271,7 @@ const RECORDS = [
    architect:'Mies van der Rohe', year:'1958',
    about:'The bronze mullions running up the face are not holding anything up. The real frame is fireproofed inside the wall, so what you are looking at is a drawing of the structure laid over the structure - Mies explaining the building to you.',
    facts:[['Height','157 m, 38 storeys'], ['Material','Bronze mullions, topaz-tinted glass'], ['Plaza','Set back 100 ft from Park Avenue'], ['Consequence','The setback shaped New York\'s 1961 Zoning Resolution'], ['Status','New York City landmark, 1989']], captures:2104, explorers:498,
-   shots:[['w7','mia'],['feedthumb','marco'],['checkin','kenji'],['w12','sofia'],['w2','javier'],['ar_facade','mia']]},
+   shots:[['ar_facade','mia'],['w7','marco'],['feedthumb','kenji']]},
   {id:'willis', img:'w2', name:'Willis Building', city:'London', style:'Modernism',
    architect:'Foster + Partners', year:'2008',
    about:'Three stepped tiers dropping down toward Lloyd\'s, so the tower gets out of the way of its neighbour rather than competing with it. The curve on the north face follows the line of the street, not a diagram.',
@@ -3487,7 +3493,7 @@ function renderCaptures(id){
     <div class="caplist">${b.shots.map(([img, who], i)=>{
       const p = PEOPLE[who];
       return `<figure class="capcard">
-        <img src="${IMG[img]}" alt="${esc(b.name)} by ${esc(p.handle)}">
+        <img src="${IMG[img]}" alt="${esc(b.name)} by ${esc(p.handle)}" data-fit>
         <figcaption>
           <button class="capwho" data-member="${who}">
             <span class="avatar art">${AV[who] || ''}</span>
@@ -3498,7 +3504,26 @@ function renderCaptures(id){
       </figure>`;
     }).join('')}</div>`;
 }
-function openCaptures(id){ renderCaptures(id); go('captures'); }
+/* Hold every picture to the size its pixels support: at most one image pixel
+   per device pixel, so nothing is ever magnified. Small files become small,
+   crisp cards instead of large soft ones. */
+function fitToPixels(scope){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  $$('img[data-fit]', scope).forEach(im=>{
+    const apply = ()=>{
+      if(!im.naturalWidth) return;
+      const w = Math.max(112, Math.round(im.naturalWidth / dpr));
+      im.style.maxWidth = w + 'px';
+      const card = im.closest('.capcard');
+      if(card){
+        card.style.width = w + 'px';
+        card.classList.toggle('tight', w < 190);
+      }
+    };
+    if(im.complete) apply(); else im.addEventListener('load', apply, {once: true});
+  });
+}
+function openCaptures(id){ renderCaptures(id); fitToPixels($('#cap-body')); go('captures'); }
 
 function openGroup(id){ renderGroup(id); go('group'); }
 function openMember(id){ renderMember(id); go('member'); }
