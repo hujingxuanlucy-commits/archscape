@@ -808,6 +808,8 @@ figure{margin:0}
 .mroute{fill:none;stroke-linejoin:round;stroke-linecap:round}
 .mlabel{font-family:var(--ui);font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
   fill:#8A857B}
+.mseq{font-family:var(--ui);font-size:8px;font-weight:700;fill:#FBF8F1}
+.mface{cursor:pointer}
 .mname{font-family:var(--ui);font-size:10px;font-weight:600;fill:#2B2B2B;paint-order:stroke;
   stroke:rgba(250,246,236,.95);stroke-width:3.4px;stroke-linejoin:round}
 /* district names are basemap, not app data, so they stay warm grey */
@@ -830,8 +832,6 @@ figure{margin:0}
   transition:transform .18s ease}
 .mstop:hover{transform:scale(1.14)}
 .mstop .mhit{fill:transparent}
-.mcross{fill:#AF2B34;opacity:.22}
-.legend .legsplit{margin:7px 0 5px;border-top:1px solid rgba(0,0,0,.09);padding-top:6px}
 .legend button i.dotted{height:0;border-top:2.5px dotted currentColor;border-radius:0;opacity:1}
 .mapsearch{position:absolute;left:14px;right:60px;bottom:12px;z-index:6}
 .mapsearch > svg{position:absolute;left:11px;top:11px;width:15px;height:15px;color:var(--muted);pointer-events:none}
@@ -869,6 +869,17 @@ figure{margin:0}
 .legend button i{width:21px;height:3px;border-radius:2px;display:block;flex:none;transition:.16s}
 .legend button[aria-pressed="false"]{color:var(--muted-2)}
 .legend button[aria-pressed="false"] i{opacity:.25}
+.legend-people .legme{display:flex;align-items:center;gap:9px;font-size:11.5px;font-weight:500;
+  color:var(--ink);padding:2.5px 0}
+.legend-people button{gap:6px}
+.legav{width:15px;height:15px;border-radius:50%;overflow:hidden;flex:none;display:block}
+.legav svg{width:100%;height:100%;display:block}
+.legend-static span{display:flex;align-items:center;gap:9px;font-size:11.5px;font-weight:500;
+  color:var(--ink);padding:2.5px 0}
+.legend-static i{width:21px;height:3px;border-radius:2px;display:block;flex:none}
+.legend-static i.dashed{height:0;border-top:2px dashed currentColor;border-radius:0;background:none}
+.legend-static i.ringed{height:9px;width:9px;border-radius:50%;border:2px solid currentColor;
+  background:none;margin:0 6px}
 .statbar{display:flex;align-items:stretch;border-bottom:1px solid var(--bone);background:var(--paper)}
 .stat{flex:1;text-align:center;padding:20px 6px 22px}
 .stat + .stat{border-left:1px solid var(--bone)}
@@ -876,7 +887,10 @@ figure{margin:0}
 .stat b.red{color:var(--red)}
 .stat span{display:block;font-size:11.5px;color:var(--muted);margin-top:7px}
 
-.stop{display:flex;align-items:flex-start;gap:12px;padding:0 22px;position:relative}
+.stop{display:flex;align-items:flex-start;gap:12px;padding:0 22px;position:relative;
+  width:100%;text-align:left;background:none;border:0;font:inherit;color:inherit;cursor:pointer}
+.stop[aria-pressed="true"] .stopbody b{color:var(--red)}
+.stop[aria-pressed="true"] .stopdot{box-shadow:0 0 0 3px rgba(117,32,47,.18)}
 .stop::after{content:"";position:absolute;left:80px;top:22px;bottom:-4px;width:2px;background:var(--bone)}
 .stop:last-child::after{display:none}
 .stoptime{flex:none;width:42px;font-size:11.5px;color:var(--muted-2);padding-top:11px}
@@ -1747,11 +1761,11 @@ the city folded in on itself.</textarea>
               <button data-zoom="out" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
               <button data-zoom="reset" id="jmap-fit" aria-label="Fit the whole city">Fit</button>
             </div>
-            <div class="legend">
-              <h4>My routes</h4>
-              <button data-layer="arch" aria-pressed="true"><i style="background:#AF2B34"></i>Architecture</button>
-              <button data-layer="art" aria-pressed="true"><i style="background:#3B6E9D"></i>Art Spaces</button>
-              <button data-layer="photo" aria-pressed="true"><i style="background:#7B7C79"></i>Photography</button>
+            <div class="legend legend-static">
+              <h4>Today</h4>
+              <span><i style="background:#75202F"></i>Walked</span>
+              <span><i class="dashed" style="color:#75202F"></i>Up next</span>
+              <span><i class="ringed" style="color:#75202F"></i>Current stop</span>
             </div>
           </div>
           <div class="statbar">
@@ -1866,15 +1880,15 @@ the city folded in on itself.</textarea>
           </div>
           <div class="xmap jmap" id="crossing-map">
             <svg class="mapcanvas" id="xmap-svg" aria-label="Map of your path crossing other explorers'"></svg>
-            <div class="legend">
-              <h4>My route</h4>
-              <button data-layer="arch" aria-pressed="true"><i style="background:#AF2B34"></i>Architecture</button>
-              <button data-layer="art" aria-pressed="true"><i style="background:#3B6E9D"></i>Art Spaces</button>
-              <button data-layer="photo" aria-pressed="true"><i style="background:#7B7C79"></i>Photography</button>
-              <h4 class="legsplit">Other explorers</h4>
-              <button data-layer="javier" aria-pressed="true" style="color:#C2748C"><i class="dotted"></i>@javier.arq</button>
-              <button data-layer="kai" aria-pressed="true" style="color:#6E93B8"><i class="dotted"></i>@kai</button>
-              <button data-layer="sara" aria-pressed="true" style="color:#6F8F63"><i class="dotted"></i>@sara</button>
+            <div class="legend legend-people">
+              <h4>Paths</h4>
+              <span class="legme"><i style="background:#75202F"></i>You</span>
+              <button data-layer="javier" aria-pressed="true" style="color:#C2748C">
+                <em class="legav" data-av="javier"></em><i class="dotted"></i>@javier.arq</button>
+              <button data-layer="kai" aria-pressed="true" style="color:#6E93B8">
+                <em class="legav" data-av="kai"></em><i class="dotted"></i>@kai</button>
+              <button data-layer="sara" aria-pressed="true" style="color:#6F8F63">
+                <em class="legav" data-av="sara"></em><i class="dotted"></i>@sara</button>
             </div>
             <div class="zoomctl">
               <button data-zoom="in" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
@@ -3638,19 +3652,23 @@ function renderPfPanel(tab){
   $('#pf-jcount').textContent = TRIPS.length;
   $('#pf-gcount').textContent = Object.keys(GROUPS).filter(k=>GROUPS[k].joined).length;
 }
+/* One day, in order - the map and this list are the same journey read two
+   ways, so they share one array. `status` is what the map draws; `c` is the
+   category dot, which stays down here rather than being repeated on the map. */
 const STOPS = [
-  {t:'09:41', name:'MoMA',              meta:'Art Spaces \u00B7 0.0 km',   c:'#3E6B9A'},
-  {t:'10:26', name:'Seagram Building',  meta:'Architecture \u00B7 1.4 km', c:'#952324'},
-  {t:'11:58', name:'Guggenheim',        meta:'Art Spaces \u00B7 3.1 km',   c:'#3E6B9A'},
-  {t:'12:34', name:'Park Ave Facades',  meta:'Photography \u00B7 4.2 km',  c:'#666666'}
+  {t:'09:41', id:'moma',    name:'MoMA',              meta:'Art Spaces \u00B7 0.0 km',   c:'#3E6B9A', status:'done'},
+  {t:'10:26', id:'seagram', name:'Seagram Building',  meta:'Architecture \u00B7 1.4 km', c:'#952324', status:'done'},
+  {t:'11:58', id:'gugg',    name:'Guggenheim',        meta:'Art Spaces \u00B7 3.1 km',   c:'#3E6B9A', status:'current'},
+  {t:'12:34', id:'parkav',  name:'Park Ave Facades',  meta:'Photography \u00B7 4.2 km',  c:'#666666', status:'next'}
 ];
+
 function renderStops(){
   $('#stops').innerHTML = STOPS.map(s=>`
-    <div class="stop">
+    <button class="stop" data-stop="${s.id}" aria-pressed="${mapView.sel === s.id}">
       <span class="stoptime tnum">${esc(s.t)}</span>
       <span class="stopdot" style="--c:${s.c}"></span>
       <span class="stopbody"><b>${esc(s.name)}</b><span>${esc(s.meta)}</span></span>
-    </div>`).join('');
+    </button>`).join('');
 }
 function renderInsp(filter){
   const list = filter==='All' ? INSP : INSP.filter(x=>x.style===filter);
@@ -3848,6 +3866,18 @@ const DISTRICTS = [
   {n:'Flushing',        lat:40.7650, lng:-73.8330}
 ];
 
+/* Every map spends colour on exactly one dimension: category on Explore,
+   status on Journey, person on Crossings. Secondary state is carried by fill,
+   opacity, ring, scale, halo and line style instead of a second hue.
+   Architecture crimson and my-route oxblood stay in one family but are kept
+   apart, so red never means two things across screens. */
+const MAPINK = {
+  arch:  '#AF2B34',  art: '#3B6E9D',  photo: '#7B7C79',   /* category */
+  route: '#75202F',                                        /* my own path */
+  you:   '#2B2B2B',                                        /* you are here */
+  paper: '#FBF8F1'
+};
+
 const PLACES = [
   {id:'moma',   name:'MoMA',                lat:40.7614, lng:-73.9776, c:'#3B6E9D', kind:'Art Spaces'},
   {id:'seagram',name:'Seagram Building',    lat:40.7587, lng:-73.9720, c:'#AF2B34', kind:'Architecture'},
@@ -3860,50 +3890,55 @@ const PLACES = [
   {id:'grand',  name:'Grand Central',       lat:40.7527, lng:-73.9772, c:'#7B7C79', kind:'Photography'}
 ];
 
-const ROUTES = {
-  arch:  {c:'#AF2B34', stops:['vessel','empire','seagram','chrysler']},
-  art:   {c:'#3B6E9D', stops:['whitney','moma','gugg']},
-  photo: {c:'#7B7C79', stops:['grand','parkav','moma']}
-};
-
 /* Discover shows the places you could walk to now; the two that exist as full
    records open them, the rest just name themselves on the map. */
-const DPLACES = PLACES.map(q =>
-  q.id === 'seagram' ? Object.assign({}, q, {bld:'seagram'}) : q);
-/* two fragments, not the whole journey - enough to orient, never a second
-   copy of the journey map */
-const DROUTES = {
-  arch: ROUTES.arch,
-  art:  {c: ROUTES.art.c, stops: ['whitney', 'moma']}
-};
+/* Explore is POI-first, and draws no lines at all: a route is a story and
+   this screen is a shelf. State rides on the same disc - saved takes an inner
+   ring, visited drops to a ghost - so there is one marker grammar, not five. */
+const DSTATE = {seagram:'saved', whitney:'saved', moma:'visited', grand:'visited'};
+const DPLACES = PLACES.map(q => Object.assign({}, q, {
+  state: DSTATE[q.id] || '',
+  bld: q.id === 'seagram' ? 'seagram' : undefined
+}));
+const DYOU = {lat: 40.7570, lng: -73.9795};
 let dmapView = {lat: 40.7601, lng: -73.9820, scale: 0.0423, sel: null};
 
 /* Paths crossing: your own three routes with other explorers' tracks laid
    over them. Theirs are dotted and in their own hue, so ownership reads
    without a label on every line. */
-const XWALK = {
-  javier: {c:'#C2748C', pts:[
-    {lat:40.7790,lng:-73.9560},{lat:40.7700,lng:-73.9618},{lat:40.7640,lng:-73.9672},
-    {lat:40.7587,lng:-73.9720},{lat:40.7512,lng:-73.9790},{lat:40.7432,lng:-73.9848},
-    {lat:40.7378,lng:-73.9822}]},
-  kai:    {c:'#6E93B8', pts:[
-    {lat:40.7346,lng:-74.0058},{lat:40.7424,lng:-74.0040},{lat:40.7488,lng:-74.0028},
-    {lat:40.7539,lng:-74.0021},{lat:40.7596,lng:-73.9958},{lat:40.7652,lng:-73.9902}]},
-  sara:   {c:'#6F8F63', pts:[
-    {lat:40.7724,lng:-73.9818},{lat:40.7676,lng:-73.9796},{lat:40.7604,lng:-73.9782},
-    {lat:40.7549,lng:-73.9756},{lat:40.7494,lng:-73.9726},{lat:40.7446,lng:-73.9714}]}
+/* the walk itself, and the leg that has not happened yet. Both are drawn in
+   one colour: on this screen the line means "my feet", and status is carried
+   by dash and weight rather than by a second hue. */
+const jCur = STOPS.findIndex(x => x.status === 'current');
+const JROUTES = {
+  walked: {c: MAPINK.route, stops: STOPS.slice(0, jCur + 1).map(x=>x.id)},
+  next:   {c: MAPINK.route, dash: true, stops: STOPS.slice(jCur).map(x=>x.id)}
 };
-const XPLACES = PLACES.concat(Object.entries(XWALK).map(([id, r])=>({
-  id: 'x-' + id, name: '@' + id, lat: r.pts[0].lat, lng: r.pts[0].lng,
-  c: r.c, kind: '', small: true
-})));
-const XROUTES = Object.assign({}, ROUTES,
+const JPLACES = STOPS.map((x, i) => Object.assign({}, PLACES.find(q=>q.id === x.id),
+  {status: x.status, seq: i + 1}));
+
+/* Each walk arrives from somewhere of its own, runs alongside mine for a
+   stretch, and leaves again - so there is something for the map to fade out
+   as well as something to draw at strength. */
+const XWALK = {
+  javier: {c:'#C2748C', pts:[                       /* down from East Harlem, past the Guggenheim */
+    {lat:40.7980,lng:-73.9360},{lat:40.7905,lng:-73.9470},{lat:40.7848,lng:-73.9578},
+    {lat:40.7710,lng:-73.9650},{lat:40.7598,lng:-73.9714},{lat:40.7470,lng:-73.9812},
+    {lat:40.7372,lng:-73.9890}]},
+  kai:    {c:'#6E93B8', pts:[                       /* up the west side, cutting east at MoMA */
+    {lat:40.7400,lng:-74.0090},{lat:40.7512,lng:-74.0020},{lat:40.7592,lng:-73.9878},
+    {lat:40.7620,lng:-73.9778},{lat:40.7668,lng:-73.9690},{lat:40.7742,lng:-73.9520}]},
+  sara:   {c:'#6F8F63', pts:[                       /* down Park Avenue and away to the east */
+    {lat:40.7830,lng:-73.9880},{lat:40.7706,lng:-73.9800},{lat:40.7606,lng:-73.9768},
+    {lat:40.7552,lng:-73.9752},{lat:40.7472,lng:-73.9678},{lat:40.7408,lng:-73.9570}]}
+};
+/* My own stops are context here, not subject: they shrink to plain dots and
+   the day's line is the same one the Journey map draws. What this screen is
+   for is the other people on it. */
+const XPLACES = JPLACES.map(q => Object.assign({}, q, {status: ''}));
+const XROUTES = Object.assign({}, JROUTES,
   Object.fromEntries(Object.entries(XWALK).map(([id, r])=>
-    [id, {c: r.c, dot: true, pts: r.pts}])));
-/* the three stops of yours that another walk actually passes through */
-const XCROSS = [
-  {lat:40.7587, lng:-73.9720}, {lat:40.7539, lng:-74.0021}, {lat:40.7549, lng:-73.9756}
-];
+    [id, {c: r.c, kind: 'friend', who: id, pts: r.pts}])));
 let xmapView = {lat: 40.7584, lng: -73.9820, scale: 0.0401, sel: null};
 
 /* --- Web Mercator, metres --- */
@@ -3957,15 +3992,14 @@ function walked(list){
 }
 
 let mapView = {lat: 40.7584, lng: -73.9820, scale: 0.0401, sel: null};
-const mapLayers  = {arch:true, art:true, photo:true};
-const xmapLayers = {arch:true, art:true, photo:true, javier:true, kai:true, sara:true};
+const xmapLayers = {walked:true, next:true, javier:true, kai:true, sara:true};
 
 function makeLiveMap(frame, svg, buttons, opts){
   opts = opts || {};
   const places = opts.places || PLACES;
-  const routes = opts.routes || ROUTES;
+  const routes = opts.routes || {};
   const view   = opts.view   || mapView;
-  const layers = opts.layers || mapLayers;
+  const layers = opts.layers || {};
 
   /* scale is pixels per mercator metre; z = log2(scale * 40075016 / 256).
      MIN was 0.09, about zoom 13.8, so the map could not be pulled back far
@@ -4162,35 +4196,108 @@ function makeLiveMap(frame, svg, buttons, opts){
       }
     }
 
-    /* the journeys: named stops for your own routes, raw coordinates where the
-       line is a walked path rather than a list of places */
+    /* ---- the overlay ----
+       One renderer, three grammars. `mode` decides what the marks mean; the
+       geometry underneath is identical on every screen. */
     const byId = Object.fromEntries(places.map(p=>[p.id, p]));
+    const mode = opts.mode || 'journey';
+    const uid  = svg.id || 'map';
+
+    /* An annotation drawn over a printed map: thin, flat, no casing and no
+       glow. Navigation UI is thick because it is the subject; here the city
+       is the subject and the line is a note on top of it. */
+    const rw = Math.max(1.7, Math.min(2.7, 1.7 + sc * 16));
+
+    const screenPts = ms => ms.map(toScreen)
+      .map(q=>q.x.toFixed(1) + ',' + q.y.toFixed(1)).join(' ');
+    const expand = r => walked((r.pts || r.stops.map(id=>byId[id]))
+      .map(q=>merc(q.lat, q.lng)));
+
+    /* my own track, expanded once - the friends are measured against it */
+    const mine = [];
     Object.entries(routes).forEach(([k, r])=>{
-      const src = r.pts || r.stops.map(id=>byId[id]);
-      const pl = walked(src.map(q=>merc(q.lat, q.lng)))
-        .map(toScreen).map(p=>p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' ');
-      /* an annotation drawn over a printed map, so it barely thickens */
-      /* an overlay drawn on a printed map: crisp, flat, barely thickening */
-      let wide = Math.max(3.4, Math.min(5.2, 3.4 + sc * 30));
-      if(r.dot) wide *= .7;                  /* another explorer's path */
-      out += `<g data-route="${k}" style="transition:opacity .25s" opacity="${
-        layers[k] === false ? 0 : (r.dot ? .85 : 1)}">
-        ${r.dot ? '' : `<polyline class="mroute" points="${pl}" stroke="#FBF8F1" stroke-width="${(wide + 2.2).toFixed(1)}" opacity=".6"/>`}
-        <polyline class="mroute" points="${pl}" stroke="${r.c}" stroke-width="${wide.toFixed(1)}"
-          ${r.dot ? `stroke-dasharray="0.1 ${(wide * 1.75).toFixed(1)}"` : ''}/>
-      </g>`;
+      if(r.kind === 'friend') return;
+      expand(r).forEach(m=>mine.push(m));
+    });
+    /* metres from a point to my track. Mercator stretches north-south by
+       1/cos(lat), so the raw distance is corrected back to ground metres. */
+    const kLat = Math.cos(view.lat * Math.PI / 180);
+    const toMine = q => {
+      let best = Infinity;
+      for(let i = 1; i < mine.length; i++){
+        const a = mine[i-1], b = mine[i];
+        const dx = b.x - a.x, dy = b.y - a.y, l2 = dx*dx + dy*dy;
+        let t = l2 ? ((q.x-a.x)*dx + (q.y-a.y)*dy) / l2 : 0;
+        t = t < 0 ? 0 : t > 1 ? 1 : t;
+        const d = Math.hypot(a.x + t*dx - q.x, a.y + t*dy - q.y) * kLat;
+        if(d < best) best = d;
+      }
+      return best;
+    };
+
+    /* How close a friend's walk has to come before it is worth drawing at
+       strength. Past FAR it is someone else's day and it drops away. */
+    const NEAR = 550, FAR = 1500;
+    const halos = [], faces = [];
+
+    Object.entries(routes).forEach(([k, r])=>{
+      const pts = expand(r);
+      const lit = layers[k] !== false;
+      let body = '';
+
+      if(r.kind === 'friend'){
+        /* Only the stretch that came near mine is drawn at strength; the rest
+           fades out rather than competing. The question this screen answers is
+           where our paths came close, not what their whole day looked like. */
+        let run = [], band = null, near = null, best = null, bd = Infinity;
+        const emit = ()=>{
+          if(run.length < 2 || !band) return;
+          body += `<polyline class="mroute" points="${screenPts(run)}" stroke="${r.c}"
+            stroke-width="${(rw * .85).toFixed(1)}" opacity="${band === 'near' ? '.9' : '.28'}"
+            stroke-dasharray="0.1 ${(rw * 2).toFixed(1)}"/>`;
+        };
+        pts.forEach(m=>{
+          const d = toMine(m);
+          if(d < bd){ bd = d; best = m; }
+          const bnd = d < NEAR ? 'near' : d < FAR ? 'far' : null;
+          if(bnd === 'near' && !near) near = m;
+          if(bnd !== band){
+            if(run.length){ run.push(m); emit(); }
+            run = [m]; band = bnd;
+          } else run.push(m);
+        });
+        emit();
+        if(lit && best && bd < 300) halos.push(best);
+        /* their face sits where their walk entered my neighbourhood, so it
+           reads as "this is whose line that is" without landing on the halo */
+        if(lit && r.who) faces.push({who: r.who, c: r.c, at: near || best || pts[0]});
+      } else {
+        body = `<polyline class="mroute" points="${screenPts(pts)}" stroke="${r.c}"
+          stroke-width="${rw.toFixed(1)}"${r.dash
+            ? ` opacity=".5" stroke-dasharray="${(rw*2.4).toFixed(1)} ${(rw*2).toFixed(1)}"` : ''}/>`;
+      }
+      out += `<g data-route="${k}" style="transition:opacity .25s" opacity="${lit ? 1 : 0}">${body}</g>`;
     });
 
-    /* where another explorer's path meets yours */
-    (opts.cross || []).forEach(c=>{
-      const q = toScreen(merc(c.lat, c.lng));
-      out += `<circle class="mcross" cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="${
-        Math.max(12, Math.min(19, 10 + sc * 110)).toFixed(1)}"/>`;
-    });
+    /* Where two walks came close. A soft falloff rather than a flat disc, so
+       it reads as an area of overlap and not as a drawn radius. */
+    if(halos.length){
+      out += `<defs><radialGradient id="${uid}-halo">
+        <stop offset="0%" stop-color="${MAPINK.route}" stop-opacity=".24"/>
+        <stop offset="55%" stop-color="${MAPINK.route}" stop-opacity=".13"/>
+        <stop offset="100%" stop-color="${MAPINK.route}" stop-opacity="0"/>
+      </radialGradient>
+      <clipPath id="${uid}-circ" clipPathUnits="objectBoundingBox">
+        <circle cx=".5" cy=".5" r=".5"/></clipPath></defs>`;
+      halos.forEach(m=>{
+        const q = toScreen(m);
+        out += `<circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="${
+          Math.max(20, Math.min(34, 16 + sc * 220)).toFixed(1)}" fill="url(#${uid}-halo)"/>`;
+      });
+    }
 
-    /* places. A printed map drops a name rather than overprinting one, so
-       each label claims a box and a later label that collides with it keeps
-       only its dot - and nothing is set under the search field. */
+    /* A printed map drops a name rather than overprinting one, so each label
+       claims a box and a later label that collides with it keeps only its dot. */
     const taken = [];
     const roomFor = (x, y, txt) => {
       const half = txt.length * 2.9 + 5;
@@ -4198,26 +4305,84 @@ function makeLiveMap(frame, svg, buttons, opts){
       if(taken.some(t => Math.abs(t.y - box.y) < 11 && box.a < t.b && box.b > t.a)) return false;
       taken.push(box); return true;
     };
+
+    /* markers. Smaller than a pin wants to be - the city has to stay readable
+       underneath them. */
+    const R = Math.max(4.3, Math.min(5.9, 3.9 + sc * 26));
     places.forEach(q=>{
       const p = toScreen(merc(q.lat, q.lng));
       if(p.x < -60 || p.x > w + 60 || p.y < -40 || p.y > h + 40) return;
       const on = view.sel === q.id;
-      /* a plain disc with a white keyline; the chosen one opens into a ring,
-         which is the loudest mark anywhere on the paper */
-      const base = q.small ? Math.max(4, Math.min(5.4, 3.7 + sc * 14))
-                            : Math.max(6.4, Math.min(8.4, 5.8 + sc * 40));
-      const r = on ? base * 1.4 : base;
       const x = p.x.toFixed(1), y = p.y.toFixed(1);
-      out += `<g class="mstop${on ? ' on' : ''}" data-place="${q.id}">
+      let r = R, fill = q.c, op = 1, inner = '', halo = '', stroke = 1.6;
+
+      if(mode === 'explore'){
+        /* one circular grammar: the category is the colour, the state is a
+           treatment of the same disc */
+        if(q.state === 'visited') op = .42;
+        if(q.state === 'saved')
+          inner = `<circle cx="${x}" cy="${y}" r="${(R*.3).toFixed(1)}" fill="${MAPINK.paper}"/>`;
+      } else if(mode === 'journey'){
+        /* status, not category - the timeline below already carries category */
+        fill = MAPINK.route;
+        if(q.status === 'next'){ fill = MAPINK.paper; stroke = 1.7; inner =
+          `<circle cx="${x}" cy="${y}" r="${R.toFixed(1)}" fill="none"
+            stroke="${MAPINK.route}" stroke-width="1.7"/>`; }
+        else if(q.status === 'current'){
+          r = R * 1.2;
+          halo = `<circle cx="${x}" cy="${y}" r="${(R*2.5).toFixed(1)}"
+            fill="${MAPINK.route}" opacity=".13"/>`;
+        } else r = R * .82;
+      } else {
+        /* crossings: my own stops are context, so they shrink to plain dots */
+        fill = MAPINK.route; r = R * .6; stroke = 1.3;
+      }
+      if(on){
+        r *= 1.3; stroke = 2.2;
+        inner += `<circle cx="${x}" cy="${y}" r="${(r + 3.4).toFixed(1)}" fill="none"
+          stroke="${MAPINK.paper}" stroke-width="1.4" opacity=".9"/>`;
+      }
+
+      const lab = (on || (mode === 'explore' && sc > .34))
+        && p.y - r - 9 > 14 && p.y < h - 46
+        && (on || roomFor(p.x, p.y - r - 9, q.name));
+      out += `<g class="mstop${on ? ' on' : ''}" data-place="${q.id}" opacity="${op}">
+        ${halo}
         <circle class="mhit" cx="${x}" cy="${y}" r="${(r + 9).toFixed(1)}"/>
-        <circle cx="${x}" cy="${y}" r="${r.toFixed(1)}" fill="${q.c}"
-          stroke="#FBF8F1" stroke-width="${(on ? 2.6 : 2)}"/>
-        ${on ? `<circle cx="${x}" cy="${y}" r="${(r * .34).toFixed(1)}" fill="#FBF9F3"/>` : ''}
-        ${((on || sc > .34) && p.y - r - 9 > 14 && p.y < h - 46
-            && (on || roomFor(p.x, p.y - r - 9, q.name)))
-          ? `<text class="mname" x="${x}" y="${(p.y - r - 9).toFixed(1)}" text-anchor="middle">${esc(q.name)}</text>` : ''}
+        <circle cx="${x}" cy="${y}" r="${r.toFixed(1)}" fill="${fill}"
+          stroke="${MAPINK.paper}" stroke-width="${stroke}"/>
+        ${inner}
+        ${on && mode === 'journey' && q.seq
+          ? `<text class="mseq" x="${x}" y="${(p.y + 3).toFixed(1)}" text-anchor="middle">${q.seq}</text>` : ''}
+        ${lab ? `<text class="mname" x="${x}" y="${(p.y - r - 9).toFixed(1)}" text-anchor="middle">${esc(q.name)}</text>` : ''}
       </g>`;
     });
+
+    /* the people, drawn last so a face is never buried under a line */
+    faces.forEach(f=>{
+      const q = toScreen(f.at), z = 22, art = AV[f.who];
+      if(!art) return;
+      const bx = (q.x - z/2).toFixed(1), by = (q.y - z/2).toFixed(1);
+      out += `<g class="mstop mface" data-member="${f.who}" data-place="x-${f.who}">
+        <circle class="mhit" cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="16"/>
+        <g clip-path="url(#${uid}-circ)">${
+          art.replace('<svg viewBox', `<svg x="${bx}" y="${by}" width="${z}" height="${z}" viewBox`)}</g>
+        <circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="${(z/2).toFixed(1)}"
+          fill="none" stroke="${MAPINK.paper}" stroke-width="2"/>
+        <circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="${(z/2 + 1).toFixed(1)}"
+          fill="none" stroke="${f.c}" stroke-width="1.2"/>
+      </g>`;
+    });
+
+    /* you are here: a neutral anchor, never a category colour */
+    if(opts.you){
+      const q = toScreen(merc(opts.you.lat, opts.you.lng));
+      out += `<g class="myou">
+        <circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="13" fill="${MAPINK.you}" opacity=".11"/>
+        <circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="5.2" fill="${MAPINK.you}"
+          stroke="${MAPINK.paper}" stroke-width="2"/>
+      </g>`;
+    }
 
     svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
     svg.innerHTML = out;
@@ -4319,7 +4484,8 @@ function makeLiveMap(frame, svg, buttons, opts){
   function flyTo(id){
     const q = places.find(p=>p.id === id); if(!q) return;
     view.sel = id;
-    view.scale = Math.max(view.scale, 1.15);
+    if(opts.flyScale !== 0)
+      view.scale = Math.max(view.scale, opts.flyScale || 1.15);
     setCentreMerc(merc(q.lat, q.lng));
     draw();
   }
@@ -4363,6 +4529,10 @@ function wireMapSearch(){
 /* ---------- wire up ---------- */
 /* avatars that sit in the markup rather than being rendered - same registry,
    so a person cannot end up with two faces */
+$$('.legav[data-av]').forEach(el=>{
+  const art = AV[el.dataset.av];
+  if(art) el.innerHTML = art;
+});
 $$('.avatar[data-av]').forEach(el=>{
   const art = AV[el.dataset.av];
   if(!art) return;
@@ -4377,13 +4547,15 @@ $$('[data-img]').forEach(el=>{
 /* opens on the city so the first read is New York, not one neighbourhood;
    FIT then frames your routes inside it */
 const jmap = makeLiveMap($('#journey-map'), $('#jmap-svg'), $$('#journey-map .zoomctl button'),
-  {autofit: false});
+  {places: JPLACES, routes: JROUTES, layers: {}, autofit: false, mode: 'journey',
+   flyScale: 0});
 wireMapSearch();
 const dmap = makeLiveMap($('#discover-map'), $('#dmap-svg'), $$('#discover-map .zoomctl button'),
-  {places: DPLACES, routes: DROUTES, view: dmapView, autofit: false});
+  {places: DPLACES, routes: {}, view: dmapView, autofit: false,
+   mode: 'explore', you: DYOU, flyScale: 0.085});
 const xmap = makeLiveMap($('#crossing-map'), $('#xmap-svg'), $$('#crossing-map .zoomctl button'),
-  {places: XPLACES, routes: XROUTES, view: xmapView, cross: XCROSS,
-   layers: xmapLayers, autofit: false});
+  {places: XPLACES, routes: XROUTES, view: xmapView,
+   layers: xmapLayers, autofit: false, mode: 'crossing', flyScale: 0});
 renderSpots('nearby'); renderPfPanel('works'); renderInsp('All'); renderRecords(); renderKnNearby(); renderMapSocial();
 syncObGate(); renderStops(); applyCapOpts(); applyTrack(); renderAudio(); applyLook(); renderLibrary(); renderCapSet(); renderCapTags(); renderCheckinTags(); setCapture('scanning');
 
@@ -4401,8 +4573,16 @@ document.addEventListener('click', e=>{
       dmap.flyTo(id); return;
     }
     if(mp.closest('#crossing-map')){ xmap.flyTo(id); return; }
-    jmap.flyTo(id); return;
+    jmap.flyTo(id);
+    /* the timeline is the same journey read the other way round, so it moves
+       with the map rather than keeping a selection of its own */
+    renderStops();
+    const row = $(`#stops [data-stop="${id}"]`);
+    if(row) row.scrollIntoView({block: 'nearest', behavior: 'smooth'});
+    return;
   }
+  const st = t.closest('[data-stop]');
+  if(st){ jmap.flyTo(st.dataset.stop); renderStops(); return; }
   if(t.closest('[data-back]')){ back(); return; }
 
   const fol = t.closest('[data-follow]');
@@ -4745,7 +4925,7 @@ document.addEventListener('click', e=>{
     /* clearing the override hands the line back to its own resting opacity,
        which is not 1 for another explorer's dotted path */
     if(g) g.style.opacity = on ? '' : '0';
-    (frame && frame.id === 'crossing-map' ? xmapLayers : mapLayers)[layer.dataset.layer] = on;
+    if(frame && frame.id === 'crossing-map') xmapLayers[layer.dataset.layer] = on;
     return;
   }
 
