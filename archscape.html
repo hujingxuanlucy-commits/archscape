@@ -904,6 +904,30 @@ figure{margin:0}
 .stoptime{flex:none;width:42px;font-size:11.5px;color:var(--muted-2);padding-top:11px}
 /* the same three states the map draws: done is solid, current is emphasised,
    next is hollow - all in the journey colour, never the category's */
+/* ---- one journey, stop by stop ---- */
+.trip.opens{cursor:pointer}
+.tripgo{flex:none;display:grid;place-items:center;color:var(--muted-2);margin-left:2px}
+.tripgo svg{width:16px;height:16px}
+.triphead{margin:2px 22px 16px;font-size:13.5px;color:var(--muted)}
+.tripstops{list-style:none;margin:0;padding:4px 22px 26px}
+.tripstops li{display:flex;gap:11px;align-items:stretch}
+.tstime{flex:none;width:42px;padding-top:15px;font-size:11.5px;color:var(--muted)}
+.tsline{flex:none;width:11px;display:flex;justify-content:center;position:relative}
+.tsline::before{content:"";position:absolute;top:0;bottom:0;width:2px;background:var(--bone)}
+.tripstops li:first-child .tsline::before{top:18px}
+.tripstops li:last-child .tsline::before{bottom:auto;height:18px}
+.tsline i{width:9px;height:9px;border-radius:50%;margin-top:16px;position:relative;z-index:1;
+  box-shadow:0 0 0 3.5px var(--paper)}
+.tsbody{flex:1;min-width:0;display:flex;gap:12px;align-items:flex-start;text-align:left;
+  padding:11px 0 15px;background:none;border:0;font:inherit;color:inherit}
+button.tsbody{cursor:pointer}
+.tsbody img{width:64px;height:64px;border-radius:8px;object-fit:cover;flex:none;background:var(--bone-soft)}
+.tsinfo{min-width:0}
+.tsinfo b{display:block;font-size:14px;font-weight:600;color:var(--ink)}
+.tskind{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);
+  margin:2px 0 5px}
+.tsnote{display:block;font-size:12.5px;line-height:1.5;color:var(--muted)}
+
 /* ---- building: what it is, before who shot it ---- */
 .babout{margin:20px 22px 0;font-size:14.5px;line-height:1.62;color:var(--ink);max-width:62ch}
 .bfactlist{margin:16px 22px 0;border-top:1px solid var(--bone)}
@@ -1868,6 +1892,15 @@ the city folded in on itself.</textarea>
         </section>
 
         <!-- ============ 06a STAT DETAIL ============ -->
+        <section class="screen pad padnav" id="s-trip">
+          <div class="ci-head">
+            <button class="iconbtn" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+            <h2 class="h-title sm" id="trip-title">Journey</h2>
+            <span class="seelink" id="trip-date" style="cursor:default"></span>
+          </div>
+          <div id="trip-body"></div>
+        </section>
+
         <section class="screen pad padnav" id="s-captures">
           <div class="ci-head">
             <button class="iconbtn" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
@@ -2057,7 +2090,8 @@ const SCREENS = [
   {id:'crossing',    name:'Crossing',    chrome:'light', nav:true, tab:'explore'},
   {id:'knowledge',   name:'Knowledge',   chrome:'light', nav:true, tab:'explore'},
   {id:'stat',        name:'Stat',        chrome:'light', nav:true, tab:'profile'},
-  {id:'captures',    name:'Captures',    chrome:'light', nav:true, tab:'explore'}
+  {id:'captures',    name:'Captures',    chrome:'light', nav:true, tab:'explore'},
+  {id:'trip',        name:'Journey',     chrome:'light', nav:true, tab:'profile'}
 ];
 /* the four screens a tab bar button actually lands on; everything else is a
    sub-screen and borrows whichever of these you came through */
@@ -2077,7 +2111,7 @@ const ENTER_FROM = ['obready','signin'];
 /* content on these scrolls up behind the status bar, so the strip behind the
    clock is painted rather than left transparent */
 const SB_SOLID = new Set(['discover', 'knowledge', 'journey', 'crossing', 'stat', 'member',
-  'group', 'building', 'captures']);
+  'group', 'building', 'captures', 'trip']);
 function go(id, isBack){
   const s = SCREENS.find(x=>x.id===id); if(!s) return;
   const from = current;
@@ -2200,9 +2234,11 @@ const SPOTS = {
 const SPOT_TITLE = {nearby:'Nearby Spots', trending:'Trending Now'};
 
 const TRIPS = [
+  {img:'vessel_hero', dot:'#952324', name:'New York \u2014 Hudson Yards to Midtown', date:'Dec 4, 2026',
+   year:'2026', meta:'9 check-ins \u00B7 Contemporary to Modernism \u00B7 6.4 km', page:'ny'},
   {img:'arc_bcn',     dot:'#952324', name:'Barcelona \u2014 Architecture Walk', date:'Nov 12, 2026', year:'2026', meta:'14 check-ins \u00B7 Gaud\u00ED buildings \u00B7 6.2 km'},
   {img:'arc_tky',     dot:'#3E6B9A', name:'Tokyo \u2014 Art District',          date:'Sep 3, 2026',  year:'2026', meta:'9 check-ins \u00B7 Modern Art \u00B7 3.8 km'},
-  {img:'vessel_hero', dot:'#952324', name:'New York \u2014 Hudson Yards',      date:'Aug 14, 2026', year:'2026', meta:'6 check-ins \u00B7 Contemporary \u00B7 2.1 km'},
+
   {img:'w1',          dot:'#666666', name:'Montreal \u2014 Habitat 67',        date:'Jun 2, 2026',  year:'2026', meta:'4 check-ins \u00B7 Brutalism \u00B7 1.4 km'},
   {img:'arc_par',     dot:'#666666', name:'Paris \u2014 Haussmann Routes',     date:'Mar 20, 2026', year:'2026', meta:'22 check-ins \u00B7 Classical France \u00B7 9.1 km'},
   {img:'insp_heydar', dot:'#3E6B9A', name:'Baku \u2014 Heydar Aliyev Centre',  date:'Jan 9, 2026',  year:'2026', meta:'3 check-ins \u00B7 Contemporary \u00B7 0.8 km'},
@@ -2213,6 +2249,24 @@ const TRIPS = [
   {img:'k11',         dot:'#666666', name:'Hong Kong \u2014 K11 Musea',        date:'Oct 30, 2024', year:'2024', meta:'6 check-ins \u00B7 Contemporary \u00B7 2.0 km'},
   {img:'onb_night',   dot:'#3E6B9A', name:'Tokyo \u2014 Shibuya Night Walk',   date:'Sep 12, 2024', year:'2024', meta:'9 check-ins \u00B7 Photography \u00B7 4.6 km'}
 ];
+
+/* The New York journey, stop by stop. Each one points at a place the app
+   already knows, so a check-in opens the building rather than a dead end. */
+const NY_TRIP = {
+  name:'New York', sub:'Hudson Yards to Midtown East', date:'4 December 2026',
+  stats:[['9','Check-ins'],['6.4 km','Walked'],['5h 20m','Out']],
+  stops:[
+    {id:'highline', t:'09:12', note:'Up on the viaduct before the crowds got there.'},
+    {id:'vessel',   t:'09:54', note:'Four flights, then gave the rest to the view.'},
+    {id:'empire',   t:'11:06', note:'Borrowed a lobby window on 34th.'},
+    {id:'morgan',   t:'11:48', note:'The stacks, not the show.'},
+    {id:'nypl',     t:'12:30', note:'Carving on the Fifth Avenue front reads from across the road.'},
+    {id:'grand',    t:'13:40', note:'Stood under the vault until somebody moved.'},
+    {id:'chrysler', t:'14:25', note:'Crown from the corner of Lex, as everyone does.'},
+    {id:'parkav',   t:'15:10', note:'Bronze the whole way up the avenue.'},
+    {id:'seagram',  t:'16:02', note:'Ended on the plaza. The light was doing the work.'}
+  ]
+};
 
 const INSP = [
   {img:'insp_heydar', name:'Azadi Tower',          by:'Hossein Amanat',    style:'Modernism', ar:.78, saved:false},
@@ -2922,17 +2976,17 @@ const PEOPLE = {
            works:['duomo','w8','w9','onb_lattice','w11','arc_bcn']},
   sofia:  {name:'Sofia Bergmann', handle:'@sofia.b', avType:'stylised', av:'S', avc:'', city:'Copenhagen',
            bio:'Danish modernism, daylight, and the space between gallery and landscape.',
-           followers:'2.8k', captures:196, cities:6, following:false, groups:['light','modernism'],
+           followers:'2.8k', captures:196, cities:6, following:true, groups:['light','modernism'],
            crossed:'You have both captured the Barbican Estate',
            works:['w5','w5','onb_glass','w2','w1','w12']},
   kenji:  {name:'Kenji Tanaka', handle:'@kenji.t', avType:'stylised', av:'K', avc:'grey', city:'Tokyo',
            bio:'Night walks through Shibuya. Neon, concrete, and the vernacular of small streets.',
-           followers:'5.6k', captures:428, cities:12, following:false, groups:['tokyo','light'],
+           followers:'5.6k', captures:428, cities:12, following:true, groups:['tokyo','light'],
            crossed:'Kenji is in New York next week',
            works:['onb_night','w11','arc_tky','onb_brick','onb_glass','w7']},
   javier: {name:'Javier Ruiz', handle:'@javier.arq', avType:'portrait', av:'J', avc:'steel', city:'Madrid',
            bio:'Brutalism, photography and urban design. Currently 400m from you.',
-           followers:'1.9k', captures:143, cities:5, following:false, groups:['brutalism'],
+           followers:'1.9k', captures:143, cities:5, following:true, groups:['brutalism'],
            crossed:'Your paths crossed today \u2014 400m away',
            works:['insp_stair','onb_lattice','kn_trellick','kn_barbican','w7','onb_lattice']},
   mia:    {name:'Mia Liu', handle:'@mia.liu', avType:'portrait', av:'M', avc:'', city:'New York',
@@ -2942,7 +2996,7 @@ const PEOPLE = {
            works:['feedthumb','w12','w2','checkin','w1','w1']},
   /* the rest of Lucy's followers - people who follow her without her having
      followed back yet, which is what makes the count differ from Following */
-  elena:  {name:'Elena Rossi', handle:'@elena.r', avType:'detail', av:'E', avc:'steel', city:'Rome',
+  elena:  {name:'Elena Rossi', handle:'@elena.r', avType:'detail', av:'E', avc:'steel', city:'Rome', following:true,
            bio:'Roman concrete, from Hadrian to the Sixties.',
            followers:'980', captures:141, cities:6, groups:[], crossed:'',
            works:['duomo','w9','onb_glass']},
@@ -2950,27 +3004,27 @@ const PEOPLE = {
            bio:'Whitewash, shade and the geometry of a hot street.',
            followers:'612', captures:88, cities:4, groups:[], crossed:'',
            works:['w3','arc_bcn','insp_stair']},
-  hana:   {name:'Hana Petrova', handle:'@hana.p', avType:'mark', av:'H', avc:'', city:'Prague',
+  hana:   {name:'Hana Petrova', handle:'@hana.p', avType:'mark', av:'H', avc:'', city:'Prague', following:true,
            bio:'Panel blocks and the people still living well in them.',
            followers:'1.4k', captures:205, cities:11, groups:[], crossed:'',
            works:['kn_trellick','onb_lattice','w5']},
-  theo:   {name:'Theo Lindqvist', handle:'@theo.l', avType:'pet', av:'T', avc:'steel', city:'Stockholm',
+  theo:   {name:'Theo Lindqvist', handle:'@theo.l', avType:'pet', av:'T', avc:'steel', city:'Stockholm', following:true,
            bio:'Timber, daylight and the long northern winter.',
            followers:'743', captures:119, cities:5, groups:[], crossed:'',
            works:['w5','w10','onb_glass']},
-  nadia:  {name:'Nadia Okonkwo', handle:'@nadia.o', avType:'portrait', av:'N', avc:'grey', city:'Lagos',
+  nadia:  {name:'Nadia Okonkwo', handle:'@nadia.o', avType:'portrait', av:'N', avc:'grey', city:'Lagos', following:true,
            bio:'Documenting what gets built between the plans.',
            followers:'2.2k', captures:268, cities:8, groups:[], crossed:'',
            works:['w4','w6','highline']},
-  pedro:  {name:'Pedro Vargas', handle:'@pedro.v', avType:'mark', av:'P', avc:'', city:'Mexico City',
+  pedro:  {name:'Pedro Vargas', handle:'@pedro.v', avType:'mark', av:'P', avc:'', city:'Mexico City', following:true,
            bio:'Colour as a structural decision. Barragan taught me that.',
            followers:'1.1k', captures:174, cities:7, groups:[], crossed:'',
            works:['onb_glass','w12','arc_bcn']},
-  sara:   {name:'Sara Frames', handle:'@sara.frames', avType:'pet', av:'S', avc:'steel', city:'Lisbon',
+  sara:   {name:'Sara Frames', handle:'@sara.frames', avType:'pet', av:'S', avc:'steel', city:'Lisbon', following:true,
            bio:'Tiles, tramlines and the hour before the light goes.',
            followers:'865', captures:132, cities:6, groups:[], crossed:'',
            works:['tate','w11','onb_night']},
-  kai:    {name:'Kai Bergstrom', handle:'@kai.builds', avType:'stylised', av:'K', avc:'grey', city:'Oslo',
+  kai:    {name:'Kai Bergstrom', handle:'@kai.builds', avType:'stylised', av:'K', avc:'grey', city:'Oslo', following:true,
            bio:'Concrete in the rain, which is most of the time.',
            followers:'1.9k', captures:221, cities:9, groups:[], crossed:'',
            works:['w1','w2','insp_heydar']},
@@ -3306,9 +3360,9 @@ function renderFollowing(){
   const list    = POSTS.filter(x=>{ const w = PEOPLE[x.person]; return w.self || w.following; });
   return `
     <div class="sechead"><h3 class="sectitle">People you follow</h3>
-      <span class="secnote onum">${mine.length}</span></div>
+      <button class="seelink" data-stat="following">See all <span class="onum">${FOLLOWING_TOTAL}</span></button></div>
     ${mine.length
-      ? `<div class="prows">${mine.map(followRow).join('')}</div>`
+      ? `<div class="prows">${mine.slice(0, 3).map(followRow).join('')}</div>`
       : `<p class="emptynote">You are not following anyone yet. Start with a suggestion below.</p>`}
 
     ${suggest.length ? `
@@ -3523,6 +3577,37 @@ function renderCaptures(id){
 }
 function openCaptures(id){ renderCaptures(id); go('captures'); }
 
+/* One journey, stop by stop. Every check-in points at a place the app already
+   holds, so tapping one opens the building rather than going nowhere. */
+function renderTrip(){
+  const t = NY_TRIP;
+  $('#trip-title').textContent = t.name;
+  $('#trip-date').textContent = t.date;
+  $('#trip-body').innerHTML = `
+    <p class="triphead">${esc(t.sub)}</p>
+    <div class="statgrid">${t.stats.map(([v, k])=>
+      `<div class="s"><b class="onum">${esc(v)}</b><span>${esc(k)}</span></div>`).join('')}</div>
+    <div class="sechead" style="padding-top:20px"><h3 class="sectitle">Check-ins</h3>
+      <span class="seelink" style="cursor:default">${t.stops.length} stops</span></div>
+    <ol class="tripstops">${t.stops.map(st=>{
+      const q = PLACES.find(z => z.id === st.id) || {};
+      const open = !!q.bld;
+      return `<li>
+        <span class="tstime tnum">${esc(st.t)}</span>
+        <span class="tsline"><i style="background:${q.c || '#7B7C79'}"></i></span>
+        <${open ? `button class="tsbody" data-building="${q.bld}"` : 'div class="tsbody"'}>
+          ${q.img ? `<img src="${IMG[q.img]}" alt="${esc(q.name || '')}">` : ''}
+          <span class="tsinfo">
+            <b>${esc(q.name || st.id)}</b>
+            <span class="tskind">${esc(q.kind || '')}</span>
+            <span class="tsnote">${esc(st.note)}</span>
+          </span>
+        </${open ? 'button' : 'div'}>
+      </li>`;
+    }).join('')}</ol>`;
+}
+function openTrip(){ renderTrip(); go('trip'); }
+
 function openGroup(id){ renderGroup(id); go('group'); }
 function openMember(id){ renderMember(id); go('member'); }
 function openBuilding(id){ renderBuilding(id); go('building'); }
@@ -3682,12 +3767,14 @@ function renderJourneys(){
     </div>
     ${jOpen && q ? `<p class="jcount">${list.length} of ${TRIPS.length} journeys</p>` : ''}
     ${list.length ? list.map(t=>{
-      const i = TRIPS.indexOf(t);
-      return `<button class="trip" data-go="journey" data-trip="${i}">
+      const open = !!t.page;
+      /* a row that cannot open anything is not dressed as a button */
+      return `<${open ? 'button' : 'div'} class="trip${open ? ' opens' : ''}"${open ? ` data-trip="${t.page}"` : ''}>
         <span class="dot" style="background:${t.dot}"></span>
         <img src="${IMG[t.img]}" alt="${esc(t.name)}">
         <span class="grow"><b>${esc(t.name)}</b><time>${esc(t.date)}</time><span>${esc(t.meta)}</span></span>
-      </button>`;
+        ${open ? '<span class="tripgo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>' : ''}
+      </${open ? 'button' : 'div'}>`;
     }).join('') : `<p class="emptynote" style="margin:18px 22px">No journeys match ${q ? '"' + esc(jQuery) + '"' : 'that year'}.</p>`}`;
 }
 
@@ -3779,9 +3866,19 @@ const CITIES = [
   {name:'Baku',      country:'Azerbaijan',    n:5,  img:'insp_heydar'}
 ];
 
+/* The registry holds the people who are drawn and named; the rest of the
+   circle is a number, the way it is in a real account. */
+const FOLLOWING_TOTAL = 52;
 function openStat(kind){
   const title = $('#stat-title'), count = $('#stat-count'), body = $('#stat-body');
-  if(kind === 'followers'){
+  if(kind === 'following'){
+    const list = Object.keys(PEOPLE).filter(k=>!PEOPLE[k].self && PEOPLE[k].following);
+    title.textContent = 'Following';
+    count.innerHTML = '<span class="onum">' + FOLLOWING_TOTAL + '</span>';
+    body.innerHTML = `<div class="prows" style="padding-top:6px">${list.map(followRow).join('')}</div>
+      <p class="emptynote sub" style="padding:14px 22px 4px">Showing the ${list.length} you
+        have captured alongside. The rest of your circle is in Search.</p>`;
+  } else if(kind === 'followers'){
     const list = Object.keys(PEOPLE).filter(k=>!PEOPLE[k].self);
     title.textContent = 'Followers';
     count.innerHTML = '<span class="onum">13</span>';
@@ -4869,6 +4966,9 @@ document.addEventListener('click', e=>{
   const mem = t.closest('[data-member]');
   if(mem){ openMember(mem.dataset.member); return; }
   const bld = t.closest('[data-building]');
+  const trip = t.closest('[data-trip]');
+  if(trip){ openTrip(); return; }
+
   const caps = t.closest('[data-captures]');
   if(caps){ openCaptures(caps.dataset.captures); return; }
   if(bld && bld.dataset.building){ openBuilding(bld.dataset.building); return; }
