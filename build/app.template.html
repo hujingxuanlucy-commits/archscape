@@ -306,6 +306,29 @@ figure{margin:0}
 .mapframe{position:relative;height:250px;overflow:hidden;background:#F1ECE2;border-bottom:1px solid var(--bone)}
 .mapimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .mapsvg{position:absolute;inset:0;width:100%;height:100%}
+.mcthumb.cat{background:var(--c);display:grid;place-items:center;color:#fff;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.mcthumb.cat svg{width:22px;height:22px;color:#fff;opacity:.92}
+
+/* the lightweight place page - hero as a colour tile with the category glyph,
+   because a photograph would either be fabricated or absent */
+.phero{position:relative;height:160px;background:var(--c,#7B7C79);display:grid;place-items:center;overflow:hidden}
+.phero::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 30% 20%, rgba(255,255,255,.18), transparent 55%),
+    linear-gradient(160deg, rgba(255,255,255,.08), rgba(0,0,0,.22));pointer-events:none}
+.phero svg{width:56px;height:56px;color:rgba(255,255,255,.94);position:relative}
+.pheadline{padding:16px 22px 0}
+.pheadline .peyebrow{display:flex;align-items:center;gap:7px;font-size:9.5px;font-weight:700;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.pheadline .peyebrow i{width:6px;height:6px;border-radius:50%;background:var(--c,#7B7C79);display:block;flex:none}
+.pheadline h2{font-family:var(--disp);font-size:29px;font-weight:600;margin:6px 0 3px;line-height:1.08;color:var(--ink)}
+.pheadline .parch{margin:0;font-size:12.5px;color:var(--muted)}
+.pnophoto{display:flex;align-items:center;gap:10px;margin:16px 22px 0;padding:11px 13px;
+  background:var(--bone-soft);border:1px solid var(--bone);border-radius:6px}
+.pnophoto svg{width:17px;height:17px;color:var(--muted);flex:none}
+.pnophoto span{font-size:12px;color:var(--muted);line-height:1.4;flex:1}
+.pnophoto button{flex:none;font-size:11.5px;font-weight:600;color:var(--red);white-space:nowrap;padding:2px 0}
+.pnophoto button:hover{text-decoration:underline}
 .mapbadge{position:absolute;right:12px;bottom:12px;z-index:3;display:flex;align-items:center;gap:7px;
   background:rgba(255,255,255,.95);border:1px solid var(--bone);border-radius:999px;padding:7px 13px;
   font-size:11.5px;font-weight:600;color:var(--ink);box-shadow:0 6px 18px -8px rgba(0,0,0,.3);transition:.16s}
@@ -1990,6 +2013,16 @@ the city folded in on itself.</textarea>
           <div id="b-body"></div>
         </section>
 
+        <!-- ============ 09b PLACE (map pin without a full record) ============ -->
+        <section class="screen pad padnav" id="s-place">
+          <div class="ci-head">
+            <button class="iconbtn" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+            <h2 class="h-title sm">Place</h2>
+            <span style="width:34px"></span>
+          </div>
+          <div id="p-body"></div>
+        </section>
+
         <!-- ============ 10 PATHS CROSSING ============ -->
         <section class="screen pad padnav" id="s-crossing">
           <div class="ci-head">
@@ -2115,7 +2148,8 @@ const SCREENS = [
   {id:'knowledge',   name:'Knowledge',   chrome:'light', nav:false},
   {id:'stat',        name:'Stat',        chrome:'light', nav:true, tab:'profile'},
   {id:'captures',    name:'Captures',    chrome:'light', nav:true, tab:'explore'},
-  {id:'trip',        name:'Journey',     chrome:'light', nav:true, tab:'profile'}
+  {id:'trip',        name:'Journey',     chrome:'light', nav:true, tab:'profile'},
+  {id:'place',       name:'Place',       chrome:'light', nav:true, tab:'explore'}
 ];
 /* the four screens a tab bar button actually lands on; everything else is a
    sub-screen and borrows whichever of these you came through */
@@ -2135,7 +2169,7 @@ const ENTER_FROM = ['obready','signin'];
 /* content on these scrolls up behind the status bar, so the strip behind the
    clock is painted rather than left transparent */
 const SB_SOLID = new Set(['discover', 'knowledge', 'journey', 'crossing', 'stat', 'member',
-  'group', 'building', 'captures', 'trip']);
+  'group', 'building', 'captures', 'trip', 'place']);
 function go(id, isBack){
   const s = SCREENS.find(x=>x.id===id); if(!s) return;
   const from = current;
@@ -3636,6 +3670,41 @@ function openTrip(){ renderTrip(); go('trip'); }
 function openGroup(id){ renderGroup(id); go('group'); }
 function openMember(id){ renderMember(id); go('member'); }
 function openBuilding(id){ renderBuilding(id); go('building'); }
+/* the lightweight place page for a landmark without a full RECORDS entry -
+   real facts, honest about the missing photograph, offering a capture */
+function renderPlace(id){
+  const q = DPLACES.find(p => p.id === id);
+  if(!q) return;
+  const info = (typeof PLACE_INFO !== 'undefined' && PLACE_INFO[id]) || null;
+  const glyph = KIND_GLYPH[q.kind] || '';
+  const lat = q.lat.toFixed(4), lng = q.lng.toFixed(4);
+  const facts = [
+    ...(info && info.arch ? [['Architect', info.arch]] : []),
+    ...(info && info.year ? [['Built',     info.year]] : []),
+    ['Category',    q.kind],
+    ['From here',   walkLabel(q) + ' walk'],
+    ['Coordinates', lat + ', ' + lng + ' N'],
+    ...(info && info.facts ? info.facts : [])
+  ];
+  $('#p-body').innerHTML = `
+    <div class="phero" style="--c:${q.c}">${glyph}</div>
+    <div class="pheadline">
+      <div class="peyebrow"><i></i>${esc(q.kind)}</div>
+      <h2>${esc(q.name)}</h2>
+      ${info && info.arch ? `<p class="parch">${esc(info.arch)}${info.year ? ' &#183; ' + esc(info.year) : ''}</p>` : ''}
+    </div>
+    <div class="pnophoto">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+      <span>No photograph in the archive yet.</span>
+      <button data-go="capture">Be the first</button>
+    </div>
+    ${info && info.about ? `<p class="babout">${esc(info.about)}</p>` : ''}
+    <dl class="bfactlist">${facts.map(([k, v]) =>
+      `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+  `;
+}
+function openPlace(id){ renderPlace(id); go('place'); }
+
 
 /* ---------- renderers ---------- */
 /* Each Discover tab answers a different question, so each gets the shape that
@@ -4211,6 +4280,24 @@ const PLACES = [
    ring, visited drops to a ghost - so there is one marker grammar, not five. */
 const DSTATE = {seagram:'saved', whitney:'saved', moma:'visited', grand:'visited'};
 const DPLACES = PLACES.map(q => Object.assign({}, q, {state: DSTATE[q.id] || ''}));
+/* the 11 map pins that do not have a full RECORDS entry - facts, one-line
+   architect/year stamp, and a short "what to look for" note. Real details,
+   not filler, so a pin without an uploaded photograph still has something
+   to say when you tap it. */
+const PLACE_INFO = {
+  moma:{arch:'Philip L. Goodwin & Edward Durell Stone, later Yoshio Taniguchi', year:'1939 (rebuilt 2004)', about:'The first International Style museum in Manhattan, then rebuilt around its own courtyard by Taniguchi. Read it from 54th Street rather than 53rd - the back of the building is the honest elevation.', facts:[['Founded','1929'],['This building','1939, Goodwin & Stone'],['Reopened','2004, Taniguchi'],['Sculpture garden','Philip Johnson, 1953'],['Look for','The 54th Street facade after dark']]},
+  gugg:{arch:'Frank Lloyd Wright', year:'1959', about:'Wright fought the New York building department for sixteen years to get this shape approved. He was dead six months before it opened. The ramp is a continuous half-mile spiral - the building is the exhibition system.', facts:[['Opened','21 October 1959'],['Design begun','1943'],['Landmark','NYC 1990, National 2008'],['World Heritage','2019'],['Look for','The oculus from the ground floor']]},
+  chrysler:{arch:'William Van Alen', year:'1930', about:'Walter Chrysler wanted the tallest building in the world, and got it for eleven months. The crown is stainless steel radiator arches; the gargoyles at the 61st floor are enlarged Chrysler hood ornaments. The lobby ceiling is a mural of transportation and industry, painted by Edward Trumbull.', facts:[['Height','319 m to the spire'],['Storeys','77'],['Built','1928 - 1930, in 20 months'],['Cladding','Nirosta stainless steel crown'],['Look for','The lobby - Africa marble, chrome, and the Trumbull ceiling']]},
+  whitney:{arch:'Renzo Piano', year:'2015', about:'Piano stacked the galleries on the Hudson side and hung the terraces off the Gansevoort side, so the building faces the meatpacking street and shows its back to the water. The exterior staircases are legally a fire escape and structurally the elevation.', facts:[['Opened','1 May 2015'],['Site','Gansevoort Street, at the south end of the High Line'],['Gallery floor','18,000 sq ft column-free on the fifth'],['Cladding','Blue-grey painted steel plate'],['Look for','The stacked terraces from the High Line']]},
+  grand:{arch:'Reed & Stem with Warren & Wetmore', year:'1913', about:'Beneath the sky ceiling is a working railway station that also invented Park Avenue - the tracks were sunk in 1913 and the avenue paved on top. The zodiac on the vault is painted backwards; the standard explanation is that it is drawn as God would see it from outside the sphere.', facts:[['Opened','2 February 1913'],['Main Concourse','470 x 160 ft, 125 ft high'],['Ceiling','Whitney Warren and Paul Helleu, restored 1998'],['Stone','Tennessee marble floor, Botticino marble trim'],['Look for','The zodiac painted in reverse']]},
+  rock:{arch:'Raymond Hood with Reinhard & Hofmeister', year:'1933', about:'Nineteen buildings arranged as a small city inside the grid, John D. Rockefeller Jr\'s Depression project. Hood pushed the tower back from Fifth Avenue to make the plaza; the sunken plaza is a failed shopping arcade that a skating rink saved.', facts:[['First phase','1931 - 1939'],['30 Rock','266 m, 70 storeys, opened 1933'],['Plaza','Sunken 1936, ice-skating from 1936'],['Prometheus','Paul Manship, 1934, gilt bronze'],['Look for','The Channel Gardens between the British and French buildings']]},
+  radio:{arch:'Edward Durell Stone, Donald Deskey interiors', year:'1932', about:'S.L. \"Roxy\" Rothafel\'s stage show palace, opened three weeks after the Empire State building broke ground. The auditorium is a scallop of overlapping arches; Deskey did every surface, including the ashtrays. The organ has 4,410 pipes and two consoles either side of the stage.', facts:[['Opened','27 December 1932'],['Seats','5,960 - the largest indoor theatre in the world at opening'],['Auditorium','Concentric arches, 84 ft to the peak'],['Wurlitzer','4,410 pipes, twin consoles'],['Look for','The mural in the Grand Foyer, Ezra Winter']]},
+  stpat:{arch:'James Renwick Jr.', year:'1878', about:'Decorated Gothic Revival in Tuckahoe marble, begun 1858 and consecrated 1879 with the spires unfinished. Renwick worked from Cologne and Reims; the plan is a Latin cross with no flying buttresses, so the aisles carry the vault thrust into the walls.', facts:[['Cornerstone','15 August 1858'],['Dedicated','25 May 1879'],['Spires added','1888'],['Height','101 m to the spire tips'],['Restored','2012 - 2015']]},
+  paley:{arch:'Zion & Breen', year:'1967', about:'A pocket park 42 feet wide, on the site of the old Stork Club. A water wall runs the back, honey locust trees hold a canopy at the front, and a step up from the sidewalk gives the noise of the city to the entrance and the sound of water to the seats.', facts:[['Opened','23 May 1967'],['Size','42 ft wide, 100 ft deep'],['Water wall','20 ft, 1,800 gallons a minute'],['Trees','17 honey locust'],['Landmark','New York City, 2006']]},
+  morgan:{arch:'McKim, Mead & White, extended by Renzo Piano', year:'1906 (2006 Piano extension)', about:'Charles McKim built it for Pierpont Morgan as a private library, laid up in Tennessee pink marble without mortar - the blocks were cut to fit dry. Piano threaded a glass court between the three original buildings in 2006 without touching the historic walls.', facts:[['Original','1902 - 1906, McKim, Mead & White'],['Method','Dry-laid Tennessee marble'],['East Room','Three tiers of walnut and inlaid bronze'],['Extension','2006, Renzo Piano'],['Look for','The Rotunda ceiling by H. Siddons Mowbray']]},
+  ford:{arch:'Kevin Roche & John Dinkeloo', year:'1967', about:'A twelve-storey office building with a third of an acre of atrium garden inside it - the offices look into the garden rather than out at 42nd Street. Cor-Ten steel and granite outside, a Dan Kiley planting scheme in.', facts:[['Opened','1967'],['Structure','Cor-Ten weathering steel and pink granite'],['Atrium','130 ft cube, twelve storeys open to the roof'],['Garden','Dan Kiley - subtropical, evergreen'],['Renovated','Foundation, 2018, Gensler']]}
+};
+
 const DYOU = {lat: 40.7550, lng: -73.9870};
 /* how far each place is from you, in metres, which is what decides both the
    framing and which cards appear underneath */
@@ -4229,23 +4316,33 @@ function walkLabel(q){
   return m < 950 ? m + ' m' : (m / 1000).toFixed(1) + ' km';
 }
 let dmapSel = null;
+/* one glyph per category, used wherever a pin has no photograph */
+const KIND_GLYPH = {
+  'Architecture': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V9l8-5 8 5v11"/><path d="M4 20h16"/><path d="M9 20v-6h6v6"/></svg>',
+  'Art Spaces':   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="7" r="1.4"/><circle cx="7.5" cy="11" r="1.4"/><circle cx="16.5" cy="11" r="1.4"/><circle cx="9" cy="16" r="1.4"/><path d="M13 20c2 0 3.5-1.2 3.5-3 0-2-2-2-2-3.5s1.5-1.5 3-1.5"/></svg>',
+  'Photography':  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>'
+};
+function catGlyphHTML(){ /* the pin category icon at map-card size, in the pin colour */
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V9l8-5 8 5v11"/><path d="M4 20h16"/><path d="M9 20v-6h6v6"/></svg>';
+}
+
 function showMapCard(id){
   const box = $('#dmap-card'), q = DPLACES.find(p => p.id === id);
   if(!q){ hideMapCard(); return; }
   dmapSel = id;
-  const open = !!q.bld;
+  /* three routes: a full record (opens the building page), a landmark
+     with facts but no photograph (opens the lightweight place page),
+     or nothing at all (fall back to place, which still knows its name) */
+  const target = q.bld ? {kind:'building', id:q.bld} : {kind:'place', id:q.id};
   const thumb = q.img
     ? `<img class="mcthumb" src="${IMG[q.img]}" alt="">`
-    : `<span class="mcthumb none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></span>`;
-  const tail = open
-    ? `<svg class="mcgo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>`
-    : `<span class="mcnone">Location only</span>`;
+    : `<span class="mcthumb cat" style="--c:${q.c}">${KIND_GLYPH[q.kind] || catGlyphHTML()}</span>`;
+  const chev = `<svg class="mcgo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>`;
   const inner = `${thumb}<span class="mcinfo"><b>${esc(q.name)}</b>
       <span class="mcmeta"><i class="mcdot" style="background:${q.c}"></i>${esc(q.kind)} &#183; ${walkLabel(q)} away</span>
-    </span>${tail}`;
-  box.innerHTML = (open
-      ? `<button class="mcbody" data-building="${q.bld}">${inner}</button>`
-      : `<div class="mcbody">${inner}</div>`)
+    </span>${chev}`;
+  const attr = target.kind === 'building' ? `data-building="${target.id}"` : `data-place-open="${target.id}"`;
+  box.innerHTML = `<button class="mcbody" ${attr}>${inner}</button>`
     + `<button class="mcclose" data-mapcard-close aria-label="Dismiss"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>`;
   box.hidden = false;
 }
@@ -4964,6 +5061,7 @@ document.addEventListener('click', e=>{
     return;
   }
 
+  const po = t.closest('[data-place-open]'); if(po){ openPlace(po.dataset.placeOpen); return; }
   if(t.closest('[data-mapcard-close]')){ hideMapCard(); return; }
   /* a tap on the map that is not a pin clears the selection */
   if(t.closest('#discover-map') && !t.closest('[data-place]') && !t.closest('#dmap-card')){
