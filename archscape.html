@@ -351,8 +351,40 @@ figure{margin:0}
 .pnophoto span{flex:1;font-size:12px;color:var(--muted);line-height:1.4}
 .pnophoto button{flex:none;font-size:11.5px;font-weight:600;color:var(--red);white-space:nowrap;padding:2px 0}
 .pnophoto button:hover{text-decoration:underline}
-#s-place{background:var(--paper)}
-#s-place > #p-body{padding-bottom:36px}
+/* the unified building detail: same shell as .phero above, plus these
+   shared building parts sit inside .pbody (both s-building and s-place
+   use them). The style pill, stat grid, captured-by section and red
+   footer CTA belong to any building page, populated or not. */
+.pstyle{margin-top:10px}
+.pstyle span{display:inline-block;padding:5px 12px;border:1px solid var(--bone);border-radius:4px;
+  font-size:11px;font-weight:600;color:var(--ink);letter-spacing:.02em}
+.pstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin:20px 22px 0;
+  border-top:1px solid var(--bone);border-bottom:1px solid var(--bone)}
+.pstats .s{padding:14px 8px;text-align:center;border-right:1px solid var(--bone)}
+.pstats .s:last-child{border-right:0}
+.pstats .s b{display:block;font-family:var(--disp);font-size:26px;font-weight:600;line-height:1;color:var(--ink)}
+.pstats .s b.red{color:var(--red)}
+.pstats .s span{display:block;margin-top:4px;font-size:10.5px;font-weight:500;color:var(--muted)}
+.pcaps{padding:24px 22px 0}
+.pcapshead{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+.pcapshead h3{font-family:var(--disp);font-size:22px;font-weight:600;color:var(--ink);margin:0}
+.pcapshead .pcount{font-size:12px;font-weight:500;color:var(--red)}
+.pcapshead .pcount.muted{color:var(--muted-2)}
+.pshots{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.pshots .shot{position:relative;aspect-ratio:1;overflow:hidden;border-radius:4px;display:block}
+.pshots .shot img{width:100%;height:100%;object-fit:cover;display:block}
+.pshots .who{position:absolute;left:6px;bottom:6px;padding:2px 6px;background:rgba(15,15,15,.72);
+  color:#fff;font-size:9.5px;font-weight:600;border-radius:3px}
+.pempty{border:1px dashed var(--bone);border-radius:6px;padding:24px 18px;text-align:center;
+  background:var(--paper);color:var(--muted)}
+.pempty svg{width:26px;height:26px;color:var(--muted-2);margin:0 auto 9px;display:block}
+.pempty b{display:block;font-family:var(--disp);font-size:18px;font-weight:600;color:var(--ink);margin-bottom:5px}
+.pempty span{display:block;font-size:12.5px;line-height:1.45;max-width:32ch;margin:0 auto}
+.pcta{padding:22px 22px 28px}
+.pcta .btn{width:100%}
+
+#s-place, #s-building{background:var(--paper)}
+#s-place > #p-body, #s-building > #b-body{padding-bottom:0}
 
 .mapbadge{position:absolute;right:12px;bottom:12px;z-index:3;display:flex;align-items:center;gap:7px;
   background:rgba(255,255,255,.95);border:1px solid var(--bone);border-radius:999px;padding:7px 13px;
@@ -2033,9 +2065,10 @@ the city folded in on itself.</textarea>
         </section>
 
         <!-- ============ BUILDING ============ -->
-        <section class="screen pad" id="s-building">
-          <div class="ci-head"><button class="iconbtn" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><h2 class="h-title sm">Building</h2><button class="iconbtn" id="b-save" data-bsave aria-pressed="false" aria-label="Save this building"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg></button></div>
+        <section class="screen" id="s-building" data-bleed>
           <div id="b-body"></div>
+          <button class="pchrome pback" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button class="pchrome psave" id="b-save" data-bsave aria-pressed="false" aria-label="Save this building"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg></button>
         </section>
 
         <!-- ============ 09b PLACE (map pin without a full record) ============ -->
@@ -3594,25 +3627,14 @@ function renderBuilding(id){
     save.setAttribute('aria-pressed', String(!!b.saved));
     save.setAttribute('aria-label', (b.saved ? 'Remove ' : 'Save ') + b.name);
   }
+  /* pull kind/c off the PLACES pin when one exists, so the hero tag matches
+     the map colour that led here; otherwise fall back on the record's style. */
+  const pin = (typeof DPLACES !== 'undefined') ? DPLACES.find(p => p.bld === id) : null;
   const walkKey = Object.keys(GROUPS).find(k => GROUPS[k].walk && GROUPS[k].walk.bld === id);
   const g = walkKey ? GROUPS[walkKey] : null;
-  $('#b-body').innerHTML = `
-    <div class="bhero"><img src="${IMG[b.img]}" alt="${esc(b.name)}"></div>
-    <div class="bfacts">
-      <h2>${esc(b.name)}</h2>
-      <p>${esc(b.architect)}, ${esc(b.year)} &#183; ${esc(b.city)}</p>
-      <div class="bstyles"><span>${esc(b.style)}</span></div>
-    </div>
-    <div class="statgrid" style="margin-top:18px">
-      <div class="s"><b class="red onum">${b.captures}</b><span>Captures</span></div>
-      <div class="s"><b class="onum">${b.explorers}</b><span>Explorers</span></div>
-      <div class="s"><b class="onum">${b.shots.length}</b><span>From your circle</span></div>
-    </div>
-    ${b.about ? `<p class="babout">${esc(b.about)}</p>` : ''}
-    ${b.facts ? `<dl class="bfactlist">${b.facts.map(([k, v])=>
-      `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>` : ''}
-    ${g ? `
-      <div class="sechead" style="padding-top:18px"><h3 class="sectitle">A walk comes here</h3></div>
+  const extra = g ? `
+    <div class="pcaps" style="padding-top:22px">
+      <div class="pcapshead"><h3>A walk comes here</h3></div>
       <div class="walkcard card">
         <div class="eyebrow">${esc(g.name)}</div>
         <div class="walkrow">
@@ -3622,13 +3644,17 @@ function renderBuilding(id){
             <span class="walkgoing">${stackOf(g.people.slice(0,3))}<em>Meet the group here</em></span></span>
         </div>
         <div style="margin-top:13px"><button class="btn-outline" data-group="${walkKey}">Open group</button></div>
-      </div>` : ''}
-    <div class="sechead" style="padding-top:18px"><h3 class="sectitle">Captured by</h3>
-      <button class="seelink" data-captures="${id}">${b.shots.length} capture${b.shots.length === 1 ? '' : 's'}</button></div>
-    <div class="shots">${b.shots.map(([img, who])=>
-      `<button class="shot" data-member="${who}"><img src="${IMG[img]}" alt="">
-        <span class="who">${esc(PEOPLE[who].handle)}</span></button>`).join('')}</div>
-    <div class="bcta"><button class="btn btn-red" data-go="capture">Add your capture</button></div>`;
+      </div>
+    </div>` : '';
+  $('#b-body').innerHTML = buildingPageHTML({
+    id, name:b.name, img:b.img,
+    architect:b.architect, year:b.year, city:b.city, style:b.style,
+    kind: pin ? pin.kind : (b.style || ''),
+    c:    pin ? pin.c    : '#7B7C79',
+    about:b.about, facts:b.facts,
+    captures:b.captures, explorers:b.explorers, shots:b.shots || [],
+    extra
+  });
 }
 
 /* What the shots of one building look like gathered in one place: whose eye it
@@ -3691,6 +3717,67 @@ function openTrip(){ renderTrip(); go('trip'); }
 
 function openGroup(id){ renderGroup(id); go('group'); }
 function openMember(id){ renderMember(id); go('member'); }
+
+/* one visual layout for every building detail page - a full-bleed photo hero
+   with floating chrome, a headline block, an optional stat grid when the app
+   holds counts, description + facts, an optional "captured by" section that
+   invites a first capture when it is empty, and the red add-your-capture
+   footer. Both renderBuilding (full records) and renderPlace (landmark pins)
+   pass their data through this. Slots read from the entity: name, img
+   (required for the photo hero, otherwise glyph), architect, year, city or
+   walkLine, style, kind, c, about, facts (array of [k,v]), captures,
+   explorers, shots (array of [imgKey, personKey]) + extra HTML appended
+   before the CTA. */
+function buildingPageHTML(o){
+  const hero = o.img
+    ? `<div class="phero photo"><img src="${IMG[o.img]}" alt="${esc(o.name)}">
+         <span class="pkind"><i></i>${esc(o.kind || '')}</span></div>`
+    : `<div class="phero" style="--c:${o.c || '#7B7C79'}">
+         <span class="pheroglyph">${(KIND_GLYPH[o.kind] || '')}</span>
+         <span class="pkind"><i></i>${esc(o.kind || '')}</span></div>`;
+  const sub = [];
+  if(o.architect) sub.push(esc(o.architect));
+  if(o.year)      sub.push(esc(o.year));
+  if(o.walkLine)  sub.push(esc(o.walkLine));
+  else if(o.city) sub.push(esc(o.city));
+  const stats = (o.captures != null || o.explorers != null || (o.shots && o.shots.length))
+    ? `<div class="pstats">
+         <div class="s"><b class="red onum">${o.captures || 0}</b><span>Captures</span></div>
+         <div class="s"><b class="onum">${o.explorers || 0}</b><span>Explorers</span></div>
+         <div class="s"><b class="onum">${(o.shots || []).length}</b><span>From your circle</span></div>
+       </div>` : '';
+  const facts = (o.facts && o.facts.length)
+    ? `<dl class="bfactlist">${o.facts.map(([k,v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>` : '';
+  const shotN = (o.shots || []).length;
+  const captured = `<div class="pcaps">
+    <div class="pcapshead"><h3>Captured by</h3>
+      ${shotN
+        ? `<button class="pcount" data-captures="${o.id}">${shotN} capture${shotN === 1 ? '' : 's'}</button>`
+        : `<span class="pcount muted">No captures yet</span>`}
+    </div>
+    ${shotN
+      ? `<div class="pshots">${o.shots.map(([img, who]) =>
+          `<button class="shot" data-member="${who}"><img src="${IMG[img]}" alt="">
+            <span class="who">${esc((PEOPLE[who] && PEOPLE[who].handle) || '@' + who)}</span></button>`).join('')}</div>`
+      : `<div class="pempty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+          <b>Be the first eye on this</b>
+          <span>Nobody in your circle has captured ${esc(o.name)} yet. Open the camera and start the archive.</span>
+        </div>`}
+  </div>`;
+  return `${hero}
+    <div class="pheadline">
+      <h2>${esc(o.name)}</h2>
+      ${sub.length ? `<p class="parch">${sub.join(' &#183; ')}</p>` : ''}
+      ${o.style ? `<div class="pstyle"><span>${esc(o.style)}</span></div>` : ''}
+    </div>
+    ${stats}
+    ${o.about ? `<p class="babout">${esc(o.about)}</p>` : ''}
+    ${facts}
+    ${o.extra || ''}
+    ${captured}
+    <div class="pcta"><button class="btn btn-red" data-go="capture">Add your capture</button></div>`;
+}
 function openBuilding(id){ renderBuilding(id); go('building'); }
 /* the lightweight place page for a landmark without a full RECORDS entry -
    real facts, honest about the missing photograph, offering a capture */
@@ -3698,7 +3785,6 @@ function renderPlace(id){
   const q = DPLACES.find(p => p.id === id);
   if(!q) return;
   const info = (typeof PLACE_INFO !== 'undefined' && PLACE_INFO[id]) || null;
-  const glyph = KIND_GLYPH[q.kind] || '';
   const lat = q.lat.toFixed(4), lng = q.lng.toFixed(4);
   const facts = [
     ...(info && info.arch ? [['Architect', info.arch]] : []),
@@ -3708,27 +3794,15 @@ function renderPlace(id){
     ['Coordinates', lat + ', ' + lng + ' N'],
     ...(info && info.facts ? info.facts : [])
   ];
-  const hero = q.img
-    ? `<div class="phero photo"><img src="${IMG[q.img]}" alt="${esc(q.name)}">
-         <span class="pkind"><i></i>${esc(q.kind)}</span></div>`
-    : `<div class="phero" style="--c:${q.c}">
-         <span class="pheroglyph">${glyph}</span>
-         <span class="pkind"><i></i>${esc(q.kind)}</span></div>`;
-  $('#p-body').innerHTML = `
-    ${hero}
-    <div class="pheadline">
-      <h2>${esc(q.name)}</h2>
-      ${info && info.arch ? `<p class="parch">${esc(info.arch)}${info.year ? ' &#183; ' + esc(info.year) : ''}</p>` : ''}
-    </div>
-    ${q.img ? '' : `<div class="pnophoto">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
-      <span>No photograph in the archive yet.</span>
-      <button data-go="capture">Be the first</button>
-    </div>`}
-    ${info && info.about ? `<p class="babout">${esc(info.about)}</p>` : ''}
-    <dl class="bfactlist">${facts.map(([k, v]) =>
-      `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
-  `;
+  $('#p-body').innerHTML = buildingPageHTML({
+    id, name:q.name, img:q.img, kind:q.kind, c:q.c,
+    architect: info && info.arch,
+    year:      info && info.year,
+    walkLine:  walkLabel(q) + ' from you',
+    about:     info && info.about,
+    facts,
+    shots: []                       /* pins have no per-user captures yet */
+  });
   const save = $('#p-save');
   if(save){
     save.setAttribute('aria-pressed', String(!!q.saved));
