@@ -310,25 +310,44 @@ figure{margin:0}
   box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
 .mcthumb.cat svg{width:22px;height:22px;color:#fff;opacity:.92}
 
-/* the lightweight place page - hero as a colour tile with the category glyph,
-   because a photograph would either be fabricated or absent */
-.phero{position:relative;height:160px;background:var(--c,#7B7C79);display:grid;place-items:center;overflow:hidden}
+/* the lightweight place page - a full-bleed category-colour hero as its
+   own visual weight, floating back and save chrome at the top edges,
+   headline landing directly on the paper below the hero */
+.phero{position:relative;height:320px;background:var(--c,#7B7C79);overflow:hidden;
+  display:grid;place-items:center}
 .phero::before{content:"";position:absolute;inset:0;
-  background:radial-gradient(circle at 30% 20%, rgba(255,255,255,.18), transparent 55%),
-    linear-gradient(160deg, rgba(255,255,255,.08), rgba(0,0,0,.22));pointer-events:none}
-.phero svg{width:56px;height:56px;color:rgba(255,255,255,.94);position:relative}
-.pheadline{padding:16px 22px 0}
-.pheadline .peyebrow{display:flex;align-items:center;gap:7px;font-size:9.5px;font-weight:700;
-  letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
-.pheadline .peyebrow i{width:6px;height:6px;border-radius:50%;background:var(--c,#7B7C79);display:block;flex:none}
-.pheadline h2{font-family:var(--disp);font-size:29px;font-weight:600;margin:6px 0 3px;line-height:1.08;color:var(--ink)}
-.pheadline .parch{margin:0;font-size:12.5px;color:var(--muted)}
+  background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.22), transparent 55%),
+    linear-gradient(160deg, rgba(255,255,255,.08), rgba(0,0,0,.28))}
+.phero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:52px;
+  background:linear-gradient(180deg, transparent, rgba(0,0,0,.14))}
+.pheroglyph{position:relative;width:74px;height:74px;color:rgba(255,255,255,.94);
+  display:grid;place-items:center;opacity:.92}
+.pheroglyph svg{width:74px;height:74px}
+.pkind{position:absolute;left:22px;bottom:19px;z-index:2;display:flex;align-items:center;gap:8px;
+  font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.88)}
+.pkind i{width:5px;height:5px;background:#fff;display:block;flex:none}
+.pchrome{position:absolute;top:calc(env(safe-area-inset-top, 0px) + 52px);z-index:12;
+  width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.92);
+  color:var(--ink);display:grid;place-items:center;
+  box-shadow:0 4px 12px -4px rgba(0,0,0,.35);transition:.16s}
+.pchrome:hover{background:#fff}
+.pchrome svg{width:19px;height:19px}
+.pback{left:14px}
+.psave{right:14px}
+.psave[aria-pressed="true"]{background:var(--red);color:#fff}
+.psave[aria-pressed="true"] svg{fill:currentColor}
+.pheadline{padding:20px 22px 0}
+.pheadline h2{font-family:var(--disp);font-size:32px;font-weight:600;margin:0 0 4px;line-height:1.05;color:var(--ink)}
+.pheadline .parch{margin:0;font-size:13px;color:var(--muted);line-height:1.5}
 .pnophoto{display:flex;align-items:center;gap:10px;margin:16px 22px 0;padding:11px 13px;
   background:var(--bone-soft);border:1px solid var(--bone);border-radius:6px}
 .pnophoto svg{width:17px;height:17px;color:var(--muted);flex:none}
-.pnophoto span{font-size:12px;color:var(--muted);line-height:1.4;flex:1}
+.pnophoto span{flex:1;font-size:12px;color:var(--muted);line-height:1.4}
 .pnophoto button{flex:none;font-size:11.5px;font-weight:600;color:var(--red);white-space:nowrap;padding:2px 0}
 .pnophoto button:hover{text-decoration:underline}
+#s-place{background:var(--paper)}
+#s-place > #p-body{padding-bottom:36px}
+
 .mapbadge{position:absolute;right:12px;bottom:12px;z-index:3;display:flex;align-items:center;gap:7px;
   background:rgba(255,255,255,.95);border:1px solid var(--bone);border-radius:999px;padding:7px 13px;
   font-size:11.5px;font-weight:600;color:var(--ink);box-shadow:0 6px 18px -8px rgba(0,0,0,.3);transition:.16s}
@@ -2014,13 +2033,10 @@ the city folded in on itself.</textarea>
         </section>
 
         <!-- ============ 09b PLACE (map pin without a full record) ============ -->
-        <section class="screen pad padnav" id="s-place">
-          <div class="ci-head">
-            <button class="iconbtn" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-            <h2 class="h-title sm">Place</h2>
-            <span style="width:34px"></span>
-          </div>
+        <section class="screen" id="s-place" data-bleed>
           <div id="p-body"></div>
+          <button class="pchrome pback" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button class="pchrome psave" id="p-save" data-psave aria-pressed="false" aria-label="Save this place"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg></button>
         </section>
 
         <!-- ============ 10 PATHS CROSSING ============ -->
@@ -2149,7 +2165,7 @@ const SCREENS = [
   {id:'stat',        name:'Stat',        chrome:'light', nav:true, tab:'profile'},
   {id:'captures',    name:'Captures',    chrome:'light', nav:true, tab:'explore'},
   {id:'trip',        name:'Journey',     chrome:'light', nav:true, tab:'profile'},
-  {id:'place',       name:'Place',       chrome:'light', nav:true, tab:'explore'}
+  {id:'place',       name:'Place',       chrome:'light', nav:false}
 ];
 /* the four screens a tab bar button actually lands on; everything else is a
    sub-screen and borrows whichever of these you came through */
@@ -2169,7 +2185,7 @@ const ENTER_FROM = ['obready','signin'];
 /* content on these scrolls up behind the status bar, so the strip behind the
    clock is painted rather than left transparent */
 const SB_SOLID = new Set(['discover', 'knowledge', 'journey', 'crossing', 'stat', 'member',
-  'group', 'building', 'captures', 'trip', 'place']);
+  'group', 'building', 'captures', 'trip']);
 function go(id, isBack){
   const s = SCREENS.find(x=>x.id===id); if(!s) return;
   const from = current;
@@ -3687,9 +3703,11 @@ function renderPlace(id){
     ...(info && info.facts ? info.facts : [])
   ];
   $('#p-body').innerHTML = `
-    <div class="phero" style="--c:${q.c}">${glyph}</div>
+    <div class="phero" style="--c:${q.c}">
+      <span class="pheroglyph">${glyph}</span>
+      <span class="pkind"><i></i>${esc(q.kind)}</span>
+    </div>
     <div class="pheadline">
-      <div class="peyebrow"><i></i>${esc(q.kind)}</div>
       <h2>${esc(q.name)}</h2>
       ${info && info.arch ? `<p class="parch">${esc(info.arch)}${info.year ? ' &#183; ' + esc(info.year) : ''}</p>` : ''}
     </div>
@@ -3702,7 +3720,14 @@ function renderPlace(id){
     <dl class="bfactlist">${facts.map(([k, v]) =>
       `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
   `;
+  const save = $('#p-save');
+  if(save){
+    save.setAttribute('aria-pressed', String(!!q.saved));
+    save.setAttribute('aria-label', (q.saved ? 'Remove ' : 'Save ') + q.name);
+  }
+  curPlace = id;
 }
+let curPlace = null;
 function openPlace(id){ renderPlace(id); go('place'); }
 
 
@@ -5454,7 +5479,18 @@ document.addEventListener('click', e=>{
     p.saved = !p.saved; reExplore();
     toast(p.saved ? 'Saved to your library' : 'Removed from library'); return;
   }
-  if(t.closest('[data-bsave]')){
+  if(t.closest('[data-psave]')){
+      const q = curPlace ? DPLACES.find(p=>p.id === curPlace) : null;
+      if(q){
+        q.saved = !q.saved;
+        const btn = $('#p-save');
+        btn.setAttribute('aria-pressed', String(q.saved));
+        btn.setAttribute('aria-label', (q.saved ? 'Remove ' : 'Save ') + q.name);
+        toast(q.saved ? 'Saved ' + q.name : 'Removed ' + q.name);
+      }
+      return;
+    }
+    if(t.closest('[data-bsave]')){
     const b = bldById(curBuilding);
     if(b){
       b.saved = !b.saved;
