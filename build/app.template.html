@@ -857,6 +857,33 @@ figure{margin:0}
 .mapres b{flex:1;min-width:0;font-size:12.5px;font-weight:600;color:var(--ink);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mapres span{flex:none;font-size:10.5px;color:var(--muted)}
+/* tapping a pin answers "what is this?" before it answers "open it" - the
+   card carries the photograph, the category and the walk, and only then
+   offers the record. Pins with no record say so rather than going nowhere. */
+.mapcard{position:absolute;left:12px;right:58px;bottom:12px;z-index:6;
+  background:rgba(255,255,255,.97);border:1px solid var(--bone);border-radius:7px;
+  box-shadow:0 10px 26px -10px rgba(15,15,15,.4);overflow:hidden;
+  animation:mapcardIn .24s cubic-bezier(.32,.72,0,1) both}
+@keyframes mapcardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.mapcard{animation:none}}
+.mapcard[hidden]{display:none}
+.mcbody{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:8px 9px}
+button.mcbody:hover{background:var(--bone-soft)}
+.mcthumb{width:46px;height:46px;border-radius:5px;object-fit:cover;flex:none;display:block}
+.mcthumb.none{background:var(--bone-soft);display:grid;place-items:center;color:var(--muted-2)}
+.mcthumb.none svg{width:19px;height:19px}
+.mcinfo{flex:1;min-width:0}
+.mcinfo b{display:block;font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.25;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mcmeta{display:flex;align-items:center;gap:6px;margin-top:3px;font-size:11px;color:var(--muted)}
+.mcdot{width:6px;height:6px;border-radius:50%;flex:none;display:block}
+.mcgo{flex:none;width:17px;height:17px;color:var(--muted-2)}
+.mcnone{flex:none;font-size:9px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted-2);padding-right:4px}
+.mcclose{position:absolute;right:3px;top:3px;width:22px;height:22px;border-radius:50%;
+  display:grid;place-items:center;color:var(--muted-2);background:rgba(255,255,255,.9)}
+.mcclose:hover{color:var(--ink);background:var(--bone-soft)}
+.mcclose svg{width:12px;height:12px}
 .zoomctl{position:absolute;right:12px;bottom:12px;z-index:5;display:flex;flex-direction:column;gap:1px;
   border-radius:9px;overflow:hidden;box-shadow:0 8px 22px -12px rgba(0,0,0,.4);border:1px solid var(--bone)}
 .zoomctl button{width:34px;height:32px;background:rgba(255,255,255,.96);color:var(--ink);display:grid;
@@ -1571,6 +1598,7 @@ button.tsbody{cursor:pointer}
           </div>
           <div class="mapframe jmap" id="discover-map" style="height:272px">
             <svg class="mapcanvas" id="dmap-svg" aria-label="Map of architectural spots near you"></svg>
+            <div class="mapcard" id="dmap-card" hidden></div>
             <div class="zoomctl">
               <button data-zoom="in" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
               <button data-zoom="out" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
@@ -2151,6 +2179,7 @@ function go(id, isBack){
   if(TAB_ROOT[id]) navTab = TAB_ROOT[id];
   const litTab = TAB_ROOT[id] || navTab || s.tab;
   $$('.tabitem').forEach(b => b.setAttribute('aria-current', String(b.dataset.tab === litTab)));
+  if(id !== 'discover') hideMapCard();
   const sc = $('#s'+'-'+id); if(sc) sc.scrollTop = 0;
   if(id === 'capture'){
     setCapture('scanning', false, capAppendMode);
@@ -3613,6 +3642,8 @@ function openBuilding(id){ renderBuilding(id); go('building'); }
    answers it: Nearby a map and cards, Trending a ranking, Following a feed of
    what people did, Saved your own shelf. */
 function renderSpots(key){
+  /* the other three tabs hide the map, so a selection cannot survive them */
+  hideMapCard();
   $('#spots-title').textContent = SPOT_TITLE[key];
   $('#s-discover').dataset.dtab = key;
   const link = $('#spots-link'), box = $('#spots');
@@ -4192,6 +4223,33 @@ function walkFrom(q){
    you read is always what you are looking at - no Hong Kong under a
    Midtown map */
 const NEARBY = DPLACES.filter(q => q.img).sort((a, b) => walkFrom(a) - walkFrom(b)).slice(0, 6);
+/* the preview card for a tapped pin */
+function walkLabel(q){
+  const m = Math.round(walkFrom(q));
+  return m < 950 ? m + ' m' : (m / 1000).toFixed(1) + ' km';
+}
+let dmapSel = null;
+function showMapCard(id){
+  const box = $('#dmap-card'), q = DPLACES.find(p => p.id === id);
+  if(!q){ hideMapCard(); return; }
+  dmapSel = id;
+  const open = !!q.bld;
+  const thumb = q.img
+    ? `<img class="mcthumb" src="${IMG[q.img]}" alt="">`
+    : `<span class="mcthumb none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></span>`;
+  const tail = open
+    ? `<svg class="mcgo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>`
+    : `<span class="mcnone">Location only</span>`;
+  const inner = `${thumb}<span class="mcinfo"><b>${esc(q.name)}</b>
+      <span class="mcmeta"><i class="mcdot" style="background:${q.c}"></i>${esc(q.kind)} &#183; ${walkLabel(q)} away</span>
+    </span>${tail}`;
+  box.innerHTML = (open
+      ? `<button class="mcbody" data-building="${q.bld}">${inner}</button>`
+      : `<div class="mcbody">${inner}</div>`)
+    + `<button class="mcclose" data-mapcard-close aria-label="Dismiss"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>`;
+  box.hidden = false;
+}
+function hideMapCard(){ dmapSel = null; const b = $('#dmap-card'); if(b){ b.hidden = true; b.innerHTML = ''; } }
 let dmapView = {lat: DYOU.lat + .0016, lng: DYOU.lng + .0026, scale: 0.108, sel: null};
 
 /* Paths crossing: your own three routes with other explorers' tracks laid
@@ -4906,15 +4964,21 @@ document.addEventListener('click', e=>{
     return;
   }
 
+  if(t.closest('[data-mapcard-close]')){ hideMapCard(); return; }
+  /* a tap on the map that is not a pin clears the selection */
+  if(t.closest('#discover-map') && !t.closest('[data-place]') && !t.closest('#dmap-card')){
+    hideMapCard();
+  }
   const mp = t.closest('[data-place]');
   if(mp){
     const id = mp.dataset.place;
     /* on Discover a pin that has a full record opens it; otherwise the map
        just centres on it, the same as tapping a stop on your own journey */
     if(mp.closest('#discover-map')){
-      const q = DPLACES.find(p=>p.id === id);
-      if(q && q.bld){ openBuilding(q.bld); return; }
-      dmap.flyTo(id); return;
+      /* one tap selects and explains; opening the record is the card's job */
+      dmap.flyTo(id);
+      showMapCard(id);
+      return;
     }
     if(mp.closest('#crossing-map')){ xmap.flyTo(id); return; }
     jmap.flyTo(id);
@@ -4928,7 +4992,7 @@ document.addEventListener('click', e=>{
   const st = t.closest('[data-stop]');
   if(st){ jmap.flyTo(st.dataset.stop); renderStops(); return; }
   const spotBtn = t.closest('[data-spot]');
-  if(spotBtn){ dmap.flyTo(spotBtn.dataset.spot); return; }
+  if(spotBtn){ dmap.flyTo(spotBtn.dataset.spot); showMapCard(spotBtn.dataset.spot); return; }
   if(t.closest('[data-back]')){ back(); return; }
 
   const fol = t.closest('[data-follow]');
