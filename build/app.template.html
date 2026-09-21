@@ -315,6 +315,12 @@ figure{margin:0}
    headline landing directly on the paper below the hero */
 .phero{position:relative;height:320px;background:var(--c,#7B7C79);overflow:hidden;
   display:grid;place-items:center}
+.phero.photo{display:block;background:#0F0F0F}
+.phero.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.phero.photo::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,.35) 0, transparent 22%, transparent 62%, rgba(0,0,0,.55))}
+.phero.photo .pkind{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5);z-index:2}
+.phero.photo .pkind i{background:#fff}
 .phero::before{content:"";position:absolute;inset:0;
   background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.22), transparent 55%),
     linear-gradient(160deg, rgba(255,255,255,.08), rgba(0,0,0,.28))}
@@ -3702,20 +3708,23 @@ function renderPlace(id){
     ['Coordinates', lat + ', ' + lng + ' N'],
     ...(info && info.facts ? info.facts : [])
   ];
+  const hero = q.img
+    ? `<div class="phero photo"><img src="${IMG[q.img]}" alt="${esc(q.name)}">
+         <span class="pkind"><i></i>${esc(q.kind)}</span></div>`
+    : `<div class="phero" style="--c:${q.c}">
+         <span class="pheroglyph">${glyph}</span>
+         <span class="pkind"><i></i>${esc(q.kind)}</span></div>`;
   $('#p-body').innerHTML = `
-    <div class="phero" style="--c:${q.c}">
-      <span class="pheroglyph">${glyph}</span>
-      <span class="pkind"><i></i>${esc(q.kind)}</span>
-    </div>
+    ${hero}
     <div class="pheadline">
       <h2>${esc(q.name)}</h2>
       ${info && info.arch ? `<p class="parch">${esc(info.arch)}${info.year ? ' &#183; ' + esc(info.year) : ''}</p>` : ''}
     </div>
-    <div class="pnophoto">
+    ${q.img ? '' : `<div class="pnophoto">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
       <span>No photograph in the archive yet.</span>
       <button data-go="capture">Be the first</button>
-    </div>
+    </div>`}
     ${info && info.about ? `<p class="babout">${esc(info.about)}</p>` : ''}
     <dl class="bfactlist">${facts.map(([k, v]) =>
       `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
@@ -4273,29 +4282,40 @@ const MAPINK = {
 };
 
 const PLACES = [
-  {id:'moma',   name:'MoMA',                lat:40.7614, lng:-73.9776, c:'#3B6E9D', kind:'Art Spaces'},
+  {id:'moma',   name:'MoMA',                lat:40.7614, lng:-73.9776, c:'#3B6E9D', kind:'Art Spaces',
+   img:'nyc_moma'},
   {id:'seagram',name:'Seagram Building',    lat:40.7587, lng:-73.9720, c:'#AF2B34', kind:'Architecture',
    img:'ar_facade', n:2104, bld:'seagram'},
-  {id:'gugg',   name:'Guggenheim',          lat:40.7830, lng:-73.9590, c:'#3B6E9D', kind:'Art Spaces'},
+  {id:'gugg',   name:'Guggenheim',          lat:40.7830, lng:-73.9590, c:'#3B6E9D', kind:'Art Spaces',
+   img:'nyc_gugg'},
   {id:'parkav', name:'Park Ave Facades',    lat:40.7549, lng:-73.9756, c:'#7B7C79', kind:'Photography',
    img:'w7', n:742, bld:'parkav'},
   {id:'vessel', name:'The Vessel',          lat:40.7539, lng:-74.0021, c:'#AF2B34', kind:'Architecture',
    img:'vessel_hero', n:3184, bld:'vessel'},
-  {id:'chrysler',name:'Chrysler Building',  lat:40.7516, lng:-73.9755, c:'#AF2B34', kind:'Architecture'},
+  {id:'chrysler',name:'Chrysler Building',  lat:40.7516, lng:-73.9755, c:'#AF2B34', kind:'Architecture',
+   img:'nyc_chrysler'},
   {id:'empire', name:'Empire State',        lat:40.7484, lng:-73.9857, c:'#AF2B34', kind:'Architecture',
    img:'w12', n:2871, bld:'empire'},
-  {id:'whitney',name:'Whitney Museum',      lat:40.7396, lng:-74.0089, c:'#3B6E9D', kind:'Art Spaces'},
-  {id:'grand',  name:'Grand Central',       lat:40.7527, lng:-73.9772, c:'#7B7C79', kind:'Photography'},
+  {id:'whitney',name:'Whitney Museum',      lat:40.7396, lng:-74.0089, c:'#3B6E9D', kind:'Art Spaces',
+   img:'nyc_whitney'},
+  {id:'grand',  name:'Grand Central',       lat:40.7527, lng:-73.9772, c:'#7B7C79', kind:'Photography',
+   img:'nyc_grand'},
   {id:'highline',name:'The High Line',      lat:40.7480, lng:-74.0048, c:'#7B7C79', kind:'Photography',
    img:'highline', n:1520, bld:'highline'},
   {id:'nypl',   name:'NY Public Library',   lat:40.7532, lng:-73.9822, c:'#AF2B34', kind:'Architecture',
    img:'w3', n:1103, bld:'nypl'},
-  {id:'rock',   name:'Rockefeller Center',  lat:40.7587, lng:-73.9787, c:'#AF2B34', kind:'Architecture'},
-  {id:'radio',  name:'Radio City',          lat:40.7599, lng:-73.9800, c:'#3B6E9D', kind:'Art Spaces'},
-  {id:'stpat',  name:"St Patrick's",        lat:40.7585, lng:-73.9760, c:'#AF2B34', kind:'Architecture'},
-  {id:'paley',  name:'Paley Park',          lat:40.7590, lng:-73.9744, c:'#7B7C79', kind:'Photography'},
-  {id:'morgan', name:'Morgan Library',      lat:40.7492, lng:-73.9814, c:'#3B6E9D', kind:'Art Spaces'},
-  {id:'ford',   name:'Ford Foundation',     lat:40.7497, lng:-73.9707, c:'#AF2B34', kind:'Architecture'}
+  {id:'rock',   name:'Rockefeller Center',  lat:40.7587, lng:-73.9787, c:'#AF2B34', kind:'Architecture',
+   img:'nyc_rock'},
+  {id:'radio',  name:'Radio City',          lat:40.7599, lng:-73.9800, c:'#3B6E9D', kind:'Art Spaces',
+   img:'nyc_radio'},
+  {id:'stpat',  name:"St Patrick's",        lat:40.7585, lng:-73.9760, c:'#AF2B34', kind:'Architecture',
+   img:'nyc_stpat'},
+  {id:'paley',  name:'Paley Park',          lat:40.7590, lng:-73.9744, c:'#7B7C79', kind:'Photography',
+   img:'nyc_paley'},
+  {id:'morgan', name:'Morgan Library',      lat:40.7492, lng:-73.9814, c:'#3B6E9D', kind:'Art Spaces',
+   img:'nyc_morgan'},
+  {id:'ford',   name:'Ford Foundation',     lat:40.7497, lng:-73.9707, c:'#AF2B34', kind:'Architecture',
+   img:'nyc_ford'}
 ];
 
 /* Discover shows the places you could walk to now; the two that exist as full
