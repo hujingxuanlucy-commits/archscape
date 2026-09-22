@@ -2224,7 +2224,7 @@ const ENTER_FROM = ['obready','signin'];
 /* content on these scrolls up behind the status bar, so the strip behind the
    clock is painted rather than left transparent */
 const SB_SOLID = new Set(['discover', 'knowledge', 'journey', 'crossing', 'stat', 'member',
-  'group', 'building', 'captures', 'trip']);
+  'group', 'captures', 'trip']);
 function go(id, isBack){
   const s = SCREENS.find(x=>x.id===id); if(!s) return;
   const from = current;
@@ -4462,7 +4462,7 @@ function showMapCard(id){
     </span>${chev}`;
   const attr = target.kind === 'building' ? `data-building="${target.id}"` : `data-place-open="${target.id}"`;
   box.innerHTML = `<button class="mcbody" ${attr}>${inner}</button>`
-    + `<button class="mcclose" data-mapcard-close aria-label="Dismiss"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>`;
+    ;
   box.hidden = false;
 }
 function hideMapCard(){ dmapSel = null; const b = $('#dmap-card'); if(b){ b.hidden = true; b.innerHTML = ''; } }
