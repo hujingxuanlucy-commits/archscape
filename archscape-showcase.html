@@ -323,6 +323,32 @@ body.progress-visible .section-progress{opacity:.78;transform:translateX(0);poin
   .onboarding-triptych img{max-width:280px;transform:none!important}
 }
 
+
+/* --- Explore: one real exported visual --- */
+.explore-image-stage{
+  min-height:610px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  overflow:visible;
+}
+.explore-image-stage img{
+  display:block;
+  width:100%;
+  max-width:760px;
+  max-height:650px;
+  height:auto;
+  object-fit:contain;
+  filter:drop-shadow(0 18px 28px rgba(15,15,15,.08));
+}
+@media(max-width:980px){
+  .explore-image-stage{min-height:auto}
+  .explore-image-stage img{max-width:680px}
+}
+
 </style>
 </head>
 <body>\n<nav class="section-progress" aria-label="Case study sections">
@@ -28245,17 +28271,16 @@ Qw011FBDDTXUUEMNNdRQQw011FBDDTXUUEMNNdRQQw011FBDDTXUUEMNNXTx
   </div>
 </div></section>
 <section id="explore"><div class="wrap section-grid">
-<div class="title"><div class="num">02</div><div class="eyebrow">Discovery</div><h2>Explore</h2><p>Discover nearby architecture, browse by style, and move from a map point into the story behind a building.</p></div>
-<div class="experience-stage explore-stage">
-  <div class="stage-note">Nearby · New York</div>
-  <div class="map">
-    <i class="dot" style="left:20%;top:33%"></i><i class="dot b" style="left:36%;top:48%"></i><i class="dot g" style="left:52%;top:29%"></i><i class="dot" style="left:67%;top:56%"></i><i class="dot b" style="left:47%;top:66%"></i><i class="dot g" style="left:29%;top:63%"></i><i class="dot s" style="left:57%;top:72%"></i>
-    <span class="map-city-label" style="left:24%;top:45%">Midtown</span><span class="map-city-label" style="right:13%;top:70%">East River</span>
+  <div class="title">
+    <div class="num">02</div>
+    <div class="eyebrow">Explore</div>
+    <h2>Search Through the Map</h2>
+    <p>Discover nearby architecture through the map, then browse by style to move from a place in the city into the story behind it.</p>
   </div>
-  <div class="browse-float"><div class="kicker">Browse by style</div><h3>Search visually.</h3><div class="style-grid-mini"><img src="data:image/png;base64,"><img src="data:image/png;base64,"><img src="data:image/png;base64,"><img src="data:image/png;base64,"></div></div>
-  <div class="explore-selected"><div class="thumb"></div><div><strong>Chrysler Building</strong><span>Architecture · 1.0 km away</span></div></div>
-  <div class="stage-caption">Map + discovery surfaces</div>
-</div></div></section>
+  <div class="explore-image-stage">
+    <img src="https://raw.githubusercontent.com/hujingxuanlucy-commits/archscape/website-showcase-page/showcase-assets/Exploremap.png" alt="ArchScape Explore map experience">
+  </div>
+</div></section>
 <section id="journey" class="mapsys"><div class="wrap section-grid">
 <div class="title"><div class="num">03</div><div class="eyebrow">Journey map</div><h2>Turn movement<br>into memory.</h2><p>A journey is one chronological path through the city. Stops show status; the timeline gives the detail.</p></div>
 <div class="experience-stage journey-stage">
