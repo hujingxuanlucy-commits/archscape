@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--paper:#faf8f5;--ink:#11100f;--muted:#817b73;--rule:#ded8cf;--red:#af2b34;--ox:#75202f;--blue:#3b6e9d;--sage:#cbd8b9;--water:#c7d7e1;--bone:#eee8df}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}a{color:inherit}.wrap{width:min(1180px,calc(100% - 48px));margin:auto}.serif,h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500}.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--red)}.kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--muted)}section{padding:104px 0;border-top:1px solid var(--rule)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Inter",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}a{color:inherit}.wrap{width:min(1180px,calc(100% - 48px));margin:auto}.serif,h1,h2,h3{font-family:"Cormorant Garamond",serif;font-weight:500}.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--red)}.kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--muted)}section{padding:104px 0;border-top:1px solid var(--rule)}
 .topbar{position:sticky;top:0;z-index:40;background:rgba(250,248,245,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--rule)}.topbar .wrap{height:70px;display:flex;align-items:center;justify-content:space-between;gap:24px}.wordmark{font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:600;line-height:1}.arch{color:var(--red);position:relative}.arch:after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:1.5px;background:var(--red)}nav{display:flex;gap:22px;font-size:13px;color:#625d56}nav a{text-decoration:none}.actions{display:flex;gap:10px}.btn{text-decoration:none;padding:10px 16px;border-radius:999px;border:1px solid var(--rule);font-size:13px;font-weight:600;background:#fff8}.btn.primary{background:var(--red);border-color:var(--red);color:#fff}
 .hero{padding:86px 0 96px;border-top:0;overflow:hidden}.hero-grid{display:grid;grid-template-columns:1.03fr .77fr;gap:72px;align-items:center}.hero h1{font-size:clamp(58px,7vw,92px);line-height:.94;letter-spacing:-.035em;margin:18px 0 28px}.hero h1 span{color:var(--red)}.hero p{font-size:18px;color:#5f5a54;max-width:590px}.chips{display:flex;gap:9px;flex-wrap:wrap;margin-top:30px}.chip{padding:7px 11px;border:1px solid var(--rule);border-radius:999px;background:#fff8;font-size:12px;color:#666058}
 .device{width:306px;height:620px;border-radius:48px;background:#171819;border:10px solid #242529;overflow:hidden;box-shadow:0 36px 80px -40px #0009}.device iframe{width:393px;height:852px;border:0;transform:scale(.73);transform-origin:0 0}.device-wrap{min-height:630px;display:flex;align-items:center;justify-content:center;position:relative}.ring{position:absolute;width:520px;height:520px;border:1px solid var(--rule);border-radius:50%}.ring:before,.ring:after{content:"";position:absolute;border:1px solid var(--rule);border-radius:50%;inset:72px}.ring:after{inset:148px}
@@ -21,10 +21,10 @@
 .capture{display:grid;grid-template-columns:1fr .85fr;gap:30px}.capture-shot{min-height:560px;border-radius:20px;background:url("images/image 3.png") center/cover;position:relative;overflow:hidden}.capture-shot:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 52%,#000c)}.tag{position:absolute;left:34px;bottom:34px;z-index:2;background:#161616dd;color:#fff;border:1px solid #ffffff2a;border-radius:12px;padding:16px 18px;width:260px}.capture-copy{display:flex;flex-direction:column;justify-content:center;padding:30px}.capture-copy h3{font-size:48px;line-height:1;margin:8px 0 18px}.capture-copy p{color:#6a645d}.asteps{display:grid;gap:14px;margin-top:30px}.astep{display:grid;grid-template-columns:36px 1fr;gap:12px;padding-top:14px;border-top:1px solid var(--rule)}.astep b{font-size:12px;color:var(--red)}.astep span{font-size:13px;color:#625d56}
 .connect{display:grid;grid-template-columns:.95fr 1.05fr;gap:28px}.people{height:510px;border:1px solid var(--rule);border-radius:20px;background:#ece5d6;position:relative;overflow:hidden;background-image:linear-gradient(30deg,transparent 49%,#fff9 49%,#fff9 51%,transparent 51%),linear-gradient(120deg,transparent 49%,#fff8 49%,#fff8 51%,transparent 51%);background-size:42px 42px}.cross{background:var(--ink);color:#fff;border-radius:20px;padding:34px}.cross h3{font-size:44px;line-height:1;margin:10px 0 18px}.cross p{color:#c7c1b9}.person{display:flex;gap:14px;align-items:center;margin-top:38px;padding-top:22px;border-top:1px solid #353535}.pic{width:52px;height:52px;border-radius:50%;background:linear-gradient(145deg,#c9b28c,#35312b)}
 .archive{display:grid;grid-template-columns:.8fr 1.2fr;gap:26px}.profile{border:1px solid var(--rule);border-radius:20px;background:#fff;padding:28px}.profile h3{font-size:40px;margin:0 0 8px}.stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:24px 0}.stat{padding:18px 0}.stat b{display:block;font-family:"Cormorant Garamond",serif;font-size:28px}.stat span{font-size:11px;color:var(--muted)}.wall{columns:3 150px;column-gap:8px}.wall img{width:100%;margin:0 0 8px;border-radius:4px;break-inside:avoid}
-.system{display:grid;grid-template-columns:1fr 1fr;gap:58px}.swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.sw{height:92px;border-radius:10px;border:1px solid var(--rule);position:relative}.sw span{position:absolute;left:10px;bottom:8px;font-size:10px;font-weight:600}.type{display:grid;gap:20px}.type .display{font-family:"Cormorant Garamond",serif;font-size:58px;line-height:.96}.type .ui{font-size:28px;font-weight:600}.type small{color:var(--muted)}
+.system-board{display:grid;gap:18px}.system-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}.system-panel{border:1px solid var(--rule);border-radius:18px;background:#fff9;padding:24px;overflow:hidden}.system-panel.wide{grid-column:1/-1}.system-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:16px}.brand-lockup{font-family:"Cormorant Garamond",serif;font-size:48px;font-weight:600;line-height:1}.brand-lockup .arch{display:inline-block}.brand-note{font-size:12px;color:var(--muted);margin-top:14px;max-width:420px}.swatches{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.sw{height:88px;border-radius:10px;border:1px solid var(--rule);position:relative;overflow:hidden}.sw span{position:absolute;left:9px;bottom:7px;font-size:9px;font-weight:600}.type-spec{display:grid;gap:14px}.type-display{font-family:"Cormorant Garamond",serif;font-size:54px;line-height:.92}.type-ui{font-family:"Inter",sans-serif;font-size:22px;font-weight:600}.type-meta{font-family:"Inter",sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}.control-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.control-tab{padding:8px 10px;border-bottom:2px solid transparent;font-size:12px;color:var(--muted);font-weight:600}.control-tab.active{color:var(--ink);border-color:var(--red)}.control-button{padding:10px 15px;border-radius:10px;background:var(--red);color:white;font-size:12px;font-weight:700}.control-search{flex:1;min-width:180px;border:1px solid var(--rule);border-radius:999px;padding:10px 14px;color:#9a948c;font-size:12px;background:var(--paper)}.token-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}.marker-demo{display:flex;align-items:center;gap:8px;font-size:11px;color:#6b655e}.mk{width:16px;height:16px;border-radius:50%;display:inline-block;background:var(--red);border:2px solid white;box-shadow:0 0 0 1px #d5cec4}.mk.saved{background:var(--blue);box-shadow:inset 0 0 0 4px white,0 0 0 1px #d5cec4}.mk.visited{background:white;border:2px solid #777;box-shadow:none}.mk.current{background:var(--ox);box-shadow:0 0 0 5px rgba(117,32,47,.12)}.line-demo{width:58px;height:4px;border-radius:99px;background:var(--ox);display:inline-block}.line-demo.dash{height:0;background:none;border-top:3px dashed var(--ox);opacity:.65}.line-demo.friend{height:0;background:none;border-top:3px dotted #c2748c}.avatar-token{width:28px;height:28px;border-radius:50%;background:linear-gradient(145deg,#c8ae8c,#34302a);border:3px solid var(--paper);box-shadow:0 0 0 1.5px #c2748c}.chip-demo{padding:7px 10px;border-radius:999px;border:1px solid var(--rule);font-size:11px;background:var(--paper)}.chip-demo.active{border-color:var(--red);color:var(--red);background:#af2b340a}.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.principle-card{padding:16px;border-top:1px solid var(--rule)}.principle-card b{display:block;font-family:"Cormorant Garamond",serif;font-size:24px;margin-bottom:5px}.principle-card span{font-size:11px;color:var(--muted)}
 footer{background:var(--ink);color:#fff;padding:80px 0}footer .wrap{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end}footer h2{font-size:58px;line-height:1;margin:0;max-width:620px}footer p{color:#aaa49c;margin:18px 0 0}
-@media(max-width:980px){nav{display:none}.hero-grid,.idea-grid,.section-grid,.capture,.connect,.archive,.system{grid-template-columns:1fr}.onboard{grid-template-columns:repeat(2,1fr)}.grammars{grid-template-columns:1fr}.title p{max-width:620px}}
-@media(max-width:680px){.wrap{width:min(100% - 28px,1180px)}section{padding:76px 0}.hero h1{font-size:54px}.title h2{font-size:46px}.onboard,.explore{grid-template-columns:1fr}.device{width:268px;height:548px}.device iframe{transform:scale(.64)}.swatches{grid-template-columns:repeat(2,1fr)}footer .wrap{grid-template-columns:1fr}}
+@media(max-width:980px){nav{display:none}.hero-grid,.idea-grid,.section-grid,.capture,.connect,.archive{grid-template-columns:1fr}.system-row{grid-template-columns:1fr}.onboard{grid-template-columns:repeat(2,1fr)}.grammars{grid-template-columns:1fr}.title p{max-width:620px}}
+@media(max-width:680px){.wrap{width:min(100% - 28px,1180px)}section{padding:76px 0}.hero h1{font-size:54px}.title h2{font-size:46px}.onboard,.explore{grid-template-columns:1fr}.device{width:268px;height:548px}.device iframe{transform:scale(.64)}.swatches{grid-template-columns:repeat(3,1fr)}.principles{grid-template-columns:1fr}footer .wrap{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -50,7 +50,81 @@ footer{background:var(--ink);color:#fff;padding:80px 0}footer .wrap{display:grid
 <section id="capture"><div class="wrap section-grid"><div class="title"><div class="num">04</div><div class="eyebrow">Capture</div><h2>See it.<br>Frame it.</h2><p>Capture what catches your eye. ArchScape helps identify the place, surface its story, and turn observation into a record.</p></div><div class="capture"><div class="capture-shot"><div class="tag"><div class="eyebrow">AR Active</div><strong>Identified: The Vessel</strong><div style="font-size:12px;color:#bbb;margin-top:4px">Thomas Heatherwick · Hudson Yards</div></div></div><div class="capture-copy"><div class="kicker">AI-assisted capture</div><h3>From looking<br>to knowing.</h3><p>Computer vision supports the moment without taking it over. The user still chooses the frame, title, notes, tags, and whether a capture becomes part of their journey.</p><div class="asteps"><div class="astep"><b>01</b><span>Identify the place from the live frame.</span></div><div class="astep"><b>02</b><span>Surface architect, history, location, and spatial context.</span></div><div class="astep"><b>03</b><span>Save the user's own observation as a capture, not just a lookup.</span></div></div></div></div></div></section>
 <section id="connect"><div class="wrap section-grid"><div class="title"><div class="num">05</div><div class="eyebrow">Social discovery</div><h2>Cross Paths</h2><p>See where routes overlap, discover people nearby, and turn shared interests into real-world connections.</p></div><div class="connect"><div class="people"><i class="route r1"></i><i class="route dashed" style="left:23%;top:58%;width:54%;transform:rotate(-46deg)"></i><i class="halo" style="left:44%;top:45%"></i><i class="avatar" style="left:58%;top:27%"></i></div><div class="cross"><div class="eyebrow">3 path crossings</div><h3>Who crossed near your path?</h3><p>Friend paths only appear where they are relevant. One selected person anchors the interaction while the map updates around that person.</p><div class="person"><div class="pic"></div><div><strong>@javier.arq</strong><div style="font-size:12px;color:#aaa49c">Madrid · 400m away · Brutalism / Photography</div></div></div></div></div></div></section>
 <section id="archive"><div class="wrap section-grid"><div class="title"><div class="num">06</div><div class="eyebrow">Personal archive</div><h2>Profile &<br>Collection</h2><p>Captures, journeys, groups, and saved places build into a visual record of how the user sees cities over time.</p></div><div class="archive"><aside class="profile"><div class="kicker">Lucy Zhang</div><h3>Your city, collected.</h3><p style="font-size:13px;color:var(--muted)">A living archive of architecture, places, people, and routes.</p><div class="stats"><div class="stat"><b>247</b><span>Captures</span></div><div class="stat"><b>12</b><span>Journeys</span></div><div class="stat"><b>89</b><span>Saved</span></div></div></aside><div class="wall"><img src="images/image 1.png"><img src="images/image 2.png"><img src="images/image 3.png"><img src="images/image 4.png"><img src="images/image 5.png"><img src="images/image 6.png"><img src="images/image 2.png"><img src="images/image 4.png"></div></div></div></section>
-<section id="system"><div class="wrap section-grid"><div class="title"><div class="num">07</div><div class="eyebrow">Visual language</div><h2>Editorial,<br>not ornamental.</h2><p>Warm paper, deep ink, restrained red, and fine cartographic lines let architectural photography and spatial information carry the experience.</p></div><div class="system"><div><div class="kicker" style="margin-bottom:16px">Core palette</div><div class="swatches"><div class="sw" style="background:#faf8f5"><span>Paper</span></div><div class="sw" style="background:#11100f;color:#fff"><span>Ink</span></div><div class="sw" style="background:#af2b34;color:#fff"><span>Signal</span></div><div class="sw" style="background:#c7d7e1"><span>Water</span></div><div class="sw" style="background:#cbd8b9"><span>Park</span></div></div></div><div class="type"><small>DISPLAY / EDITORIAL</small><div class="display">ArchScape<br>Explore</div><small>INTERFACE / INFORMATION</small><div class="ui">Nearby · Journey · Capture · Profile</div></div></div></div></section>
+<section id="system"><div class="wrap section-grid">
+<div class="title"><div class="num">07</div><div class="eyebrow">Visual language</div><h2>A system for<br>seeing the city.</h2><p>The interface borrows from editorial architecture publishing: expressive serif typography, precise information design, restrained color, and a map language that changes meaning by context.</p></div>
+<div class="system-board">
+
+  <div class="system-row">
+    <div class="system-panel">
+      <div class="system-label">Brand identity</div>
+      <div class="brand-lockup"><span class="arch">Arch</span>Scape</div>
+      <div class="brand-note">A quiet editorial wordmark. Signal red belongs to “Arch” and its precise underline; the rest stays ink.</div>
+    </div>
+    <div class="system-panel">
+      <div class="system-label">Typography</div>
+      <div class="type-spec">
+        <div class="type-meta">Display · Cormorant Garamond</div>
+        <div class="type-display">Explore the city.</div>
+        <div class="type-meta">Interface · Inter</div>
+        <div class="type-ui">Nearby · Journey · Capture · Profile</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="system-panel wide">
+    <div class="system-label">Core palette</div>
+    <div class="swatches">
+      <div class="sw" style="background:#faf8f5"><span>Paper</span></div>
+      <div class="sw" style="background:#11100f;color:#fff"><span>Ink</span></div>
+      <div class="sw" style="background:#af2b34;color:#fff"><span>Signal red</span></div>
+      <div class="sw" style="background:#75202f;color:#fff"><span>Journey</span></div>
+      <div class="sw" style="background:#c7d7e1"><span>Water</span></div>
+      <div class="sw" style="background:#cbd8b9"><span>Park</span></div>
+    </div>
+  </div>
+
+  <div class="system-row">
+    <div class="system-panel">
+      <div class="system-label">Navigation & controls</div>
+      <div class="control-row">
+        <span class="control-tab active">Nearby</span><span class="control-tab">Trending</span><span class="control-tab">Following</span><span class="control-tab">Groups</span>
+      </div>
+      <div class="control-row" style="margin-top:18px"><span class="control-search">Search by architect, style, city…</span><span class="control-button">Explore</span></div>
+    </div>
+    <div class="system-panel">
+      <div class="system-label">Tags & categories</div>
+      <div class="control-row">
+        <span class="chip-demo active">Architecture</span><span class="chip-demo">Modernism</span><span class="chip-demo">Museums</span><span class="chip-demo">Brutalism</span><span class="chip-demo">Landscape</span>
+      </div>
+      <div class="brand-note">Selection is expressed through restraint: borders, underline, or a small color shift — not heavy fills everywhere.</div>
+    </div>
+  </div>
+
+  <div class="system-panel wide">
+    <div class="system-label">Map language</div>
+    <div class="token-row">
+      <span class="marker-demo"><i class="mk"></i>Nearby POI</span>
+      <span class="marker-demo"><i class="mk saved"></i>Saved</span>
+      <span class="marker-demo"><i class="mk visited"></i>Visited</span>
+      <span class="marker-demo"><i class="mk current"></i>Current stop</span>
+      <span class="marker-demo"><i class="line-demo"></i>Journey</span>
+      <span class="marker-demo"><i class="line-demo dash"></i>Up next</span>
+      <span class="marker-demo"><i class="line-demo friend"></i>Friend path</span>
+      <span class="marker-demo"><i class="avatar-token"></i>Explorer</span>
+    </div>
+    <div class="brand-note">One map language, three grammars: category on Explore, status on Journey, person on Path Crossings. Hue carries one meaning at a time.</div>
+  </div>
+
+  <div class="system-panel wide">
+    <div class="system-label">Design principles</div>
+    <div class="principles">
+      <div class="principle-card"><b>Editorial first</b><span>Architecture photography and Cormorant Garamond carry personality; the interface stays quiet.</span></div>
+      <div class="principle-card"><b>Information with purpose</b><span>Inter handles UI, metadata, controls, and dense spatial information with clarity.</span></div>
+      <div class="principle-card"><b>Color means something</b><span>Red is not decoration. Every accent signals category, state, route, or action.</span></div>
+    </div>
+  </div>
+
+</div></div></section>
 </main>
 <footer><div class="wrap"><div><div class="eyebrow">ArchScape</div><h2>Walk it before<br>you read about it.</h2><p>Architecture becomes more memorable when it is tied to a place, a path, and a person.</p></div><div class="actions"><a class="btn" href="#explore">Explore the system</a><a class="btn primary" href="archscape.html">Try prototype</a></div></div></footer>
 </body>
