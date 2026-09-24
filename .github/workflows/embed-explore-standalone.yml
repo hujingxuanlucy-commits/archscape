@@ -1,0 +1,56 @@
+name: Embed Explore image in standalone showcase
+
+on:
+  push:
+    branches:
+      - website-showcase-page
+    paths:
+      - ".github/workflows/embed-explore-standalone.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  embed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: website-showcase-page
+
+      - name: Embed Exploremap.png into showcase HTML
+        shell: python
+        run: |
+          from pathlib import Path
+          import base64, re
+
+          html_path = Path("archscape-showcase.html")
+          image_path = Path("showcase-assets/Exploremap.png")
+
+          html = html_path.read_text(encoding="utf-8")
+          data_uri = "data:image/png;base64," + base64.b64encode(image_path.read_bytes()).decode("ascii")
+
+          pattern = r'<img\s+src="[^"]*"\s+alt="ArchScape Explore map experience"\s*>'
+          replacement = f'<img src="{data_uri}" alt="ArchScape Explore map experience">'
+          html, count = re.subn(pattern, replacement, html, count=1)
+          if count != 1:
+              raise SystemExit(f"Expected exactly one Explore image tag; replaced {count}")
+
+          html = re.sub(
+              r'<!-- Single-file showcase:[\s\S]*?-->',
+              '<!-- Standalone showcase: raster UI assets are embedded as data URIs. Google Fonts remain web-loaded with CSS fallbacks. -->',
+              html,
+              count=1
+          )
+
+          html_path.write_text(html, encoding="utf-8")
+
+      - name: Commit embedded standalone HTML
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add archscape-showcase.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Embed Explore map in standalone showcase [skip ci]"
+          git push origin HEAD:website-showcase-page
