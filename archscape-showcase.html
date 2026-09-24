@@ -103,6 +103,7 @@
   .ds-intro p{ color:var(--graphite); font-size:15.5px; margin:0; max-width:460px; }
   .ds-principles{ display:grid; grid-template-columns:repeat(3,1fr); gap:0; border-top:1px solid var(--ink); }
   .ds-principles div{ padding:18px 20px 0 0; }
+  .ds-principles i{ display:block; width:22px; height:3px; margin-bottom:12px; }
   .ds-principles b{ display:block; font-size:13px; font-weight:600; margin-bottom:6px; }
   .ds-principles span{ display:block; font-size:13px; color:var(--graphite); line-height:1.5; }
 
@@ -148,6 +149,9 @@
   .d-pinlab{ font-size:10.5px; color:var(--graphite); margin-left:-4px; margin-right:6px; }
 
   .specs{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; border-top:1px solid var(--bone); }
+  .redline{ border:1px solid var(--bone); background:#fff; padding:20px 24px; }
+  .redline svg{ display:block; }
+
   .specs div{ padding:16px 16px 0 0; }
   .specs b{ display:block; font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; line-height:1; font-variant-numeric:tabular-nums; }
   .specs span{ display:block; margin-top:6px; font-size:12.5px; color:var(--graphite); line-height:1.4; }
@@ -307,9 +311,9 @@
             <p>A small system built for one job: keeping the photograph in charge. Two typefaces, three category colours, and one rule about where colour is allowed to appear.</p>
           </div>
           <div class="ds-principles">
-            <div><b>The image leads</b><span>Chrome stays neutral so a facade never competes with a button.</span></div>
-            <div><b>Colour means something</b><span>Hue encodes category and nothing else. No decorative colour.</span></div>
-            <div><b>Editorial, not app-store</b><span>Serif for what you read, sans for what you tap.</span></div>
+            <div><i style="background:#0F0F0F;"></i><b>The image leads</b><span>Chrome stays neutral so a facade never competes with a button.</span></div>
+            <div><i style="background:#952324;"></i><b>Colour means something</b><span>Hue encodes category and nothing else. No decorative colour.</span></div>
+            <div><i style="background:#3E6B9A;"></i><b>Editorial, not app-store</b><span>Serif for what you read, sans for what you tap.</span></div>
           </div>
         </div>
 
@@ -318,15 +322,15 @@
           <div>
             <div class="ds-group">Foundation</div>
             <div class="swatches">
-              <div class="dsw"><div class="chip" style="background:#0F0F0F;"><i style="color:#FAF8F5;">18.1:1</i></div><b>Ink</b><code>#0F0F0F</code><span>Body text and dark grounds: onboarding, capture, profile.</span></div>
-              <div class="dsw"><div class="chip edge" style="background:#FAF8F5;"></div><b>Paper</b><code>#FAF8F5</code><span>Default ground. Warm, never pure white.</span></div>
-              <div class="dsw"><div class="chip" style="background:#E5E0D8;"></div><b>Bone</b><code>#E5E0D8</code><span>Rules, borders and dividers. Never used for text.</span></div>
+              <div class="dsw"><div class="chip" style="background:#0F0F0F;"><i style="color:#FAF8F5;">18.1:1</i></div><b>Ink</b><code>#0F0F0F</code><span>Dark screens &amp; body text</span></div>
+              <div class="dsw"><div class="chip edge" style="background:#FAF8F5;"></div><b>Paper</b><code>#FAF8F5</code><span>Default ground</span></div>
+              <div class="dsw"><div class="chip" style="background:#E5E0D8;"></div><b>Bone</b><code>#E5E0D8</code><span>Rules &amp; borders</span></div>
             </div>
             <div class="ds-group">Category</div>
             <div class="swatches">
-              <div class="dsw"><div class="chip" style="background:#952324;"><i style="color:#fff;">7.8:1</i></div><b>Signal red</b><code>#952324</code><span>Architecture, and the single primary action on a screen.</span></div>
-              <div class="dsw"><div class="chip" style="background:#3E6B9A;"><i style="color:#fff;">5.2:1</i></div><b>Steel</b><code>#3E6B9A</code><span>Art Spaces: museums, galleries, theatres.</span></div>
-              <div class="dsw"><div class="chip" style="background:#666666;"><i style="color:#fff;">5.4:1</i></div><b>Graphite</b><code>#666666</code><span>Photography, and secondary text.</span></div>
+              <div class="dsw"><div class="chip" style="background:#952324;"><i style="color:#fff;">7.8:1</i></div><b>Signal red</b><code>#952324</code><span>Architecture &middot; primary action</span></div>
+              <div class="dsw"><div class="chip" style="background:#3E6B9A;"><i style="color:#fff;">5.2:1</i></div><b>Steel</b><code>#3E6B9A</code><span>Art Spaces</span></div>
+              <div class="dsw"><div class="chip" style="background:#666666;"><i style="color:#fff;">5.4:1</i></div><b>Graphite</b><code>#666666</code><span>Photography &middot; secondary text</span></div>
             </div>
             <p class="ds-rule">On any one map, colour carries a single meaning: category on Explore, status on your journey, person on Path Crossings. State such as saved or visited is shown by shape and fill, never by a new hue.</p>
           </div>
@@ -355,11 +359,37 @@
 
         <div class="ds-block">
           <div class="ds-label">Spacing &amp; shape<small>Measured on a 393 &times; 852 phone.</small></div>
-          <div class="specs">
-            <div><b>22 px</b><span>Page gutter on every screen</span></div>
-            <div><b>2 px</b><span>Card and photo radius: sharp, like a print</span></div>
-            <div><b>8 px</b><span>Button radius</span></div>
-            <div><b>44 px</b><span>Minimum tap target</span></div>
+          <div class="redline">
+            <svg viewBox="0 0 600 210" width="100%" role="img" aria-label="Diagram of the app's spacing and radius rules">
+              <rect x="0" y="0" width="600" height="210" fill="#fff"/>
+              <line x1="30" y1="0" x2="30" y2="210" stroke="#952324" stroke-width="1" stroke-dasharray="3 3"/>
+              <line x1="0" y1="14" x2="30" y2="14" stroke="#952324" stroke-width="1"/>
+              <line x1="0" y1="10" x2="0" y2="18" stroke="#952324" stroke-width="1"/>
+              <line x1="30" y1="10" x2="30" y2="18" stroke="#952324" stroke-width="1"/>
+              <text x="16" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="10.5" font-weight="600" fill="#952324">22</text>
+              <text x="16" y="150" text-anchor="middle" font-family="Inter,sans-serif" font-size="9.5" fill="#666" writing-mode="vertical-rl" transform="rotate(180 16 150)">GUTTER</text>
+
+              <rect x="50" y="34" width="118" height="94" rx="2" fill="#E5E0D8"/>
+              <path d="M158 34 h10 v10" fill="none" stroke="#952324" stroke-width="1"/>
+              <text x="172" y="30" font-family="Inter,sans-serif" font-size="10.5" font-weight="600" fill="#952324">2px</text>
+              <text x="50" y="146" font-family="Cormorant Garamond,serif" font-weight="600" font-size="14" fill="#0F0F0F">Photo &amp; card radius</text>
+              <text x="50" y="162" font-family="Inter,sans-serif" font-size="11" fill="#666">Sharp corners, like a print</text>
+
+              <rect x="210" y="60" width="140" height="42" rx="8" fill="#952324"/>
+              <text x="280" y="86" text-anchor="middle" font-family="Inter,sans-serif" font-size="12.5" font-weight="600" fill="#fff">Add your capture</text>
+              <path d="M350 60 h-16 v6" fill="none" stroke="#952324" stroke-width="1"/>
+              <text x="357" y="56" font-family="Inter,sans-serif" font-size="10.5" font-weight="600" fill="#952324">8px</text>
+              <text x="210" y="128" font-family="Cormorant Garamond,serif" font-weight="600" font-size="14" fill="#0F0F0F">Button radius</text>
+              <text x="210" y="144" font-family="Inter,sans-serif" font-size="11" fill="#666">Every primary action</text>
+
+              <circle cx="470" cy="80" r="22" fill="none" stroke="#952324" stroke-width="1" stroke-dasharray="3 3"/>
+              <circle cx="470" cy="80" r="15" fill="#0F0F0F"/>
+              <path d="M492 80 h20" stroke="#952324" stroke-width="1"/>
+              <text x="516" y="72" font-family="Inter,sans-serif" font-size="10.5" font-weight="600" fill="#952324">44px</text>
+              <text x="516" y="86" font-family="Inter,sans-serif" font-size="9.5" fill="#666">min</text>
+              <text x="420" y="128" font-family="Cormorant Garamond,serif" font-weight="600" font-size="14" fill="#0F0F0F">Tap target</text>
+              <text x="420" y="144" font-family="Inter,sans-serif" font-size="11" fill="#666">Every icon button, this size</text>
+            </svg>
           </div>
         </div>
       </div>
