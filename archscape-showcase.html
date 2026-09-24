@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ArchScape — Architecture · City · Community</title>\n<!-- Single-file showcase. Raster UI assets are embedded where available; Exploremap is loaded from the branch asset until its binary is inlined. -->
+<title>ArchScape — Architecture · City · Community</title>\n<!-- Single-file showcase: hero and onboarding raster UI assets are embedded as data URIs. The Explore map export is currently loaded from the website-showcase-page branch asset. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -362,7 +362,7 @@ body.progress-visible .section-progress{opacity:.78;transform:translateX(0);poin
     <li><a href="#system" data-progress-section="system"><span class="route-node"></span><span class="route-index">07</span><span class="route-name">System</span></a></li>
   </ol>
 </nav>
-<header class="topbar"><div class="wrap"><div class="wordmark"><span class="arch">Arch</span>Scape</div><nav><a href="#onboarding">Onboarding</a><a href="#explore">Explore</a><a href="#journey">Map</a><a href="#capture">Capture</a><a href="#connect">Connect</a><a href="#archive">Archive</a><a href="#system">System</a></nav><div class="actions"><a class="btn" href="https://github.com/hujingxuanlucy-commits/archscape" target="_blank">GitHub</a><a class="btn primary" href="archscape.html">Try prototype</a></div></div></header>
+<header class="topbar"><div class="wrap"><div class="wordmark"><span class="arch">Arch</span>Scape</div><nav><a href="#onboarding">Onboarding</a><a href="#explore">Explore</a><a href="#journey">Map</a><a href="#capture">Capture</a><a href="#connect">Connect</a><a href="#archive">Archive</a><a href="#system">System</a></nav><div class="actions"><a class="btn" href="https://github.com/hujingxuanlucy-commits/archscape" target="_blank">GitHub</a><a class="btn primary" href="https://raw.githack.com/hujingxuanlucy-commits/archscape/lucy/archscape.html" target="_blank" rel="noopener noreferrer">Try prototype</a></div></div></header>
 <main>
 <section class="hero"><div class="wrap hero-grid"><div><div class="eyebrow">Architecture · City · Community</div><h1>Record the city.<br><span>Connect the world.</span></h1><p>ArchScape turns architectural curiosity into a personal city archive — helping people discover nearby places, capture what catches their eye, trace the journeys they walk, and meet others whose paths overlap.</p><div class="chips"><span class="chip">Nearby discovery</span><span class="chip">Personal journeys</span><span class="chip">Path crossings</span><span class="chip">AI-assisted capture</span><span class="chip">Visual archive</span></div></div><div class="device-wrap"><div class="ring"></div><img class="hero-screen" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAiwAAAOkCAYAAACF42/oAAAACXBIWXMAAAsT
 AAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAOdEVY
@@ -9247,7 +9247,39 @@ Hp2A/7/kxFPNjyCFk6Y+0/K0XR1I9JVL46WT9uHT7O4SZeam7OpwygR0MI/D
 CQBjPNUrciuupv5r1fNwsttMwzAfYbNXalWWtlXaBvjDWOBCovXTxQbvuWBV
 LQMP7zBO0nZuS0Pr0la+tP46ZlJxZzoe5beaq64a3y0Az9IwKYcvBdWHWzgB
 yu1gO6lVCsv/mRaneIcPrwanft+IMNie+t0wO22jdBxrmodbvlmp+6o+eajf
-/+EEAKbP0U4U89AdhLRDkfpGS<section id="onboarding"><div class="wrap section-grid">
+/+EEAKbP0U4U89AdhLRDkfpGSSx4Gi6KWl4m1j2ViNEp7lGXFBmkPIKURUIX
+HxXVitlRn+v/NZTGrM1TI/0JmBwjcHjlCAH14rgKAHheTVn4ro0YlmFUIU4X
+sGQH1jf5a5w2QnxMpjgNu2UXuSqs7hz5/PCABV3Llz5P6XCyu0/LrXVK4w3i
+Rml6bbtk3ek2vGzvM75jH7TVra3+bf0gXILUIm3VgpUuXsz/OwdbtbVeGW4A
+d8D0bC7G0/HWVre03mxDBWiD6pJanaT9reG1zNr+bZwgHY/fmSjKt5Vl0Pho
+K3t6ZVyCD/0WU25mOm7StM/i+2ec5jw1na/0HJ4i8QguAKP1+xcxT7mGVQ/L
+0McNy5Qp08NAwuYs/L75a3um7/jeVtig8XeYHDr6Dr/T9DR82299nsZPr5on
+w/vvjqZhNaewSY/xJH5zr8+TNPriJfl30jbAs7Xy45+G0XKk8Vral+Vr6jzg
+ffM7DSvt30nL2NJvfW3Y1g6D2lLbIy2rPEvTKdLyJfVdNV51LKTllTbvGyta
+n5b6d7S/2vo8CdPXVulYbsszLXcaXsef9nnarpqOlj8dN239mrbBoO+/rRwt
+33+npRwP9/e/Kvyg7z9Nr6UcfcenZMqU6QIj/cgt+ZhtwOSRLlBVzYrtm3Cr
+Wnw0cKJqm1BswER7ugX2dBPRWpPloPTSSbKtnZKrDZqALZl00zKZTMAa31YD
+QhvUV4P6TPtmrXaxlsWlrf5pHQb1gdarrT1aylm01betnIMWMimb2RqLY3pN
+6zXoWVu9B9XjdG3eVoc2QNXWpm1ppu1wJmHaxnXb4n4Rff+tun+ZMmW6CKgS
+2a61TBA2GABY8t7sNJN38mdrhbNkMTzTietMFv1BO9hBv9My2YDFSCf3tgXh
+DNu3r13bdqVti56GHTCRF21l0jQHpXumdUg5C2k/22kWy7Xu28bEoPqmbXYm
+7dLGGRo0Bs7kWZV8D/qdpL8H9cdaZR/Q1q3jcq0xXJ3mu13r+9H+aOuvQf2Y
+jotBfT9ofMhfpkyZMq2QTC76rO+99e9sQOnk0jxrmxBtjYU7nSQHcTUsmYDT
+iT6d4NfIt3XhSMtRrbGQtqVTrbFwy/2qOksZrW2RSBfbtHw2YMFhmm15p+3U
+BjLauClti+igNm4py6Aymw1YvAal1xaurQ0HtVfbuDtdXQbFGcRlaOOCpGPG
+zgJIpP2S3qf1Pk0dbFD7pt9Zy3hZ8/vX8WwDQEe1er7JAOUSpdzpmR5x4sQm
+B4RhAmtToqMSnurzVp6GUdFY02IaoqhXyUQ6SFGvUUxlHA/HuJW/XuVxuKqq
+vrgt6RZJGVbVzeNr/bQcpr/T8CyHrfihaG1XtQJL2yBNK4nL8FVLPJNEV5VL
+4vTFbemrKuljaxsP2vc2oJ+l2EkVTMvU59corVOSnrWE6+vXAWOtCasWK1KH
+Iu23lIoWdwSqKJqMTW2b9NvoyzN53pq3lKGJm5ap6HexUGj4TJkyZcqUKVOm
+TJkyZcqUKVOmTJkyZcqUKVOmTJkyZcqUKVOmTJkyZcqUKVOmTJkyZcqUKVOm
+TJkyZcqUKVOmTJkyZcqUKVOmTJkyZcqUKVOmTJkyZcqUKdMlQP8/yPt/8DSn
+MJAAAAAASUVORK5CYII=
+" alt="ArchScape landing onboarding screen"></div></div></section>
+
+<section class="idea"><div class="wrap idea-grid"><div><div class="eyebrow">The idea</div><h2>See the city<br>through your own lens.</h2></div><p>ArchScape is built around one loop: <strong>discover a place, capture it, add it to your journey, and let that journey create new connections.</strong> Architecture becomes something you notice while moving through the city — not something you look up later.</p></div></section>
+
+<section id="onboarding"><div class="wrap section-grid">
   <div class="title">
     <div class="num">01</div>
     <div class="eyebrow">Onboarding</div>
@@ -28233,6 +28265,7 @@ Qw011FBDDTXUUEMNNdRQQw011FBDDTXUUEMNNdRQQw011FBDDTXUUEMNNXTx
     </div>
   </div>
 </div></section>
+
 <section id="explore"><div class="wrap section-grid">
   <div class="title">
     <div class="num">02</div>
@@ -28278,7 +28311,7 @@ Qw011FBDDTXUUEMNNdRQQw011FBDDTXUUEMNNdRQQw011FBDDTXUUEMNNXTx
     <circle cx="465" cy="392" r="42" fill="rgba(149,35,36,.12)"/>
     <circle cx="590" cy="395" r="36" fill="rgba(149,35,36,.10)"/>
   </svg>
-  <div class="selected-explorer"><div class="explorer-head"><div class="pic"></div><div><h3>@javier.arq</h3><p>Madrid · 400m away</p></div></div><p>Loves Brutalism, Photography, Urban Design.</p><a class="btn primary" href="archscape.html">View crossing</a></div>
+  <div class="selected-explorer"><div class="explorer-head"><div class="pic"></div><div><h3>@javier.arq</h3><p>Madrid · 400m away</p></div></div><p>Loves Brutalism, Photography, Urban Design.</p><a class="btn primary" href="https://raw.githack.com/hujingxuanlucy-commits/archscape/lucy/archscape.html" target="_blank" rel="noopener noreferrer">View crossing</a></div>
   <div class="stage-caption">One person selected at a time</div>
 </div></div></section>
 <section id="archive"><div class="wrap section-grid"><div class="title"><div class="num">06</div><div class="eyebrow">Personal archive</div><h2>Profile &<br>Collection</h2><p>Captures, journeys, groups, and saved places build into a visual record of how the user sees cities over time.</p></div><div class="archive"><aside class="profile"><div class="kicker">Lucy Zhang</div><h3>Your city, collected.</h3><p style="font-size:13px;color:var(--muted)">A living archive of architecture, places, people, and routes.</p><div class="stats"><div class="stat"><b>247</b><span>Captures</span></div><div class="stat"><b>12</b><span>Journeys</span></div><div class="stat"><b>89</b><span>Saved</span></div></div></aside><div class="wall"><img src="data:image/png;base64,"><img src="data:image/png;base64,"><img src="data:image/png;base64,"><img src="data:image/png;base64,"><img src="data:image/png;base64,"><img src="data:image/png;base64,"><img src="data:image/png;base64,"><img src="data:image/png;base64,"></div></div></div></section>
@@ -28409,7 +28442,7 @@ Qw011FBDDTXUUEMNNdRQQw011FBDDTXUUEMNNdRQQw011FBDDTXUUEMNNXTx
   </div>
 </div></section>
 </main>
-<footer><div class="wrap"><div><div class="eyebrow">ArchScape</div><h2>Walk it before<br>you read about it.</h2><p>Architecture becomes more memorable when it is tied to a place, a path, and a person.</p></div><div class="actions"><a class="btn" href="#explore">Explore the system</a><a class="btn primary" href="archscape.html">Try prototype</a></div></div></footer>
+<footer><div class="wrap"><div><div class="eyebrow">ArchScape</div><h2>Walk it before<br>you read about it.</h2><p>Architecture becomes more memorable when it is tied to a place, a path, and a person.</p></div><div class="actions"><a class="btn" href="#explore">Explore the system</a><a class="btn primary" href="https://raw.githack.com/hujingxuanlucy-commits/archscape/lucy/archscape.html" target="_blank" rel="noopener noreferrer">Try prototype</a></div></div></footer>
 
 <script>
 (() => {
