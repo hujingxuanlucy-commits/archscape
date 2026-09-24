@@ -99,18 +99,58 @@
   .ftext .num{ font-family:'Inter',sans-serif; font-size:12.5px; color:var(--signal); font-weight:600; margin-bottom:10px; display:block; }
 
   /* ---- SECTION: design system ---- */
-  .tokens{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--bone); border:1px solid var(--bone); margin-top:8px; }
-  .token{ background:var(--paper); padding:26px 22px; }
-  .token .chip{ width:100%; height:52px; border-radius:6px; margin-bottom:14px; }
-  .token .name{ font-size:14.5px; font-weight:600; }
-  .token .hex{ font-size:12.5px; color:var(--graphite); margin-top:2px; }
+  .ds-intro{ display:grid; grid-template-columns:1fr 1.15fr; gap:56px; align-items:end; margin-bottom:64px; }
+  .ds-intro p{ color:var(--graphite); font-size:15.5px; margin:0; max-width:460px; }
+  .ds-principles{ display:grid; grid-template-columns:repeat(3,1fr); gap:0; border-top:1px solid var(--ink); }
+  .ds-principles div{ padding:18px 20px 0 0; }
+  .ds-principles b{ display:block; font-size:13px; font-weight:600; margin-bottom:6px; }
+  .ds-principles span{ display:block; font-size:13px; color:var(--graphite); line-height:1.5; }
 
-  .type-specimen{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--bone); border:1px solid var(--bone); margin-top:36px; }
-  .type-card{ background:var(--paper); padding:34px 28px; }
-  .type-card .label{ font-size:12.5px; color:var(--graphite); margin-bottom:14px; }
-  .type-card .big{ font-size:40px; }
-  .type-card.serif .big{ font-style:italic; }
-  .type-card.sans .big{ font-family:'Inter',sans-serif; font-weight:600; }
+  .ds-block{ display:grid; grid-template-columns:200px 1fr; gap:40px; padding:40px 0; border-top:1px solid var(--bone); }
+  .ds-label{ font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--ink); }
+  .ds-label small{ display:block; margin-top:8px; font-size:13px; font-weight:400; letter-spacing:0; text-transform:none; color:var(--graphite); line-height:1.5; }
+
+  .ds-group{ font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--graphite); margin:0 0 12px; }
+  .ds-group + .swatches{ margin-bottom:32px; }
+  .swatches{ display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:16px; }
+  .dsw .chip{ height:64px; border-radius:2px; margin-bottom:12px; position:relative; }
+  .dsw .chip.edge{ box-shadow:inset 0 0 0 1px var(--bone); }
+  .dsw .chip i{ position:absolute; right:10px; bottom:8px; font-style:normal; font-size:11px; font-weight:600; font-variant-numeric:tabular-nums; }
+  .dsw b{ display:block; font-size:14px; font-weight:600; }
+  .dsw code{ display:block; font-family:'Inter',sans-serif; font-size:12px; color:var(--graphite); font-variant-numeric:tabular-nums; margin:2px 0 6px; }
+  .dsw span{ display:block; font-size:13px; color:var(--graphite); line-height:1.45; }
+  .ds-rule{ margin:8px 0 0; padding:14px 16px; background:#F1ECE4; border-left:2px solid var(--signal); font-size:13.5px; color:var(--ink); line-height:1.55; }
+
+  .scale{ width:100%; border-collapse:collapse; }
+  .scale td{ padding:16px 0; border-bottom:1px solid var(--bone); vertical-align:baseline; }
+  .scale tr:first-child td{ padding-top:0; }
+  .scale .role{ width:120px; font-size:12px; color:var(--graphite); }
+  .scale .spec{ width:190px; font-size:12px; color:var(--graphite); font-variant-numeric:tabular-nums; text-align:right; }
+  .t-display{ font-family:'Cormorant Garamond',serif; font-size:46px; font-weight:600; line-height:1; }
+  .t-title{ font-family:'Cormorant Garamond',serif; font-size:29px; font-weight:600; line-height:1.1; }
+  .t-section{ font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; }
+  .t-body{ font-size:14px; line-height:1.5; }
+  .t-label{ font-size:9.5px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; }
+  .t-num{ font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:600; font-variant-numeric:oldstyle-nums; color:var(--signal); }
+
+  .comps{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; }
+  .comp{ border:1px solid var(--bone); border-radius:2px; padding:22px 20px 18px; background:#fff; display:flex; flex-direction:column; gap:16px; }
+  .comp .stage{ min-height:64px; display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:nowrap; white-space:nowrap; }
+  .comp b{ font-size:13px; font-weight:600; }
+  .comp p{ margin:3px 0 0; font-size:12.5px; color:var(--graphite); line-height:1.45; }
+  .d-btn{ background:var(--signal); color:#fff; font-size:13px; font-weight:600; padding:11px 20px; border-radius:8px; }
+  .d-ghost{ border:1px solid var(--bone); font-size:13px; font-weight:600; padding:10px 18px; border-radius:8px; }
+  .d-tab{ font-size:12.5px; font-weight:600; color:var(--graphite); padding:6px 0; border-bottom:2px solid transparent; }
+  .d-tab.on{ color:var(--ink); border-color:var(--signal); }
+  .d-pin{ width:14px; height:14px; border-radius:50%; box-shadow:0 0 0 2px #fff, 0 1px 3px rgba(0,0,0,.3); }
+  .d-pin.saved{ background:radial-gradient(circle,#fff 0 28%,var(--signal) 30%); }
+  .d-pin.visited{ background:#fff; box-shadow:inset 0 0 0 2px var(--signal), 0 0 0 2px #fff, 0 1px 3px rgba(0,0,0,.3); }
+  .d-pinlab{ font-size:10.5px; color:var(--graphite); margin-left:-4px; margin-right:6px; }
+
+  .specs{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; border-top:1px solid var(--bone); }
+  .specs div{ padding:16px 16px 0 0; }
+  .specs b{ display:block; font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; line-height:1; font-variant-numeric:tabular-nums; }
+  .specs span{ display:block; margin-top:6px; font-size:12.5px; color:var(--graphite); line-height:1.4; }
 
   /* ---- FOOTER ---- */
   footer{ background:var(--ink); color:#a9a49c; padding:64px 0 40px; }
@@ -127,8 +167,12 @@
     .hero-shot{ order:-1; }
     .feature-row, .feature-row.rev{ grid-template-columns:1fr; }
     .feature-row.rev .fshot{ order:0; }
-    .tokens{ grid-template-columns:1fr 1fr; }
-    .type-specimen{ grid-template-columns:1fr; }
+    .ds-intro,.ds-block{ grid-template-columns:1fr; gap:20px; }
+    .ds-principles,.swatches,.comps{ grid-template-columns:1fr; gap:14px; }
+    .specs{ grid-template-columns:1fr 1fr; }
+    .scale .spec,.scale .role{ display:none; }
+    .t-display{ font-size:34px; }
+    .specs b{ font-size:24px; }
   }
 </style>
 </head>
@@ -257,21 +301,66 @@
 
     <section id="system">
       <div class="wrap">
-        <div class="section-head" style="margin-bottom:14px;">The design system</div>
-        <p style="color:var(--graphite); font-size:15px; max-width:520px; margin-bottom:36px;">Cormorant Garamond carries the voice of the app — editorial, a little formal. Inter handles everything you tap. Colour is reserved almost entirely for the three lines.</p>
-
-        <div class="tokens">
-          <div class="token"><div class="chip" style="background:#952324;"></div><div class="name">Signal red</div><div class="hex">#952324 &middot; accent, Architecture</div></div>
-          <div class="token"><div class="chip" style="background:#0F0F0F;"></div><div class="name">Ink</div><div class="hex">#0F0F0F &middot; dark ground</div></div>
-          <div class="token"><div class="chip" style="background:#FAF8F5; border:1px solid #E5E0D8;"></div><div class="name">Paper</div><div class="hex">#FAF8F5 &middot; light ground</div></div>
-          <div class="token"><div class="chip" style="background:#3E6B9A;"></div><div class="name">Steel</div><div class="hex">#3E6B9A &middot; Art Spaces</div></div>
-          <div class="token"><div class="chip" style="background:#666666;"></div><div class="name">Graphite</div><div class="hex">#666666 &middot; Photography</div></div>
-          <div class="token"><div class="chip" style="background:#E5E0D8;"></div><div class="name">Bone</div><div class="hex">#E5E0D8 &middot; rules, borders</div></div>
+        <div class="ds-intro">
+          <div>
+            <div class="section-head" style="margin-bottom:18px;">The design system</div>
+            <p>A small system built for one job: keeping the photograph in charge. Two typefaces, three category colours, and one rule about where colour is allowed to appear.</p>
+          </div>
+          <div class="ds-principles">
+            <div><b>The image leads</b><span>Chrome stays neutral so a facade never competes with a button.</span></div>
+            <div><b>Colour means something</b><span>Hue encodes category and nothing else. No decorative colour.</span></div>
+            <div><b>Editorial, not app-store</b><span>Serif for what you read, sans for what you tap.</span></div>
+          </div>
         </div>
 
-        <div class="type-specimen">
-          <div class="type-card serif"><div class="label">Cormorant Garamond &middot; display</div><div class="big">The city, recorded.</div></div>
-          <div class="type-card sans"><div class="label">Inter &middot; interface</div><div class="big">Capture, Discover, Journey</div></div>
+        <div class="ds-block">
+          <div class="ds-label">Colour<small>Six tokens. Contrast shown against Paper.</small></div>
+          <div>
+            <div class="ds-group">Foundation</div>
+            <div class="swatches">
+              <div class="dsw"><div class="chip" style="background:#0F0F0F;"><i style="color:#FAF8F5;">18.1:1</i></div><b>Ink</b><code>#0F0F0F</code><span>Body text and dark grounds: onboarding, capture, profile.</span></div>
+              <div class="dsw"><div class="chip edge" style="background:#FAF8F5;"></div><b>Paper</b><code>#FAF8F5</code><span>Default ground. Warm, never pure white.</span></div>
+              <div class="dsw"><div class="chip" style="background:#E5E0D8;"></div><b>Bone</b><code>#E5E0D8</code><span>Rules, borders and dividers. Never used for text.</span></div>
+            </div>
+            <div class="ds-group">Category</div>
+            <div class="swatches">
+              <div class="dsw"><div class="chip" style="background:#952324;"><i style="color:#fff;">7.8:1</i></div><b>Signal red</b><code>#952324</code><span>Architecture, and the single primary action on a screen.</span></div>
+              <div class="dsw"><div class="chip" style="background:#3E6B9A;"><i style="color:#fff;">5.2:1</i></div><b>Steel</b><code>#3E6B9A</code><span>Art Spaces: museums, galleries, theatres.</span></div>
+              <div class="dsw"><div class="chip" style="background:#666666;"><i style="color:#fff;">5.4:1</i></div><b>Graphite</b><code>#666666</code><span>Photography, and secondary text.</span></div>
+            </div>
+            <p class="ds-rule">On any one map, colour carries a single meaning: category on Explore, status on your journey, person on Path Crossings. State such as saved or visited is shown by shape and fill, never by a new hue.</p>
+          </div>
+        </div>
+
+        <div class="ds-block">
+          <div class="ds-label">Typography<small>Cormorant Garamond for reading, Inter for interface.</small></div>
+          <table class="scale">
+            <tr><td class="role">Display</td><td><div class="t-display">Record the city.</div></td><td class="spec">Cormorant 600 &middot; 46 / 1.0</td></tr>
+            <tr><td class="role">Page title</td><td><div class="t-title">Seagram Building</div></td><td class="spec">Cormorant 600 &middot; 29 / 1.1</td></tr>
+            <tr><td class="role">Section</td><td><div class="t-section">Captured by</div></td><td class="spec">Cormorant 600 &middot; 22</td></tr>
+            <tr><td class="role">Body</td><td><div class="t-body">The bronze mullions running up the face are not holding anything up.</div></td><td class="spec">Inter 400 &middot; 14 / 1.5</td></tr>
+            <tr><td class="role">Label</td><td><div class="t-label">Architecture &middot; 1.3 km away</div></td><td class="spec">Inter 700 &middot; 9.5 &middot; +0.16em</td></tr>
+            <tr><td class="role">Figures</td><td><div class="t-num">2104</div></td><td class="spec">Cormorant 600 &middot; old-style numerals</td></tr>
+          </table>
+        </div>
+
+        <div class="ds-block">
+          <div class="ds-label">Components<small>A short vocabulary, reused on every screen.</small></div>
+          <div class="comps">
+            <div class="comp"><div class="stage"><span class="d-btn">Add your capture</span><span class="d-ghost">Skip</span></div><div><b>Actions</b><p>One red button per screen. Everything else is a quiet outline.</p></div></div>
+            <div class="comp"><div class="stage" style="gap:22px;"><span class="d-tab on">Nearby</span><span class="d-tab">Trending</span><span class="d-tab">Following</span></div><div><b>Tabs</b><p>A red underline for the current view. No filled pills.</p></div></div>
+            <div class="comp"><div class="stage"><i class="d-pin" style="background:#952324;"></i><span class="d-pinlab">Default</span><i class="d-pin saved"></i><span class="d-pinlab">Saved</span><i class="d-pin visited"></i><span class="d-pinlab">Visited</span></div><div><b>Map pins</b><p>Hue for category; fill for state. Same size at every zoom.</p></div></div>
+          </div>
+        </div>
+
+        <div class="ds-block">
+          <div class="ds-label">Spacing &amp; shape<small>Measured on a 393 &times; 852 phone.</small></div>
+          <div class="specs">
+            <div><b>22 px</b><span>Page gutter on every screen</span></div>
+            <div><b>2 px</b><span>Card and photo radius: sharp, like a print</span></div>
+            <div><b>8 px</b><span>Button radius</span></div>
+            <div><b>44 px</b><span>Minimum tap target</span></div>
+          </div>
         </div>
       </div>
     </section>
