@@ -8,122 +8,238 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--paper:#faf8f5;--ink:#11100f;--muted:#817b73;--rule:#ded8cf;--red:#af2b34;--ox:#75202f;--blue:#3b6e9d;--sage:#cbd8b9;--water:#c7d7e1;--bone:#eee8df}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Inter",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}a{color:inherit}.wrap{width:min(1180px,calc(100% - 48px));margin:auto}.serif,h1,h2,h3{font-family:"Cormorant Garamond",serif;font-weight:500}.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--red)}.kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--muted)}section{padding:104px 0;border-top:1px solid var(--rule)}
-.topbar{position:sticky;top:0;z-index:40;background:rgba(250,248,245,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--rule)}.topbar .wrap{height:70px;display:flex;align-items:center;justify-content:space-between;gap:24px}.wordmark{font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:600;line-height:1}.arch{color:var(--red);position:relative}.arch:after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:1.5px;background:var(--red)}nav{display:flex;gap:22px;font-size:13px;color:#625d56}nav a{text-decoration:none}.actions{display:flex;gap:10px}.btn{text-decoration:none;padding:10px 16px;border-radius:999px;border:1px solid var(--rule);font-size:13px;font-weight:600;background:#fff8}.btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+:root{--paper:#faf8f5;--ink:#11100f;--muted:#817b73;--rule:#ded8cf;--red:#952324;--ox:#75202f;--blue:#3b6e9d;--sage:#cbd8b9;--water:#c7d7e1;--bone:#eee8df}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Inter";line-height:1.55;-webkit-font-smoothing:antialiased}a{color:inherit}.wrap{width:min(1180px,calc(100% - 48px));margin:auto}.serif,h1,h2,h3{font-family:"Cormorant Garamond";font-weight:500}.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--red)}.kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--muted)}section{padding:104px 0;border-top:1px solid var(--rule)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(250,248,245,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--rule)}.topbar .wrap{height:70px;display:flex;align-items:center;justify-content:space-between;gap:24px}.wordmark{font-family:"Cormorant Garamond";font-size:28px;font-weight:600;line-height:1}.arch{color:var(--red);position:relative}.arch:after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:1.5px;background:var(--red)}nav{display:flex;gap:22px;font-size:13px;color:#625d56}nav a{text-decoration:none}.actions{display:flex;gap:10px}.btn{text-decoration:none;padding:10px 16px;border-radius:999px;border:1px solid var(--rule);font-size:13px;font-weight:600;background:#fff8}.btn.primary{background:var(--red);border-color:var(--red);color:#fff}
 .hero{padding:86px 0 96px;border-top:0;overflow:hidden}.hero-grid{display:grid;grid-template-columns:1.03fr .77fr;gap:72px;align-items:center}.hero h1{font-size:clamp(58px,7vw,92px);line-height:.94;letter-spacing:-.035em;margin:18px 0 28px}.hero h1 span{color:var(--red)}.hero p{font-size:18px;color:#5f5a54;max-width:590px}.chips{display:flex;gap:9px;flex-wrap:wrap;margin-top:30px}.chip{padding:7px 11px;border:1px solid var(--rule);border-radius:999px;background:#fff8;font-size:12px;color:#666058}
 .device{width:306px;height:620px;border-radius:48px;background:#171819;border:10px solid #242529;overflow:hidden;box-shadow:0 36px 80px -40px #0009}.device iframe{width:393px;height:852px;border:0;transform:scale(.73);transform-origin:0 0}.device-wrap{min-height:630px;display:flex;align-items:center;justify-content:center;position:relative}.ring{position:absolute;width:520px;height:520px;border:1px solid var(--rule);border-radius:50%}.ring:before,.ring:after{content:"";position:absolute;border:1px solid var(--rule);border-radius:50%;inset:72px}.ring:after{inset:148px}
 .idea{background:var(--ink);color:#fff;border:0;padding:68px 0}.idea-grid{display:grid;grid-template-columns:.65fr 1.35fr;gap:70px;align-items:end}.idea h2{font-size:58px;line-height:1;margin:10px 0}.idea p{font-size:18px;color:#c9c5bd;max-width:660px}.idea strong{color:white}
-.section-grid{display:grid;grid-template-columns:.62fr 1.38fr;gap:72px}.title .num{font-family:"Cormorant Garamond",serif;font-size:20px;color:var(--red);margin-bottom:30px}.title h2{font-size:58px;line-height:1;margin:10px 0 20px}.title p{max-width:380px;color:#6b655e}
-.onboard{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.mini{min-height:438px;background:#0e0f10;color:#fff;border:1px solid #2f2f2f;border-radius:28px;padding:28px 20px 22px;position:relative}.mini .brand{font-family:"Cormorant Garamond",serif;font-size:19px;margin-bottom:68px}.mini h3{font-size:28px;line-height:1.02;margin:0 0 12px}.mini p{font-size:11px;color:#aaa49c}.mlist{display:grid;gap:8px;margin-top:24px}.mrow{border:1px solid #383838;border-radius:9px;padding:11px 12px;font-size:10px}.mrow.sel{border-color:var(--red);background:#321417}.steps{position:absolute;left:0;right:0;bottom:16px;display:flex;gap:6px;justify-content:center}.steps i{width:28px;height:3px;background:#343434;border-radius:4px}.steps i.on{background:var(--red)}
+.section-grid{display:grid;grid-template-columns:.62fr 1.38fr;gap:72px}.title .num{font-family:"Cormorant Garamond";font-size:20px;color:var(--red);margin-bottom:30px}.title h2{font-size:58px;line-height:1;margin:10px 0 20px}.title p{max-width:380px;color:#6b655e}
+.onboard{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.mini{min-height:438px;background:#0e0f10;color:#fff;border:1px solid #2f2f2f;border-radius:28px;padding:28px 20px 22px;position:relative}.mini .brand{font-family:"Cormorant Garamond";font-size:19px;margin-bottom:68px}.mini h3{font-size:28px;line-height:1.02;margin:0 0 12px}.mini p{font-size:11px;color:#aaa49c}.mlist{display:grid;gap:8px;margin-top:24px}.mrow{border:1px solid #383838;border-radius:9px;padding:11px 12px;font-size:10px}.mrow.sel{border-color:var(--red);background:#321417}.steps{position:absolute;left:0;right:0;bottom:16px;display:flex;gap:6px;justify-content:center}.steps i{width:28px;height:3px;background:#343434;border-radius:4px}.steps i.on{background:var(--red)}
 .explore{display:grid;grid-template-columns:1.05fr .95fr;gap:24px}.card{border:1px solid var(--rule);border-radius:18px;background:#fff9;overflow:hidden}.pad{padding:26px}.card h3{font-size:34px;margin:8px 0 10px}.card p{font-size:14px;color:#6a645d}.map{height:360px;position:relative;background:var(--bone);overflow:hidden;background-image:linear-gradient(30deg,transparent 49%,#fff 49%,#fff 51%,transparent 51%),linear-gradient(120deg,transparent 49%,#fff 49%,#fff 51%,transparent 51%);background-size:46px 46px}.map:before{content:"";position:absolute;right:-10%;top:0;width:30%;height:100%;background:var(--water);transform:skewX(-9deg)}.map:after{content:"";position:absolute;left:44%;top:0;width:15%;height:45%;background:var(--sage);opacity:.8;transform:skewX(-10deg)}.dot{position:absolute;width:13px;height:13px;border-radius:50%;background:var(--red);border:2px solid #fff}.dot.b{background:var(--blue)}.dot.g{background:#777}.dot.s{width:19px;height:19px;box-shadow:0 0 0 4px #fff}.place{position:absolute;left:26px;right:26px;bottom:22px;padding:14px 16px;border:1px solid var(--rule);border-radius:11px;background:#fff;display:flex;gap:12px;align-items:center;font-size:12px}.place strong{display:block;font-size:14px}.place span{color:var(--muted)}.thumb{width:48px;height:48px;border-radius:6px;background:url("images/image 4.png") center/cover}.styles{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 22px 22px}.tile{height:164px;position:relative;overflow:hidden;border-radius:8px}.tile img{width:100%;height:100%;object-fit:cover}.tile:after{content:"";position:absolute;inset:auto 0 0;height:55%;background:linear-gradient(transparent,#000b)}.tile b{position:absolute;z-index:2;left:12px;bottom:10px;color:#fff;font-size:12px}
-.mapsys{background:#f3efe8}.grammars{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.grammar{background:var(--paper);border:1px solid var(--rule);border-radius:18px;padding:22px}.grammar h3{font-size:29px;margin:7px 0 8px}.grammar p{font-size:13px;color:#6b655e;min-height:60px}.gmap{height:230px;border-radius:12px;background:#ece5d6;position:relative;overflow:hidden;margin-top:18px;background-image:linear-gradient(30deg,transparent 49%,#fff9 49%,#fff9 51%,transparent 51%),linear-gradient(120deg,transparent 49%,#fff8 49%,#fff8 51%,transparent 51%);background-size:34px 34px}.route{position:absolute;height:3px;background:var(--ox);border-radius:99px;transform-origin:left center}.r1{left:16%;top:63%;width:44%;transform:rotate(-22deg)}.r2{left:49%;top:48%;width:39%;transform:rotate(-63deg)}.dashed{height:0;background:none;border-top:3px dotted #c2748c}.avatar{position:absolute;width:34px;height:34px;border-radius:50%;background:linear-gradient(145deg,#d7c7aa,#403a34);border:3px solid var(--paper);box-shadow:0 0 0 2px #c2748c}.halo{position:absolute;width:70px;height:70px;border-radius:50%;background:radial-gradient(circle,#af2b3430,transparent 70%)}
+.mapsys{background:#f3efe8}.grammars{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.grammar{background:var(--paper);border:1px solid var(--rule);border-radius:18px;padding:22px}.grammar h3{font-size:29px;margin:7px 0 8px}.grammar p{font-size:13px;color:#6b655e;min-height:60px}.gmap{height:230px;border-radius:12px;background:#ece5d6;position:relative;overflow:hidden;margin-top:18px;background-image:linear-gradient(30deg,transparent 49%,#fff9 49%,#fff9 51%,transparent 51%),linear-gradient(120deg,transparent 49%,#fff8 49%,#fff8 51%,transparent 51%);background-size:34px 34px}.route{position:absolute;height:3px;background:var(--ox);border-radius:99px;transform-origin:left center}.r1{left:16%;top:63%;width:44%;transform:rotate(-22deg)}.r2{left:49%;top:48%;width:39%;transform:rotate(-63deg)}.dashed{height:0;background:none;border-top:3px dotted #c2748c}.avatar{position:absolute;width:34px;height:34px;border-radius:50%;background:linear-gradient(145deg,#d7c7aa,#403a34);border:3px solid var(--paper);box-shadow:0 0 0 2px #c2748c}.halo{position:absolute;width:70px;height:70px;border-radius:50%;background:radial-gradient(circle,#95232430,transparent 70%)}
 .capture{display:grid;grid-template-columns:1fr .85fr;gap:30px}.capture-shot{min-height:560px;border-radius:20px;background:url("images/image 3.png") center/cover;position:relative;overflow:hidden}.capture-shot:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 52%,#000c)}.tag{position:absolute;left:34px;bottom:34px;z-index:2;background:#161616dd;color:#fff;border:1px solid #ffffff2a;border-radius:12px;padding:16px 18px;width:260px}.capture-copy{display:flex;flex-direction:column;justify-content:center;padding:30px}.capture-copy h3{font-size:48px;line-height:1;margin:8px 0 18px}.capture-copy p{color:#6a645d}.asteps{display:grid;gap:14px;margin-top:30px}.astep{display:grid;grid-template-columns:36px 1fr;gap:12px;padding-top:14px;border-top:1px solid var(--rule)}.astep b{font-size:12px;color:var(--red)}.astep span{font-size:13px;color:#625d56}
 .connect{display:grid;grid-template-columns:.95fr 1.05fr;gap:28px}.people{height:510px;border:1px solid var(--rule);border-radius:20px;background:#ece5d6;position:relative;overflow:hidden;background-image:linear-gradient(30deg,transparent 49%,#fff9 49%,#fff9 51%,transparent 51%),linear-gradient(120deg,transparent 49%,#fff8 49%,#fff8 51%,transparent 51%);background-size:42px 42px}.cross{background:var(--ink);color:#fff;border-radius:20px;padding:34px}.cross h3{font-size:44px;line-height:1;margin:10px 0 18px}.cross p{color:#c7c1b9}.person{display:flex;gap:14px;align-items:center;margin-top:38px;padding-top:22px;border-top:1px solid #353535}.pic{width:52px;height:52px;border-radius:50%;background:linear-gradient(145deg,#c9b28c,#35312b)}
-.archive{display:grid;grid-template-columns:.8fr 1.2fr;gap:26px}.profile{border:1px solid var(--rule);border-radius:20px;background:#fff;padding:28px}.profile h3{font-size:40px;margin:0 0 8px}.stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:24px 0}.stat{padding:18px 0}.stat b{display:block;font-family:"Cormorant Garamond",serif;font-size:28px}.stat span{font-size:11px;color:var(--muted)}.wall{columns:3 150px;column-gap:8px}.wall img{width:100%;margin:0 0 8px;border-radius:4px;break-inside:avoid}
-.system-board{display:grid;gap:18px}.system-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}.system-panel{border:1px solid var(--rule);border-radius:18px;background:#fff9;padding:24px;overflow:hidden}.system-panel.wide{grid-column:1/-1}.system-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:16px}.brand-lockup{font-family:"Cormorant Garamond",serif;font-size:48px;font-weight:600;line-height:1}.brand-lockup .arch{display:inline-block}.brand-note{font-size:12px;color:var(--muted);margin-top:14px;max-width:420px}.swatches{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.sw{height:88px;border-radius:10px;border:1px solid var(--rule);position:relative;overflow:hidden}.sw span{position:absolute;left:9px;bottom:7px;font-size:9px;font-weight:600}.type-spec{display:grid;gap:14px}.type-display{font-family:"Cormorant Garamond",serif;font-size:54px;line-height:.92}.type-ui{font-family:"Inter",sans-serif;font-size:22px;font-weight:600}.type-meta{font-family:"Inter",sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}.control-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.control-tab{padding:8px 10px;border-bottom:2px solid transparent;font-size:12px;color:var(--muted);font-weight:600}.control-tab.active{color:var(--ink);border-color:var(--red)}.control-button{padding:10px 15px;border-radius:10px;background:var(--red);color:white;font-size:12px;font-weight:700}.control-search{flex:1;min-width:180px;border:1px solid var(--rule);border-radius:999px;padding:10px 14px;color:#9a948c;font-size:12px;background:var(--paper)}.token-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}.marker-demo{display:flex;align-items:center;gap:8px;font-size:11px;color:#6b655e}.mk{width:16px;height:16px;border-radius:50%;display:inline-block;background:var(--red);border:2px solid white;box-shadow:0 0 0 1px #d5cec4}.mk.saved{background:var(--blue);box-shadow:inset 0 0 0 4px white,0 0 0 1px #d5cec4}.mk.visited{background:white;border:2px solid #777;box-shadow:none}.mk.current{background:var(--ox);box-shadow:0 0 0 5px rgba(117,32,47,.12)}.line-demo{width:58px;height:4px;border-radius:99px;background:var(--ox);display:inline-block}.line-demo.dash{height:0;background:none;border-top:3px dashed var(--ox);opacity:.65}.line-demo.friend{height:0;background:none;border-top:3px dotted #c2748c}.avatar-token{width:28px;height:28px;border-radius:50%;background:linear-gradient(145deg,#c8ae8c,#34302a);border:3px solid var(--paper);box-shadow:0 0 0 1.5px #c2748c}.chip-demo{padding:7px 10px;border-radius:999px;border:1px solid var(--rule);font-size:11px;background:var(--paper)}.chip-demo.active{border-color:var(--red);color:var(--red);background:#af2b340a}.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.principle-card{padding:16px;border-top:1px solid var(--rule)}.principle-card b{display:block;font-family:"Cormorant Garamond",serif;font-size:24px;margin-bottom:5px}.principle-card span{font-size:11px;color:var(--muted)}
+.archive{display:grid;grid-template-columns:.8fr 1.2fr;gap:26px}.profile{border:1px solid var(--rule);border-radius:20px;background:#fff;padding:28px}.profile h3{font-size:40px;margin:0 0 8px}.stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:24px 0}.stat{padding:18px 0}.stat b{display:block;font-family:"Cormorant Garamond";font-size:28px}.stat span{font-size:11px;color:var(--muted)}.wall{columns:3 150px;column-gap:8px}.wall img{width:100%;margin:0 0 8px;border-radius:4px;break-inside:avoid}
+.system-board{display:grid;gap:18px}.system-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}.system-panel{border:1px solid var(--rule);border-radius:18px;background:#fff9;padding:24px;overflow:hidden}.system-panel.wide{grid-column:1/-1}.system-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:16px}.brand-lockup{font-family:"Cormorant Garamond";font-size:48px;font-weight:600;line-height:1}.brand-lockup .arch{display:inline-block}.brand-note{font-size:12px;color:var(--muted);margin-top:14px;max-width:420px}.swatches{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.sw{height:88px;border-radius:10px;border:1px solid var(--rule);position:relative;overflow:hidden}.sw span{position:absolute;left:9px;bottom:7px;font-size:9px;font-weight:600}.type-spec{display:grid;gap:14px}.type-display{font-family:"Cormorant Garamond";font-size:54px;line-height:.92}.type-ui{font-family:"Inter";font-size:22px;font-weight:600}.type-meta{font-family:"Inter";font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}.control-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.control-tab{padding:8px 10px;border-bottom:2px solid transparent;font-size:12px;color:var(--muted);font-weight:600}.control-tab.active{color:var(--ink);border-color:var(--red)}.control-button{padding:10px 15px;border-radius:10px;background:var(--red);color:white;font-size:12px;font-weight:700}.control-search{flex:1;min-width:180px;border:1px solid var(--rule);border-radius:999px;padding:10px 14px;color:#9a948c;font-size:12px;background:var(--paper)}.token-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}.marker-demo{display:flex;align-items:center;gap:8px;font-size:11px;color:#6b655e}.mk{width:16px;height:16px;border-radius:50%;display:inline-block;background:var(--red);border:2px solid white;box-shadow:0 0 0 1px #d5cec4}.mk.saved{background:var(--blue);box-shadow:inset 0 0 0 4px white,0 0 0 1px #d5cec4}.mk.visited{background:white;border:2px solid #777;box-shadow:none}.mk.current{background:var(--ox);box-shadow:0 0 0 5px rgba(117,32,47,.12)}.line-demo{width:58px;height:4px;border-radius:99px;background:var(--ox);display:inline-block}.line-demo.dash{height:0;background:none;border-top:3px dashed var(--ox);opacity:.65}.line-demo.friend{height:0;background:none;border-top:3px dotted #c2748c}.avatar-token{width:28px;height:28px;border-radius:50%;background:linear-gradient(145deg,#c8ae8c,#34302a);border:3px solid var(--paper);box-shadow:0 0 0 1.5px #c2748c}.chip-demo{padding:7px 10px;border-radius:999px;border:1px solid var(--rule);font-size:11px;background:var(--paper)}.chip-demo.active{border-color:var(--red);color:var(--red);background:#9523240a}.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.principle-card{padding:16px;border-top:1px solid var(--rule)}.principle-card b{display:block;font-family:"Cormorant Garamond";font-size:24px;margin-bottom:5px}.principle-card span{font-size:11px;color:var(--muted)}
 footer{background:var(--ink);color:#fff;padding:80px 0}footer .wrap{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end}footer h2{font-size:58px;line-height:1;margin:0;max-width:620px}footer p{color:#aaa49c;margin:18px 0 0}
 @media(max-width:980px){nav{display:none}.hero-grid,.idea-grid,.section-grid,.capture,.connect,.archive{grid-template-columns:1fr}.system-row{grid-template-columns:1fr}.onboard{grid-template-columns:repeat(2,1fr)}.grammars{grid-template-columns:1fr}.title p{max-width:620px}}
 @media(max-width:680px){.wrap{width:min(100% - 28px,1180px)}section{padding:76px 0}.hero h1{font-size:54px}.title h2{font-size:46px}.onboard,.explore{grid-template-columns:1fr}.device{width:268px;height:548px}.device iframe{transform:scale(.64)}.swatches{grid-template-columns:repeat(3,1fr)}.principles{grid-template-columns:1fr}footer .wrap{grid-template-columns:1fr}}
+
+/* --- Route-led showcase language --- */
+main{position:relative}
+.route-rail{position:fixed;left:18px;top:82px;bottom:18px;width:54px;z-index:20;pointer-events:none;opacity:.92}
+.route-rail svg{width:100%;height:100%;overflow:visible}
+.route-rail .route-main{fill:none;stroke:var(--red);stroke-width:1.4}
+.route-rail .route-alt{fill:none;stroke:var(--blue);stroke-width:1.15;opacity:.75}
+.route-rail .route-quiet{fill:none;stroke:#8d8b87;stroke-width:1.1;opacity:.72}
+.route-rail circle{fill:var(--paper);stroke-width:1.5}
+.route-rail .n-red{stroke:var(--red)}.route-rail .n-blue{stroke:var(--blue)}.route-rail .n-gray{stroke:#8d8b87}
+
+/* one primary visual per section */
+.experience-stage{position:relative;border:1px solid var(--rule);border-radius:24px;background:#fff9;overflow:hidden;min-height:590px}
+.stage-note{position:absolute;left:24px;top:22px;z-index:6;font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.stage-caption{position:absolute;right:22px;bottom:18px;z-index:8;font-size:11px;color:var(--muted);background:rgba(250,248,245,.9);border:1px solid var(--rule);padding:7px 10px;border-radius:999px}
+
+/* onboarding: one animated phone instead of four equal screens */
+.onboarding-stage{display:grid;grid-template-columns:.68fr 1.32fr;align-items:stretch;background:#0e0f10;color:#fff}
+.flow-index{padding:48px 38px;border-right:1px solid #2b2b2b;display:flex;flex-direction:column;justify-content:flex-end}
+.flow-index .eyebrow{color:#d56d73}.flow-index h3{font-size:42px;line-height:1;margin:10px 0 12px}.flow-index p{font-size:13px;color:#aaa49c;max-width:250px}
+.flow-phone-wrap{display:flex;align-items:center;justify-content:center;min-height:610px;padding:30px}
+.flow-phone{width:306px;height:590px;border:1px solid #2f2f2f;border-radius:34px;background:#0e0f10;position:relative;overflow:hidden;box-shadow:0 28px 70px -34px #000}
+.flow-state{position:absolute;inset:0;padding:34px 26px 28px;opacity:0;animation:flowCycle 16s infinite}
+.flow-state:nth-child(1){animation-delay:0s}.flow-state:nth-child(2){animation-delay:4s}.flow-state:nth-child(3){animation-delay:8s}.flow-state:nth-child(4){animation-delay:12s}
+.flow-state .mini-brand{font-family:"Cormorant Garamond";font-size:21px;margin-bottom:90px}.flow-state h3{font-size:34px;line-height:1.02;margin:0 0 14px}.flow-state p{font-size:12px;color:#aaa49c}.flow-state .mlist{margin-top:26px}.flow-state .mrow{font-size:11px;padding:12px}.flow-state .steps{bottom:22px}
+@keyframes flowCycle{0%,20%{opacity:1;transform:translateY(0)}25%,95%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
+
+/* Explore becomes one map composition with two floating information surfaces */
+.explore-stage{min-height:620px;background:#ede6d8}
+.explore-stage .map{position:absolute;inset:0;height:auto;border-radius:0}
+.explore-stage .map:before{width:26%}.explore-stage .map:after{left:46%;width:14%;height:38%}
+.explore-selected{position:absolute;left:34px;bottom:34px;z-index:5;width:360px;background:rgba(250,248,245,.96);border:1px solid var(--rule);border-radius:16px;padding:14px;display:grid;grid-template-columns:62px 1fr;gap:13px;align-items:center;box-shadow:0 20px 44px -34px #0009}
+.explore-selected .thumb{width:62px;height:62px}.explore-selected strong{display:block;font-size:15px}.explore-selected span{font-size:12px;color:var(--muted)}
+.browse-float{position:absolute;right:34px;top:34px;z-index:5;width:330px;background:rgba(250,248,245,.96);border:1px solid var(--rule);border-radius:16px;padding:16px;box-shadow:0 20px 44px -34px #0009}
+.browse-float h3{font-size:28px;margin:5px 0 12px}.browse-float .style-grid-mini{display:grid;grid-template-columns:1fr 1fr;gap:6px}.browse-float .style-grid-mini img{width:100%;height:104px;object-fit:cover;border-radius:6px}
+.map-city-label{position:absolute;z-index:3;font-family:"Cormorant Garamond";font-style:italic;color:#7c8790;font-size:18px}
+
+/* Journey is a map-first composition, not a row of cards */
+.journey-stage{min-height:650px;background:#eae3d4}
+.journey-map-bg{position:absolute;inset:0;background-image:linear-gradient(29deg,transparent 49%,rgba(255,255,255,.95) 49%,rgba(255,255,255,.95) 51%,transparent 51%),linear-gradient(119deg,transparent 49%,rgba(255,255,255,.78) 49%,rgba(255,255,255,.78) 51%,transparent 51%);background-size:42px 42px}
+.journey-map-bg:before{content:"";position:absolute;right:-7%;top:0;width:25%;height:100%;background:var(--water);transform:skewX(-8deg)}
+.journey-map-bg:after{content:"";position:absolute;left:46%;top:-4%;width:15%;height:44%;background:var(--sage);transform:skewX(-8deg)}
+.journey-svg{position:absolute;inset:0;width:100%;height:100%;z-index:3}
+.journey-svg .walked{fill:none;stroke:var(--red);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.journey-svg .upnext{fill:none;stroke:var(--red);stroke-width:4;stroke-dasharray:10 8;opacity:.62;stroke-linecap:round}
+.journey-svg .friend{fill:none;stroke:#c2748c;stroke-width:3;stroke-dasharray:2 9;stroke-linecap:round}
+.journey-svg .friend.blue{stroke:#6e93b8}.journey-svg .friend.green{stroke:#6f8f63}
+.stop-panel{position:absolute;right:34px;bottom:34px;z-index:6;width:310px;background:rgba(250,248,245,.96);border:1px solid var(--rule);border-radius:16px;padding:18px;box-shadow:0 22px 50px -34px #0009}
+.stop-panel h3{font-size:30px;margin:4px 0 14px}.stop-row{display:grid;grid-template-columns:54px 14px 1fr;gap:9px;align-items:start;padding:10px 0;border-top:1px solid var(--rule);font-size:12px}.stop-row time{color:var(--muted)}.stop-row i{width:10px;height:10px;border-radius:50%;background:var(--red);margin-top:4px}.stop-row i.current{background:var(--paper);border:2px solid var(--red);box-shadow:0 0 0 5px rgba(149,35,36,.1)}
+.map-key{position:absolute;left:30px;top:30px;z-index:6;display:flex;gap:10px;flex-wrap:wrap;max-width:470px}.map-key span{background:rgba(250,248,245,.92);border:1px solid var(--rule);padding:8px 10px;border-radius:999px;font-size:11px;color:#5f5952}
+
+/* connect keeps the map dominant; selected person is the only major panel */
+.connect-stage{min-height:620px;background:#eae3d4}.connect-stage .journey-map-bg{opacity:1}
+.connect-stage .selected-explorer{position:absolute;right:34px;bottom:34px;z-index:7;width:330px;background:rgba(250,248,245,.97);border:1px solid var(--rule);border-radius:16px;padding:18px;box-shadow:0 22px 50px -34px #0009}
+.explorer-head{display:flex;gap:12px;align-items:center}.explorer-head .pic{flex:0 0 auto}.selected-explorer h3{font-family:"Inter";font-size:16px;font-weight:700;margin:0}.selected-explorer p{font-size:12px;color:var(--muted);margin:4px 0 0}.selected-explorer .btn{display:inline-block;margin-top:16px}
+
+/* richer design language */
+.design-board{display:grid;gap:18px}
+.design-hero{display:grid;grid-template-columns:.8fr 1.2fr;gap:18px}
+.design-panel{border:1px solid var(--rule);border-radius:20px;background:#fff9;padding:24px;overflow:hidden}
+.design-panel.dark{background:var(--ink);color:#fff;border-color:#222}.design-panel.dark .system-label,.design-panel.dark .brand-note{color:#aaa49c}
+.design-lockup{font-family:"Cormorant Garamond";font-size:58px;font-weight:600;line-height:.95}.design-lockup .arch{display:inline-block}
+.design-subtitle{font-family:"Cormorant Garamond";font-size:38px;line-height:1.05;margin-top:28px}
+.design-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.design-grid.three{grid-template-columns:1fr 1fr 1fr}
+.photo-strip{display:grid;grid-template-columns:1.2fr .8fr 1fr;gap:8px;height:260px}.photo-strip img{width:100%;height:100%;object-fit:cover;border-radius:10px;filter:saturate(.78) contrast(1.04)}
+.palette-spec{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.color-chip{height:94px;border-radius:10px;border:1px solid var(--rule);position:relative}.color-chip b{position:absolute;left:9px;bottom:18px;font-size:9px}.color-chip span{position:absolute;left:9px;bottom:6px;font-size:8px;opacity:.65}
+.font-pair{display:grid;grid-template-columns:1fr 1fr;gap:24px}.font-pair .serif-sample{font-family:"Cormorant Garamond";font-size:44px;line-height:.95}.font-pair .sans-sample{font-family:"Inter";font-size:18px;font-weight:600;line-height:1.25}
+.language-rule{margin-top:18px;padding-top:14px;border-top:1px solid var(--rule);font-size:12px;color:var(--muted)}
+.component-demo{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.design-principles{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--rule)}.design-principle{padding:18px 16px 6px 0}.design-principle b{font-family:"Cormorant Garamond";font-size:26px;display:block;margin-bottom:6px}.design-principle span{font-size:11px;color:var(--muted)}
+@media(max-width:980px){.route-rail{display:none}.onboarding-stage,.design-hero,.design-grid,.design-grid.three{grid-template-columns:1fr}.explore-stage,.journey-stage,.connect-stage{min-height:650px}.browse-float{width:280px}.design-principles{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){.flow-index{display:none}.onboarding-stage{grid-template-columns:1fr}.explore-selected{left:14px;right:14px;width:auto}.browse-float{right:14px;top:14px;width:250px}.stop-panel,.connect-stage .selected-explorer{left:14px;right:14px;width:auto}.map-key{left:14px;top:14px}.palette-spec{grid-template-columns:repeat(3,1fr)}.photo-strip{grid-template-columns:1fr 1fr;height:220px}.photo-strip img:nth-child(3){display:none}.design-principles{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.flow-state{animation:none;opacity:0}.flow-state:first-child{opacity:1}}
+
 </style>
 </head>
 <body>
+<div class="route-rail" aria-hidden="true"><svg viewBox="0 0 54 1000" preserveAspectRatio="none"><path class="route-main" d="M18 0 C18 140 18 210 18 300 S20 480 18 610 S18 840 18 1000"/><path class="route-alt" d="M35 0 C35 180 35 230 35 390 S31 560 35 710 S35 900 35 1000"/><path class="route-quiet" d="M48 0 C48 100 48 250 48 420 S45 700 48 1000"/><circle class="n-red" cx="18" cy="150" r="4"/><circle class="n-blue" cx="35" cy="360" r="4"/><circle class="n-gray" cx="48" cy="610" r="4"/><circle class="n-red" cx="18" cy="820" r="4"/></svg></div>
 <header class="topbar"><div class="wrap"><div class="wordmark"><span class="arch">Arch</span>Scape</div><nav><a href="#onboarding">Onboarding</a><a href="#explore">Explore</a><a href="#journey">Map</a><a href="#capture">Capture</a><a href="#connect">Connect</a><a href="#archive">Archive</a><a href="#system">System</a></nav><div class="actions"><a class="btn" href="https://github.com/hujingxuanlucy-commits/archscape" target="_blank">GitHub</a><a class="btn primary" href="archscape.html">Try prototype</a></div></div></header>
 <main>
 <section class="hero"><div class="wrap hero-grid"><div><div class="eyebrow">Architecture · City · Community</div><h1>Record the city.<br><span>Connect the world.</span></h1><p>ArchScape turns architectural curiosity into a personal city archive — helping people discover nearby places, capture what catches their eye, trace the journeys they walk, and meet others whose paths overlap.</p><div class="chips"><span class="chip">Nearby discovery</span><span class="chip">Personal journeys</span><span class="chip">Path crossings</span><span class="chip">AI-assisted capture</span><span class="chip">Visual archive</span></div></div><div class="device-wrap"><div class="ring"></div><div class="device"><iframe src="archscape.html" title="ArchScape prototype"></iframe></div></div></div></section>
 <section class="idea"><div class="wrap idea-grid"><div><div class="eyebrow">The idea</div><h2>See the city<br>through your own lens.</h2></div><p>ArchScape is built around one loop: <strong>discover a place, capture it, add it to your journey, and let that journey create new connections.</strong> Architecture becomes something you notice while moving through the city — not something you look up later.</p></div></section>
-<section id="onboarding"><div class="wrap section-grid"><div class="title"><div class="num">01</div><div class="eyebrow">Personalization</div><h2>Personalized<br>Onboarding</h2><p>New users define their creative lens, choose the themes that inspire them, and step into a community of visual explorers.</p></div><div class="onboard">
-<div class="mini"><div class="brand"><span class="red">Arch</span>Scape</div><h3>Record the city.<br>Connect the world.</h3><p>Capture architectural moments, build your visual path, and join a global community.</p><div class="steps"><i class="on"></i><i></i><i></i><i></i></div></div>
-<div class="mini"><div class="brand"><span class="red">Arch</span>Scape</div><h3>How do you see the city?</h3><p>Select the role that best defines your creative lens.</p><div class="mlist"><div class="mrow">Architect</div><div class="mrow">Interior Designer</div><div class="mrow">Photographer</div><div class="mrow sel">Urban Explorer</div></div><div class="steps"><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
-<div class="mini"><div class="brand"><span class="red">Arch</span>Scape</div><h3>What inspires you most?</h3><p>Pick as many themes as you like.</p><div class="mlist" style="grid-template-columns:1fr 1fr"><div class="mrow sel">Architecture</div><div class="mrow">Street Art</div><div class="mrow sel">Urban Design</div><div class="mrow sel">Historical</div><div class="mrow">Minimalist</div><div class="mrow sel">Museums</div></div><div class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div>
-<div class="mini"><div class="brand"><span class="red">Arch</span>Scape</div><h3>Your creative journey begins</h3><p>Capture the city's hidden geometries and join a community of visual curators.</p><div class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div></div>
+<section id="onboarding"><div class="wrap section-grid">
+<div class="title"><div class="num">01</div><div class="eyebrow">Personalization</div><h2>Personalized<br>Onboarding</h2><p>New users define their creative lens, choose the themes that inspire them, and step into a community of visual explorers.</p></div>
+<div class="experience-stage onboarding-stage">
+  <div class="flow-index"><div class="eyebrow">Four steps · one flow</div><h3>Start with how<br>you see.</h3><p>One animated sequence will replace this placeholder after the final onboarding screenshots are uploaded.</p></div>
+  <div class="flow-phone-wrap"><div class="flow-phone">
+    <div class="flow-state"><div class="mini-brand"><span class="arch">Arch</span>Scape</div><h3>Record the city.<br>Connect the world.</h3><p>Capture architectural moments, build your visual path, and join a global community.</p><div class="steps"><i class="on"></i><i></i><i></i><i></i></div></div>
+    <div class="flow-state"><div class="mini-brand"><span class="arch">Arch</span>Scape</div><h3>How do you see the city?</h3><p>Select the role that best defines your creative lens.</p><div class="mlist"><div class="mrow">Architect</div><div class="mrow">Interior Designer</div><div class="mrow">Photographer</div><div class="mrow sel">Urban Explorer</div></div><div class="steps"><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+    <div class="flow-state"><div class="mini-brand"><span class="arch">Arch</span>Scape</div><h3>What inspires you most?</h3><p>Pick as many themes as you like.</p><div class="mlist" style="grid-template-columns:1fr 1fr"><div class="mrow sel">Architecture</div><div class="mrow">Street Art</div><div class="mrow sel">Urban Design</div><div class="mrow sel">Historical</div><div class="mrow">Minimalist</div><div class="mrow sel">Museums</div></div><div class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div>
+    <div class="flow-state"><div class="mini-brand"><span class="arch">Arch</span>Scape</div><h3>Your creative journey begins</h3><p>Capture the city's hidden geometries and join a community of visual curators.</p><div class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div></div>
+  </div></div>
 </div></div></section>
-<section id="explore"><div class="wrap section-grid"><div class="title"><div class="num">02</div><div class="eyebrow">Discovery</div><h2>Explore</h2><p>Discover nearby architecture, browse by style, and move from a map point into the story behind a building.</p></div><div class="explore">
-<div class="card"><div class="pad"><div class="kicker">Nearby</div><h3>What's worth walking to?</h3><p>A local, POI-first map surfaces relevant buildings around the user without turning discovery into route planning.</p></div><div class="map"><i class="dot" style="left:22%;top:34%"></i><i class="dot b" style="left:39%;top:46%"></i><i class="dot g" style="left:53%;top:30%"></i><i class="dot" style="left:67%;top:54%"></i><i class="dot b" style="left:48%;top:65%"></i><i class="dot g" style="left:29%;top:63%"></i><i class="dot s" style="left:58%;top:72%"></i><div class="place"><div class="thumb"></div><div><strong>Chrysler Building</strong><span>Architecture · 1.0 km away</span></div></div></div></div>
-<div class="card"><div class="pad"><div class="kicker">Browse by style</div><h3>Search visually.</h3><p>Style filters stay available while scrolling, helping users move between architecture categories without losing context.</p></div><div class="styles"><div class="tile"><img src="images/image 1.png"><b>New York Public Library</b></div><div class="tile"><img src="images/image 2.png"><b>Empire State Building</b></div><div class="tile"><img src="images/image 4.png"><b>Park Avenue Facades</b></div><div class="tile"><img src="images/image 5.png"><b>The High Line</b></div></div></div>
+<section id="explore"><div class="wrap section-grid">
+<div class="title"><div class="num">02</div><div class="eyebrow">Discovery</div><h2>Explore</h2><p>Discover nearby architecture, browse by style, and move from a map point into the story behind a building.</p></div>
+<div class="experience-stage explore-stage">
+  <div class="stage-note">Nearby · New York</div>
+  <div class="map">
+    <i class="dot" style="left:20%;top:33%"></i><i class="dot b" style="left:36%;top:48%"></i><i class="dot g" style="left:52%;top:29%"></i><i class="dot" style="left:67%;top:56%"></i><i class="dot b" style="left:47%;top:66%"></i><i class="dot g" style="left:29%;top:63%"></i><i class="dot s" style="left:57%;top:72%"></i>
+    <span class="map-city-label" style="left:24%;top:45%">Midtown</span><span class="map-city-label" style="right:13%;top:70%">East River</span>
+  </div>
+  <div class="browse-float"><div class="kicker">Browse by style</div><h3>Search visually.</h3><div class="style-grid-mini"><img src="images/image 1.png"><img src="images/image 2.png"><img src="images/image 4.png"><img src="images/image 5.png"></div></div>
+  <div class="explore-selected"><div class="thumb"></div><div><strong>Chrysler Building</strong><span>Architecture · 1.0 km away</span></div></div>
+  <div class="stage-caption">Map + discovery surfaces</div>
 </div></div></section>
-<section id="journey" class="mapsys"><div class="wrap section-grid"><div class="title"><div class="num">03</div><div class="eyebrow">One map language</div><h2>Three map<br>grammars</h2><p>The basemap stays consistent. What changes is the question each screen answers — and what color means.</p></div><div class="grammars">
-<div class="grammar"><div class="kicker">Explore · Nearby</div><h3>Places near you</h3><p>Color encodes POI category. No routes — discovery stays point-first.</p><div class="gmap"></div></div>
-<div class="grammar"><div class="kicker">My Journey Map</div><h3>One journey, in time</h3><p>One chronological route. Stops communicate completed, current, and upcoming state.</p><div class="gmap"><i class="route r1"></i><i class="route r2"></i></div></div>
-<div class="grammar"><div class="kicker">Path Crossings</div><h3>People in relation</h3><p>Color encodes person. Relevant path segments, avatars, and soft crossing halos make overlap social.</p><div class="gmap"><i class="route r1"></i><i class="route dashed" style="left:18%;top:67%;width:52%;transform:rotate(-48deg)"></i><i class="halo" style="left:42%;top:44%"></i><i class="avatar" style="left:58%;top:22%"></i></div></div>
+<section id="journey" class="mapsys"><div class="wrap section-grid">
+<div class="title"><div class="num">03</div><div class="eyebrow">Journey map</div><h2>Turn movement<br>into memory.</h2><p>A journey is one chronological path through the city. Stops show status; the timeline gives the detail.</p></div>
+<div class="experience-stage journey-stage">
+  <div class="journey-map-bg"></div>
+  <div class="map-key"><span>● Completed</span><span>◉ Current</span><span>○ Upcoming</span><span>— Walked</span><span>– – Up next</span></div>
+  <svg class="journey-svg" viewBox="0 0 1000 650" preserveAspectRatio="none" aria-hidden="true">
+    <path class="walked" d="M155 530 L255 455 L330 470 L420 375 L515 405 L610 315 L665 330"/>
+    <path class="upnext" d="M665 330 L735 245 L770 145"/>
+    <circle cx="255" cy="455" r="8" fill="#952324" stroke="#faf8f5" stroke-width="4"/>
+    <circle cx="420" cy="375" r="8" fill="#952324" stroke="#faf8f5" stroke-width="4"/>
+    <circle cx="610" cy="315" r="12" fill="#faf8f5" stroke="#952324" stroke-width="4"/>
+    <circle cx="770" cy="145" r="8" fill="#faf8f5" stroke="#952324" stroke-width="4"/>
+  </svg>
+  <div class="stop-panel"><div class="kicker">Stops today</div><h3>One walk, in time.</h3>
+    <div class="stop-row"><time>09:41</time><i></i><strong>MoMA</strong></div>
+    <div class="stop-row"><time>10:26</time><i></i><strong>Seagram Building</strong></div>
+    <div class="stop-row"><time>11:12</time><i class="current"></i><strong>Chrysler Building</strong></div>
+    <div class="stop-row"><time>11:58</time><i style="background:white;border:2px solid var(--red)"></i><strong>Guggenheim</strong></div>
+  </div>
 </div></div></section>
 <section id="capture"><div class="wrap section-grid"><div class="title"><div class="num">04</div><div class="eyebrow">Capture</div><h2>See it.<br>Frame it.</h2><p>Capture what catches your eye. ArchScape helps identify the place, surface its story, and turn observation into a record.</p></div><div class="capture"><div class="capture-shot"><div class="tag"><div class="eyebrow">AR Active</div><strong>Identified: The Vessel</strong><div style="font-size:12px;color:#bbb;margin-top:4px">Thomas Heatherwick · Hudson Yards</div></div></div><div class="capture-copy"><div class="kicker">AI-assisted capture</div><h3>From looking<br>to knowing.</h3><p>Computer vision supports the moment without taking it over. The user still chooses the frame, title, notes, tags, and whether a capture becomes part of their journey.</p><div class="asteps"><div class="astep"><b>01</b><span>Identify the place from the live frame.</span></div><div class="astep"><b>02</b><span>Surface architect, history, location, and spatial context.</span></div><div class="astep"><b>03</b><span>Save the user's own observation as a capture, not just a lookup.</span></div></div></div></div></div></section>
-<section id="connect"><div class="wrap section-grid"><div class="title"><div class="num">05</div><div class="eyebrow">Social discovery</div><h2>Cross Paths</h2><p>See where routes overlap, discover people nearby, and turn shared interests into real-world connections.</p></div><div class="connect"><div class="people"><i class="route r1"></i><i class="route dashed" style="left:23%;top:58%;width:54%;transform:rotate(-46deg)"></i><i class="halo" style="left:44%;top:45%"></i><i class="avatar" style="left:58%;top:27%"></i></div><div class="cross"><div class="eyebrow">3 path crossings</div><h3>Who crossed near your path?</h3><p>Friend paths only appear where they are relevant. One selected person anchors the interaction while the map updates around that person.</p><div class="person"><div class="pic"></div><div><strong>@javier.arq</strong><div style="font-size:12px;color:#aaa49c">Madrid · 400m away · Brutalism / Photography</div></div></div></div></div></div></section>
+<section id="connect"><div class="wrap section-grid">
+<div class="title"><div class="num">05</div><div class="eyebrow">Path crossings</div><h2>Paths become<br>people.</h2><p>See where routes overlap, discover people nearby, and turn shared interests into real-world connections.</p></div>
+<div class="experience-stage connect-stage">
+  <div class="journey-map-bg"></div>
+  <div class="map-key"><span>You · solid red</span><span>Friends · dotted</span><span>3 nearby</span></div>
+  <svg class="journey-svg" viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true">
+    <path class="walked" d="M150 530 L260 448 L355 464 L445 365 L540 396 L630 302 L700 322"/>
+    <path class="friend" d="M240 560 L340 470 L465 392 L590 295 L710 176"/>
+    <path class="friend blue" d="M340 575 L390 490 L500 410 L610 350 L790 280"/>
+    <path class="friend green" d="M760 540 L670 450 L590 395 L520 350 L455 300"/>
+    <circle cx="465" cy="392" r="42" fill="rgba(149,35,36,.12)"/>
+    <circle cx="590" cy="395" r="36" fill="rgba(149,35,36,.10)"/>
+  </svg>
+  <div class="selected-explorer"><div class="explorer-head"><div class="pic"></div><div><h3>@javier.arq</h3><p>Madrid · 400m away</p></div></div><p>Loves Brutalism, Photography, Urban Design.</p><a class="btn primary" href="archscape.html">View crossing</a></div>
+  <div class="stage-caption">One person selected at a time</div>
+</div></div></section>
 <section id="archive"><div class="wrap section-grid"><div class="title"><div class="num">06</div><div class="eyebrow">Personal archive</div><h2>Profile &<br>Collection</h2><p>Captures, journeys, groups, and saved places build into a visual record of how the user sees cities over time.</p></div><div class="archive"><aside class="profile"><div class="kicker">Lucy Zhang</div><h3>Your city, collected.</h3><p style="font-size:13px;color:var(--muted)">A living archive of architecture, places, people, and routes.</p><div class="stats"><div class="stat"><b>247</b><span>Captures</span></div><div class="stat"><b>12</b><span>Journeys</span></div><div class="stat"><b>89</b><span>Saved</span></div></div></aside><div class="wall"><img src="images/image 1.png"><img src="images/image 2.png"><img src="images/image 3.png"><img src="images/image 4.png"><img src="images/image 5.png"><img src="images/image 6.png"><img src="images/image 2.png"><img src="images/image 4.png"></div></div></div></section>
 <section id="system"><div class="wrap section-grid">
-<div class="title"><div class="num">07</div><div class="eyebrow">Visual language</div><h2>A system for<br>seeing the city.</h2><p>The interface borrows from editorial architecture publishing: expressive serif typography, precise information design, restrained color, and a map language that changes meaning by context.</p></div>
-<div class="system-board">
+<div class="title"><div class="num">07</div><div class="eyebrow">Visual language</div><h2>Editorial city<br>intelligence.</h2><p>ArchScape combines architectural publishing, cartographic precision, and restrained product UI. The system is quiet enough for photography, but specific enough to make place, movement, and social context legible.</p></div>
 
-  <div class="system-row">
-    <div class="system-panel">
+<div class="design-board">
+  <div class="design-hero">
+    <div class="design-panel dark">
       <div class="system-label">Brand identity</div>
-      <div class="brand-lockup"><span class="arch">Arch</span>Scape</div>
-      <div class="brand-note">A quiet editorial wordmark. Signal red belongs to “Arch” and its precise underline; the rest stays ink.</div>
+      <div class="design-lockup"><span class="arch">Arch</span>Scape</div>
+      <div class="design-subtitle">Architecture.<br>City.<br>Community.</div>
+      <div class="brand-note">Signal red is #952324. It marks the “Arch” wordmark, selected actions, and intentional spatial states — never decoration for decoration’s sake.</div>
     </div>
-    <div class="system-panel">
-      <div class="system-label">Typography</div>
-      <div class="type-spec">
-        <div class="type-meta">Display · Cormorant Garamond</div>
-        <div class="type-display">Explore the city.</div>
-        <div class="type-meta">Interface · Inter</div>
-        <div class="type-ui">Nearby · Journey · Capture · Profile</div>
+    <div class="design-panel">
+      <div class="system-label">Typography · two typefaces, two jobs</div>
+      <div class="font-pair">
+        <div><div class="type-meta">Cormorant Garamond</div><div class="serif-sample">The city<br>as editorial<br>material.</div></div>
+        <div><div class="type-meta">Inter</div><div class="sans-sample">Nearby<br>1.0 km away<br>11:12 · Current stop<br>Architecture</div></div>
       </div>
+      <div class="language-rule">Cormorant Garamond carries identity, narrative, and architectural character. Inter carries navigation, controls, metadata, and dense information.</div>
     </div>
   </div>
 
-  <div class="system-panel wide">
-    <div class="system-label">Core palette</div>
-    <div class="swatches">
-      <div class="sw" style="background:#faf8f5"><span>Paper</span></div>
-      <div class="sw" style="background:#11100f;color:#fff"><span>Ink</span></div>
-      <div class="sw" style="background:#af2b34;color:#fff"><span>Signal red</span></div>
-      <div class="sw" style="background:#75202f;color:#fff"><span>Journey</span></div>
-      <div class="sw" style="background:#c7d7e1"><span>Water</span></div>
-      <div class="sw" style="background:#cbd8b9"><span>Park</span></div>
+  <div class="design-panel">
+    <div class="system-label">Core palette · functional, not decorative</div>
+    <div class="palette-spec">
+      <div class="color-chip" style="background:#FAF8F5"><b>Paper</b><span>#FAF8F5</span></div>
+      <div class="color-chip" style="background:#11100F;color:white"><b>Ink</b><span>#11100F</span></div>
+      <div class="color-chip" style="background:#952324;color:white"><b>Signal</b><span>#952324</span></div>
+      <div class="color-chip" style="background:#75202F;color:white"><b>Journey</b><span>#75202F</span></div>
+      <div class="color-chip" style="background:#C7D7E1"><b>Water</b><span>#C7D7E1</span></div>
+      <div class="color-chip" style="background:#CBD8B9"><b>Park</b><span>#CBD8B9</span></div>
     </div>
   </div>
 
-  <div class="system-row">
-    <div class="system-panel">
-      <div class="system-label">Navigation & controls</div>
-      <div class="control-row">
-        <span class="control-tab active">Nearby</span><span class="control-tab">Trending</span><span class="control-tab">Following</span><span class="control-tab">Groups</span>
+  <div class="design-grid">
+    <div class="design-panel">
+      <div class="system-label">Interface grammar</div>
+      <div class="component-demo"><span class="control-tab active">Nearby</span><span class="control-tab">Trending</span><span class="control-tab">Following</span><span class="control-tab">Groups</span></div>
+      <div class="component-demo" style="margin-top:18px"><span class="control-search">Search by architect, style, city…</span><span class="control-button">Explore</span></div>
+      <div class="component-demo" style="margin-top:18px"><span class="chip-demo active">Architecture</span><span class="chip-demo">Modernism</span><span class="chip-demo">Museums</span><span class="chip-demo">Brutalism</span></div>
+      <div class="language-rule">Selection is communicated through underline, border, weight, or a precise red accent. Large filled color blocks are reserved for primary action.</div>
+    </div>
+    <div class="design-panel">
+      <div class="system-label">Map grammar</div>
+      <div class="token-row">
+        <span class="marker-demo"><i class="mk"></i>Nearby POI</span>
+        <span class="marker-demo"><i class="mk saved"></i>Saved</span>
+        <span class="marker-demo"><i class="mk visited"></i>Visited</span>
+        <span class="marker-demo"><i class="mk current"></i>Current</span>
+        <span class="marker-demo"><i class="line-demo"></i>Journey</span>
+        <span class="marker-demo"><i class="line-demo dash"></i>Up next</span>
+        <span class="marker-demo"><i class="line-demo friend"></i>Friend</span>
+        <span class="marker-demo"><i class="avatar-token"></i>Explorer</span>
       </div>
-      <div class="control-row" style="margin-top:18px"><span class="control-search">Search by architect, style, city…</span><span class="control-button">Explore</span></div>
-    </div>
-    <div class="system-panel">
-      <div class="system-label">Tags & categories</div>
-      <div class="control-row">
-        <span class="chip-demo active">Architecture</span><span class="chip-demo">Modernism</span><span class="chip-demo">Museums</span><span class="chip-demo">Brutalism</span><span class="chip-demo">Landscape</span>
-      </div>
-      <div class="brand-note">Selection is expressed through restraint: borders, underline, or a small color shift — not heavy fills everywhere.</div>
+      <div class="language-rule">One map language, three grammars: <strong>category</strong> on Explore, <strong>status</strong> on Journey, <strong>person</strong> on Path Crossings. Hue carries one meaning per screen.</div>
     </div>
   </div>
 
-  <div class="system-panel wide">
-    <div class="system-label">Map language</div>
-    <div class="token-row">
-      <span class="marker-demo"><i class="mk"></i>Nearby POI</span>
-      <span class="marker-demo"><i class="mk saved"></i>Saved</span>
-      <span class="marker-demo"><i class="mk visited"></i>Visited</span>
-      <span class="marker-demo"><i class="mk current"></i>Current stop</span>
-      <span class="marker-demo"><i class="line-demo"></i>Journey</span>
-      <span class="marker-demo"><i class="line-demo dash"></i>Up next</span>
-      <span class="marker-demo"><i class="line-demo friend"></i>Friend path</span>
-      <span class="marker-demo"><i class="avatar-token"></i>Explorer</span>
-    </div>
-    <div class="brand-note">One map language, three grammars: category on Explore, status on Journey, person on Path Crossings. Hue carries one meaning at a time.</div>
+  <div class="design-panel">
+    <div class="system-label">Image language · architecture remains the hero</div>
+    <div class="photo-strip"><img src="images/image 1.png" alt="Architectural study"><img src="images/image 3.png" alt="Architectural detail"><img src="images/image 5.png" alt="Urban architecture"></div>
+    <div class="language-rule">Use real architectural photography with strong geometry, material, light, and spatial depth. UI should frame the image, not compete with it. Final showcase screenshots will be linked from <code>showcase-assets/</code> rather than redrawn.</div>
   </div>
 
-  <div class="system-panel wide">
+  <div class="design-panel">
     <div class="system-label">Design principles</div>
-    <div class="principles">
-      <div class="principle-card"><b>Editorial first</b><span>Architecture photography and Cormorant Garamond carry personality; the interface stays quiet.</span></div>
-      <div class="principle-card"><b>Information with purpose</b><span>Inter handles UI, metadata, controls, and dense spatial information with clarity.</span></div>
-      <div class="principle-card"><b>Color means something</b><span>Red is not decoration. Every accent signals category, state, route, or action.</span></div>
+    <div class="design-principles">
+      <div class="design-principle"><b>Editorial first</b><span>Typography and photography create the character; controls stay quiet.</span></div>
+      <div class="design-principle"><b>Spatially precise</b><span>Maps, routes, markers, and distance are part of the product language.</span></div>
+      <div class="design-principle"><b>Color has a job</b><span>#952324 signals identity, selection, route state, or action — never generic decoration.</span></div>
+      <div class="design-principle"><b>Real over rendered</b><span>Show actual UI exports and actual architectural imagery. Avoid reconstructed screenshots when final assets exist.</span></div>
     </div>
   </div>
-
 </div></div></section>
 </main>
 <footer><div class="wrap"><div><div class="eyebrow">ArchScape</div><h2>Walk it before<br>you read about it.</h2><p>Architecture becomes more memorable when it is tied to a place, a path, and a person.</p></div><div class="actions"><a class="btn" href="#explore">Explore the system</a><a class="btn primary" href="archscape.html">Try prototype</a></div></div></footer>
