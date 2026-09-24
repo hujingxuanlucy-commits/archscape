@@ -31,7 +31,8 @@
     backdrop-filter:blur(6px); border-bottom:1px solid var(--bone);
   }
   .topbar .wrap{ display:flex; align-items:center; justify-content:space-between; height:64px; }
-  .wordmark{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:22px; }
+  .wordmark{ font-family:'Cormorant Garamond',serif; font-weight:600; font-size:24px; line-height:1; letter-spacing:.005em; color:var(--ink); }
+  .wordmark .arch{ color:var(--signal); text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:4px; }
   .topbar nav{ display:flex; gap:28px; font-size:13.5px; }
   .topbar nav a{ text-decoration:none; color:var(--graphite); }
   .topbar .cta{
@@ -135,7 +136,7 @@
 
 <div class="topbar">
   <div class="wrap">
-    <div class="wordmark">ArchScape</div>
+    <div class="wordmark" aria-label="ArchScape"><span class="arch">Arch</span>Scape</div>
     <nav>
       <a href="#lines">The idea</a>
       <a href="#features">What it does</a>
