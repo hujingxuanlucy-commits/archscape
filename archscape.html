@@ -800,6 +800,8 @@ figure{margin:0}
 .dpickrow[aria-current="true"] i{background:var(--red)}
 .dpickrow.manual b{color:var(--muted)}
 /* the value is editable, so it has to look it - flat text reads as a label */
+.dfield b{flex:1;min-width:0;font-size:14px;font-weight:500;color:var(--ink);padding:5px 8px;margin:-3px 0;display:block}
+
 .dfield input{flex:1;min-width:0;border:0;outline:none;font-size:14px;font-weight:500;color:var(--ink);
   background:none;padding:5px 8px;margin:-3px 0;border-radius:4px;transition:background .16s,color .16s}
 .dfield input::placeholder{color:var(--muted-2);font-weight:400}
@@ -1377,6 +1379,9 @@ button.tsbody{cursor:pointer}
 .hashes a{font-size:12.5px;color:var(--red);font-weight:500;text-decoration:none;cursor:pointer}
 .hashes a:hover{text-decoration:underline}
 .post-acts{display:flex;gap:20px;align-items:center}
+.pd-acts{padding:4px 22px 0}
+.pd-caption{font-family:var(--disp);font-size:18px;line-height:1.45;color:var(--ink);margin:6px 0 0;white-space:pre-wrap}
+
 .post-acts .act svg{width:19px;height:19px}
 .post-acts .spacer{flex:1}
 .newflag{display:inline-block;background:var(--red);color:#fff;font-size:8.5px;font-weight:700;letter-spacing:.13em;
@@ -3869,26 +3874,26 @@ function renderSpots(key){
   }).join('');
 }
 const WORKS = [
-  {img:'w1', t:'Shadow line, Broadgate'},   {img:'w2', t:'Willis Building curve'},
-  {img:'w3', t:'Carved arcade, Midtown'},   {img:'w4', t:'Cable stay detail'},
-  {img:'w5', t:'Rotunda chandelier'},       {img:'w6', t:'Mosaic stair soffit'},
-  {img:'onb_lattice', t:'Diagonal lattice'},{img:'insp_heydar', t:'Heydar Aliyev Centre'},
-  {img:'kn_barbican', t:'Albion Street Terrace'}, {img:'lz_concrete', t:'Concrete curve, glass shadow'},
-  {img:'onb_glass', t:'Green curtain wall'},{img:'lz_soho', t:'Cast iron, SoHo'},
-  {img:'duomo', t:'Duomo di Milano'},       {img:'lz_chapel', t:'Folded stone, Midtown'},
-  {img:'lz_balconies', t:'Balconies, stacked'},{img:'w7', t:'Bronze mullions, Park Ave'},
+  {img:'w1', t:'Shadow line, Broadgate', bld:'habitat'},   {img:'w2', t:'Willis Building curve', bld:'willis'},
+  {img:'w3', t:'Carved arcade, Midtown', bld:'nypl'},   {img:'w4', t:'Cable stay detail'},
+  {img:'w5', t:'Rotunda chandelier', bld:'serpentine'},       {img:'w6', t:'Mosaic stair soffit'},
+  {img:'onb_lattice', t:'Diagonal lattice', bld:'national'},{img:'insp_heydar', t:'Azadi Tower, Tehran', bld:'heydar'},
+  {img:'kn_barbican', t:'Albion Street Terrace', bld:'barbican'}, {img:'lz_concrete', t:'Concrete curve, glass shadow'},
+  {img:'onb_glass', t:'Green curtain wall', bld:'greatcourt'},{img:'lz_soho', t:'Cast iron, SoHo'},
+  {img:'duomo', t:'Duomo di Milano', bld:'duomo'},       {img:'lz_chapel', t:'Folded stone, Midtown'},
+  {img:'lz_balconies', t:'Balconies, stacked'},{img:'w7', t:'Bronze mullions, Park Ave', bld:'parkav'},
   {img:'lz_sculpture', t:'Sculpture, colonnade'}, {img:'lz_wtc', t:'One World Trade, from the street'},
-  {img:'w10', t:'High Line, winter'},        {img:'w11', t:'Lanterns after rain'},
-  {img:'w12', t:'Empire State, framed'}
+  {img:'w10', t:'High Line, winter', bld:'highline'},        {img:'w11', t:'Lanterns after rain'},
+  {img:'w12', t:'Empire State, framed', bld:'empire'}
 ];
 const SAVED = [
   {img:'insp_stair',  t:'Balcony Stair',       by:'@javier.arq'},
-  {img:'onb_lattice', t:'Concrete Lattice',    by:'@marco.design'},
-  {img:'kn_trellick', t:'Elizabeth Tower',     by:'@kai.builds'},
-  {img:'k11',         t:'Concrete Gallery',    by:'@mia.liu'},
-  {img:'tate',        t:'Atelier Wall',        by:'@sara.frames'},
-  {img:'onb_glass',   t:'Green Curtain Wall',  by:'@pedro.v'},
-  {img:'highline',    t:'High Line at Dusk',   by:'@nora.k'},
+  {img:'onb_lattice', t:'Concrete Lattice',    by:'@marco.design', bld:'national'},
+  {img:'kn_trellick', t:'Elizabeth Tower',     by:'@kai.builds', bld:'trellick'},
+  {img:'k11',         t:'Concrete Gallery',    by:'@mia.liu', bld:'k11'},
+  {img:'tate',        t:'Atelier Wall',        by:'@sara.frames', bld:'tate'},
+  {img:'onb_glass',   t:'Green Curtain Wall',  by:'@pedro.v', bld:'greatcourt'},
+  {img:'highline',    t:'High Line at Dusk',   by:'@nora.k', bld:'highline'},
   {img:'onb_night',   t:'Night Street',        by:'@kenji.t'},
   {img:'arc_bcn',     t:'Passeig de Gracia',   by:'@marco.design'}
 ];
@@ -3994,11 +3999,11 @@ const GRID_POSTS = {};
 function synthesizeGridPost(kind, ref){
   const key = kind + ':' + ref;
   if(GRID_POSTS[key]) return GRID_POSTS[key];
-  let img, quote, person = null, guestHandle = null, guestName = null, place = '';
+  let img, quote, person = null, guestHandle = null, guestName = null, place = '', bld = null;
   if(kind === 'work'){
-    const w = WORKS[+ref]; img = w.img; quote = w.t; person = 'lucy'; place = PEOPLE.lucy.city;
+    const w = WORKS[+ref]; img = w.img; quote = w.t; person = 'lucy'; place = PEOPLE.lucy.city; bld = w.bld || null;
   } else if(kind === 'saved'){
-    const s = SAVED[+ref]; img = s.img; quote = s.t;
+    const s = SAVED[+ref]; img = s.img; quote = s.t; bld = s.bld || null;
     person = Object.keys(PEOPLE).find(k => PEOPLE[k].handle === s.by) || null;
     guestHandle = s.by;
     guestName = person ? null : s.by.replace('@', '').split('.')[0].replace(/^./, c => c.toUpperCase());
@@ -4008,15 +4013,44 @@ function synthesizeGridPost(kind, ref){
     img = m.works[+idx]; quote = GRID_CAPTIONS[+idx % GRID_CAPTIONS.length];
     person = id; place = m.city;
   }
+  /* a linked record gives real tags to show - style and city - rather than
+     the single placeholder hashtag every grid post used to carry */
+  const b = bld ? bldById(bld) : null;
+  const tags = b
+    ? ['#' + b.style.toLowerCase().replace(/[^a-z0-9]+/g, ''), '#' + b.city.toLowerCase().replace(/[^a-z0-9]+/g, ''), '#archscape']
+    : ['#archscape'];
   let seed = 0; for(const c of key) seed += c.charCodeAt(0);
   GRID_POSTS[key] = {
-    kind, ref, person, guestHandle, guestName, place,
+    kind, ref, person, guestHandle, guestName, place, bld,
     time: ['3d ago', '1w ago', '2w ago', 'Last month'][seed % 4],
-    img, quote, tags: ['#archscape'],
+    img, quote, tags,
     likes: 40 + (seed * 17) % 260, comments: 3 + (seed * 7) % 24,
     liked: false, saved: kind === 'saved'
   };
   return GRID_POSTS[key];
+}
+/* a read-only version of the check-in composer's Building Details card -
+   same eyebrow, same label/value rows - so a published capture reads like
+   the record of the check-in that made it, not a stripped-down summary.
+   Only rendered when the post has an explicit, hand-verified building link;
+   never guessed from a shared stock photo, which would risk naming the
+   wrong building the way several records once did. */
+function pdBuildingCardHTML(bldId){
+  const b = bldId && bldById(bldId);
+  if(!b) return '';
+  return `<div class="ci-block card">
+    <div class="dhead">
+      <div class="eyebrow">Building details</div>
+      <button class="seelink" data-building="${b.id}">Open building</button>
+    </div>
+    <div class="dfields">
+      <div class="dfield"><span>Name</span><b>${esc(b.name)}</b></div>
+      <div class="dfield"><span>Architect</span><b>${esc(b.architect || 'Unconfirmed')}</b></div>
+      <div class="dfield"><span>Year</span><b>${esc(b.year || '\u2014')}</b></div>
+      <div class="dfield"><span>Style</span><b>${esc(b.style)}</b></div>
+      <div class="dfield"><span>Where</span><b>${esc(b.city)}</b></div>
+    </div>
+  </div>`;
 }
 function gridPostHTML(kind, ref){
   const p = synthesizeGridPost(kind, ref);
@@ -4026,7 +4060,7 @@ function gridPostHTML(kind, ref){
   const saveAct = p.kind === 'member'
     ? `<button class="act ${p.saved ? 'liked' : ''}" data-gridsave="${kind}" data-gridref="${ref}">${I.book}</button>`
     : '';
-  return `<article class="post">
+  return `<article class="post pd-post">
     <div class="post-head">
       ${avatarHTML}
       <button class="grow" ${p.person ? `data-member="${p.person}"` : 'disabled'} style="text-align:left">
@@ -4035,16 +4069,21 @@ function gridPostHTML(kind, ref){
       ${p.person ? followBtn(p.person) : ''}
     </div>
     <img class="post-img" src="${IMG[p.img]}" alt="${esc(p.quote)}">
-    <div class="post-body">
-      <p class="post-quote">${esc(p.quote)}</p>
-      <div class="hashes">${p.tags.map(t => `<a>${esc(t)}</a>`).join('')}</div>
-      <div class="post-acts">
-        <button class="act ${p.liked ? 'liked' : ''}" data-gridlike="${kind}" data-gridref="${ref}">${I.heart}<span>${p.likes > 999 ? (p.likes / 1000).toFixed(1) + 'k' : p.likes}</span></button>
-        <button class="act">${I.chat}<span>${p.comments}</span></button>
-        <button class="act">${I.share}</button>
-        <span class="spacer"></span>
-        ${saveAct}
-      </div>
+    ${pdBuildingCardHTML(p.bld)}
+    <div class="ci-block card">
+      <div class="eyebrow">Caption / Poetry</div>
+      <p class="pd-caption">${esc(p.quote)}</p>
+    </div>
+    <div class="ci-block card">
+      <div class="eyebrow">Tags</div>
+      <div class="tagset">${p.tags.map(t => `<span class="tag" aria-pressed="true">${esc(t)}</span>`).join('')}</div>
+    </div>
+    <div class="post-acts pd-acts">
+      <button class="act ${p.liked ? 'liked' : ''}" data-gridlike="${kind}" data-gridref="${ref}">${I.heart}<span>${p.likes > 999 ? (p.likes / 1000).toFixed(1) + 'k' : p.likes}</span></button>
+      <button class="act">${I.chat}<span>${p.comments}</span></button>
+      <button class="act">${I.share}</button>
+      <span class="spacer"></span>
+      ${saveAct}
     </div>
   </article>` + (p.kind === 'saved'
     ? `<button class="btn-outline" style="margin:4px 22px 0;width:calc(100% - 44px)" data-gridunsave="${kind}" data-gridref="${ref}">Remove from Saved</button>`
