@@ -3913,6 +3913,23 @@ function renderSpots(key){
       <figcaption><b>${esc(s.name)}</b><span>${away} away &#183; ${s.n} check-ins</span></figcaption></button>`;
   }).join('');
 }
+/* Photo sources for the pd_* replacement images below (all Wikimedia
+   Commons, all licensed for reuse, downloaded and re-encoded once at build
+   time - none of it is fetched at runtime). Each one shows a different
+   photograph of the correctly-identified building than any other asset
+   already used for that same record elsewhere in the app, so a post and
+   its own building record never share a literal duplicate image.
+     pd_willis      - "Willis Building, City of London.JPG" by Eluveitie, CC BY-SA 3.0
+     pd_nypl        - "New York Public Library - Main Branch (51396225599).jpg" by ajay_suresh, CC BY 2.0
+     pd_azadi       - "Azadi Tower (29358497718).jpg" by Blondinrikard Froberg, CC BY 2.0
+     pd_parkav      - "Park Avenue 01.jpg" by midweekpost, CC BY 2.0
+     pd_highline_w  - "High Line Park, Section 1a.jpg" by Dansnguyen, CC0
+     pd_highline_d  - "High Line looking north past 19th Street Manhattan.jpeg" by Dough4872, CC BY-SA 4.0
+     pd_empire      - "USA-NYC-Empire State1.JPG" by Ingfbruno, CC BY-SA 3.0
+     pd_bigben      - "Big Ben Elizabeth Tower London 2023 01 Detail.jpg" by Julian Herzog, CC BY 4.0
+   All from commons.wikimedia.org; each licence permits reuse with
+   attribution, which is recorded here rather than on-screen. */
+
 /* every capture carries its own stable id - the grid tile and the detail
    page both look this post up by id, never by its position in the array,
    so the two can never drift apart if entries are ever added, removed or
@@ -3921,13 +3938,13 @@ function renderSpots(key){
    normal case for a personal capture. */
 const WORKS = [
   {id:'shadow-line-broadgate',   img:'w1', t:'Shadow line, Broadgate', bld:'habitat'},
-  {id:'willis-curve',            img:'w2', t:'Willis Building curve', bld:'willis'},
-  {id:'carved-arcade-midtown',   img:'w3', t:'Carved arcade, Midtown', bld:'nypl'},
+  {id:'willis-curve',            img:'pd_willis', t:'Willis Building curve', bld:'willis'},
+  {id:'carved-arcade-midtown',   img:'pd_nypl', t:'Carved arcade, Midtown', bld:'nypl'},
   {id:'cable-stay-detail',       img:'w4', t:'Cable stay detail'},
   {id:'rotunda-chandelier',      img:'w5', t:'Rotunda chandelier', bld:'serpentine'},
   {id:'mosaic-stair-soffit',     img:'w6', t:'Mosaic stair soffit'},
   {id:'diagonal-lattice',        img:'onb_lattice', t:'Diagonal lattice', bld:'national'},
-  {id:'azadi-tower',             img:'insp_heydar', t:'Azadi Tower, Tehran', bld:'heydar'},
+  {id:'azadi-tower',             img:'pd_azadi', t:'Azadi Tower, Tehran', bld:'heydar'},
   {id:'albion-street-terrace',   img:'kn_barbican', t:'Albion Street Terrace', bld:'barbican'},
   {id:'concrete-curve-shadow',   img:'lz_concrete', t:'Concrete curve, glass shadow', track:'sakamoto'},
   {id:'green-curtain-wall',      img:'onb_glass', t:'Green curtain wall', bld:'greatcourt'},
@@ -3935,22 +3952,22 @@ const WORKS = [
   {id:'duomo-di-milano',         img:'duomo', t:'Duomo di Milano', bld:'duomo'},
   {id:'folded-stone-midtown',    img:'lz_chapel', t:'Folded stone, Midtown'},
   {id:'balconies-stacked',       img:'lz_balconies', t:'Balconies, stacked'},
-  {id:'bronze-mullions-parkave', img:'w7', t:'Bronze mullions catch the light —\nthe avenue keeps a straight line all afternoon.',
+  {id:'bronze-mullions-parkave', img:'pd_parkav', t:'Bronze mullions catch the light —\nthe avenue keeps a straight line all afternoon.',
    bld:'parkav', feats:['Bronze mullions', 'Afternoon light'], track:'frahm'},
   {id:'sculpture-colonnade',     img:'lz_sculpture', t:'Sculpture, colonnade'},
   {id:'one-world-trade-street',  img:'lz_wtc', t:'One World Trade, from the street'},
-  {id:'high-line-winter',        img:'w10', t:'High Line, winter', bld:'highline'},
+  {id:'high-line-winter',        img:'pd_highline_w', t:'High Line, winter', bld:'highline'},
   {id:'lanterns-after-rain',     img:'w11', t:'Lanterns after rain'},
-  {id:'empire-state-framed',     img:'w12', t:'Empire State, framed', bld:'empire'}
+  {id:'empire-state-framed',     img:'pd_empire', t:'Empire State, framed', bld:'empire'}
 ];
 const SAVED = [
   {id:'balcony-stair',      img:'insp_stair',  t:'Balcony Stair',       by:'@javier.arq'},
   {id:'concrete-lattice',   img:'onb_lattice', t:'Concrete Lattice',    by:'@marco.design', bld:'national'},
-  {id:'elizabeth-tower',    img:'kn_trellick', t:'Elizabeth Tower',     by:'@kai.builds', bld:'trellick', feats:['Crockets, close up']},
+  {id:'elizabeth-tower',    img:'pd_bigben', t:'Elizabeth Tower',     by:'@kai.builds', bld:'trellick', feats:['Crockets, close up']},
   {id:'concrete-gallery',   img:'k11',         t:'Concrete Gallery',    by:'@mia.liu', bld:'k11'},
   {id:'atelier-wall',       img:'tate',        t:'Atelier Wall',        by:'@sara.frames', bld:'tate'},
   {id:'green-curtain-wall', img:'onb_glass',   t:'Green Curtain Wall',  by:'@pedro.v', bld:'greatcourt'},
-  {id:'high-line-dusk',     img:'highline',    t:'High Line at Dusk',   by:'@nora.k', bld:'highline'},
+  {id:'high-line-dusk',     img:'pd_highline_d', t:'High Line at Dusk',   by:'@nora.k', bld:'highline'},
   {id:'night-street',       img:'onb_night',   t:'Night Street',        by:'@kenji.t'},
   {id:'passeig-de-gracia',  img:'arc_bcn',     t:'Passeig de Gracia',   by:'@marco.design'}
 ];
