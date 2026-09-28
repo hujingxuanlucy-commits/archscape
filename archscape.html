@@ -1380,21 +1380,50 @@ button.tsbody{cursor:pointer}
 .post-acts{display:flex;gap:20px;align-items:center}
 /* the post detail page: photo and caption first, building reference
    quiet and collapsed, nothing that looks like a form to fill in */
+/* the photo: full-bleed cover crop when the source has enough resolution
+   to hold it, otherwise the .lowres fallback below shows the real photo at
+   something close to its own size rather than stretching it blurry */
+.pd-photo{background:var(--bone-soft)}
 .pd-hero{width:100%;height:420px;object-fit:cover;display:block}
-.pd-body{padding:16px 20px 0}
-.pd-quote{font-family:var(--disp);font-size:19px;line-height:1.45;color:var(--ink);margin:0 0 10px}
-.pd-bldline{font-size:13px;color:var(--ink);margin:14px 0 0;padding-top:13px;border-top:1px solid var(--bone)}
+.pd-photo.lowres{display:flex;align-items:center;justify-content:center;padding:22px 0}
+.pd-photo.lowres .pd-hero{width:auto;height:auto;max-width:60%;max-height:280px;object-fit:contain;
+  box-shadow:0 10px 26px -10px rgba(0,0,0,.3);border-radius:2px}
+
+.pd-body{padding:18px 20px 0}
+.pd-quote{font-family:var(--disp);font-size:19px;line-height:1.48;color:var(--ink);margin:0;
+  white-space:pre-wrap}
+/* tags read as context, not controls - small, muted, no pill chrome */
+.pd-meta{font-size:12px;color:var(--muted);margin:9px 0 0}
+.pd-feats{font-size:13px;color:var(--ink);line-height:1.5;margin:9px 0 0}
+.pd-feats span{display:block;font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:3px}
+
+.pd-music{display:flex;align-items:center;gap:11px;margin:14px 0 0;padding:9px 11px;
+  background:var(--bone-soft);border-radius:8px}
+.pd-musicplay{width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;flex:none;
+  display:grid;place-items:center}
+.pd-musicplay svg{width:11px;height:11px;margin-left:1px}
+.pd-musicinfo b{display:block;font-size:12.5px;font-weight:600;color:var(--ink)}
+.pd-musicinfo span{display:block;font-size:10.5px;color:var(--muted);margin-top:1px}
+
+.pd-section{margin-top:16px;padding-top:14px;border-top:1px solid var(--bone)}
+.pd-bldline{font-size:13.5px;color:var(--ink);margin:0}
 .pd-bldline b{font-weight:600}
-.pd-fold{display:flex;align-items:center;gap:6px;width:100%;padding:8px 0 6px;text-align:left;
-  font-size:11.5px;font-weight:600;letter-spacing:.04em;color:var(--muted);transition:.15s}
-.pd-fold:hover{color:var(--ink)}
-.pd-fold svg{width:14px;height:14px;color:var(--muted-2);transition:transform .2s}
+/* a real tap target, not a link-sized label, so the disclosure reads as
+   something you can open rather than a caption line that happens to sit
+   next to a chevron */
+.pd-fold{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%;
+  min-height:36px;margin-top:2px;text-align:left;
+  font-size:12px;font-weight:600;color:var(--red);transition:.15s}
+.pd-fold:hover{opacity:.75}
+.pd-fold svg{width:15px;height:15px;color:var(--red);transition:transform .2s;flex:none}
 .pd-fold[aria-expanded="true"] svg{transform:rotate(180deg)}
-.pd-blddetail{padding-bottom:10px}
+.pd-blddetail{padding-bottom:2px}
 .pd-blddetail .bfactlist{margin:0;border-top:1px solid var(--bone-soft)}
 .pd-blddetail .bfactlist div{padding:8px 0}
 .pd-blddetail .seelink{display:inline-block;margin-top:10px;font-size:12.5px}
-.pd-acts{padding:4px 0 16px;border-top:1px solid var(--bone);margin-top:14px}
+
+.pd-acts{padding:12px 0 18px;margin-top:16px;border-top:1px solid var(--bone)}
 
 .post-acts .act svg{width:19px;height:19px}
 .post-acts .spacer{flex:1}
@@ -3895,15 +3924,21 @@ const WORKS = [
   {img:'kn_barbican', t:'Albion Street Terrace', bld:'barbican'}, {img:'lz_concrete', t:'Concrete curve, glass shadow'},
   {img:'onb_glass', t:'Green curtain wall', bld:'greatcourt'},{img:'lz_soho', t:'Cast iron, SoHo'},
   {img:'duomo', t:'Duomo di Milano', bld:'duomo'},       {img:'lz_chapel', t:'Folded stone, Midtown'},
-  {img:'lz_balconies', t:'Balconies, stacked'},{img:'w7', t:'Bronze mullions, Park Ave', bld:'parkav'},
+  {img:'lz_balconies', t:'Balconies, stacked'},{img:'w7', t:'Bronze mullions catch the light \u2014\nthe avenue keeps a straight line all afternoon.', bld:'parkav'},
   {img:'lz_sculpture', t:'Sculpture, colonnade'}, {img:'lz_wtc', t:'One World Trade, from the street'},
   {img:'w10', t:'High Line, winter', bld:'highline'},        {img:'w11', t:'Lanterns after rain'},
   {img:'w12', t:'Empire State, framed', bld:'empire'}
 ];
+/* a couple of Lucy's own captures carry the extra, genuinely-authored detail
+   that lets the post detail page prove out its optional sections - most
+   posts have none of this, which is the normal case */
+WORKS[9].track = 'sakamoto';
+WORKS[15].feats = ['Bronze mullions', 'Afternoon light'];
+WORKS[15].track = 'frahm';
 const SAVED = [
   {img:'insp_stair',  t:'Balcony Stair',       by:'@javier.arq'},
   {img:'onb_lattice', t:'Concrete Lattice',    by:'@marco.design', bld:'national'},
-  {img:'kn_trellick', t:'Elizabeth Tower',     by:'@kai.builds', bld:'trellick'},
+  {img:'kn_trellick', t:'Elizabeth Tower',     by:'@kai.builds', bld:'trellick', feats:['Crockets, close up']},
   {img:'k11',         t:'Concrete Gallery',    by:'@mia.liu', bld:'k11'},
   {img:'tate',        t:'Atelier Wall',        by:'@sara.frames', bld:'tate'},
   {img:'onb_glass',   t:'Green Curtain Wall',  by:'@pedro.v', bld:'greatcourt'},
@@ -4013,11 +4048,13 @@ const GRID_POSTS = {};
 function synthesizeGridPost(kind, ref){
   const key = kind + ':' + ref;
   if(GRID_POSTS[key]) return GRID_POSTS[key];
-  let img, quote, person = null, guestHandle = null, guestName = null, place = '', bld = null;
+  let img, quote, person = null, guestHandle = null, guestName = null, place = '', bld = null,
+      feats = null, track = null;
   if(kind === 'work'){
-    const w = WORKS[+ref]; img = w.img; quote = w.t; person = 'lucy'; place = PEOPLE.lucy.city; bld = w.bld || null;
+    const w = WORKS[+ref]; img = w.img; quote = w.t; person = 'lucy'; place = PEOPLE.lucy.city;
+    bld = w.bld || null; feats = w.feats || null; track = w.track || null;
   } else if(kind === 'saved'){
-    const s = SAVED[+ref]; img = s.img; quote = s.t; bld = s.bld || null;
+    const s = SAVED[+ref]; img = s.img; quote = s.t; bld = s.bld || null; feats = s.feats || null; track = s.track || null;
     person = Object.keys(PEOPLE).find(k => PEOPLE[k].handle === s.by) || null;
     guestHandle = s.by;
     guestName = person ? null : s.by.replace('@', '').split('.')[0].replace(/^./, c => c.toUpperCase());
@@ -4035,7 +4072,7 @@ function synthesizeGridPost(kind, ref){
     : ['#archscape'];
   let seed = 0; for(const c of key) seed += c.charCodeAt(0);
   GRID_POSTS[key] = {
-    kind, ref, person, guestHandle, guestName, place, bld,
+    kind, ref, person, guestHandle, guestName, place, bld, feats, track,
     time: ['3d ago', '1w ago', '2w ago', 'Last month'][seed % 4],
     img, quote, tags,
     likes: 40 + (seed * 17) % 260, comments: 3 + (seed * 7) % 24,
@@ -4055,11 +4092,11 @@ function synthesizeGridPost(kind, ref){
    never guessed from a shared stock photo (several records reuse the same
    filler image across unrelated buildings, so an automatic lookup would
    risk naming the wrong building the way a few records once did). */
-function pdBuildingHTML(bldId){
-  const b = bldId && bldById(bldId);
+function pdBuildingHTML(b){
   if(!b) return '';
   const extra = (b.facts || []).map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('');
-  return `<p class="pd-bldline"><b>${esc(b.name)}</b> &middot; ${esc(b.city)}${b.year ? ' &middot; ' + esc(b.year) : ''}</p>
+  return `<div class="pd-section pd-bld">
+    <p class="pd-bldline"><b>${esc(b.name)}</b> &middot; ${esc(b.city)}${b.year ? ' &middot; ' + esc(b.year) : ''}</p>
     <button class="pd-fold" data-fold aria-expanded="false">
       <span>Building details</span>
       <svg class="chev fold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -4071,10 +4108,26 @@ function pdBuildingHTML(bldId){
         ${extra}
       </dl>
       <button class="seelink" data-building="${b.id}">Open building</button>
-    </div>`;
+    </div>
+  </div>`;
+}
+/* a compact, visual-only music attachment - this is a prototype, so the
+   control does not play anything, it just shows that a track was chosen */
+function pdMusicHTML(trackId){
+  const t = trackId && TRACKS.find(x => x.id === trackId);
+  if(!t) return '';
+  return `<div class="pd-music">
+    <span class="pd-musicplay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+    <span class="pd-musicinfo"><b>${esc(t.title)}</b><span>${esc(t.len)}</span></span>
+  </div>`;
 }
 function gridPostHTML(kind, ref){
   const p = synthesizeGridPost(kind, ref);
+  const b = p.bld ? bldById(p.bld) : null;
+  /* a linked record's own hero photo is always the highest-resolution image
+     the app holds for that building - use it here rather than blowing up
+     whatever small stock crop the grid tile itself carries */
+  const heroImg = (b && b.img) || p.img;
   const name = p.person ? PEOPLE[p.person].name : p.guestName;
   const sub = (p.person ? PEOPLE[p.person].city : p.guestHandle) + ' \u00B7 ' + p.time;
   const avatarHTML = p.person ? avatarOf(p.person) : `<span class="avatar">${esc((name || '?').charAt(0).toUpperCase())}</span>`;
@@ -4095,11 +4148,16 @@ function gridPostHTML(kind, ref){
       </button>
       ${p.person ? followBtn(p.person) : ''}
     </div>
-    <img class="pd-hero" src="${IMG[p.img]}" alt="${esc(p.quote)}">
+    <div class="pd-photo">
+      <img class="pd-hero" src="${IMG[heroImg]}" alt="${esc(p.quote)}"
+        onload="if(this.naturalWidth &amp;&amp; this.naturalWidth &lt; 400) this.closest('.pd-photo').classList.add('lowres')">
+    </div>
     <div class="pd-body">
       <p class="pd-quote">${esc(p.quote)}</p>
-      <div class="hashes">${p.tags.map(t => `<a>${esc(t)}</a>`).join('')}</div>
-      ${pdBuildingHTML(p.bld)}
+      ${p.tags.length ? `<p class="pd-meta">${p.tags.map(t => esc(t)).join(' &middot; ')}</p>` : ''}
+      ${p.feats && p.feats.length ? `<p class="pd-feats"><span>What stands out</span>${esc(p.feats.join(', '))}</p>` : ''}
+      ${pdMusicHTML(p.track)}
+      ${pdBuildingHTML(b)}
       <div class="post-acts pd-acts">
         <button class="act ${p.liked ? 'liked' : ''}" data-gridlike="${kind}" data-gridref="${ref}">${I.heart}<span>${p.likes > 999 ? (p.likes / 1000).toFixed(1) + 'k' : p.likes}</span></button>
         <button class="act">${I.chat}<span>${p.comments}</span></button>
