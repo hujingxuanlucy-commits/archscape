@@ -800,7 +800,6 @@ figure{margin:0}
 .dpickrow[aria-current="true"] i{background:var(--red)}
 .dpickrow.manual b{color:var(--muted)}
 /* the value is editable, so it has to look it - flat text reads as a label */
-.dfield b{flex:1;min-width:0;font-size:14px;font-weight:500;color:var(--ink);padding:5px 8px;margin:-3px 0;display:block}
 
 .dfield input{flex:1;min-width:0;border:0;outline:none;font-size:14px;font-weight:500;color:var(--ink);
   background:none;padding:5px 8px;margin:-3px 0;border-radius:4px;transition:background .16s,color .16s}
@@ -1379,8 +1378,23 @@ button.tsbody{cursor:pointer}
 .hashes a{font-size:12.5px;color:var(--red);font-weight:500;text-decoration:none;cursor:pointer}
 .hashes a:hover{text-decoration:underline}
 .post-acts{display:flex;gap:20px;align-items:center}
-.pd-acts{padding:4px 22px 0}
-.pd-caption{font-family:var(--disp);font-size:18px;line-height:1.45;color:var(--ink);margin:6px 0 0;white-space:pre-wrap}
+/* the post detail page: photo and caption first, building reference
+   quiet and collapsed, nothing that looks like a form to fill in */
+.pd-hero{width:100%;height:420px;object-fit:cover;display:block}
+.pd-body{padding:16px 20px 0}
+.pd-quote{font-family:var(--disp);font-size:19px;line-height:1.45;color:var(--ink);margin:0 0 10px}
+.pd-bldline{font-size:13px;color:var(--ink);margin:14px 0 0;padding-top:13px;border-top:1px solid var(--bone)}
+.pd-bldline b{font-weight:600}
+.pd-fold{display:flex;align-items:center;gap:6px;width:100%;padding:8px 0 6px;text-align:left;
+  font-size:11.5px;font-weight:600;letter-spacing:.04em;color:var(--muted);transition:.15s}
+.pd-fold:hover{color:var(--ink)}
+.pd-fold svg{width:14px;height:14px;color:var(--muted-2);transition:transform .2s}
+.pd-fold[aria-expanded="true"] svg{transform:rotate(180deg)}
+.pd-blddetail{padding-bottom:10px}
+.pd-blddetail .bfactlist{margin:0;border-top:1px solid var(--bone-soft)}
+.pd-blddetail .bfactlist div{padding:8px 0}
+.pd-blddetail .seelink{display:inline-block;margin-top:10px;font-size:12.5px}
+.pd-acts{padding:4px 0 16px;border-top:1px solid var(--bone);margin-top:14px}
 
 .post-acts .act svg{width:19px;height:19px}
 .post-acts .spacer{flex:1}
@@ -4035,30 +4049,43 @@ function synthesizeGridPost(kind, ref){
    Only rendered when the post has an explicit, hand-verified building link;
    never guessed from a shared stock photo, which would risk naming the
    wrong building the way several records once did. */
-function pdBuildingCardHTML(bldId){
+/* a quiet, read-only building reference for a published post - a one-line
+   preview plus a disclosure, not the check-in composer's form fields. Only
+   rendered when the post carries an explicit, hand-verified building link;
+   never guessed from a shared stock photo (several records reuse the same
+   filler image across unrelated buildings, so an automatic lookup would
+   risk naming the wrong building the way a few records once did). */
+function pdBuildingHTML(bldId){
   const b = bldId && bldById(bldId);
   if(!b) return '';
-  return `<div class="ci-block card">
-    <div class="dhead">
-      <div class="eyebrow">Building details</div>
+  const extra = (b.facts || []).map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('');
+  return `<p class="pd-bldline"><b>${esc(b.name)}</b> &middot; ${esc(b.city)}${b.year ? ' &middot; ' + esc(b.year) : ''}</p>
+    <button class="pd-fold" data-fold aria-expanded="false">
+      <span>Building details</span>
+      <svg class="chev fold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="pd-blddetail" hidden>
+      <dl class="bfactlist">
+        <div><dt>Architect</dt><dd>${esc(b.architect || 'Unconfirmed')}</dd></div>
+        <div><dt>Style</dt><dd>${esc(b.style)}</dd></div>
+        ${extra}
+      </dl>
       <button class="seelink" data-building="${b.id}">Open building</button>
-    </div>
-    <div class="dfields">
-      <div class="dfield"><span>Name</span><b>${esc(b.name)}</b></div>
-      <div class="dfield"><span>Architect</span><b>${esc(b.architect || 'Unconfirmed')}</b></div>
-      <div class="dfield"><span>Year</span><b>${esc(b.year || '\u2014')}</b></div>
-      <div class="dfield"><span>Style</span><b>${esc(b.style)}</b></div>
-      <div class="dfield"><span>Where</span><b>${esc(b.city)}</b></div>
-    </div>
-  </div>`;
+    </div>`;
 }
 function gridPostHTML(kind, ref){
   const p = synthesizeGridPost(kind, ref);
   const name = p.person ? PEOPLE[p.person].name : p.guestName;
   const sub = (p.person ? PEOPLE[p.person].city : p.guestHandle) + ' \u00B7 ' + p.time;
   const avatarHTML = p.person ? avatarOf(p.person) : `<span class="avatar">${esc((name || '?').charAt(0).toUpperCase())}</span>`;
+  /* the bookmark icon means something different depending on how you got
+     here: on your own post there is nothing to save; on someone else's
+     work it toggles; on something already in Saved it is a small, already-
+     selected control that removes it - never the old full-width button */
   const saveAct = p.kind === 'member'
-    ? `<button class="act ${p.saved ? 'liked' : ''}" data-gridsave="${kind}" data-gridref="${ref}">${I.book}</button>`
+    ? `<button class="act ${p.saved ? 'liked' : ''}" data-gridsave="${kind}" data-gridref="${ref}" aria-label="${p.saved ? 'Remove from library' : 'Save'}">${I.book}</button>`
+    : p.kind === 'saved'
+    ? `<button class="act liked" data-gridunsave="${kind}" data-gridref="${ref}" aria-label="Remove from Saved">${I.book}</button>`
     : '';
   return `<article class="post pd-post">
     <div class="post-head">
@@ -4068,26 +4095,20 @@ function gridPostHTML(kind, ref){
       </button>
       ${p.person ? followBtn(p.person) : ''}
     </div>
-    <img class="post-img" src="${IMG[p.img]}" alt="${esc(p.quote)}">
-    ${pdBuildingCardHTML(p.bld)}
-    <div class="ci-block card">
-      <div class="eyebrow">Caption / Poetry</div>
-      <p class="pd-caption">${esc(p.quote)}</p>
+    <img class="pd-hero" src="${IMG[p.img]}" alt="${esc(p.quote)}">
+    <div class="pd-body">
+      <p class="pd-quote">${esc(p.quote)}</p>
+      <div class="hashes">${p.tags.map(t => `<a>${esc(t)}</a>`).join('')}</div>
+      ${pdBuildingHTML(p.bld)}
+      <div class="post-acts pd-acts">
+        <button class="act ${p.liked ? 'liked' : ''}" data-gridlike="${kind}" data-gridref="${ref}">${I.heart}<span>${p.likes > 999 ? (p.likes / 1000).toFixed(1) + 'k' : p.likes}</span></button>
+        <button class="act">${I.chat}<span>${p.comments}</span></button>
+        <button class="act">${I.share}</button>
+        <span class="spacer"></span>
+        ${saveAct}
+      </div>
     </div>
-    <div class="ci-block card">
-      <div class="eyebrow">Tags</div>
-      <div class="tagset">${p.tags.map(t => `<span class="tag" aria-pressed="true">${esc(t)}</span>`).join('')}</div>
-    </div>
-    <div class="post-acts pd-acts">
-      <button class="act ${p.liked ? 'liked' : ''}" data-gridlike="${kind}" data-gridref="${ref}">${I.heart}<span>${p.likes > 999 ? (p.likes / 1000).toFixed(1) + 'k' : p.likes}</span></button>
-      <button class="act">${I.chat}<span>${p.comments}</span></button>
-      <button class="act">${I.share}</button>
-      <span class="spacer"></span>
-      ${saveAct}
-    </div>
-  </article>` + (p.kind === 'saved'
-    ? `<button class="btn-outline" style="margin:4px 22px 0;width:calc(100% - 44px)" data-gridunsave="${kind}" data-gridref="${ref}">Remove from Saved</button>`
-    : '');
+  </article>`;
 }
 function openPostDetail(kind, ref){
   $('#postdetail-body').innerHTML = gridPostHTML(kind, ref);
@@ -5541,6 +5562,14 @@ document.addEventListener('click', e=>{
   }
   const draftTile = t.closest('[data-draft]');
   if(draftTile){ resumeDraft(+draftTile.dataset.draft); return; }
+  const foldBtn = t.closest('[data-fold]');
+  if(foldBtn){
+    const open = foldBtn.getAttribute('aria-expanded') === 'true';
+    foldBtn.setAttribute('aria-expanded', String(!open));
+    const body = foldBtn.nextElementSibling;
+    if(body) body.hidden = open;
+    return;
+  }
   const gridOpen = t.closest('[data-gridopen]');
   if(gridOpen){ openPostDetail(gridOpen.dataset.gridopen, gridOpen.dataset.gridref); return; }
   const gridLike = t.closest('[data-gridlike]');
