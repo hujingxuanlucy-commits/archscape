@@ -1381,13 +1381,10 @@ button.tsbody{cursor:pointer}
 /* the post detail page: photo and caption first, building reference
    quiet and collapsed, nothing that looks like a form to fill in */
 /* the photo: full-bleed cover crop when the source has enough resolution
-   to hold it, otherwise the .lowres fallback below shows the real photo at
-   something close to its own size rather than stretching it blurry */
+   to hold it. The frame itself never changes size or shape between posts -
+   only which asset is asked to fill it. */
 .pd-photo{background:var(--bone-soft)}
 .pd-hero{width:100%;height:420px;object-fit:cover;display:block}
-.pd-photo.lowres{display:flex;align-items:center;justify-content:center;padding:22px 0}
-.pd-photo.lowres .pd-hero{width:auto;height:auto;max-width:60%;max-height:280px;object-fit:contain;
-  box-shadow:0 10px 26px -10px rgba(0,0,0,.3);border-radius:2px}
 
 .pd-body{padding:18px 20px 0}
 .pd-quote{font-family:var(--disp);font-size:19px;line-height:1.48;color:var(--ink);margin:0;
@@ -3916,36 +3913,48 @@ function renderSpots(key){
       <figcaption><b>${esc(s.name)}</b><span>${away} away &#183; ${s.n} check-ins</span></figcaption></button>`;
   }).join('');
 }
+/* every capture carries its own stable id - the grid tile and the detail
+   page both look this post up by id, never by its position in the array,
+   so the two can never drift apart if entries are ever added, removed or
+   reordered. bld links only where a caption and image were hand-checked
+   against the real record; most entries below carry none, which is the
+   normal case for a personal capture. */
 const WORKS = [
-  {img:'w1', t:'Shadow line, Broadgate', bld:'habitat'},   {img:'w2', t:'Willis Building curve', bld:'willis'},
-  {img:'w3', t:'Carved arcade, Midtown', bld:'nypl'},   {img:'w4', t:'Cable stay detail'},
-  {img:'w5', t:'Rotunda chandelier', bld:'serpentine'},       {img:'w6', t:'Mosaic stair soffit'},
-  {img:'onb_lattice', t:'Diagonal lattice', bld:'national'},{img:'insp_heydar', t:'Azadi Tower, Tehran', bld:'heydar'},
-  {img:'kn_barbican', t:'Albion Street Terrace', bld:'barbican'}, {img:'lz_concrete', t:'Concrete curve, glass shadow'},
-  {img:'onb_glass', t:'Green curtain wall', bld:'greatcourt'},{img:'lz_soho', t:'Cast iron, SoHo'},
-  {img:'duomo', t:'Duomo di Milano', bld:'duomo'},       {img:'lz_chapel', t:'Folded stone, Midtown'},
-  {img:'lz_balconies', t:'Balconies, stacked'},{img:'w7', t:'Bronze mullions catch the light \u2014\nthe avenue keeps a straight line all afternoon.', bld:'parkav'},
-  {img:'lz_sculpture', t:'Sculpture, colonnade'}, {img:'lz_wtc', t:'One World Trade, from the street'},
-  {img:'w10', t:'High Line, winter', bld:'highline'},        {img:'w11', t:'Lanterns after rain'},
-  {img:'w12', t:'Empire State, framed', bld:'empire'}
+  {id:'shadow-line-broadgate',   img:'w1', t:'Shadow line, Broadgate', bld:'habitat'},
+  {id:'willis-curve',            img:'w2', t:'Willis Building curve', bld:'willis'},
+  {id:'carved-arcade-midtown',   img:'w3', t:'Carved arcade, Midtown', bld:'nypl'},
+  {id:'cable-stay-detail',       img:'w4', t:'Cable stay detail'},
+  {id:'rotunda-chandelier',      img:'w5', t:'Rotunda chandelier', bld:'serpentine'},
+  {id:'mosaic-stair-soffit',     img:'w6', t:'Mosaic stair soffit'},
+  {id:'diagonal-lattice',        img:'onb_lattice', t:'Diagonal lattice', bld:'national'},
+  {id:'azadi-tower',             img:'insp_heydar', t:'Azadi Tower, Tehran', bld:'heydar'},
+  {id:'albion-street-terrace',   img:'kn_barbican', t:'Albion Street Terrace', bld:'barbican'},
+  {id:'concrete-curve-shadow',   img:'lz_concrete', t:'Concrete curve, glass shadow', track:'sakamoto'},
+  {id:'green-curtain-wall',      img:'onb_glass', t:'Green curtain wall', bld:'greatcourt'},
+  {id:'cast-iron-soho',          img:'lz_soho', t:'Cast iron, SoHo'},
+  {id:'duomo-di-milano',         img:'duomo', t:'Duomo di Milano', bld:'duomo'},
+  {id:'folded-stone-midtown',    img:'lz_chapel', t:'Folded stone, Midtown'},
+  {id:'balconies-stacked',       img:'lz_balconies', t:'Balconies, stacked'},
+  {id:'bronze-mullions-parkave', img:'w7', t:'Bronze mullions catch the light \u2014\nthe avenue keeps a straight line all afternoon.',
+   bld:'parkav', feats:['Bronze mullions', 'Afternoon light'], track:'frahm'},
+  {id:'sculpture-colonnade',     img:'lz_sculpture', t:'Sculpture, colonnade'},
+  {id:'one-world-trade-street',  img:'lz_wtc', t:'One World Trade, from the street'},
+  {id:'high-line-winter',        img:'w10', t:'High Line, winter', bld:'highline'},
+  {id:'lanterns-after-rain',     img:'w11', t:'Lanterns after rain'},
+  {id:'empire-state-framed',     img:'w12', t:'Empire State, framed', bld:'empire'}
 ];
-/* a couple of Lucy's own captures carry the extra, genuinely-authored detail
-   that lets the post detail page prove out its optional sections - most
-   posts have none of this, which is the normal case */
-WORKS[9].track = 'sakamoto';
-WORKS[15].feats = ['Bronze mullions', 'Afternoon light'];
-WORKS[15].track = 'frahm';
 const SAVED = [
-  {img:'insp_stair',  t:'Balcony Stair',       by:'@javier.arq'},
-  {img:'onb_lattice', t:'Concrete Lattice',    by:'@marco.design', bld:'national'},
-  {img:'kn_trellick', t:'Elizabeth Tower',     by:'@kai.builds', bld:'trellick', feats:['Crockets, close up']},
-  {img:'k11',         t:'Concrete Gallery',    by:'@mia.liu', bld:'k11'},
-  {img:'tate',        t:'Atelier Wall',        by:'@sara.frames', bld:'tate'},
-  {img:'onb_glass',   t:'Green Curtain Wall',  by:'@pedro.v', bld:'greatcourt'},
-  {img:'highline',    t:'High Line at Dusk',   by:'@nora.k', bld:'highline'},
-  {img:'onb_night',   t:'Night Street',        by:'@kenji.t'},
-  {img:'arc_bcn',     t:'Passeig de Gracia',   by:'@marco.design'}
+  {id:'balcony-stair',      img:'insp_stair',  t:'Balcony Stair',       by:'@javier.arq'},
+  {id:'concrete-lattice',   img:'onb_lattice', t:'Concrete Lattice',    by:'@marco.design', bld:'national'},
+  {id:'elizabeth-tower',    img:'kn_trellick', t:'Elizabeth Tower',     by:'@kai.builds', bld:'trellick', feats:['Crockets, close up']},
+  {id:'concrete-gallery',   img:'k11',         t:'Concrete Gallery',    by:'@mia.liu', bld:'k11'},
+  {id:'atelier-wall',       img:'tate',        t:'Atelier Wall',        by:'@sara.frames', bld:'tate'},
+  {id:'green-curtain-wall', img:'onb_glass',   t:'Green Curtain Wall',  by:'@pedro.v', bld:'greatcourt'},
+  {id:'high-line-dusk',     img:'highline',    t:'High Line at Dusk',   by:'@nora.k', bld:'highline'},
+  {id:'night-street',       img:'onb_night',   t:'Night Street',        by:'@kenji.t'},
+  {id:'passeig-de-gracia',  img:'arc_bcn',     t:'Passeig de Gracia',   by:'@marco.design'}
 ];
+let savedIdSeq = 0;
 /* ---------- unfinished check-ins: kept out of the community feed, but not
    lost - they live under the Captures tab in Profile until sent or dropped ---------- */
 let DRAFTS = [];
@@ -3987,7 +3996,7 @@ function draftShelf(){
 }
 function grid(list, badgeFirst){
   return '<div class="works">' + list.map((x,i)=>`
-    <button class="work" data-gridopen="work" data-gridref="${i}">
+    <button class="work" data-gridopen="work" data-gridref="${x.id}">
       <img src="${IMG[x.img]}" alt="${esc(x.t)}">
       ${badgeFirst && i===0 ? '<span class="newbadge">NEW</span>' : ''}
     </button>`).join('') + '</div>';
@@ -4051,10 +4060,14 @@ function synthesizeGridPost(kind, ref){
   let img, quote, person = null, guestHandle = null, guestName = null, place = '', bld = null,
       feats = null, track = null;
   if(kind === 'work'){
-    const w = WORKS[+ref]; img = w.img; quote = w.t; person = 'lucy'; place = PEOPLE.lucy.city;
+    /* looked up by its stable id, never by array position - a post found
+       this way is guaranteed to be the exact one whose tile was tapped */
+    const w = WORKS.find(x => x.id === ref); if(!w) return null;
+    img = w.img; quote = w.t; person = 'lucy'; place = PEOPLE.lucy.city;
     bld = w.bld || null; feats = w.feats || null; track = w.track || null;
   } else if(kind === 'saved'){
-    const s = SAVED[+ref]; img = s.img; quote = s.t; bld = s.bld || null; feats = s.feats || null; track = s.track || null;
+    const s = SAVED.find(x => x.id === ref); if(!s) return null;
+    img = s.img; quote = s.t; bld = s.bld || null; feats = s.feats || null; track = s.track || null;
     person = Object.keys(PEOPLE).find(k => PEOPLE[k].handle === s.by) || null;
     guestHandle = s.by;
     guestName = person ? null : s.by.replace('@', '').split('.')[0].replace(/^./, c => c.toUpperCase());
@@ -4123,11 +4136,13 @@ function pdMusicHTML(trackId){
 }
 function gridPostHTML(kind, ref){
   const p = synthesizeGridPost(kind, ref);
+  if(!p) return '<p class="emptynote" style="margin:40px 22px">This post is no longer available.</p>';
   const b = p.bld ? bldById(p.bld) : null;
-  /* a linked record's own hero photo is always the highest-resolution image
-     the app holds for that building - use it here rather than blowing up
-     whatever small stock crop the grid tile itself carries */
-  const heroImg = (b && b.img) || p.img;
+  /* the detail photo is always the exact image the tile showed - never a
+     different photo of the same building, even a sharper one, because that
+     breaks the one thing this page has to get right: tapping a photo shows
+     that photo. Resolution is handled by asset choice upstream, not by
+     substituting a different picture at the last second. */
   const name = p.person ? PEOPLE[p.person].name : p.guestName;
   const sub = (p.person ? PEOPLE[p.person].city : p.guestHandle) + ' \u00B7 ' + p.time;
   const avatarHTML = p.person ? avatarOf(p.person) : `<span class="avatar">${esc((name || '?').charAt(0).toUpperCase())}</span>`;
@@ -4149,8 +4164,7 @@ function gridPostHTML(kind, ref){
       ${p.person ? followBtn(p.person) : ''}
     </div>
     <div class="pd-photo">
-      <img class="pd-hero" src="${IMG[heroImg]}" alt="${esc(p.quote)}"
-        onload="if(this.naturalWidth &amp;&amp; this.naturalWidth &lt; 400) this.closest('.pd-photo').classList.add('lowres')">
+      <img class="pd-hero" src="${IMG[p.img]}" alt="${esc(p.quote)}">
     </div>
     <div class="pd-body">
       <p class="pd-quote">${esc(p.quote)}</p>
@@ -4218,7 +4232,7 @@ function openStat(kind){
     title.textContent = 'Saved';
     count.innerHTML = '<span class="onum">89</span>';
     body.innerHTML = '<div class="savedgrid">' + SAVED.map((x,i)=>`
-      <button class="savedcard" data-gridopen="saved" data-gridref="${i}">
+      <button class="savedcard" data-gridopen="saved" data-gridref="${x.id}">
         <span class="savedthumb"><img src="${IMG[x.img]}" alt="${esc(x.t)}">
           <span class="savedmark">${I.book}</span></span>
         <b>${esc(x.t)}</b><span>Saved from ${esc(x.by)}</span>
@@ -5633,6 +5647,7 @@ document.addEventListener('click', e=>{
   const gridLike = t.closest('[data-gridlike]');
   if(gridLike){
     const p = synthesizeGridPost(gridLike.dataset.gridlike, gridLike.dataset.gridref);
+    if(!p) return;
     p.liked = !p.liked; p.likes += p.liked ? 1 : -1;
     $('#postdetail-body').innerHTML = gridPostHTML(p.kind, p.ref);
     return;
@@ -5640,9 +5655,13 @@ document.addEventListener('click', e=>{
   const gridSave = t.closest('[data-gridsave]');
   if(gridSave){
     const p = synthesizeGridPost(gridSave.dataset.gridsave, gridSave.dataset.gridref);
+    if(!p) return;
     p.saved = !p.saved;
     const handle = PEOPLE[p.person].handle;
-    if(p.saved) SAVED.push({img: p.img, t: p.quote, by: handle});
+    /* saving from a member's grid creates its own SAVED entry, with a
+       stable id of its own so it can be found and removed the same way
+       as any other saved post - never by scanning for a matching image */
+    if(p.saved) SAVED.push({id: 'saved-' + (++savedIdSeq), img: p.img, t: p.quote, by: handle});
     else { const i = SAVED.findIndex(s => s.img === p.img && s.by === handle); if(i > -1) SAVED.splice(i, 1); }
     $('#postdetail-body').innerHTML = gridPostHTML(p.kind, p.ref);
     toast(p.saved ? 'Saved to your library' : 'Removed from library');
@@ -5650,7 +5669,8 @@ document.addEventListener('click', e=>{
   }
   const gridUnsave = t.closest('[data-gridunsave]');
   if(gridUnsave){
-    SAVED.splice(+gridUnsave.dataset.gridref, 1);
+    const i = SAVED.findIndex(s => s.id === gridUnsave.dataset.gridref);
+    if(i > -1) SAVED.splice(i, 1);
     Object.keys(GRID_POSTS).filter(k => k.startsWith('saved:')).forEach(k => delete GRID_POSTS[k]);
     back();
     openStat('saved');
