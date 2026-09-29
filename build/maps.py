@@ -3,7 +3,7 @@ _vendor = os.path.join(HERE, 'pylibs')          # optional local Pillow install
 if os.path.isdir(_vendor): sys.path.insert(0, _vendor)
 from PIL import Image, ImageDraw, ImageFilter
 
-REF = os.path.join(HERE, os.pardir, 'reference') + os.sep
+REF = os.path.join(HERE, os.pardir, 'archive', 'prototype-source', 'reference') + os.sep
 
 def is_marker(p):
     r, g, b = p

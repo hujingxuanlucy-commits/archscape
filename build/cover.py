@@ -7,7 +7,7 @@ _vendor = os.path.join(HERE, 'pylibs')
 if os.path.isdir(_vendor): sys.path.insert(0, _vendor)
 from PIL import Image, ImageEnhance
 
-SRC = os.path.join(HERE, os.pardir, 'images')
+SRC = os.path.join(HERE, os.pardir, 'archive', 'prototype-source', 'images')
 RATIO = 780 / 206   # matches .pf-cover's on-screen aspect
 
 im = Image.open(os.path.join(SRC, 'image 2.png')).convert('RGB')

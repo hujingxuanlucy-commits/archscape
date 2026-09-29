@@ -4,7 +4,7 @@ _vendor = os.path.join(HERE, 'pylibs')          # optional local Pillow install
 if os.path.isdir(_vendor): sys.path.insert(0, _vendor)
 from PIL import Image
 
-REF = os.path.join(HERE, os.pardir, 'reference')
+REF = os.path.join(HERE, os.pardir, 'archive', 'prototype-source', 'reference')
 
 # key: (file, x1, y1, x2, y2, target_width, quality)
 CROPS = {

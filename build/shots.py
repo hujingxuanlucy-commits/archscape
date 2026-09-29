@@ -1,7 +1,7 @@
 """Full-bleed viewfinder frames at phone aspect, from the full-size originals.
 
 The camera is the one place a soft image is obvious: it fills the screen and
-it is meant to read as a live frame. These are cut from images/ at 3000-4200px
+it is meant to read as a live frame. These are cut from archived prototype source images at 3000-4200px
 rather than from the 797px mockups, so they stay sharp at 2x.
 """
 import sys, os, io, json, base64
@@ -10,7 +10,7 @@ _vendor = os.path.join(HERE, 'pylibs')
 if os.path.isdir(_vendor): sys.path.insert(0, _vendor)
 from PIL import Image
 
-SRC = os.path.join(HERE, os.pardir, 'images')
+SRC = os.path.join(HERE, os.pardir, 'archive', 'prototype-source', 'images')
 PHONE = 393 / 852          # viewfinder aspect
 W, Q = 620, 80             # ~1.6x the CSS width, high enough for 2x screens
 

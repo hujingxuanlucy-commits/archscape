@@ -10,7 +10,7 @@ _vendor = os.path.join(HERE, 'pylibs')
 if os.path.isdir(_vendor): sys.path.insert(0, _vendor)
 from PIL import Image, ImageOps, ImageEnhance
 
-SRC = os.path.join(HERE, os.pardir, 'images')
+SRC = os.path.join(HERE, os.pardir, 'archive', 'prototype-source', 'images')
 RATIO = 393 / 378.0   # the hero's on-screen aspect
 W, Q = 780, 74
 

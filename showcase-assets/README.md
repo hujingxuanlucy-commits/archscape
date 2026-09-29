@@ -1,25 +1,15 @@
-# ArchScape Showcase Assets
+# Current Showcase Assets
 
-Upload the final exported UI screenshots for `archscape-showcase.html` into this folder.
+These are the source files currently represented in `archscape-showcase.html`.
+The showcase embeds its visual media directly, so updating an asset here does not change the page until the HTML is re-embedded.
 
-Use the original high-resolution PNG exports. Do not crop, stretch, redraw, or recompress the UI before uploading.
+- `landing-onboard.png` — hero image.
+- `01 onboarding.mp4` — onboarding walkthrough.
+- `Exploremap.png` — Explore section.
+- `map-bg-4.png` — Journey section.
+- `03 capture.mp4` — Capture section.
+- `map-bg-5.png` — Path Crossings section.
+- `profile.png` — Personal Archive section.
+- `visual-language.png` — Visual Language section.
 
-Recommended filenames:
-
-- onboarding-01.png
-- onboarding-02.png
-- onboarding-03.png
-- onboarding-04.png
-- explore-nearby.png
-- explore-browse.png
-- explore-building.png
-- map-journey.png
-- map-crossings.png
-- capture-camera.png
-- capture-edit.png
-- groups.png
-- profile-captures.png
-- profile-journeys.png
-- profile-saved.png
-
-The showcase page will be wired to these exact files after they are uploaded.
+Superseded exports are preserved in `../archive/showcase-assets-legacy/`.

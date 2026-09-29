@@ -1,11 +1,11 @@
-"""Extract Vessel imagery (images/) for the capture flow and building record."""
+"""Extract archived Vessel source imagery for the capture flow and building record."""
 import sys, os, io, json, base64
 HERE = os.path.dirname(os.path.abspath(__file__))
 _vendor = os.path.join(HERE, 'pylibs')
 if os.path.isdir(_vendor): sys.path.insert(0, _vendor)
 from PIL import Image
 
-SRC = os.path.join(HERE, os.pardir, 'images')
+SRC = os.path.join(HERE, os.pardir, 'archive', 'prototype-source', 'images')
 
 def crop_to(im, aspect):
     """Centre-crop to the given width/height ratio."""
